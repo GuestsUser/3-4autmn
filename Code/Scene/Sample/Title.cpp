@@ -20,8 +20,8 @@ void Title::Update() {
 		break;
 
 	case Title::State::Stop:
-		if (key->GetKeyState(A_KEY) == KEY_PUSH) { //Aボタン(緑ボタン)が押された瞬間
-			//SetNext(new Game()); //ゲームシーンへ遷移
+		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { //Aボタン(緑ボタン)が押された瞬間
+			//SetNext(new Title()); //ゲームシーンへ遷移
 		}
 		break;
 	}
