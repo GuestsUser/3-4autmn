@@ -15,6 +15,7 @@ extern constexpr int KEY_FREE = 3; //離しっぱなし
 
 //GetKeyState等で引数に渡す変数、Aボタン(緑ボタン)の状態が知りたかったらGetKeyState(A_KEY)で取得できる
 //このリストに載ってないように現在LT、RTボタンの状態は受け取れない
+//新たにマウスの入力を受け取れるようになった
 extern int A_KEY;
 extern int B_KEY;
 extern int X_KEY;
@@ -24,8 +25,12 @@ extern int R_KEY;
 extern int POUSE_KEY; //start
 extern int SELECT_KEY; //back
 
+extern int MOUSE_LEFT;
+extern int MOUSE_RIGHT;
+extern int MOUSE_CENTER;
+
 //KeySystem各関数のrequestにスティックをリクエストする為のconst値、その他ボタンとの重複を避ける為100を基準に打っている
-//
+//マウスのキーは十字キーと重複してしまうのでリクエストに入れる変数にはこちらを使うように
 extern constexpr int L_STICK_UP = 100;
 extern constexpr int L_STICK_DOWN = 101;
 extern constexpr int L_STICK_LEFT = 102;
@@ -34,6 +39,10 @@ extern constexpr int R_STICK_UP = 104;
 extern constexpr int R_STICK_DOWN = 105;
 extern constexpr int R_STICK_LEFT = 106;
 extern constexpr int R_STICK_RIGHT = 107;
+
+extern constexpr int REQUEST_MOUSE_LEFT = 108;
+extern constexpr int REQUEST_MOUSE_RIGHT = 109;
+extern constexpr int REQUEST_MOUSE_CENTER = 110;
 
 //GetTiltに指定するスティック傾き方向
 extern constexpr int LX_TILT = 0; //左スティックのx軸の動きをチェックする、-なら左、+なら右に傾いている
@@ -46,8 +55,8 @@ extern constexpr int RY_TILT = 3;
 class KeySystem {
 private:
 	const int key_vol = 12;
-	int key_state[20];
-	int hold_time[20];
+	int key_state[23];
+	int hold_time[23];
 	double tilt[4];
 	XINPUT_STATE input;
 public:

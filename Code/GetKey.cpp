@@ -11,10 +11,15 @@ int L_KEY = XINPUT_BUTTON_LEFT_SHOULDER;
 int R_KEY = XINPUT_BUTTON_RIGHT_SHOULDER;
 int POUSE_KEY = XINPUT_BUTTON_START;
 int SELECT_KEY = XINPUT_BUTTON_BACK;
+
+int MOUSE_LEFT = MOUSE_INPUT_LEFT;
+int MOUSE_RIGHT = MOUSE_INPUT_RIGHT;
+int MOUSE_CENTER = MOUSE_INPUT_MIDDLE;
+
 KeySystem* key;
 
 KeySystem::KeySystem() :input{0} {
-	for (int i = 0; i < key_vol+8; i++) { key_state[i] = KEY_FREE; hold_time[i] = 0; }
+	for (int i = 0; i < key_vol + 8 + 3; i++) { key_state[i] = KEY_FREE; hold_time[i] = 0; }
 	SetJoypadDeadZone(DX_INPUT_PAD1, 0);//KeyInputで入力無効化を行っているのでこちらの処理は切る、KeyInputとこちらの違いとしてはKeyInputはx軸、y軸個別に無効範囲を決められる事にある……
 }
 
@@ -49,8 +54,25 @@ void KeySystem::KeyInput() {
 		}
 	}
 
-	//スティック入力状態入力
-	for (int i = 0; i < 4; i++) {
+	for (int i = 20; i < 23; ++i) { //マウス用ボタン入力チェック
+		switch (i) {
+		case 20:c_key = MOUSE_LEFT; break;
+		case 21:c_key = MOUSE_RIGHT; break;
+		case 22:c_key = MOUSE_CENTER; break;
+		}
+		if (GetMouseInput() & c_key) {
+			if (hold_time[i] > 0) { key_state[i] = KEY_HOLD; }
+			else { key_state[i] = KEY_PUSH; }
+			hold_time[i]++;
+		}
+		else {
+			if (hold_time[i] > 0) { key_state[i] = KEY_PULL; }
+			else { key_state[i] = KEY_FREE; }
+			hold_time[i] = 0;
+		}
+	}
+
+	for (int i = 0; i < 4; i++) { //スティック入力状態入力
 		switch (i) {
 		case 0:c_key = input.ThumbLY; break;
 		case 1:c_key = input.ThumbLX; break;
@@ -103,6 +125,11 @@ int KeySystem::GetKeyState(int request) {
 	if (request == R_KEY) { return key_state[9]; }
 	if (request == POUSE_KEY) { return key_state[10]; }
 	if (request == SELECT_KEY) { return key_state[11]; }
+
+	if (request == REQUEST_MOUSE_LEFT) { return key_state[20]; }
+	if (request == REQUEST_MOUSE_RIGHT) { return key_state[21]; }
+	if (request == REQUEST_MOUSE_CENTER) { return key_state[22]; }
+
 	return -1;//引数エラー
 }
 int KeySystem::GetKeyHoldTime(int request) {
@@ -129,6 +156,11 @@ int KeySystem::GetKeyHoldTime(int request) {
 	if (request == L_KEY) { return hold_time[8]; }
 	if (request == R_KEY) { return hold_time[9]; }
 	if (request == POUSE_KEY) { return hold_time[10]; }
-	if (request == SELECT_KEY) { return key_state[11]; }
+	if (request == SELECT_KEY) { return hold_time[11]; }
+
+	if (request == REQUEST_MOUSE_LEFT) { return hold_time[20]; }
+	if (request == REQUEST_MOUSE_RIGHT) { return hold_time[21]; }
+	if (request == REQUEST_MOUSE_CENTER) { return hold_time[22]; }
+
 	return -1;//引数エラー
 }
