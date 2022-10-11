@@ -1,0 +1,18 @@
+#include"Scene_ConnectFour.h"
+#include"CF_Player.h"
+
+Scene_ConnectFour::Scene_ConnectFour() {
+	player = new CF_Player();
+	player->CF_Player_Initialize();
+}
+Scene_ConnectFour::	~Scene_ConnectFour() {
+	delete player;
+}
+
+void Scene_ConnectFour::Update() {
+
+}
+void Scene_ConnectFour::Draw() {
+	player->CF_Player_Draw();
+}
+
