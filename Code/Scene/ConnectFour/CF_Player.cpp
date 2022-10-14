@@ -1,10 +1,13 @@
 #include"CF_Player.h"
 #include"DxLib.h"
+#include"windows.h"
 
 //CF_Player cf_player;
 void CF_Player::CF_Player_Initialize() {
 	CF_Back = LoadGraph("Resource/image/CF_Back.png");
 	CF_Panel = LoadGraph("Resource/image/CF_Panel.png");
+	Player_x = 400;
+	Player_y = 100;
 }
 void CF_Player::CF_Player_Finalize() {
 	DeleteGraph(CF_Back);
