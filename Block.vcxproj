@@ -25,6 +25,7 @@
     <ClCompile Include="Code\SceneManager.cpp" />
     <ClCompile Include="Code\Scene\ConnectFour\CF_Player.cpp" />
     <ClCompile Include="Code\Scene\ConnectFour\Scene_ConnectFour.cpp" />
+    <ClCompile Include="Code\Scene\Othello\Scene_Othello.cpp" />
     <ClCompile Include="Code\Scene\Sample\Title.cpp" />
     <ClCompile Include="Code\Worldval.cpp" />
   </ItemGroup>
@@ -35,6 +36,7 @@
     <ClInclude Include="Code\SceneManager.h" />
     <ClInclude Include="Code\Scene\ConnectFour\CF_Player.h" />
     <ClInclude Include="Code\Scene\ConnectFour\Scene_ConnectFour.h" />
+    <ClInclude Include="Code\Scene\Othello\Scene_Othello.h" />
     <ClInclude Include="Code\Scene\Sample\Title.h" />
     <ClInclude Include="Code\Scene\Scene.h" />
     <ClInclude Include="Code\Worldval.h" />
