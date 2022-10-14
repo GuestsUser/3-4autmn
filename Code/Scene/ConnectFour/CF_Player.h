@@ -4,8 +4,19 @@ class CF_Player {
 private:
 	int CF_Back;
 	int CF_Panel;
-	int Player_x;
-	int Player_y;
+	int CF_PCoin;
+	int CF_CCoin;
+	int CF_Yajirusi;
+	int i;
+	
+	float Yajirusi_Move;
+	float Yajirusi_Y;
+
+	int Yajirusi_Col[7];
+	int Mouse_X; //マウスのX座標
+	int Mouse_Y; //マウスのY座標
+	int Player_X; //プレイヤーのX座標
+	int Player_Y; //プレイヤーのY座標
 public:
 	void CF_Player_Initialize();
 	void CF_Player_Finalize();
