@@ -23,6 +23,7 @@
     <ClCompile Include="Code\GlovalLoading.cpp" />
     <ClCompile Include="Code\main.cpp" />
     <ClCompile Include="Code\SceneManager.cpp" />
+    <ClCompile Include="Code\Scene\daifugou\AI.cpp" />
     <ClCompile Include="Code\Scene\Sample\Title.cpp" />
     <ClCompile Include="Code\Worldval.cpp" />
   </ItemGroup>
