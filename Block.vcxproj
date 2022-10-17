@@ -24,6 +24,8 @@
     <ClCompile Include="Code\main.cpp" />
     <ClCompile Include="Code\SceneManager.cpp" />
     <ClCompile Include="Code\Scene\Sample\Title.cpp" />
+    <ClCompile Include="Code\Scene\Title\Scene_GameTitle.cpp" />
+    <ClCompile Include="Code\Scene\Title\Scene_Select.cpp" />
     <ClCompile Include="Code\Worldval.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -33,6 +35,7 @@
     <ClInclude Include="Code\SceneManager.h" />
     <ClInclude Include="Code\Scene\Sample\Title.h" />
     <ClInclude Include="Code\Scene\Scene.h" />
+    <ClInclude Include="Code\Scene\Title\Scene_GameTitle.h" />
     <ClInclude Include="Code\Worldval.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
