@@ -6,12 +6,13 @@ private:
 	int Board;
 	const int MAP_SIZE_X = 65;
 	const int MAP_SIZE_Y = 65;
-	int Board2[10][10];
-	int Cr;
+	int BlackCr;
+	int GreenCr;
+
 public:
 	void Othello_Plyaer_Initialize();
 	void Othello_Player_Finalize();
 	void Othello_Player_Update();
 	void Othello_Player_Draw();
-	void init_DataMap();
+	void init_DataMap(int Board);
 };
