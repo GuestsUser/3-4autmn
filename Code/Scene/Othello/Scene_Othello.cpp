@@ -1,19 +1,26 @@
 #include "./../Code/Scene/Othello/Scene_Othello.h"
 #include "Othello_Player.h"
+#include "Othello_Board.h"
 
 Scene_Othello::Scene_Othello() {
-	player_o = new Othello_Player();
-	player_o->Othello_Plyaer_Initialize();
+	C_Player = new Othello_Player();
+	C_Board = new Othello_Board();
+	C_Player->Othello_Plyaer_Initialize();
+	C_Board->Othello_Board_Initialize();
+
 }
 
 Scene_Othello::~Scene_Othello() {
-	delete player_o;
+	delete C_Player;
+	delete C_Board;
 }
 
 void Scene_Othello::Update() {
-	player_o->Othello_Player_Update();
+	C_Player->Othello_Player_Update();
+	C_Board->Othello_Board_Update();
 }
 
 void Scene_Othello::Draw() {
-	player_o->Othello_Player_Draw();
+	C_Player->Othello_Player_Draw();
+	C_Board->Othello_Board_Draw();
 }
