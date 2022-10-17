@@ -8,7 +8,6 @@ void CF_Player::CF_Player_Initialize() {
 	CF_Panel = LoadGraph("Resource/image/CF_Panel.png"); //パネル
 	CF_PCoin = LoadGraph("Resource/image/Player_Coin.png"); //プレイヤーコイン
 	CF_CCoin = LoadGraph("Resource/image/CPU_Coin.png"); //CPUコイン
-	Player_X = 400;
 	Player_Y = 50;
 	Yajirusi_Y = 100;
 	Yajirusi_Move = 0.5f;
@@ -37,6 +36,23 @@ void CF_Player::CF_Player_Update() {
 	else if(Yajirusi_Y >= 115){
 		Yajirusi_Y = 115;
 		Yajirusi_Move = -Yajirusi_Move;
+	}
+	for (i = 0; i < 7; i++) {
+		if (297 + i * 110 - 48 < Player_X && Player_X < 297 + i * 110 + 48) {
+			if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
+				Player_X = 297 + i * 110 - 48;
+				if (Player_Y < 550) {
+					Player_Y += 1;
+				}
+				else {
+					Player_Y = 550;
+				}
+			}
+			Yajirusi_Col[i] = 0xffffff;
+		}
+		else {
+			Yajirusi_Col[i] = 0xff0000;
+		}
 	}
 }
 void CF_Player::CF_Player_Draw() {

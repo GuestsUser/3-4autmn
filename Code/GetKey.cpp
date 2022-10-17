@@ -25,6 +25,23 @@ KeySystem::KeySystem() :input{0} {
 
 void KeySystem::KeyInput() {
 	int c_key=0;
+	for (int i = 20; i < 23; ++i) { //マウス用ボタン入力チェック
+		switch (i) {
+		case 20:c_key = MOUSE_LEFT; break;
+		case 21:c_key = MOUSE_RIGHT; break;
+		case 22:c_key = MOUSE_CENTER; break;
+		}
+		if (GetMouseInput() & c_key) {
+			if (hold_time[i] > 0) { key_state[i] = KEY_HOLD; }
+			else { key_state[i] = KEY_PUSH; }
+			hold_time[i]++;
+		}
+		else {
+			if (hold_time[i] > 0) { key_state[i] = KEY_PULL; }
+			else { key_state[i] = KEY_FREE; }
+			hold_time[i] = 0;
+		}
+	}
 	if (GetJoypadXInputState(DX_INPUT_PAD1, &input) == -1) { return; }//エラー対策
 
 	for (int i = 0; i < key_vol; i++) {
@@ -54,23 +71,7 @@ void KeySystem::KeyInput() {
 		}
 	}
 
-	for (int i = 20; i < 23; ++i) { //マウス用ボタン入力チェック
-		switch (i) {
-		case 20:c_key = MOUSE_LEFT; break;
-		case 21:c_key = MOUSE_RIGHT; break;
-		case 22:c_key = MOUSE_CENTER; break;
-		}
-		if (GetMouseInput() & c_key) {
-			if (hold_time[i] > 0) { key_state[i] = KEY_HOLD; }
-			else { key_state[i] = KEY_PUSH; }
-			hold_time[i]++;
-		}
-		else {
-			if (hold_time[i] > 0) { key_state[i] = KEY_PULL; }
-			else { key_state[i] = KEY_FREE; }
-			hold_time[i] = 0;
-		}
-	}
+	
 
 	for (int i = 0; i < 4; i++) { //スティック入力状態入力
 		switch (i) {
