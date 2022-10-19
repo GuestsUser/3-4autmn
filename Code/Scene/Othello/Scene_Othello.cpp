@@ -21,6 +21,7 @@ void Scene_Othello::Update() {
 }
 
 void Scene_Othello::Draw() {
-	C_Player->Othello_Player_Draw();
 	C_Board->Othello_Board_Draw();
+	C_Player->Othello_Player_Draw();
+
 }
