@@ -11,7 +11,10 @@
 #include "SceneManager.h"
 #include "Worldval.h"
 #include "GlovalLoading.h"
+#include"./Scene/ConnectFour/Scene_ConnectFour.h"
 //最初に実行したいシーンのヘッダーをインクルードしておく
+
+
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); //デバッグ表示を可能にする
@@ -33,7 +36,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	GlovalLoading(); //GlovalLoading.cppの関数、WorldVal::Getで取り出せる値の用意を行うサンプル
 
 	key = new KeySystem(); //キー入力受付用クラスの実体作成
-	SceneManager* scm = new SceneManager(new Title()); //引数に最初に実行したいシーン実体を入れる
+	SceneManager* scm = new SceneManager(new Scene_ConnectFour()); //引数に最初に実行したいシーン実体を入れる
 
 	while (ProcessMessage() == 0 && (!CheckHitKey(KEY_INPUT_ESCAPE)) && key->GetKeyState(SELECT_KEY) != KEY_PUSH) { //GetKeyシステム使用例、backボタンが押された瞬間にfalseとなる
 		//_RPTF1(_CRT_WARN, "%s\n", "test"); //デバッグ表示

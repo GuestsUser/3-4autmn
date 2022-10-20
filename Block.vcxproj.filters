@@ -33,13 +33,13 @@
     <ClCompile Include="Code\GlovalLoading.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Code\Scene\Sugoroku\SR_Title.cpp">
+    <ClCompile Include="Code\Scene\ConnectFour\CF_Player.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Code\Scene\Sugoroku\MapLoad.cpp">
+    <ClCompile Include="Code\Scene\ConnectFour\Scene_ConnectFour.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Code\Scene\Sugoroku\SR_Game.cpp">
+    <ClCompile Include="Code\Scene\daifugou\CP_Player.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,13 +65,13 @@
     <ClInclude Include="Code\GlovalLoading.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Code\Scene\Sugoroku\MapLoad.h">
+    <ClInclude Include="Code\Scene\ConnectFour\CF_Player.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Code\Scene\Sugoroku\SR_Title.h">
+    <ClInclude Include="Code\Scene\ConnectFour\Scene_ConnectFour.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Code\Scene\Sugoroku\SR_Game.h">
+    <ClInclude Include="Code\Scene\daifugou\CP_Player.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

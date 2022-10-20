@@ -23,6 +23,9 @@
     <ClCompile Include="Code\GlovalLoading.cpp" />
     <ClCompile Include="Code\main.cpp" />
     <ClCompile Include="Code\SceneManager.cpp" />
+    <ClCompile Include="Code\Scene\ConnectFour\CF_Player.cpp" />
+    <ClCompile Include="Code\Scene\ConnectFour\Scene_ConnectFour.cpp" />
+    <ClCompile Include="Code\Scene\daifugou\CP_Player.cpp" />
     <ClCompile Include="Code\Scene\Sample\Title.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\MapLoad.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\SR_Title.cpp" />
@@ -34,6 +37,9 @@
     <ClInclude Include="Code\GetKey.h" />
     <ClInclude Include="Code\GlovalLoading.h" />
     <ClInclude Include="Code\SceneManager.h" />
+    <ClInclude Include="Code\Scene\ConnectFour\CF_Player.h" />
+    <ClInclude Include="Code\Scene\ConnectFour\Scene_ConnectFour.h" />
+    <ClInclude Include="Code\Scene\daifugou\CP_Player.h" />
     <ClInclude Include="Code\Scene\Sample\Title.h" />
     <ClInclude Include="Code\Scene\Scene.h" />
     <ClInclude Include="Code\Scene\Sugoroku\MapLoad.h" />
