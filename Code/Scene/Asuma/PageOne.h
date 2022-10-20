@@ -1,20 +1,23 @@
 #pragma once
+#include "./../Scene.h"
 
 class Card {
-private:
+public:
 	int img;	//画像用の変数
 	int num;	//カードの数字
 	int suit;	//カードのスート(マーク)
+	bool flg;	//使用したかどうか(false:使ってない　true:使ってる)
 
-public:
-	Card(int i, int n, int s) {
+	//Card(画像、数値、スート、使用フラグ)
+	Card(int i, int n, int s, bool f) {
 		img = i;
 		num = n;
 		suit = s;
+		flg = f;
 	}
 };
 
-class PageOne {
+class PageOne : public Scene{
 private:
 	Card Card_obj[54];	//カードの情報
 

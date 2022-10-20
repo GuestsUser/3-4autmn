@@ -10,16 +10,16 @@ void PageOne::PageOne_Initialize() {
 	// iはスート、jはナンバー
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 13; j++) {
-			Card_obj[i + j] = Card(card_type[i + j], j, i);
+			Card_obj[i + j] = Card::Card(card_type[i + j], j, i, false);
 		}
 	}
 
-	Card_obj[52] = Card(card_type[52], 0, 5);
-	Card_obj[53] = Card(card_type[53], 99, 5);
+	Card_obj[52] = Card::Card(card_type[52], 0, 5, false);	//カードの裏面
+	Card_obj[53] = Card::Card(card_type[53], 99, 5, false);	//ジョーカー
 }
 
 void PageOne::PageOne_Finalize() {
-
+	DeleteGraph((int)card_type);
 }
 
 void PageOne::PageOne_Update() {
@@ -27,5 +27,5 @@ void PageOne::PageOne_Update() {
 }
 
 void PageOne::PageOne_Draw() {
-
+	DrawRotaGraph(100, 100, 0.5, 0, Card_obj[53].img, TRUE);
 }
