@@ -1,6 +1,7 @@
 #pragma once
 #include "./../Scene.h"
 #include "Othello_Player.h"
+#include "Othello_Board.h"
 
 class Othello_Player;
 class Othello_Board;

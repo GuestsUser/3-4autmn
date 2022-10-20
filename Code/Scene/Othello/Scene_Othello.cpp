@@ -3,21 +3,21 @@
 #include "Othello_Board.h"
 
 Scene_Othello::Scene_Othello() {
-	C_Player = new Othello_Player();
 	C_Board = new Othello_Board();
-	C_Player->Othello_Plyaer_Initialize();
-	C_Board->Othello_Board_Initialize();
+	C_Player = new Othello_Player();
 
+	C_Board->Othello_Board_Initialize();
+	C_Player->Othello_Plyaer_Initialize();
 }
 
 Scene_Othello::~Scene_Othello() {
-	delete C_Player;
 	delete C_Board;
+	delete C_Player;
 }
 
 void Scene_Othello::Update() {
-	C_Player->Othello_Player_Update();
 	C_Board->Othello_Board_Update();
+	C_Player->Othello_Player_Update();
 }
 
 void Scene_Othello::Draw() {
