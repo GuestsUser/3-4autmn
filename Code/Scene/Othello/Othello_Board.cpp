@@ -10,13 +10,14 @@ Othello_Board* OB;
 void Othello_Board::Othello_Board_Initialize() {
 	//Board = LoadGraph("Resource/image/Othello_Board.jpg");
 
-    BlackCr = GetColor(0, 0, 0);
-    GreenCr = GetColor(0, 255, 0);
-    WhiteCr = GetColor(255, 255, 255);
+    BlackCr = GetColor(0, 0, 0);        // 黒色を設定
+    GreenCr = GetColor(0, 255, 0);      // 緑色を設定
+    WhiteCr = GetColor(255, 255, 255);  // 白色を設定
 
     DrawFlag = false;
+    CheckFlag = false;
 
-    Init_OthelloBoard(Board);
+    Init_OthelloBoard(Board);           // ボードを初期化
 }
 void Othello_Board::Othello_Board_Finalize() {
 	//DeleteGraph(Board);
@@ -25,6 +26,9 @@ void Othello_Board::Othello_Board_Finalize() {
 void Othello_Board::Othello_Board_Update() {
     // デバッグ用
     DrawFormatString(1000, 150, WhiteCr, "座標Ｘ %d　　座標Ｙ %d", Mouse_X / MAP_SIZE, Mouse_Y / MAP_SIZE);
+    DrawFormatString(1000, 120, WhiteCr, "現在：%d", Board[Square_X][Square_Y]);
+    DrawFormatString(1000, 170, WhiteCr, "CheckFlag：%d", CheckFlag);
+
 
     GetMousePoint(&Mouse_X, &Mouse_Y);  // マウスカーソルの位置を取得
     Square_X = Mouse_X / MAP_SIZE;      // マウスカーソルの位置を MAP_SIZE で割った値を代入
@@ -37,10 +41,19 @@ void Othello_Board::Othello_Board_Update() {
 
         if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
             Board[Square_X][Square_Y] = 1;
+            CheckFlag = true;
         }
+        else {
+            CheckFlag = false;
+        }
+        
     }
     else {
         DrawFlag = false;
+    }
+
+    if (CheckFlag == true) {
+        Check2(Board, 1, 0);
     }
 
 }
@@ -117,14 +130,27 @@ void Othello_Board::CursorOn_OthelloBoard() {
     }
 }
 
-int Check(int board[PB][PB], int p, int q, int d, int e) {
+void Othello_Board::Check2(int board[PB][PB], int p, int q) {
     int i;
-    for (i = 1; board[p + i * d][q + i * e] == 2; i++) {
-        if (board[p + i * d][q + i * e] == 1) {
-            return i - 1;
-        }
-        else {
-            return 0;
+    for (i = 1; board[Square_X + i * p][Square_Y] == -1; i++) {
+        // ここ以降の処理が反応しない
+        board[Square_X + i * p][Square_Y] = 1;
+
+        if (board[Square_X + i * p][Square_Y] == 2) {
+            board[Square_X + i * p][Square_Y] = 1;
         }
     }
 }
+
+//int Othello_Board::Check(int board[PB][PB], int p, int q, int d, int e) {
+//    int i;
+//
+//    for (i = 1; board[p + i * d][q + i * e] == 2; i++) {}
+//
+//    if (board[p + i * d][q + i * e] == 1) {
+//        return i - 1;
+//    }
+//    else {
+//        return 0;
+//    }
+//}

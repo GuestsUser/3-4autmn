@@ -14,6 +14,7 @@ private:
 	int WhiteCr;
 
 	bool DrawFlag;
+	bool CheckFlag;
 public:
 	int Mouse_X;
 	int Mouse_Y;
@@ -28,6 +29,7 @@ public:
 	void Print_OthelloBoard(int board[PB][PB]);
 	void CursorOn_OthelloBoard();
 	int Check(int board[PB][PB], int p, int q, int d, int e);
+	void Check2(int board[PB][PB], int p, int q);
 };
 
 extern Othello_Board* OB;
