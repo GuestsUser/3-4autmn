@@ -23,9 +23,14 @@ void PageOne::PageOne_Finalize() {
 }
 
 void PageOne::PageOne_Update() {
-
+	for (int i = 0; i < 4; i++) {
+		Player_card[i] = Card_obj[rand() % sizeof(Card_obj)];
+	}
 }
 
 void PageOne::PageOne_Draw() {
 	DrawRotaGraph(100, 100, 0.5, 0, Card_obj[53].img, TRUE);
+	DrawRotaGraph(300, 100, 0.5, 0, Card_obj[53].img, TRUE);
+	DrawRotaGraph(500, 100, 0.5, 0, Card_obj[53].img, TRUE);
+	DrawRotaGraph(700, 100, 0.5, 0, Card_obj[53].img, TRUE);
 }

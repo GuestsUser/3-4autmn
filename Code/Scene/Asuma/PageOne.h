@@ -21,6 +21,8 @@ class PageOne : public Scene{
 private:
 	Card Card_obj[54];	//カードの情報
 
+	Card Player_card[54];	//プレイヤーの持っているカードの情報
+
 	int card_type[65];	//画像用ハンドル
 
 	int Mouse_X; //マウスのX座標
