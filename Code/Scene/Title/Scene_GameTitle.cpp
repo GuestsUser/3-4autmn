@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "Scene_GameTitle.h"
+#include "Scene_Select.h"
 #include "./../../SceneManager.h"
 #include "./../../GetKey.h"
 
