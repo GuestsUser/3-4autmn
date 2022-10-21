@@ -19,6 +19,7 @@ private:
 	int Mouse_Y; //マウスのY座標
 	int Player_X; //プレイヤーのX座標
 	int Player_Y; //プレイヤーのY座標
+	int PlayUser;
 	
 	float yadd; //重力加速度
 	float Yajirusi_Move; //矢印のアニメーションの値
@@ -36,8 +37,10 @@ public:
 
 	void Coin_Fall();
 	void Board_Init();
+	void ChangeTurn(int *PlayUser);
 
 	int ClearCheck(int board[Board_Xsize][Board_Ysize], int x, int y);
+
 };
 //
 //extern CF_Player cf_player;

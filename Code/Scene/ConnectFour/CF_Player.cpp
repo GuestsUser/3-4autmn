@@ -1,6 +1,7 @@
 #include"CF_Player.h"
 #include"DxLib.h"
 #include"./../Code/GetKey.h"
+#include<time.h>
 
 //CF_Player cf_player;
 void CF_Player::CF_Player_Initialize() {
@@ -20,6 +21,8 @@ void CF_Player::CF_Player_Initialize() {
 		Yajirusi_Col[i] = 0xff0000; //矢印の色の初期値
 	}
 	Board_Init();//パネル情報の初期化
+	srand((unsigned int)time(NULL));
+	PlayUser = rand() % 2 + 1;
 }
 void CF_Player::CF_Player_Finalize() {
 	DeleteGraph(CF_Back); //画像削除処理
@@ -73,22 +76,31 @@ void CF_Player::CF_Player_Update() {
 }
 void CF_Player::CF_Player_Draw() {
 	DrawRotaGraph(640, 360, 1.0, 0, CF_Back, TRUE);
-	DrawFormatString(100, 50, 0xffffff, "%d", Player_X);
-	DrawRotaGraph(Player_X, Player_Y, 0.165, 0, CF_PCoin, TRUE);
+	SetFontSize(24);
+	if (PlayUser == Coin_Player) {
+		DrawFormatString(100, 50, 0xffffff, "あなたの番です");
+		DrawRotaGraph(Player_X, Player_Y, 0.165, 0, CF_PCoin, TRUE);
+		SetFontSize(16);
+	}
+	else {
+		DrawFormatString(100, 50, 0xffffff, "CPUの番です");
+		DrawRotaGraph(Player_X, Player_Y, 0.165, 0, CF_CCoin, TRUE);
+	}
+	SetFontSize(16);
 	for (i = 0; i < Board_Ysize; i++) {
 		for (j = 0; j < Board_Xsize; j++) {
 			DrawFormatString(297 + j * 114.5, Yajirusi_Y, Yajirusi_Col[j], "▼");
 			if (CF_Board[j][i] == Coin_Player) {
 				DrawRotaGraph(j * 114 + 306, i * 79 + 209, 0.17, 0, CF_PCoin, TRUE);
 			}else if(CF_Board[j][i] == Coin_CPU){
-				DrawRotaGraph(j * 110 + 298, i * 78 + 200, 0.17, 0, CF_CCoin, TRUE);
+				DrawRotaGraph(j * 114 + 306, i * 79 + 209, 0.17, 0, CF_CCoin, TRUE);
 			}
-			DrawFormatString(j * 114+ 303, i * 79 + 200, 0xffffff, "%d", CF_Board[j][i]);
+			DrawFormatString(j * 114 + 303, i * 79 + 200, 0x000000, "%d", CF_Board[j][i]);
 		}
 	}
 	DrawRotaGraph(640, 420, 0.8, 0, CF_Panel, TRUE);
 	if (CF_Clear == true) {
-		SetFontSize(36);
+		SetFontSize(48);
 		DrawFormatString(640, 360, 0x0000ff, "勝ち！");
 		SetFontSize(16);
 	}
@@ -96,24 +108,35 @@ void CF_Player::CF_Player_Draw() {
 
 void CF_Player:: Coin_Fall() { //コインを配置する処理
 	Player_X = j * 114 + 306;
-	if (FallCount++ > 60) {
-		if (Player_Y < 604) {
+	if (FallCount++ > 90) {
+		if (Player_Y < i * 79 + 230) {
 			Player_Y += yadd;
-			yadd += 0.1f;
+			yadd += 0.08f;
 		}
 		else {
 			Player_Y = 50;
 			yadd = 0;
 			FallCount = 0;
-			if (CF_Board[j][Board_Ysize - k] != Coin_Space && Board_Ysize - k >= 0) {
+			if (CF_Board[j][Board_Ysize - k] != Coin_Space && Board_Ysize - k >= 0) { //空白じゃないなら、一つ上に置く
 				k += 1;
 			}
-			else {
-				k = 1;
+			else if (CF_Board[j][Board_Ysize - k + 1] == Coin_Space){ //下が空白なら、おけるところまで下に下げる
+				while (Board_Ysize - k + 1 < Board_Ysize) {
+					k -= 1;
+				}
+			}
+			else { //それ以外ならその場に置く
+				k = k;
 			}
 			if (CF_Board[j][Board_Ysize - k] == Coin_Space) {
-				CF_Board[j][Board_Ysize - k] = Coin_Player;
+				if (PlayUser == Coin_Player) {
+					CF_Board[j][Board_Ysize - k] = Coin_Player;
+				}
+				else {
+					CF_Board[j][Board_Ysize - k] = Coin_CPU;
+				}
 			}
+			ChangeTurn(&PlayUser);
 			Mouse_Push = false;
 		}
 	}
@@ -127,18 +150,27 @@ void CF_Player::Board_Init() { //パネル情報の初期化
 }
 int CF_Player::ClearCheck(int board[Board_Xsize][Board_Ysize], int x, int y) {//クリア判定処理
 	int a, b, ClearFlg;
-	int dx[] = { 0,1,1 };
-	int dy[] = { 1,0,1 };
+	int dx[] = { 0,1,1 ,-1};
+	int dy[] = { 1,0,1 ,1};
 
-	for (a = 0; a < 3; a++) {
-		for (b = 1, ClearFlg = 1; b <= 3; b++) {
-			if (board[y][x] != board[y + b * dy[a]][x + b * dx[a]] || board[y + j * dy[a]][x + j * dx[a]] == Coin_Space) {
-				ClearFlg = 0;
+	for (a = 0; a < 4; a++) { //0の時は上、1の時は右、2の時は右上,3の時は左上の盤面を見る
+		for (b = 1, ClearFlg = 1; b <= 3; b++) { //指定した座標から4マス見る
+			if (board[x][y] != board[x + b * dx[a]][y - b * dy[a]] || board[x + b * dx[a]][y - b * dy[a]] == Coin_Space) {
+				ClearFlg = 0; 
 			}
 		}
-		if (ClearFlg == 1) {
+		if (ClearFlg == 1) { //4マスとも同じものであったらクリアを返す
 			return 1;
 		}
 	}
 	return 0;
+}
+
+void CF_Player::ChangeTurn(int *PlayUser) {
+	if (*PlayUser == Coin_Player) {
+		*PlayUser = Coin_CPU;
+	}
+	else {
+		*PlayUser = Coin_Player;
+	}
 }
