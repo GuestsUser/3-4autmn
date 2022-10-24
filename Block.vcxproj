@@ -26,6 +26,7 @@
     <ClCompile Include="Code\Scene\ConnectFour\CF_Player.cpp" />
     <ClCompile Include="Code\Scene\ConnectFour\Scene_ConnectFour.cpp" />
     <ClCompile Include="Code\Scene\daifugou\CP_Player.cpp" />
+    <ClCompile Include="Code\Scene\Karuta\K_Title.cpp" />
     <ClCompile Include="Code\Scene\Sample\Title.cpp" />
     <ClCompile Include="Code\Worldval.cpp" />
   </ItemGroup>
