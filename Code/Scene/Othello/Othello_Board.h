@@ -29,8 +29,10 @@ public:
 	void Init_OthelloBoard(int board[PB][PB]);
 	void Print_OthelloBoard(int board[PB][PB]);
 	void CursorOn_OthelloBoard();
-	int Check(int board[PB][PB], int p, int q, int d, int e);
-	void Check2(int board[PB][PB], int p, int q);
+	void Check();
+	int Check2(int board[PB][PB], int p, int q, int enemy, int player);
+	int Check3();
+	void BlackOn_OthelloBoard();
 };
 
 extern Othello_Board* OB;
