@@ -28,6 +28,9 @@ void Othello_Board::Othello_Board_Update() {
     DrawFormatString(1000, 150, WhiteCr, "座標Ｘ %d　　座標Ｙ %d", Mouse_X / MAP_SIZE, Mouse_Y / MAP_SIZE);
     DrawFormatString(1000, 120, WhiteCr, "現在：%d", Board[Square_X][Square_Y]);
     DrawFormatString(1000, 170, WhiteCr, "CheckFlag：%d", CheckFlag);
+    DrawFormatString(1000, 190, WhiteCr, "CheckNum：%d", CheckNum);
+    DrawFormatString(1000, 210, WhiteCr, "Board[%d][%d]", Square_X, Square_Y);
+
 
 
     GetMousePoint(&Mouse_X, &Mouse_Y);  // マウスカーソルの位置を取得
@@ -39,9 +42,11 @@ void Othello_Board::Othello_Board_Update() {
 
         DrawFlag = true;
 
+        // 左クリックをしたら
         if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
-            Board[Square_X][Square_Y] = 1;
+            Board[Square_X][Square_Y] = 1;      // 黒石を置く
             CheckFlag = true;
+            Check2(Board, 1, 0);
         }
         else {
             CheckFlag = false;
@@ -51,11 +56,6 @@ void Othello_Board::Othello_Board_Update() {
     else {
         DrawFlag = false;
     }
-
-    if (CheckFlag == true) {
-        Check2(Board, 1, 0);
-    }
-
 }
 
 void Othello_Board::Othello_Board_Draw() {
@@ -70,13 +70,13 @@ void Othello_Board::Init_OthelloBoard(int board[PB][PB]) {
     {
      {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
      {-1,  0,  0,  0,  0,  0,  0,  0,  0, -1},
-     {-1,  0,  0,  0,  0,  0,  0,  0,  0, -1},
-     {-1,  0,  0,  0,  0,  0,  0,  0,  0, -1},
-     {-1,  0,  0,  0,  2,  1,  0,  0,  0, -1},
-     {-1,  0,  0,  0,  1,  2,  0,  0,  0, -1},
-     {-1,  0,  0,  0,  0,  0,  0,  0,  0, -1},
-     {-1,  0,  0,  0,  0,  0,  0,  0,  0, -1},
-     {-1,  0,  0,  0,  0,  0,  0,  0,  0, -1},
+     {-1,  0,  0,  0,  0,  0,  0,  0,  2, -1},
+     {-1,  0,  0,  0,  2,  0,  0,  0,  2, -1},
+     {-1,  0,  0,  0,  2,  1,  0,  0,  2, -1},
+     {-1,  0,  0,  0,  1,  2,  0,  0,  2, -1},
+     {-1,  0,  0,  0,  0,  0,  0,  0,  2, -1},
+     {-1,  0,  0,  0,  0,  0,  0,  0,  2, -1},
+     {-1,  0,  0,  0,  0,  0,  0,  0,  1, -1},
      {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1}
     };
     memcpy(board, InitBoard, sizeof(InitBoard));
@@ -131,15 +131,15 @@ void Othello_Board::CursorOn_OthelloBoard() {
 }
 
 void Othello_Board::Check2(int board[PB][PB], int p, int q) {
-    int i;
-    for (i = 1; board[Square_X + i * p][Square_Y] == -1; i++) {
-        // ここ以降の処理が反応しない
-        board[Square_X + i * p][Square_Y] = 1;
-
-        if (board[Square_X + i * p][Square_Y] == 2) {
-            board[Square_X + i * p][Square_Y] = 1;
+    for (CheckNum = 1; board[Square_X + CheckNum * p][Square_Y] != -1; CheckNum++) {
+        if (board[Square_X + CheckNum * p][Square_Y] == 2) {
+            board[Square_X + CheckNum * p][Square_Y] = 1;
         }
     }
+    //// ここ以降の処理が反応しない
+    //board[Square_X + CheckNum * p][Square_Y] = 1;
+
+
 }
 
 //int Othello_Board::Check(int board[PB][PB], int p, int q, int d, int e) {

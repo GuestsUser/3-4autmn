@@ -12,6 +12,7 @@ private:
 	int BlackCr;
 	int GreenCr;
 	int WhiteCr;
+	int CheckNum;
 
 	bool DrawFlag;
 	bool CheckFlag;
