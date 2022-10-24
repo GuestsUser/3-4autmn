@@ -19,7 +19,7 @@ private:
 	int Mouse_Y; //マウスのY座標
 	int Player_X; //プレイヤーのX座標
 	int Player_Y; //プレイヤーのY座標
-	int PlayUser;
+	int PlayUser; //今プレイしているコインの所持者
 	
 	float yadd; //重力加速度
 	float Yajirusi_Move; //矢印のアニメーションの値
@@ -28,6 +28,7 @@ private:
 
 	bool Mouse_Push; //マウスの左クリックがされたかのフラグ
 	bool CF_Clear; //コネクトフォーをクリアしたかのフラグ
+	bool CF_Draw; //コネクトフォーで引き分けをしたかのフラグ
 	
 public:
 	void CF_Player_Initialize();
@@ -40,6 +41,7 @@ public:
 	void ChangeTurn(int *PlayUser);
 
 	int ClearCheck(int board[Board_Xsize][Board_Ysize], int x, int y);
+	int DrawCheck(int board[Board_Xsize][Board_Ysize]);
 
 };
 //

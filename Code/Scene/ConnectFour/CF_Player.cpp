@@ -16,19 +16,21 @@ void CF_Player::CF_Player_Initialize() {
 	yadd = 0.0f;
 	FallCount = 0.0f;
 	Mouse_Push = false; //左クリックされたかのフラグの初期値
-	CF_Clear = false;
+	CF_Clear = false; //クリアフラグの初期値
+	CF_Draw = false; //ドローフラグの初期値
 	for (i = 0; i < 7; i++) {
 		Yajirusi_Col[i] = 0xff0000; //矢印の色の初期値
 	}
 	Board_Init();//パネル情報の初期化
 	srand((unsigned int)time(NULL));
-	PlayUser = rand() % 2 + 1;
+	PlayUser = rand() % 2 + 1; //プレイヤーの先攻後攻をランダムで取得
 }
 void CF_Player::CF_Player_Finalize() {
 	DeleteGraph(CF_Back); //画像削除処理
 	DeleteGraph(CF_Panel);
 }
 void CF_Player::CF_Player_Update() {
+	if (CF_Clear == false && CF_Draw == false) {
 		if (Mouse_Push == false) {
 			GetMousePoint(&Mouse_X, &Mouse_Y); //マウスの座標取得
 		}
@@ -51,13 +53,11 @@ void CF_Player::CF_Player_Update() {
 		for (i = 0; i < Board_Ysize; i++) {
 			for (j = 0; j < Board_Xsize; j++) {
 				if (297 + j * 110 - 48 < Player_X && Player_X < 297 + j * 110 + 48) { //矢印の範囲にコインが入ったら
-					if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
-						if (CF_Board[j][0] == Coin_Space) {
+					if (CF_Board[j][0] == Coin_Space) {
+						if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
 							Mouse_Push = true;
 						}
-					}
-					if (Mouse_Push == true) {
-						if (CF_Board[j][0] == Coin_Space) {
+						if (Mouse_Push == true) {
 							Coin_Fall(); //コインを配置する
 						}
 					}
@@ -66,30 +66,39 @@ void CF_Player::CF_Player_Update() {
 				else {
 					Yajirusi_Col[j] = 0xff0000;
 				}
-				if (CF_Board[j][i] == Coin_Space) continue;
+				if (CF_Board[j][i] == Coin_Space) {
+					continue;
+				}
 				if (ClearCheck(CF_Board, j, i)) {
 					CF_Clear = true;
 				}
+				if (DrawCheck(CF_Board)) {
+					CF_Draw = true;
+				}
 			}
 		}
-	
+	}
 }
 void CF_Player::CF_Player_Draw() {
 	DrawRotaGraph(640, 360, 1.0, 0, CF_Back, TRUE);
 	SetFontSize(24);
-	if (PlayUser == Coin_Player) {
-		DrawFormatString(100, 50, 0xffffff, "あなたの番です");
-		DrawRotaGraph(Player_X, Player_Y, 0.165, 0, CF_PCoin, TRUE);
-		SetFontSize(16);
-	}
-	else {
-		DrawFormatString(100, 50, 0xffffff, "CPUの番です");
-		DrawRotaGraph(Player_X, Player_Y, 0.165, 0, CF_CCoin, TRUE);
+	if (CF_Clear == false) {
+		if (PlayUser == Coin_Player) {
+			DrawFormatString(100, 50, 0xffffff, "あなたの番です");
+			DrawRotaGraph(Player_X, Player_Y, 0.165, 0, CF_PCoin, TRUE);
+			SetFontSize(16);
+		}
+		else {
+			DrawFormatString(100, 50, 0xffffff, "ＣＰＵの番です");
+			DrawRotaGraph(Player_X, Player_Y, 0.165, 0, CF_CCoin, TRUE);
+		}
 	}
 	SetFontSize(16);
 	for (i = 0; i < Board_Ysize; i++) {
 		for (j = 0; j < Board_Xsize; j++) {
-			DrawFormatString(297 + j * 114.5, Yajirusi_Y, Yajirusi_Col[j], "▼");
+			if (CF_Board[j][0] == Coin_Space) {
+				DrawFormatString(297 + j * 114.5, Yajirusi_Y, Yajirusi_Col[j], "▼");
+			}
 			if (CF_Board[j][i] == Coin_Player) {
 				DrawRotaGraph(j * 114 + 306, i * 79 + 209, 0.17, 0, CF_PCoin, TRUE);
 			}else if(CF_Board[j][i] == Coin_CPU){
@@ -101,7 +110,17 @@ void CF_Player::CF_Player_Draw() {
 	DrawRotaGraph(640, 420, 0.8, 0, CF_Panel, TRUE);
 	if (CF_Clear == true) {
 		SetFontSize(48);
-		DrawFormatString(640, 360, 0x0000ff, "勝ち！");
+		if (PlayUser != Coin_Player) {
+			DrawFormatString(440, 300, 0x0000ff, "プレイヤーの勝ち！");
+		}
+		else {
+			DrawFormatString(500, 300, 0x0000ff, "ＣＰＵの勝ち！");
+		}
+		SetFontSize(16);
+	}
+	if (CF_Draw == true) {
+		SetFontSize(48);
+		DrawFormatString(440, 300, 0x0000ff, "引 き 分 け");
 		SetFontSize(16);
 	}
 }
@@ -109,19 +128,21 @@ void CF_Player::CF_Player_Draw() {
 void CF_Player:: Coin_Fall() { //コインを配置する処理
 	Player_X = j * 114 + 306;
 	if (FallCount++ > 90) {
-		if (Player_Y < i * 79 + 230) {
+		if (Player_Y < i * 79 + 380) {
 			Player_Y += yadd;
-			yadd += 0.08f;
+			yadd += 0.1f;
 		}
 		else {
 			Player_Y = 50;
 			yadd = 0;
 			FallCount = 0;
 			if (CF_Board[j][Board_Ysize - k] != Coin_Space && Board_Ysize - k >= 0) { //空白じゃないなら、一つ上に置く
-				k += 1;
+				while (CF_Board[j][Board_Ysize - k] != Coin_Space && Board_Ysize - k >= 0) {
+					k += 1;
+				}
 			}
-			else if (CF_Board[j][Board_Ysize - k + 1] == Coin_Space){ //下が空白なら、おけるところまで下に下げる
-				while (Board_Ysize - k + 1 < Board_Ysize) {
+			if (CF_Board[j][Board_Ysize - k + 1] == Coin_Space && Board_Ysize - k + 1 < Board_Ysize){ //下が空白なら、おけるところまで下に下げる
+				while (CF_Board[j][Board_Ysize - k + 1] == Coin_Space && Board_Ysize - k + 1 < Board_Ysize) {
 					k -= 1;
 				}
 			}
@@ -172,5 +193,21 @@ void CF_Player::ChangeTurn(int *PlayUser) {
 	}
 	else {
 		*PlayUser = Coin_Player;
+	}
+}
+int CF_Player::DrawCheck(int board[Board_Xsize][Board_Ysize]) {
+	int a, b, DrawFlg;
+	for (a = Board_Ysize; a >= 0; a--) {
+		for (b = Board_Xsize, DrawFlg = 1; b >= 0; b--) {
+			if (board[b][a] == Coin_Space) {
+				DrawFlg = 0;
+			}
+		}
+	}
+	if (DrawFlg == 1) {
+		return 1;
+	}
+	else {
+		return 0;
 	}
 }
