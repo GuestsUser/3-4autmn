@@ -178,7 +178,7 @@ int Othello_Board::Check3() {
     }
 
     if (Check2(Board, 0, 1, 2, 1)) {     // â∫
-
+        return 1;
     }
 
     if (Check2(Board, 0, -1, 2, 1)) {   // è„
@@ -189,11 +189,17 @@ int Othello_Board::Check3() {
         return 1;
     }
 
-    // Ç±Ç±Ç©ÇÁ
-    Check2(Board,  1,  1, 2, 1);  // âEâ∫
-    Check2(Board, -1,  1, 2, 1);  // ç∂â∫
-    Check2(Board,  1, -1, 2, 1);  // âEè„
-    Check2(Board, -1, -1, 2, 1);  // ç∂è„
+    if(Check2(Board, -1, 1, 2, 1)){     // ç∂â∫
+        return 1;
+    }
+
+    if (Check2(Board, 1, -1, 2, 1)) {   // âEè„
+        return 1;
+    }
+
+    if (Check2(Board, -1, -1, 2, 1)) {  // ç∂è„
+        return 1;
+    }
 }
 
 //void Othello_Board::BlackOn_OthelloBoard() {
