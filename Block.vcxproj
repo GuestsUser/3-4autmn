@@ -24,6 +24,8 @@
     <ClCompile Include="Code\main.cpp" />
     <ClCompile Include="Code\SceneManager.cpp" />
     <ClCompile Include="Code\Scene\Asuma\PageOne.cpp" />
+    <ClCompile Include="Code\Scene\Asuma\PO_Player.cpp" />
+    <ClCompile Include="Code\Scene\Asuma\Scene_PageOne.cpp" />
     <ClCompile Include="Code\Scene\ConnectFour\CF_Player.cpp" />
     <ClCompile Include="Code\Scene\ConnectFour\Scene_ConnectFour.cpp" />
     <ClCompile Include="Code\Scene\daifugou\CP_Player.cpp" />
@@ -36,6 +38,8 @@
     <ClInclude Include="Code\GlovalLoading.h" />
     <ClInclude Include="Code\SceneManager.h" />
     <ClInclude Include="Code\Scene\Asuma\PageOne.h" />
+    <ClInclude Include="Code\Scene\Asuma\PO_Player.h" />
+    <ClInclude Include="Code\Scene\Asuma\Scene_PageOne.h" />
     <ClInclude Include="Code\Scene\ConnectFour\CF_Player.h" />
     <ClInclude Include="Code\Scene\ConnectFour\Scene_ConnectFour.h" />
     <ClInclude Include="Code\Scene\daifugou\CP_Player.h" />

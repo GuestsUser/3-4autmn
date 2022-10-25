@@ -1,11 +1,9 @@
-#include "DxLib.h"
-#include "PageOne.h"
-#include "./../../SceneManager.h"
-#include "./../../GetKey.h"
-#include "./../../Worldval.h"
-#include <list>
+#include"PO_Player.h"
+#include"DxLib.h"
+#include"./../Code/GetKey.h"
 
-void PageOne::PageOne_Initialize() {
+//CF_Player cf_player;
+void PO_Player::PO_Player_Initialize() {
 	LoadDivGraph("./../Resource/image/toranpu_all.png", 65, 5, 13, 200, 300, card_type);
 
 	// iはスート、jはナンバー
@@ -26,13 +24,12 @@ void PageOne::PageOne_Initialize() {
 	}
 }
 
-void PageOne::PageOne_Finalize() {
-	for (int i = 0; i < sizeof(card_type); i++) {
-		DeleteGraph(card_type[i]);
-	}
+void PO_Player::PO_Player_Finalize() {
+	DeleteGraph((int)card_type);
 }
 
-void PageOne::PageOne_Update() {
+void PO_Player::PO_Player_Update() {
+
 	for (int i = 0; i < 4; i++) {
 		Player_card.push_back(Card_obj[rand() % sizeof(Card_obj)]);
 	}
@@ -71,14 +68,18 @@ void PageOne::PageOne_Update() {
 			Yajirusi_Col[i] = 0xff0000;
 		}
 	}
-
 }
+void PO_Player::PO_Player_Draw() {
 
-void PageOne::PageOne_Draw() {
 	//int i = 0;
 	//for (auto itr = Player_card.begin(); itr != Player_card.end(); itr++) {
 	//	DrawRotaGraph(100 + i * Player_X, 100, 0.5, 0, *itr, TRUE);
 	//	i++;
 	//}
 	DrawRotaGraph(100 + Player_X, 100, 0.5, 0, Card_obj[0].img, TRUE);
+
+	for (i = 0; i < 7; i++) {
+		DrawFormatString(297 + i * 110, Yajirusi_Y, Yajirusi_Col[i], "▼");
+	}
+	DrawFormatString(100, 50, 0xffffff, "%d", Player_X);
 }

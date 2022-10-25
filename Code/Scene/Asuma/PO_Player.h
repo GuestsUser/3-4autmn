@@ -17,19 +17,15 @@ public:
 	}
 };
 
-class PageOne : public Card{
+class PO_Player {
 private:
+
 	Card Card_obj[54];	//カードの情報
 
 	std::list<Card> Player_card;	//プレイヤーの持っているカードの情報
 
 	int card_type[65];	//画像用ハンドル
 
-	int CF_Back;
-	int CF_Panel;
-	int CF_PCoin;
-	int CF_CCoin;
-	int CF_Yajirusi;
 	int i;
 
 	float Yajirusi_Move;
@@ -40,10 +36,11 @@ private:
 	int Mouse_Y; //マウスのY座標
 	int Player_X; //プレイヤーのX座標
 	int Player_Y; //プレイヤーのY座標
-
 public:
-	void PageOne_Initialize();
-	void PageOne_Finalize();
-	void PageOne_Update();
-	void PageOne_Draw();
+	void PO_Player_Initialize();
+	void PO_Player_Finalize();
+	void PO_Player_Update();
+	void PO_Player_Draw();
 };
+//
+//extern CF_Player cf_player;
