@@ -3,7 +3,7 @@
 
 class SR_Game : public Scene {
 private:
-	int BackImage;	/*”wŒi‰æ‘œ*/
+	int SR_MAP;	/*”wŒi‰æ‘œ*/
 public:
 	SR_Game();
 	void Update();

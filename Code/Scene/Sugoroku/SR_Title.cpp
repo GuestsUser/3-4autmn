@@ -3,14 +3,16 @@
 #include "./../../SceneManager.h"
 #include "MapLoad.h"
 #include "SR_Title.h"
+#include "SR_Game.h"
+#include "SR_Saikoro.h"
 
 SR_Title::SR_Title() {
-	Rule = LoadGraph("./../../Scene/SR_Title/SR_TitleImages/Rule.png");	/*画像読み込み*/
+	Rule = LoadGraph("Resource/image/SR_Rule.png");	/*画像読み込み*/
 }
 
 void SR_Title::Update() {
 	if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { //Aボタン(緑ボタン)が押された瞬間
-		//SetNext((new 00000));
+		SetNext((new SR_Game));
 	}
 	Draw();
 }

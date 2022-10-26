@@ -28,6 +28,7 @@
     <ClCompile Include="Code\Scene\daifugou\CP_Player.cpp" />
     <ClCompile Include="Code\Scene\Sample\Title.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\MapLoad.cpp" />
+    <ClCompile Include="Code\Scene\Sugoroku\SR_Saikoro.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\SR_Title.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\SR_Game.cpp" />
     <ClCompile Include="Code\Worldval.cpp" />
@@ -44,6 +45,7 @@
     <ClInclude Include="Code\Scene\Scene.h" />
     <ClInclude Include="Code\Scene\Sugoroku\MapLoad.h" />
     <ClInclude Include="Code\Scene\Sugoroku\SR_Game.h" />
+    <ClInclude Include="Code\Scene\Sugoroku\SR_Saikoro.h" />
     <ClInclude Include="Code\Scene\Sugoroku\SR_Title.h" />
     <ClInclude Include="Code\Worldval.h" />
   </ItemGroup>
