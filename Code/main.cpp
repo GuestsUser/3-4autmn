@@ -14,7 +14,13 @@
 #include"./Scene/ConnectFour/Scene_ConnectFour.h"
 //最初に実行したいシーンのヘッダーをインクルードしておく
 
-
+//気になっている事
+//void Hoge(int* x) { x = nullptr; }
+//void main() {
+//	int* a = new int(0);
+//	Hoge(a);
+//}
+//こうした際、Hoge実行後のaはnullptrになるのか否か、予想ではならない
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); //デバッグ表示を可能にする
