@@ -3,20 +3,20 @@
 #include "./../../SceneManager.h"
 #include "./../../GetKey.h"
 #include "./../../Worldval.h"
-#include <list>
+//#include <list>
+//#include <vector>
 
 void PageOne::PageOne_Initialize() {
-	LoadDivGraph("./../Resource/image/toranpu_all.png", 65, 5, 13, 200, 300, card_type);
+	LoadDivGraph("Resource/image/toranpu_all.png", 54, 13, 5, 200, 300, card_type);
 
-	// iはスート、jはナンバー
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 13; j++) {
-			Card_obj[i + j] = Card(card_type[i + j], j, i, false);
+	for (i = 0; i < 4; i++) {
+		for (j = 0; j < 13; j++) {
+			Card_obj.push_back(Card(card_type[i + j], j, i));
 		}
 	}
 
-	Card_obj[52] = Card(card_type[52], 0, 5, false);	//カードの裏面
-	Card_obj[53] = Card(card_type[53], 99, 5, false);	//ジョーカー
+	Card_back = Card(card_type[52], 0, 5);	//カードの裏面
+	Card_joker = Card(card_type[53], 99, 5);	//ジョーカー
 
 	Player_Y = 50;
 	Yajirusi_Y = 100;
@@ -27,14 +27,16 @@ void PageOne::PageOne_Initialize() {
 }
 
 void PageOne::PageOne_Finalize() {
-	for (int i = 0; i < sizeof(card_type); i++) {
+	for (i = 0; i < 65; i++) {
 		DeleteGraph(card_type[i]);
 	}
 }
 
 void PageOne::PageOne_Update() {
-	for (int i = 0; i < 4; i++) {
-		Player_card.push_back(Card_obj[rand() % sizeof(Card_obj)]);
+	for (i = 0; i < 4; i++) {
+		r = rand() % sizeof(Card_obj);
+		Player_card.push_back(Card_obj[r]);
+		Card_obj.erase(Card_obj.begin() + r);
 	}
 
 	GetMousePoint(&Mouse_X, &Mouse_Y);
