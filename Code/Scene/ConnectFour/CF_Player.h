@@ -18,17 +18,20 @@ private:
 	int Mouse_X; //マウスのX座標
 	int Mouse_Y; //マウスのY座標
 	int Player_X; //プレイヤーのX座標
-	int Player_Y; //プレイヤーのY座標
 	int PlayUser; //今プレイしているコインの所持者
-	
+	int DlayCount; //コインが落ちてからプレイヤーに変わるまでのディレイ時間
+	 
 	float yadd; //重力加速度
 	float Yajirusi_Move; //矢印のアニメーションの値
 	float Yajirusi_Y; //矢印のY座標
 	float FallCount;
+	float Player_Y; //プレイヤーのY座標
+	float Coin_Exp[Board_Xsize][Board_Ysize]; //コインの拡大率
 
 	bool Mouse_Push; //マウスの左クリックがされたかのフラグ
 	bool CF_Clear; //コネクトフォーをクリアしたかのフラグ
 	bool CF_Draw; //コネクトフォーで引き分けをしたかのフラグ
+	bool CF_Start; //ゲームがスタートしたかどうかのフラグ
 	
 public:
 	void CF_Player_Initialize();
