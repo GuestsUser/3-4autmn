@@ -1,38 +1,46 @@
 #pragma once
-#include "./../Scene.h"
+#include <list>
+#include <vector>
 
 class Card {
 public:
+	Card(){}
+
 	int img;	//画像用の変数
 	int num;	//カードの数字
 	int suit;	//カードのスート(マーク)
-	bool flg;	//使用したかどうか(false:使ってない　true:使ってる)
 
 	//Card(画像、数値、スート、使用フラグ)
-	Card(int i, int n, int s, bool f) {
+	Card(int i, int n, int s) {
 		img = i;
 		num = n;
 		suit = s;
-		flg = f;
 	}
 };
 
-class PageOne : public Scene{
+class PageOne {
 private:
-	Card Card_obj[54];	//カードの情報
 
-	Card Player_card[54];	//プレイヤーの持っているカードの情報
+	int card_type[54];	//画像用ハンドル
+	
+	Card Card_back;		//カードの裏面の情報
+	Card Card_joker;	//ジョーカーの情報
 
-	int card_type[65];	//画像用ハンドル
+	//Card Card_obj[4][13];		//全カードの情報
+	std::vector<Card> Card_obj;		//全カードの情報
+	std::list<Card> Player_card;	//プレイヤーの持っているカードの情報
 
-	int Mouse_X; //マウスのX座標
-	int Mouse_Y; //マウスのY座標
-	int Player_X; //プレイヤーのX座標
-	int Player_Y; //プレイヤーのY座標
+	int i;
+	int j;
+	int r;
+	int n;
 
 public:
+	PageOne() {}
+
 	void PageOne_Initialize();
 	void PageOne_Finalize();
 	void PageOne_Update();
 	void PageOne_Draw();
+
 };

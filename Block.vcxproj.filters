@@ -70,6 +70,12 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Code\Scene\Othello\Othello_Player.cpp">
+		<Filter>ソース ファイル</Filter>
+	</ClCompile>
+    <ClCompile Include="Code\Scene\Asuma\Scene_PageOne.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Scene\Asuma\PO_Player.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -132,6 +138,12 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Code\Scene\Othello\Othello_Player.h">
+		<Filter>ヘッダー ファイル</Filter>
+	</ClInclude>
+    <ClInclude Include="Code\Scene\Asuma\Scene_PageOne.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Scene\Asuma\PO_Player.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
