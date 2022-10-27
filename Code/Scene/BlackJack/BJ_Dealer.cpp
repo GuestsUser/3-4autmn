@@ -49,7 +49,7 @@ int Dealer::Calc() {
     score += data[i];
 
   }
-  if (data[0] == 1) {     /*戦闘が1であるか判定*/
+  if (data[0] == 1) {     /*先頭が1であるか判定*/
     /*1をどう扱うか判定する*/
     if (score + 11 < 22) {    /*11として扱ってもバーストしない場合*/
       /*11を加える*/
@@ -83,7 +83,8 @@ void Dealer::Hit(Shoe* shoe) {    /*shoeオブジェクトポインタ*/
 /*手札を表示*/
 void Dealer::Show_Hand() {
   /*標準出力*/
-  std::cout << "hand: ";
+
+  //DrawFormatString(100,620,0xffffff,"hand:");
   /*配列の最初から最後までを順に表示*/
   for (int i = 0; i < hand_num; i++) {
     /*カードの種類（スペード、ハート、ダイヤ、クラブ）を探索*/
@@ -109,23 +110,27 @@ void Dealer::Show_Hand() {
 
     default:    /*0-3でない場合はエラー処理*/
       /*標準出力*/
-      std::cout << "DefTypeError\nPlayer.show_hand" << std::endl;
+
+      DrawFormatString(0,0,0xffffff, "DefTypeError\nPlayer.show_hand");
       break;
 
     }
     /*標準出力*/
-    std::cout << hand[i] % 13 + 1 << ' ';
+
+    DrawFormatString(100,640,0xffffff," ");
 
   }
-  std::cout << std::endl;   /*改行*/
+
   if (Dealer::Calc() <= 21) {
 
-    std::cout << "score: " << Dealer::Calc() << std::endl;    /*スコア表示*/
+
+    DrawFormatString(100, 380, 0xffffff, "score: %d\n", Dealer::Calc());
 
   }
   else {
 
-    std::cout << "score: " << Dealer::Calc() << " !! Burst !!" << std::endl;    /*スコア表示*/
+    /*スコア表示*/
+    DrawFormatString(100, 380, 0xffffff, "score: %d\n", Dealer::Calc());
 
   }
 
@@ -136,12 +141,14 @@ bool Dealer::Play(Shoe* shoe) {   /*shoeオブジェクトポインタ*/
   while (Dealer::Calc() < 17 && Dealer::Calc() > 0) {
     /*ヒットする*/
     Dealer::Hit(shoe);
-    std::cout << "hit" << std::endl;
+
+    DrawFormatString(100,720,0xffffff,"hit\n");
     /*手札の表示*/
-    std::cout << "==============" << std::endl;
-    std::cout << "dealer" << std::endl;
+    DrawFormatString(100,740,0xffffff, "==============\n");
+    DrawFormatString(100,760,0xffffff, "dealer\n");
     Dealer::Show_Hand();
-    std::cout << "==============" << std::endl;
+
+    DrawFormatString(100,780,0xffffff, "==============\n");
 
   }
   return true;

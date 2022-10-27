@@ -70,22 +70,24 @@ void Shoe::Show_Shoe(bool type) {
     /*カード配列を先頭から表示する*/
     for (int i = 0; i < card_num; i++) {
 
-      std::cout << card_shoe[i] << ' ';
+      //std::cout << card_shoe[i] << ' ';
+      DrawFormatString(0,0,0xffffff," ");
 
     }
     /*改行*/
-    std::cout << std::endl;
+    //std::cout << std::endl;
 
   }
   else {    /*falseなら配列全体*/
     /*カード配列を先頭から表示する*/
     for (auto i : card_shoe) {
       /*標準出力*/
-      std::cout << i << ' ';
+      //std::cout << i << ' ';
+      DrawFormatString(0,0,0xffffff," ");
 
     }
     /*改行*/
-    std::cout << std::endl;
+    //std::cout << std::endl;
 
   }
 
@@ -95,7 +97,8 @@ int Shoe::Take_Card() {
   /*カード枚数が0だった場合、エラーとして出力*/
   if (card_num == 0) {
     /*標準出力*/
-    std::cout << "NoStackError\nShoe_card_num" << std::endl;
+    //std::cout << "NoStackError\nShoe_card_num" << std::endl;
+    DrawFormatString(0,0,0xffffff, "NoStackError\nShoe_card_num");
 
     return -1;
   }

@@ -12,3 +12,4 @@
 #include"BJ_Shoe.h"
 #include"BJ_Dealer.h"
 #include"BJ_Player.h"
+#include"BJ_Main.h"

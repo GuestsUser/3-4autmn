@@ -55,6 +55,7 @@
     <ClInclude Include="Code\Scene\Asuma\PageOne.h" />
     <ClInclude Include="Code\Scene\BlackJack\BJ_Dealer.h" />
     <ClInclude Include="Code\Scene\BlackJack\BJ_Head.h" />
+    <ClInclude Include="Code\Scene\BlackJack\BJ_Main.h" />
     <ClInclude Include="Code\Scene\BlackJack\BJ_Player.h" />
     <ClInclude Include="Code\Scene\BlackJack\BJ_Shoe.h" />
     <ClInclude Include="Code\Scene\ConnectFour\CF_Player.h" />
