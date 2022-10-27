@@ -3,6 +3,7 @@
 #include "./../../SceneManager.h"
 #include "./../../GetKey.h"
 #include "./../../Worldval.h"
+#include "./../../Scene/Sugoroku/SR_Title.h"
 
 Title::Title() :posX(0), posY(720), scrollSpeed(8), state(State::Moving) {
 	titleImage = LoadGraph("Resource/image/Title.png");
@@ -21,7 +22,7 @@ void Title::Update() {
 
 	case Title::State::Stop:
 		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { //Aボタン(緑ボタン)が押された瞬間
-			//SetNext(new Title()); //ゲームシーンへ遷移
+			SetNext(new SR_Title()); //ゲームシーンへ遷移
 		}
 		break;
 	}
