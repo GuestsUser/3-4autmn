@@ -25,18 +25,7 @@ void SR_Saikoro::Update() {
 	if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH) {
 		Shuffle = false;
 	}
-	Dice();
-	//Draw();
-}
-
-void SR_Saikoro::Draw() {
-	DrawString(0, 0, "‘o˜Zƒ‹[ƒ‹à–¾‰æ‘œ", GetColor(255, 255, 255));
-	DrawFormatString(200, 200, GetColor(255, 255, 255), "%d", Sum);
-}
-
-void SR_Saikoro::Dice() {
-	
-	if ((count / 6) % 2 == 0) {
+	if ((count / 4) % 2 == 0) {
 		if (Shuffle == true) {
 			/*y = rand() % 6 + 1;
 			d = rand() % 6 + 1;*/
@@ -47,4 +36,11 @@ void SR_Saikoro::Dice() {
 	DrawGraph(300, 300, SR_Saikoro1[y], true);
 	DrawGraph(300, 400, SR_Saikoro2[d], true);
 	Sum = y + d + 2;
+}
+
+void SR_Saikoro::Draw() {
+	DrawString(0, 0, "‘o˜Zƒ‹[ƒ‹à–¾‰æ‘œ", GetColor(255, 255, 255));
+	DrawFormatString(900, 600, GetColor(255, 255, 255), "%d", Sum);
+	DrawGraph(1050, 600, SR_Saikoro1[y], true);
+	DrawGraph(1140, 600, SR_Saikoro2[d], true);
 }

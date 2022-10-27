@@ -7,12 +7,14 @@
 
 SR_Game::SR_Game() {
 	SR_MAP = LoadGraph("Resource/image/SR_MAP.png");
+	saikoro = new SR_Saikoro();
 }
 
 void SR_Game::Update() {
-	&SR_Saikoro::Update;
+	saikoro->Update();
 }
 
 void SR_Game::Draw() {
-	//DrawGraph(0, 0, SR_MAP,true);
+	DrawGraph(0, 0, SR_MAP,false);
+	saikoro->Draw();
 }

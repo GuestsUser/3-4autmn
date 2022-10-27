@@ -1,7 +1,6 @@
 #pragma once
 #include "./../Scene.h"
-
-class SR_Saikoro : public Scene {
+class SR_Saikoro{
 private:
 	int SR_Saikoro1[6];	/*サイコロ画像１*/
 	int SR_Saikoro2[6];	/*サイコロ画像２*/
