@@ -6,7 +6,7 @@ private:
 	bool isDraw; //true‚ÅDraw‚ğÀs
 public:
 	Component() :isUpdate(true), isDraw(true) {}
-	virtual ~Component() = 0;
+	virtual ~Component() {}
 
 	virtual void Update() = 0;
 	virtual void Draw() {}

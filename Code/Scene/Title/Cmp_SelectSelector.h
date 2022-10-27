@@ -2,7 +2,7 @@
 #include "../Code/Component/Component.h"
 #include "../Code/Scene/Scene.h"
 
-class Cmp_SelectSelector :public Component {
+class Cmp_SelectSelector :public Component { //セレクト画面でゲームをセレクトした時、ゲームの説明へ処理を飛ばす為のButton用追加機能
 	int count; //Updateが実行されてからのカウント
 	int limit; //countがこの値になったら実行シーンを交換する
 
@@ -11,7 +11,6 @@ class Cmp_SelectSelector :public Component {
 
 public:
 	Cmp_SelectSelector(Scene* set, Scene** ref, int setLimit = 30) :run(set), gameRef(ref), count(0),limit(setLimit) { }
-	~Cmp_SelectSelector();
 
 	void Update();
 };

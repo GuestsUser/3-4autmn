@@ -8,15 +8,18 @@
 
 
 class Button : public Component { //Componentを継承しているが追加機能というより単体生存するタイプなので命名にCmpを付けなかった
+	enum class State { free, push }; //free=平常時、push=area範囲内で左ボタンを押した瞬間からarea内外問わず離した瞬間まで	
+	State state; //クリック状態を記憶しておくための変数
+
 	Cmp_Transform pos; //ボタン座標、中心座標になる
-	Cmp_Transform area; //クリック検知範囲、Posに検知半径を入れる
+	Cmp_Transform area; //クリック検知範囲、Posに検知半径を入れる、Scaleはクリックした際縮小する機能を実行した際拡大率を元に戻す為posから値を受け取る事に使用する
 	bool isMonitorClick; //trueでクリック検知、falseなら検知しない
 
 	std::deque<Component*> always; //常にUpdate、Drawを実行するコンポーネント
 	std::deque<Component*> click; //クリックを検知した瞬間Update、Drawを有効化するコンポーネント
 	
 public:
-	Button(bool monitorSet = true, int setX = 0, int setY = 0, int setAreaX = 0, int setAreaY = 0) :pos(Cmp_Transform()), area(Cmp_Transform()), isMonitorClick(monitorSet), always(std::deque<Component*>()), click(std::deque<Component*>()) {
+	Button(bool monitorSet = true, int setX = 0, int setY = 0, int setAreaX = 0, int setAreaY = 0) :pos(Cmp_Transform()), area(Cmp_Transform()), isMonitorClick(monitorSet), state(State::free), always(std::deque<Component*>()), click(std::deque<Component*>()) {
 		pos.EditPos().SetXYZ(setX, setY, 0);
 		area.EditPos().SetXYZ(setAreaX, setAreaY, 0);
 	}

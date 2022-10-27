@@ -26,6 +26,6 @@ public:
 
 	const Cmp_Transform* ReadTranform() const { return ts; } //読み取り専用形式でTransformを取得
 	Cmp_Transform* EditTranform() { return ts; } //書き換え可能な形式でTransformを取得
-	const int GetAnimesub() const { return use; } //画像描写に使用する添え字を取得
+	const int GetAnimeSub() const { return use; } //画像描写に使用する添え字を取得
 	void SetAnimeSub(int set) { use = set; } //画像描写に使用する添え字を設定
 };

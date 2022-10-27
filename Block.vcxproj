@@ -56,6 +56,7 @@
     <ClInclude Include="Code\Scene\Title\Cmp_SelectSelector.h" />
     <ClInclude Include="Code\Scene\Title\Scene_Explain.h" />
     <ClInclude Include="Code\Scene\Title\Scene_GameTitle.h" />
+    <ClInclude Include="Code\Scene\Title\Scene_Select.h" />
     <ClInclude Include="Code\Worldval.h" />
   </ItemGroup>
   <ItemGroup>

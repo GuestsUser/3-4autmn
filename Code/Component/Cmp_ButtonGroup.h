@@ -11,5 +11,6 @@ class Cmp_ButtonGroup :public Component { //ボタンをクリックするとグループ化され
 
 public:
 	Cmp_ButtonGroup(Button& setParent, std::deque<Button*>& setArray) :parent(&setParent), group(setArray) {}
+
 	void Update(); //parentのclickが実行された1回だけ実行する様になっている
 };
