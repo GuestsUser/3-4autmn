@@ -4,6 +4,8 @@
 
 class Card {
 public:
+	Card(){}
+
 	int img;	//画像用の変数
 	int num;	//カードの数字
 	int suit;	//カードのスート(マーク)
@@ -20,11 +22,12 @@ class PageOne {
 private:
 
 	int card_type[54];	//画像用ハンドル
+	
 	Card Card_back;		//カードの裏面の情報
 	Card Card_joker;	//ジョーカーの情報
 
-	Card Card_obj[4][13];		//全カードの情報
-	//std::vector<Card> Card_obj;		//全カードの情報
+	//Card Card_obj[4][13];		//全カードの情報
+	std::vector<Card> Card_obj;		//全カードの情報
 	std::list<Card> Player_card;	//プレイヤーの持っているカードの情報
 
 	int i;
@@ -33,6 +36,7 @@ private:
 	int n;
 
 public:
+	PageOne() {}
 
 	void PageOne_Initialize();
 	void PageOne_Finalize();
