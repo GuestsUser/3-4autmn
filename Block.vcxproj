@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -31,11 +31,15 @@
     <ClCompile Include="Code\Scene\ConnectFour\CF_Player.cpp" />
     <ClCompile Include="Code\Scene\ConnectFour\Scene_ConnectFour.cpp" />
     <ClCompile Include="Code\Scene\daifugou\CP_Player.cpp" />
+
     <ClCompile Include="Code\Scene\Karuta\Karu_Game.cpp" />
     <ClCompile Include="Code\Scene\Karuta\Scene_Karuta.cpp" />
     <ClCompile Include="Code\Scene\Othello\Othello_Board.cpp" />
     <ClCompile Include="Code\Scene\Othello\Othello_Player.cpp" />
     <ClCompile Include="Code\Scene\Othello\Scene_Othello.cpp" />
+
+    <ClCompile Include="Code\Scene\daifugou\CP_Scene.cpp" />
+
     <ClCompile Include="Code\Scene\Sample\Title.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\MapLoad.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\SR_Saikoro.cpp" />
@@ -56,11 +60,15 @@
     <ClInclude Include="Code\Scene\ConnectFour\CF_Player.h" />
     <ClInclude Include="Code\Scene\ConnectFour\Scene_ConnectFour.h" />
     <ClInclude Include="Code\Scene\daifugou\CP_Player.h" />
+
     <ClInclude Include="Code\Scene\Karuta\Karu_Game.h" />
     <ClInclude Include="Code\Scene\Karuta\Scene_Karuta.h" />
     <ClInclude Include="Code\Scene\Othello\Othello_Board.h" />
     <ClInclude Include="Code\Scene\Othello\Othello_Player.h" />
     <ClInclude Include="Code\Scene\Othello\Scene_Othello.h" />
+
+    <ClInclude Include="Code\Scene\daifugou\CP_Scene.h" />
+
     <ClInclude Include="Code\Scene\Sample\Title.h" />
     <ClInclude Include="Code\Scene\Scene.h" />
     <ClInclude Include="Code\Scene\Sugoroku\MapLoad.h" />
