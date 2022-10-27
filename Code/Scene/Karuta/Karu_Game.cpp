@@ -2,6 +2,9 @@
 #include"./../Code/GetKey.h"
 #include"Karu_Game.h"
 
+#include <random>
+
+
 void Karu_Game::Karu_Game_Initialize() {
 	Karu_Bg = LoadGraph("Resource/image/Karu_Tatami.png");
 	Karu_SideBg = LoadGraph("Resource/image/Karu_Side_Bg.png");
@@ -22,7 +25,8 @@ void Karu_Game::Karu_Game_Draw() {
 	for (float j = Karu_StartPosY; j < ((Karu_imgY + Karu_Space) * KARU_MAX_Y); j += Karu_imgY + Karu_Space) {
 		for (float i = Karu_StartPosX; i < ((Karu_imgX + Karu_Space) * KARU_MAX_X); i += Karu_imgX + Karu_Space) {
 
-			DrawRotaGraph(i, j, 1.0, 0, Karu_fuda[4][6], TRUE);
+			DrawRotaGraph(i, j, 1.0, 0, Karu_fuda[0][6], TRUE);
+			
 		}
 	}
 }
