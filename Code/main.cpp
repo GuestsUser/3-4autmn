@@ -39,7 +39,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	key = new KeySystem(); //キー入力受付用クラスの実体作成
 
-	SceneManager* scm = new SceneManager(new Scene_Karuta()); //引数に最初に実行したいシーン実体を入れる
+	SceneManager* scm = new SceneManager(new CP_Scene()); //引数に最初に実行したいシーン実体を入れる
 
 	while (ProcessMessage() == 0 && (!CheckHitKey(KEY_INPUT_ESCAPE)) && key->GetKeyState(SELECT_KEY) != KEY_PUSH) { //GetKeyシステム使用例、backボタンが押された瞬間にfalseとなる
 		//_RPTF1(_CRT_WARN, "%s\n", "test"); //デバッグ表示
