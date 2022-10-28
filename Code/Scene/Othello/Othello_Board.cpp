@@ -18,6 +18,7 @@ void Othello_Board::Othello_Board_Initialize() {
     CheckFlag = false;
 
     Init_OthelloBoard(Board);           // ボードを初期化
+    
 }
 void Othello_Board::Othello_Board_Finalize() {
 	//DeleteGraph(Board);
@@ -38,35 +39,44 @@ void Othello_Board::Othello_Board_Update() {
     Square_X = Mouse_X / MAP_SIZE;      // マウスカーソルの位置を MAP_SIZE で割った値を代入
     Square_Y = Mouse_Y / MAP_SIZE;      // マウスカーソルの位置を MAP_SIZE で割った値を代入
 
-    //Check(Board);
-
-    // ボードのマスの上にマウスカーソルが重なったところが 0 だったら
-    if (Board[Square_X][Square_Y] == 0) {
-
+    if (Board[Square_X][Square_Y] == 3) {
         DrawFlag = true;
-
-        // 左クリックをしたら
         if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
             Board[Square_X][Square_Y] = 1;      // 黒石を置く
             Check3();
         }
+    }
+    else {
+        DrawFlag = false;
+    }
+
+
+    // ボードのマスの上にマウスカーソルが重なったところが 0 だったら
+    if (Board[Square_X][Square_Y] == 0) {
+
+        //DrawFlag = true;
+
+        // 左クリックをしたら
+
 
         // 右クリックをしたら
         if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH) {
-            Board[Square_X][Square_Y] = 2;      // 黒石を置く
+            Board[Square_X][Square_Y] = 2;      // 白石を置く
             //Check2(Board, -1, 0);
         }
         
     }
     else {
-        DrawFlag = false;
+        //DrawFlag = false;
     }
 }
+
 
 void Othello_Board::Othello_Board_Draw() {
     //DrawRotaGraph(640, 360, 1.0, 0, Board, TRUE);
     //DrawBox(0, 0, 1280, 720, GetColor(255, 255, 255), TRUE);
     Print_OthelloBoard(Board);
+    Check(Board);
 }
 
 // ボードを初期化する
@@ -98,8 +108,6 @@ void Othello_Board::Print_OthelloBoard(int board[PB][PB]) {
                 // ボードのマスの設定
                 DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
                     (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
-
-                CursorOn_OthelloBoard();    // マウスカーソルの位置がボードのマス目の上に来たマスを赤く表示する
             }
             if (board[i][j] == 1) {
                 // ボードのマス目を見やすくするために黒色で囲む
@@ -121,6 +129,16 @@ void Othello_Board::Print_OthelloBoard(int board[PB][PB]) {
                 // 白石を置く
                 DrawCircle(i * MAP_SIZE + (MAP_SIZE / 2), j * MAP_SIZE + (MAP_SIZE / 2), 27, WhiteCr, TRUE);
             }
+            if (board[i][j] == 3) {
+                // ボードのマス目を見やすくするために黒色で囲む
+                DrawBox(i * MAP_SIZE, j * MAP_SIZE,
+                    (i * MAP_SIZE) + MAP_SIZE, (j * MAP_SIZE) + MAP_SIZE, WhiteCr, TRUE);
+                // ボードのマスの設定
+                DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
+                    (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
+
+                CursorOn_OthelloBoard();    // マウスカーソルの位置がボードのマス目の上に来たマスを赤く表示する
+            }
         }
     }
 }
@@ -134,28 +152,20 @@ void Othello_Board::CursorOn_OthelloBoard() {
     }
 }
 
-// 黒石が置ける場所を探す
-//void Othello_Board::Check(int board[PB][PB]) {
-//    for (int i = 1; i <= 8; i++) {
-//        for (int j = 1; j <= 8; i++) {
-//            if (board[i][j] == 0) {
-//                if (Check3()) {
-//                    DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
-//                        (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GetColor(255, 0, 0), TRUE);
-//                }
-//            }
-//        }
-//    }
-//}
+
 
 // 黒石で白石を挟むと黒石に変える(ボード、左右、上下、敵の色、プレイヤーの色）
-int Othello_Board::Check2(int board[PB][PB], int p, int q, int enemy, int player) {
+int Othello_Board::BlackOnCheck(int board[PB][PB], int p, int q, int enemy, int player) {
+
+    // カーソルが合っているところから、置いた場合ひっくり返せるかどうか調べる
     for (CheckNum = 1; board[Square_X + CheckNum * p][Square_Y + CheckNum * q] != -1; CheckNum++) {
+        // 置いた場所からプレイヤーが指定した方向にいたら
         if (board[Square_X + CheckNum * p][Square_Y + CheckNum * q] == player) {
             CheckFlag = true;
             //return 1;
             break;
         }
+        // 調べた方向になにも置いていなかったら
         else if (board[Square_X + CheckNum * p][Square_Y + CheckNum * q] == 0) {
             return 0;
         }
@@ -174,56 +184,83 @@ int Othello_Board::Check2(int board[PB][PB], int p, int q, int enemy, int player
 
 // 上下左右斜めに石があるかどうか
 void Othello_Board::Check3() {
-    Check2(Board, 1, 0, 2, 1);
-    Check2(Board, -1, 0, 2, 1);
-    Check2(Board, 0, 1, 2, 1);
-    Check2(Board, 0, -1, 2, 1);
-    Check2(Board, 1, 1, 2, 1);
-    Check2(Board, -1, 1, 2, 1);
-    Check2(Board, 1, -1, 2, 1);
-    Check2(Board, -1, -1, 2, 1);
+    BlackOnCheck(Board, 1, 0, 2, 1);
+    BlackOnCheck(Board, -1, 0, 2, 1);
+    BlackOnCheck(Board, 0, 1, 2, 1);
+    BlackOnCheck(Board, 0, -1, 2, 1);
+    BlackOnCheck(Board, 1, 1, 2, 1);
+    BlackOnCheck(Board, -1, 1, 2, 1);
+    BlackOnCheck(Board, 1, -1, 2, 1);
+    BlackOnCheck(Board, -1, -1, 2, 1);
 
-    //if (Check2(Board, 1, 0, 2, 1)) {    // 右
-    //    return 1;
-    //}
 
-    //if (Check2(Board, -1, 0, 2, 1)) {    // 左
-    //    return 1;
-    //}
-
-    //if (Check2(Board, 0, 1, 2, 1)) {     // 下
-    //    return 1;
-    //}
-
-    //if (Check2(Board, 0, -1, 2, 1)) {   // 上
-    //    return 1;
-    //}
-
-    //if (Check2(Board, 1, 1, 2, 1)) {   // 右下
-    //    return 1;
-    //}
-
-    //if(Check2(Board, -1, 1, 2, 1)){     // 左下
-    //    return 1;
-    //}
-
-    //if (Check2(Board, 1, -1, 2, 1)) {   // 右上
-    //    return 1;
-    //}
-
-    //if (Check2(Board, -1, -1, 2, 1)) {  // 左上
-    //    return 1;
-    //}
 }
 
-void Othello_Board::BlackOn_OthelloBoard(int board[PB][PB], int p, int q, int enemy, int player) {
+// 左右上斜めに石があるかどうか調べる
+int Othello_Board::BlackPutCheck(int d, int e) {
 
-    if (CheckFlag == true) {
-        for (int i = 0; i <= CheckNum - 1; CheckNum--) {
-            if (board[Square_X + CheckNum * p][Square_Y + CheckNum * q] == enemy) {
-                board[Square_X + CheckNum * p][Square_Y + CheckNum * q] = player;
+    if (PutSearch(Board, 1, 0, d, e, 2, 1)){    // 右
+        return 1;
+    }
+    if (PutSearch(Board, -1, 0, d, e, 2, 1)) {  // 左
+        return 1;
+    }
+    if (PutSearch(Board, 0, -1, d, e, 2, 1)) {  // 上
+        return 1;
+    }
+    if (PutSearch(Board, 0, 1, d, e, 2, 1)) {   // 下
+        return 1;
+    }
+
+    if (PutSearch(Board, 1, 1, d, e, 2, 1)) {   // 右下
+        return 1;
+    }
+    if (PutSearch(Board, -1, 1, d, e, 2, 1)) {  // 左下
+        return 1;
+    }
+    if (PutSearch(Board, 1, -1, d, e, 2, 1)) {  // 右上
+        return 1;
+    }
+    if (PutSearch(Board, -1, -1, d, e, 2, 1)) { // 左上
+        return 1;
+    }
+
+    return 0;
+}
+
+// 8方向を調べて石が無ければ return 0 、石があれば return 1 を返す
+int Othello_Board::PutSearch(int board[PB][PB], int p, int q, int d, int e, int enemy, int player) {
+
+    // 指定した方向に enemy（敵の石) があったら
+    if (board[d + p][e + q] == enemy) {
+
+        // マップチップの -1（盤外） にいくまでに player(自分の石) があるかどうか調べる
+        for (int i = 1; board[d + i * p][e + i * q] != -1; i++) {
+
+            if (board[d + i * p][e + i * q] == 0) {
+                return 0;
+            }
+            if (board[d + i * p][e + i * q] == player) {
+                return 1;
             }
         }
-        CheckFlag = false;
+    }
+    return 0;
+}
+
+//黒石が置ける場所を探す
+void Othello_Board::Check(int board[PB][PB]) {
+    for (int i = 1; i <= 8; i++) {
+        for (int j = 1; j <= 8; j++) {
+            if (board[i][j] == 0) {
+                if (BlackPutCheck(i, j)) {
+
+                    DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
+                        (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GetColor(10, 50, 100), false);
+
+                   board[i][j] = 3;
+                }
+            }
+        }
     }
 }
