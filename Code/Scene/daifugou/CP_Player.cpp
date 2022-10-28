@@ -4,7 +4,7 @@
 //‘å•x‹ƒvƒŒƒCƒ„[
 void CareerPoker::CP_Player_Initialize(){
 	//rule = LoadGraph("Code/Scene/daifugou/images/rule.png");//ƒ‹[ƒ‹‰æ‘œ
-	stage = LoadGraph("Code/Scene/daifugou/images/CareerPoker.png");//”wŒi‰æ‘œ
+	stage = LoadGraph("Resource/image/CareerPoker.png");//”wŒi‰æ‘œ
 	LoadDivGraph("Resource/image/toranpu_all.png",53,13,5,200,300, *cards,TRUE);
 	for (int i = 0; i < 4; i++) {
 		printf("‘«‚µZ");
