@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="最初に実行するのはScene_Select">
+    <Position X="13.396" Y="3.156" Height="0.75" Width="1.7" />
+  </Comment>
   <Class Name="Component">
     <Position X="8.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
@@ -58,14 +61,14 @@
       </Enum>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>hEQAAAAAAAAEAgAAABQAAIAACAgAAAAEggQCBAEAIAE=</HashCode>
+      <HashCode>hEQAABAAAAAEBgAAABUEAIQACAgAAACEggRKBAEEIAE=</HashCode>
       <FileName>Code\Component\Button.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Cmp_ButtonGroup">
     <Position X="10.25" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QAUAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>QAUAAAAAAAAAAEBAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Code\Component\Cmp_ButtonGroup.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -76,7 +79,7 @@
       <Field Name="gameRef" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAQAAhAAAgAAAAAABAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>QAQAAhAAAgAAAAAABAAAAAAAAAGAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Code\Scene\Title\Cmp_SelectSelector.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -89,15 +92,24 @@
   </Class>
   <Class Name="Scene_Select">
     <Position X="14.25" Y="4.25" Width="1.5" />
+    <Members>
+      <Field Name="run" Hidden="true" />
+    </Members>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>gAQAAgJAAAAAAgAAAAAAAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
       <FileName>Code\Scene\Title\Scene_Select.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Scene_Explain">
     <Position X="16.75" Y="4.25" Width="1.5" />
+    <Members>
+      <Field Name="button" Hidden="true" />
+      <Field Name="cursor" Hidden="true" />
+      <Field Name="page" Hidden="true" />
+      <Field Name="run" Hidden="true" />
+    </Members>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAQAAgBAAIAAAgEAEAAAAAAAGAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Code\Scene\Title\Scene_Explain.h</FileName>
     </TypeIdentifier>
   </Class>

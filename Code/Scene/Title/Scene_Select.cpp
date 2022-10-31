@@ -8,6 +8,13 @@
 #include "Scene_Select.h"
 #include "Scene_Explain.h"
 
+//プレイするゲームシーンをインクルード
+#include"../Code/Scene/Karuta/Scene_Karuta.h"
+#include"../Code/Scene/ConnectFour/Scene_ConnectFour.h"
+#include"../Code/Scene/daifugou/CP_Scene.h"
+#include"../Code/Scene/BlackJack/BJ_Main.h"
+#include"../Code/Scene/Asuma/Scene_PageOne.h"
+
 #include <deque>
 
 
@@ -45,6 +52,7 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			break;
 		case 4: //かるた
 			*img = LoadGraph("Resource/image/Select_Karuta.png");
+			gameScene = new Scene_Karuta(); //個別シーン飛ばし作例、scmに入れていたのがgameSceneになった程度の違い
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Karuta1.png")), 1));
 			break;
 		case 5: //ページワン
