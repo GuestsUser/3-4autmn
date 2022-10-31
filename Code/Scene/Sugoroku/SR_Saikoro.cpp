@@ -8,34 +8,32 @@
 #include <stdlib.h>
 
 SR_Saikoro::SR_Saikoro() {
-	LoadDivGraph("Resource/image/SR_Saikoro1.png",6,6,1,75,75,SR_Saikoro1,true);	/*画像読み込み*/
-	LoadDivGraph("Resource/image/SR_Saikoro2.png",6,6,1,75,75,SR_Saikoro2,true);	/*画像読み込み*/
-	y = 0;
-	d = 0;
-	i = 0;
+	LoadDivGraph("Resource/image/SR_Saikoro1.png",6,6,1,75,75,SR_Saikoro1,true);	/*サイコロ画像読み込み*/
+	LoadDivGraph("Resource/image/SR_Saikoro2.png",6,6,1,75,75,SR_Saikoro2,true);	/*サイコロ画像読み込み*/
+	y = 0, d = 0, i = 0;	/*各種変数初期化*/
 	count = 0;
 	SRand(123456); // 乱数の初期値を123456に設定する
 }
 
 void SR_Saikoro::Update() {
 	count++;
-	if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
-		Shuffle = true;
-	}
-	if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH) {
-		Shuffle = false;
-	}
+	GetMousePoint(&MouseX, &MouseY);
+	//if (Click == true) {	/*サイコロ画像クリック可否フラグ*/
+		if (MouseX >= 1020 && MouseY >= 580 && MouseX <= 1250 && MouseY <= 700) {
+			if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {	/*もし左クリックしたら*/
+				Shuffle = true;	/*シャッフルフラグをONに*/
+			}
+			else if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH && Shuffle == true) {
+				Shuffle = false;
+			}
+		}
 	if ((count / 4) % 2 == 0) {
 		if (Shuffle == true) {
-			/*y = rand() % 6 + 1;
-			d = rand() % 6 + 1;*/
 			y = GetRand(5);
 			d = GetRand(5);
 		}
 	}
-	DrawGraph(300, 300, SR_Saikoro1[y], true);
-	DrawGraph(300, 400, SR_Saikoro2[d], true);
-	Sum = y + d + 2;
+	Sum = y + d + 2;	/*サイコロの合計値*/
 }
 
 void SR_Saikoro::Draw() {
