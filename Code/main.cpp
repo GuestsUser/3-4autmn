@@ -15,10 +15,8 @@
 #include"./Scene/ConnectFour/Scene_ConnectFour.h"
 #include"./Scene/daifugou/CP_Scene.h"
 #include"./Scene/BlackJack/BJ_Main.h"
-#include"./Scene/Sugoroku/SR_Game.h"
 //最初に実行したいシーンのヘッダーをインクルードしておく
-
-
+#include"./Scene/Asuma/Scene_PageOne.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); //デバッグ表示を可能にする
@@ -41,8 +39,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	key = new KeySystem(); //キー入力受付用クラスの実体作成
 
-	SceneManager* scm = new SceneManager(new SR_Game()); //引数に最初に実行したいシーン実体を入れる
+	SceneManager* scm = new SceneManager(new Scene_PageOne()); //引数に最初に実行したいシーン実体を入れる
 
+	
 	while (ProcessMessage() == 0 && (!CheckHitKey(KEY_INPUT_ESCAPE)) && key->GetKeyState(SELECT_KEY) != KEY_PUSH) { //GetKeyシステム使用例、backボタンが押された瞬間にfalseとなる
 		//_RPTF1(_CRT_WARN, "%s\n", "test"); //デバッグ表示
 
