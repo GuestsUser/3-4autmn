@@ -19,7 +19,7 @@ class Button : public Component { //Component‚ğŒp³‚µ‚Ä‚¢‚é‚ª’Ç‰Á‹@”\‚Æ‚¢‚¤‚æ‚è’
 	std::deque<Component*> click; //ƒNƒŠƒbƒN‚ğŒŸ’m‚µ‚½uŠÔUpdateADraw‚ğ—LŒø‰»‚·‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 	
 public:
-	Button(bool monitorSet = true, int setX = 0, int setY = 0, int setAreaX = 0, int setAreaY = 0) :pos(Cmp_Transform()), area(Cmp_Transform()), isMonitorClick(monitorSet), state(State::free), always(std::deque<Component*>()), click(std::deque<Component*>()) {
+	Button(int setX = 0, int setY = 0, int setAreaX = 0, int setAreaY = 0, bool monitorSet = true) :pos(Cmp_Transform()), area(Cmp_Transform()), isMonitorClick(monitorSet), state(State::free), always(std::deque<Component*>()), click(std::deque<Component*>()) {
 		pos.EditPos().SetXYZ(setX, setY, 0);
 		area.EditPos().SetXYZ(setAreaX, setAreaY, 0);
 	}
@@ -30,18 +30,36 @@ public:
 
 
 
+	void SetRunClickMonitor(bool set) { isMonitorClick = set; } //ƒNƒŠƒbƒN‚ğŒŸ’m‚·‚é‚©‚ğİ’èAtrue‚ÅŒŸ’m‚·‚éAfalse‚Å‚µ‚È‚¢
+	const bool GetRunClickMonitor()const { return isMonitorClick; } //ƒNƒŠƒbƒNŒŸ’m‚ÌÀs‰Â”Û‚Ìæ“¾
+
+
+	void SetRunUpdateAlways(bool set); //always‚ÌisUpdate‚ğˆêŠ‡İ’è
+	void SetRunDrawAlways(bool set); //always‚ÌisDraw‚ğˆêŠ‡İ’è
+	void SetRunUpdateClick(bool set); //click‚ÌisUpdate‚ğˆêŠ‡İ’è
+	void SetRunDrawClick(bool set); //click‚ÌisDraw‚ğˆêŠ‡İ’è
+
+	const bool GetRunUpdateAlways()const; //always‚ÌisUpdate‚ğ’²¸‚µA1‚Â‚Å‚àtrue‚ª‚ ‚Á‚½‚çtrue‚ğ•Ô‚·
+	const bool GetRunDrawAlways()const; //always‚ÌisDraw‚ğ’²¸‚µA1‚Â‚Å‚àtrue‚ª‚ ‚Á‚½‚çtrue‚ğ•Ô‚·
+	const bool GetRunUpdateClick()const; //click‚ÌisUpdate‚ğ’²¸‚µA1‚Â‚Å‚àtrue‚ª‚ ‚Á‚½‚çtrue‚ğ•Ô‚·
+	const bool GetRunDrawClick()const; //click‚ÌisDraw‚ğ’²¸‚µA1‚Â‚Å‚àtrue‚ª‚ ‚Á‚½‚çtrue‚ğ•Ô‚·
+	
+
+
 
 	void SetAlways(Component* cmp) { always.push_back(cmp); } //cmp‚ğalways‚Ö’Ç‰Á
 	void EraseAlways(Component* cmp); //cmp©‘Ì‚ğíœ‚µAalways‚©‚ç‚àœŠOAalways‚É‘¶İ‚µ‚È‚¢ƒRƒ“ƒ|[ƒlƒ“ƒg‚ğw’è‚µ‚½ê‡íœ‚µ‚È‚¢
 	void ClearAlways(); //always‚ğ‹ó‚É‚·‚éA“ü‚Á‚Ä‚¢‚½ƒRƒ“ƒ|[ƒlƒ“ƒgÀ‘Ì‚Í‘S‚Äíœ‚³‚ê‚é
 
 	void SetClick(Component* cmp) { //cmp‚ğclick‚Ö’Ç‰Á
-		always.push_back(cmp); //”z—ñ‚É’Ç‰Á
+		click.push_back(cmp); //”z—ñ‚É’Ç‰Á
 		cmp->SetRunUpdate(false); //w’èƒRƒ“ƒ|[ƒlƒ“ƒg‚ÌUpdateADraw‚ÍƒNƒŠƒbƒN‚ğŒŸ’m‚µ‚½Atrue‚É‚³‚ê‚é
 		cmp->SetRunDraw(false);
 	}
 	void EraseClick(Component* cmp); //cmp©‘Ì‚ğíœ‚µAclick‚©‚ç‚àœŠO
 	void ClearClick(); //click‚ğ‹ó‚É‚·‚éA“ü‚Á‚Ä‚¢‚½ƒRƒ“ƒ|[ƒlƒ“ƒgÀ‘Ì‚Í‘S‚Äíœ‚³‚ê‚é
+
+
 
 
 	const Cmp_Transform* ReadTransform() const { return &pos; } //À•WŒnî•ñ‚ğ“Ç‚İæ‚èê—pŒ`®‚Åæ“¾

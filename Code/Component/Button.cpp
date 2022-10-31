@@ -18,11 +18,13 @@ void Button::Update() {
 	int x = -1; //マウスx
 	int y = -1; //マウスy
 	GetMousePoint(&x, &y); //マウス位置取得
-	bool hit = x > current.GetX() + rad.GetX() && x < current.GetX() - rad.GetX() && y > current.GetY() + rad.GetY() && y < current.GetY() - rad.GetY(); //範囲内にカーソルがある場合true
+	bool hit = x < current.GetX() + rad.GetX() && x > current.GetX() - rad.GetX() && y < current.GetY() + rad.GetY() && y > current.GetY() - rad.GetY(); //範囲内にカーソルがある場合true
 
+
+	if (!isMonitorClick) { return; } //クリック検知禁止が入っていればここで終わり
 	switch (state) {
 	case Button::State::free: //平常時処理
-		if (hit && GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { //カーソルが範囲内にある状態で押した瞬間を検知
+		if (hit && key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { //カーソルが範囲内にある状態で押した瞬間を検知
 			float shrink = 0.7; //クリックした際の縮小表示の為の拡大倍率
 
 			area.EditScale() = pos.ReadScale(); //現在の拡大状況をareaに保存する
@@ -33,7 +35,7 @@ void Button::Update() {
 		break;
 
 	case Button::State::push: //押している間の処理
-		if (GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PULL) { //離した瞬間を検知
+		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PULL) { //離した瞬間を検知
 			pos.EditScale() = area.ReadScale(); //拡大率を元の物に戻す
 			state = State::free; //stateを平常へ移行する
 
@@ -53,7 +55,7 @@ void Button::Update() {
 }
 
 void Button::Draw() {
-	if (!GetRunUpdate()) { return; } //実行の許可が出てない場合終わり
+	if (!GetRunDraw()) { return; } //実行の許可が出てない場合終わり
 	for (auto itr : always) { itr->Draw(); }
 	for (auto itr : click) { itr->Draw(); }
 
@@ -97,5 +99,43 @@ void Button::ClearClick() {
 	click.clear(); //配列の要素を全削除
 }
 
+void Button::SetRunUpdateAlways(bool set) {
+	for (auto itr : always) { itr->SetRunUpdate(set); }
+}
+void Button::SetRunDrawAlways(bool set) {
+	for (auto itr : always) { itr->SetRunDraw(set); }
+}
+void Button::SetRunUpdateClick(bool set) {
+	for (auto itr : click) { itr->SetRunUpdate(set); }
+}
+void Button::SetRunDrawClick(bool set) {
+	for (auto itr : click) { itr->SetRunDraw(set); }
+}
+
+
+const bool Button::GetRunUpdateAlways()const {
+	for (auto itr : always) { //always全調査
+		if (itr->GetRunUpdate()) { return true; } //trueが1つでもあればtrueを返す
+	}
+	return false; //1つもtrueが見つからなければfalseを返す
+}
+const bool Button::GetRunDrawAlways()const {
+	for (auto itr : always) { //always全調査
+		if (itr->GetRunDraw()) { return true; } //trueが1つでもあればtrueを返す
+	}
+	return false; //1つもtrueが見つからなければfalseを返す
+}
+const bool Button::GetRunUpdateClick()const {
+	for (auto itr : click) { //click全調査
+		if (itr->GetRunUpdate()) { return true; } //trueが1つでもあればtrueを返す
+	}
+	return false; //1つもtrueが見つからなければfalseを返す
+}
+const bool Button::GetRunDrawClick()const {
+	for (auto itr : click) { //click全調査
+		if (itr->GetRunDraw()) { return true; } //trueが1つでもあればtrueを返す
+	}
+	return false; //1つもtrueが見つからなければfalseを返す
+}
 
 

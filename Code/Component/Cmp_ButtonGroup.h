@@ -13,4 +13,7 @@ public:
 	Cmp_ButtonGroup(Button& setParent, std::deque<Button*>& setArray) :parent(&setParent), group(setArray) {}
 
 	void Update(); //parentのclickが実行された1回だけ実行する様になっている
+
+	std::deque<Button*>* EditGroup() { return &group; } //ボタングループを編集可能な状態で取得
+	Button* EditParent() { return parent; } //自身の親を編集可能な状態で取得
 };
