@@ -39,3 +39,8 @@ x64/
 x86/
 debug.log
 Log.txt
+Block.vcxproj
+Block.vcxproj.filters
+Block.vcxproj.user
+*.vcxproj
+*.filters

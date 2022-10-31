@@ -1,4 +1,4 @@
-//���̕����̃R�����g�A�E�g���O���ƃf�o�b�O�I������new�̊J�����Y������������Œʒm���Ă����
+﻿//この部分のコメントアウトを外すとデバッグ終了時にnewの開放し忘れをメモリ数で通知してくれる
 //#define _CRTDBG_MAP_ALLOC
 //#include <cstdlib>
 //#include <crtdbg.h>
@@ -11,55 +11,51 @@
 #include "SceneManager.h"
 #include "Worldval.h"
 #include "GlovalLoading.h"
+#include"./Scene/Karuta/Scene_Karuta.h"
 #include"./Scene/ConnectFour/Scene_ConnectFour.h"
-//�ŏ��Ɏ��s�������V�[���̃w�b�_�[���C���N���[�h���Ă���
-
-//�C�ɂȂ��Ă��鎖
-//void Hoge(int* x) { x = nullptr; }
-//void main() {
-//	int* a = new int(0);
-//	Hoge(a);
-//}
-//���������ہAHoge���s���a��nullptr�ɂȂ�̂��ۂ��A�\�z�ł͂Ȃ�Ȃ�
+#include"./Scene/daifugou/CP_Scene.h"
+#include"./Scene/BlackJack/BJ_Main.h"
+//最初に実行したいシーンのヘッダーをインクルードしておく
+#include"./Scene/Asuma/Scene_PageOne.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); //�f�o�b�O�\�����\�ɂ���
+	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); //デバッグ表示を可能にする
 	ChangeWindowMode(true);
 
-	if (DxLib_Init() == -1) { return -1; }		//�������ƈُ킪�F�߂�ꂽ�ꍇ�̏I��
+	if (DxLib_Init() == -1) { return -1; }		//初期化と異常が認められた場合の終了
 
-	//�E�B���h�E�̏����ݒ�
-	SetWindowText("PAC MAN");			//��ʃ^�C�g���ݒ�
-	SetGraphMode(WINDOW_X, WINDOW_Y, 32);		//��ʃ��[�h�̐ݒ�
-	SetBackgroundColor(0, 0, 0);		//��ʂ̔w�i�F�̐ݒ�
-	SetDrawScreen(DX_SCREEN_BACK);
-
-	WorldVal::SetUp(); //�V�[�����ׂ����ϐ����L�N���X�̏�����
-	GlovalLoading(); //GlovalLoading.cpp�̊֐��AWorldVal::Get�Ŏ��o����l�̗p�ӂ��s���T���v��
-
-	key = new KeySystem(); //�L�[���͎�t�p�N���X�̎��̍쐬
-	SceneManager* scm = new SceneManager(new Scene_GameTitle()); //�����ɍŏ��Ɏ��s�������V�[�����̂�����
-
-	int fps = 1000000 / FPS; //����l��ς����1�b�Ԃɍs�������񐔂�ύX�ł���
+	int fps = 1000000 / FPS; //割る値を変えると1秒間に行う処理回数を変更できる
 	LONGLONG now = GetNowHiPerformanceCount();
 	LONGLONG old = now;
 
-	while (ProcessMessage() == 0 && (!CheckHitKey(KEY_INPUT_ESCAPE)) && key->GetKeyState(SELECT_KEY) != KEY_PUSH) { //GetKey�V�X�e���g�p��Aback�{�^���������ꂽ�u�Ԃ�false�ƂȂ�
-		//_RPTF1(_CRT_WARN, "%s\n", "test"); //�f�o�b�O�\��
+	//ウィンドウの初期設定
+	SetWindowText("PAC MAN");			//画面タイトル設定
+	SetGraphMode(WINDOW_X, WINDOW_Y, 32);		//画面モードの設定
+	SetBackgroundColor(0, 0, 0);		//画面の背景色の設定
+	SetDrawScreen(DX_SCREEN_BACK);
 
-		now = GetNowHiPerformanceCount(); //���ݎ����̎擾
-		if (now - old > fps) { //�O�t���[���̌��ݎ����Ƃ̍������s�^�C�~���O�ɂȂ��Ă����ꍇ�Q�[�������A�`�ʂ̎��s
-			key->KeyInput(); //�L�[���͍X�V
-			old = now - (now - old - fps); //�������s�^�C�~���O�ȏゾ�����ꍇ���̂܂�old�Ɍ��ݎ���������Ɛ؂�̂Ă��Ă��܂��̂�old������s�^�C�~���O���ߕ����������Œ��ߕ������������`�ɂ���
-			ClearDrawScreen(); //��ʂ̏�����
-			if (!scm->Update()) { break; } //�E�B���h�E�����w�����o����Ă���I��
-			scm->Draw(); //��ʕ`��
+	WorldVal::SetUp(); //シーンを跨いだ変数共有クラスの初期化
+	GlovalLoading(); //GlovalLoading.cppの関数、WorldVal::Getで取り出せる値の用意を行うサンプル
+
+	key = new KeySystem(); //キー入力受付用クラスの実体作成
+	SceneManager* scm = new SceneManager(new Scene_GameTitle()); //引数に最初に実行したいシーン実体を入れる
+	
+	while (ProcessMessage() == 0 && (!CheckHitKey(KEY_INPUT_ESCAPE)) && key->GetKeyState(SELECT_KEY) != KEY_PUSH) { //GetKeyシステム使用例、backボタンが押された瞬間にfalseとなる
+		//_RPTF1(_CRT_WARN, "%s\n", "test"); //デバッグ表示
+
+		now = GetNowHiPerformanceCount(); //現在時刻の取得
+		if (now - old > fps) { //前フレームの現在時刻との差が実行タイミングになっていた場合ゲーム処理、描写の実行
+			key->KeyInput(); //キー入力更新
+			old = now - (now - old - fps); //差が実行タイミング以上だった場合そのままoldに現在時刻を入れると切り捨てられてしまうのでoldから実行タイミング超過分を引く事で超過分を加味した形にする
+			ClearDrawScreen(); //画面の初期化
+			if (!scm->Update()) { break; } //ウィンドウを閉じる指示を出されてたら終了
+			scm->Draw(); //画面描写
 		}
 		ScreenFlip();
 	}
-	WorldVal::Destruct(); //�l���L�̎��̔j��
+	WorldVal::Destruct(); //値共有の実体破棄
 	delete key;
 	delete scm;
-	DxLib_End();// �c�w���C�u�����g�p�̏I������
+	DxLib_End();// ＤＸライブラリ使用の終了処理
 	return 0;
 }
