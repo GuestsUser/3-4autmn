@@ -56,11 +56,42 @@ void PageOne::PageOne_Update() {
 		}
 	}
 
-	if (Card::Hit(Mouse_X, Mouse_Y, Player_X, Player_Y, card_w, card_h)) {
-		j = GetColor(255, 0, 0);
-	}
-	else {
-		j = GetColor(0, 0, 255);
+	j = GetColor(255, 255, 255);
+
+	for (i = 0; i < Player_card.size(); i++) {
+		//switch (i) {
+		//case 0:
+		//	if (Card::Hit(Mouse_X, Mouse_Y, Player_X + (card_w / 2) * i, Player_Y, card_w, card_h)) {
+		//		j = GetColor(255, 0, 0);
+		//	}
+		//	break;
+		//case 1:
+		//	if (Card::Hit(Mouse_X, Mouse_Y, Player_X + (card_w / 2) * i, Player_Y, card_w, card_h)) {
+		//		j = GetColor(0, 255, 0);
+		//	}
+		//	break;
+		//case 2:
+		//	if (Card::Hit(Mouse_X, Mouse_Y, Player_X + (card_w / 2) * i, Player_Y, card_w, card_h)) {
+		//		j = GetColor(0, 0, 255);
+		//	}
+		//	break;
+		//case 3:
+		//	if (Card::Hit(Mouse_X, Mouse_Y, Player_X + (card_w / 2) * i, Player_Y, card_w, card_h)) {
+		//		j = GetColor(255, 0, 255);
+		//	}
+		//	break;
+
+		//default:
+		//	if (Card::Hit(Mouse_X, Mouse_Y, Player_X + (card_w / 2) * i, Player_Y, card_w, card_h)) {
+		//		j = GetColor(255, 255, 0);
+		//	}			break;
+		//}
+
+		if (Card::Hit(Mouse_X, Mouse_Y, Player_X + (card_w / 2) * i, Player_Y, card_w, card_h)) {
+			if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
+				Field_card.push_back(Player_card.begin() + i);
+			}
+		}
 	}
 
 	//NPCがカード引く用_後で要改造
@@ -95,4 +126,6 @@ void PageOne::PageOne_Draw() {
 
 	DrawFormatString(120,300,GetColor(255,255,255),"デッキ枚数:%d", Card_obj.size());
 	DrawRotaGraph(Deck_X, Deck_Y, 0.5, 0, Card_back.img, TRUE);
+
+	DrawBox(500, 300, 550, 350, j, TRUE);
 }

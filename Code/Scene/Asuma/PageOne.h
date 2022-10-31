@@ -14,7 +14,7 @@ public:
 	int suit;	//カードのスート(マーク)
 
 	bool Hit(int mx, int my, int cx, int cy, int cw, int ch) {
-		if (mx > cx - (cw / 2) && mx < cx + (cw / 2) && my > cy - (ch / 2) && my < cy + (ch / 2)) {
+		if (mx > cx - (cw / 4) && mx < cx + (cw / 4) && my > cy - (ch / 4) && my < cy + (ch / 4)) {
 			return true;
 		}
 		else {
@@ -40,7 +40,9 @@ private:
 
 	//Card Card_obj[4][13];		//全カードの情報
 	std::vector<Card> Card_obj;		//全カードの情報
-	std::list<Card> Player_card;	//プレイヤーの持っているカードの情報
+	std::vector<Card> Player_card;	//プレイヤーの持っているカードの情報
+
+	std::vector<Card> Field_card;		//場に出ているカード
 
 	std::list<Card> NPC_card_1;		//NPC１号の持っているカードの情報
 	std::list<Card> NPC_card_2;		//NPC２号の持っているカードの情報
