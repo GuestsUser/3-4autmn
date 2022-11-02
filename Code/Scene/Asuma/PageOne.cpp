@@ -1,18 +1,12 @@
 #include"PageOne.h"
 #include"DxLib.h"
-//#include <list>
-//#include <vector>
-
-//int card_type[54];	//画像用ハンドル
+#include"./../Code/GetKey.h"
 
 void PageOne::PageOne_Initialize() {
 	LoadDivGraph("Resource/image/toranpu_all.png", 54, 13, 5, 200, 300, card_type);
 
-	for (i = 0; i < 4; i++) {
-		for (j = 0; j < 13; j++) {
-			Card_obj.push_back(Card(card_type[i + j], j, i));
-			//Card_obj[i][j] = Card(card_type[i + j], j, i);
-		}
+	for (i = 0; i < 52; i++) {
+			Card_obj.push_back(Card(card_type[i], i % 13, i / 13));
 	}
 
 	Card_back = Card(card_type[52], 0, 5);	//カードの裏面
@@ -24,6 +18,19 @@ void PageOne::PageOne_Initialize() {
 		Card_obj.erase(Card_obj.begin() + r);
 	}
 
+	for (i = 0; i < 4; i++) {
+		r = GetRand(sizeof(Card_obj));
+		NPC_card_1.push_back(Card_obj[r]);
+		Card_obj.erase(Card_obj.begin() + r);
+	}
+
+	Deck_X = 100;
+	Deck_Y = 400;
+
+	Player_X = 150;
+	Player_Y = 575;
+
+	n = 0;
 }
 
 void PageOne::PageOne_Finalize() {
@@ -33,14 +40,59 @@ void PageOne::PageOne_Finalize() {
 }
 
 void PageOne::PageOne_Update() {
+	GetMousePoint(&Mouse_X, &Mouse_Y);
 
+	n++;	//山札からカード引くときのクールタイム（早すぎるとアクセス違反でるから）
+
+	//プレイヤーがカード引く用
+	if (n > 20) {
+		if (Mouse_X > Deck_X - 50 && Mouse_X < Deck_X + 50 && Mouse_Y > Deck_Y - 75 && Mouse_Y < Deck_Y + 75) {
+			if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
+				r = GetRand(Card_obj.size());
+				Player_card.push_back(Card_obj[r]);
+				Card_obj.erase(Card_obj.begin() + r);
+				n = 0;
+			}
+		}
+	}
+
+	if (Card::Hit(Mouse_X, Mouse_Y, Player_X, Player_Y, card_w, card_h)) {
+		j = GetColor(255, 0, 0);
+	}
+	else {
+		j = GetColor(0, 0, 255);
+	}
+
+	//NPCがカード引く用_後で要改造
+	if (n > 20) {
+		if (Mouse_X > Deck_X - 50 && Mouse_X < Deck_X + 50 && Mouse_Y > Deck_Y - 75 && Mouse_Y < Deck_Y + 75) {
+			if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH) {
+				r = GetRand(Card_obj.size());
+				NPC_card_1.push_back(Card_obj[r]);
+				Card_obj.erase(Card_obj.begin() + r);
+				n = 0;
+			}
+		}
+	}
 }
 
 void PageOne::PageOne_Draw() {
-	int i = 0;
+	player = 0;
+	npc_1 = 0;
+
+	//プレイヤーの手札描画
 	for (auto itr = Player_card.begin(); itr != Player_card.end(); itr++) {
-		DrawRotaGraph(100 + i * 100, 100, 0.5, 0, (*itr).img, TRUE);
-		i++;
+		DrawRotaGraph(Player_X + (player % 10) * (card_w * 0.5), Player_Y + (player / 10) * (card_h * 0.5), 0.5, 0, (*itr).img, TRUE);
+		player++;
 	}
-	//DrawRotaGraph(500, 300, 1.0, 0, Card_obj[0][0].img, TRUE);
+
+	//NPC１号の手札描画
+	for (auto itr = NPC_card_1.begin(); itr != NPC_card_1.end(); itr++) {
+		//DrawRotaGraph(150 + (npc_1 % 5) * (card_w * 0.3), 75 + (npc_1 / 5) * (card_h * 0.3), 0.3, 0, Card_back.img, TRUE);
+		DrawRotaGraph(150 + (npc_1 % 5) * (card_w * 0.3), 75 + (npc_1 / 5) * (card_h * 0.3), 0.3, 0, (*itr).img, TRUE);
+		npc_1++;
+	}
+
+	DrawFormatString(120,300,GetColor(255,255,255),"デッキ枚数:%d", Card_obj.size());
+	DrawRotaGraph(Deck_X, Deck_Y, 0.5, 0, Card_back.img, TRUE);
 }
