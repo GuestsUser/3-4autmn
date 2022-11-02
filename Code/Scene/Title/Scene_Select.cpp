@@ -14,14 +14,14 @@
 #include"../Code/Scene/daifugou/CP_Scene.h"
 #include"../Code/Scene/BlackJack/BJ_Main.h"
 #include"../Code/Scene/Asuma/Scene_PageOne.h"
-
+#include"../Code/Scene/Othello/Scene_Othello.h"
 #include <deque>
 
 
 Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std::deque<Button*>()), run(nullptr) {
 	SetFontSize(36); //描写文字サイズ指定
 
-	int place = 8; //ボタン配置数
+	int place = 9; //ボタン配置数
 	int xSplit = 4; //ボタンの1列の配置数
 	int ySplit = place / xSplit; //ボタンの配置行数
 	int xSize = 260; //ボタンの画像サイズx
@@ -67,6 +67,10 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 		case 7: //すごろく
 			*img = LoadGraph("Resource/image/Select_Sugoroku.png");
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Sugoroku1.png")), 1));
+			break;
+		case 8: //オセロ
+			*img = LoadGraph("Resource/image/Select_Othello.png");
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Othello1.png")), 1));
 			break;
 		}
 		explain.push_back(new Scene_Explain(*explainImage, gameScene)); //ボタンを押した際の説明シーン作成
