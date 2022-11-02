@@ -14,6 +14,8 @@ private:
 	int WhiteCr;
 	int CheckNum;
 
+	int OrderNum;
+
 	bool DrawFlag;
 	bool CheckFlag;
 public:

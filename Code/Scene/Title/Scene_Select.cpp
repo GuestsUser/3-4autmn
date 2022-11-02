@@ -70,6 +70,7 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			break;
 		case 8: //オセロ
 			*img = LoadGraph("Resource/image/Select_Othello.png");
+			gameScene = new Scene_Othello(); //個別シーン飛ばし作例、scmに入れていたのがgameSceneになった程度の違い
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Othello1.png")), 1));
 			break;
 		}

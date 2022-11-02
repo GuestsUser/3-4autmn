@@ -14,6 +14,8 @@ void Othello_Board::Othello_Board_Initialize() {
     GreenCr = GetColor(0, 255, 0);      // 緑色を設定
     WhiteCr = GetColor(255, 255, 255);  // 白色を設定
 
+    OrderNum = 0;
+
     DrawFlag = false;
     CheckFlag = false;
 
@@ -26,12 +28,18 @@ void Othello_Board::Othello_Board_Finalize() {
 
 void Othello_Board::Othello_Board_Update() {
     // デバッグ用
-    DrawFormatString(1000,  90, WhiteCr, "左クリック：黒　右クリック：白");
-    DrawFormatString(1000, 120, WhiteCr, "現在：%d", Board[Square_X][Square_Y]);
-    DrawFormatString(1000, 150, WhiteCr, "座標Ｘ %d　　座標Ｙ %d", Mouse_X / MAP_SIZE, Mouse_Y / MAP_SIZE);
-    DrawFormatString(1000, 170, WhiteCr, "CheckFlag：%d", CheckFlag);
-    DrawFormatString(1000, 190, WhiteCr, "CheckNum：%d", CheckNum);
-    DrawFormatString(1000, 210, WhiteCr, "Board[%d][%d]", Square_X, Square_Y);
+    if (OrderNum == 0) {
+        DrawFormatString(650, 90, WhiteCr, "左クリック：黒");
+    }
+    else {
+        DrawFormatString(650, 90, WhiteCr, "左クリック：白");
+    }
+
+    //DrawFormatString(500, 120, WhiteCr, "現在：%d", Board[Square_X][Square_Y]);
+    //DrawFormatString(500, 150, WhiteCr, "座標Ｘ %d　　座標Ｙ %d", Mouse_X / MAP_SIZE, Mouse_Y / MAP_SIZE);
+    //DrawFormatString(500, 170, WhiteCr, "CheckFlag：%d", CheckFlag);
+    //DrawFormatString(500, 190, WhiteCr, "CheckNum：%d", CheckNum);
+    //DrawFormatString(500, 210, WhiteCr, "Board[%d][%d]", Square_X, Square_Y);
 
 
 
@@ -39,27 +47,34 @@ void Othello_Board::Othello_Board_Update() {
     Square_X = Mouse_X / MAP_SIZE;      // マウスカーソルの位置を MAP_SIZE で割った値を代入
     Square_Y = Mouse_Y / MAP_SIZE;      // マウスカーソルの位置を MAP_SIZE で割った値を代入
 
-    if (Board[Square_X][Square_Y] == 3) {
-        DrawFlag = true;
-        if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
-            Board[Square_X][Square_Y] = 1;      // 黒石を置く
-            BlackPut();
+    if (OrderNum == 0) {
+        if (Board[Square_X][Square_Y] == 3) {
+            DrawFlag = true;
+            if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
+                Board[Square_X][Square_Y] = 1;      // 黒石を置く
+                BlackPut();
+                OrderNum = 1;
+            }
+        }
+        else {
+            DrawFlag = false;
         }
     }
     else {
-        DrawFlag = false;
+        if (Board[Square_X][Square_Y] == 4) {
+            DrawFlag = true;
+            if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
+                Board[Square_X][Square_Y] = 2;      // 黒石を置く
+                WhitePut();
+                OrderNum = 0;
+            }
+        }
+        else {
+            DrawFlag = false;
+        }
     }
 
-    if (Board[Square_X][Square_Y] == 4) {
-        DrawFlag = true;
-        if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH) {
-            Board[Square_X][Square_Y] = 2;      // 黒石を置く
-            WhitePut();
-        }
-    }
-    else {
-        DrawFlag = false;
-    }
+
 
 
     // ボードのマスの上にマウスカーソルが重なったところが 0 だったら
@@ -84,8 +99,12 @@ void Othello_Board::Othello_Board_Draw() {
     //DrawRotaGraph(640, 360, 1.0, 0, Board, TRUE);
     //DrawBox(0, 0, 1280, 720, GetColor(255, 255, 255), TRUE);
     Print_OthelloBoard(Board);
-    BoardSearchBlack(Board);
-    BoardSearchWhite(Board);
+    if (OrderNum == 0) {
+        BoardSearchBlack(Board);
+    }
+    else {
+        BoardSearchWhite(Board);
+    }
 
 }
 
@@ -186,8 +205,12 @@ int Othello_Board::PutOnCheck(int board[PB][PB], int p, int q, int enemy, int pl
             return 0;
         }
         // 置いた場所からプレイヤーが指定した方向にいたら
+        // 隣に白か黒がある状態で、予測先に挟める石があるとひっくり返してしまうバグ
         else if (board[Square_X + CheckNum * p][Square_Y + CheckNum * q] == player) {
-            if (board[Square_X + CheckNum * p][Square_Y + CheckNum * q] == enemy) {
+            if (board[Square_X + CheckNum * p][Square_Y + CheckNum * q] == enemy ||
+                board[Square_X + CheckNum * p][Square_Y + CheckNum * q] == 0 ||
+                board[Square_X + CheckNum * p][Square_Y + CheckNum * q] == 3 ||
+                board[Square_X + CheckNum * p][Square_Y + CheckNum * q] == 4) {
                 return 0;
             }
             CheckFlag = true;
@@ -329,7 +352,7 @@ void Othello_Board::BoardSearchBlack(int board[PB][PB]) {
                 if (BlackPutCheck(i, j)) {
 
                     DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
-                        (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GetColor(0, 0, 0), true);
+                        (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GetColor(100, 0, 0), false);
 
                     board[i][j] = 3;
 
@@ -355,7 +378,7 @@ void Othello_Board::BoardSearchWhite(int board[PB][PB]) {
                 if (WhitePutCheck(i, j)) {
 
                     DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
-                        (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GetColor(255, 255, 255), true);
+                        (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GetColor(100, 0, 0), false);
 
                     board[i][j] = 4;
 
