@@ -1,5 +1,4 @@
 #pragma once
-#include <list>
 #include <vector>
 
 class Card {
@@ -44,10 +43,11 @@ private:
 
 	std::vector<Card> Field_card;		//場に出ているカード
 
-	std::list<Card> NPC_card_1;		//NPC１号の持っているカードの情報
-	std::list<Card> NPC_card_2;		//NPC２号の持っているカードの情報
-	std::list<Card> NPC_card_3;		//NPC３号の持っているカードの情報
+	std::vector<Card> NPC_card_1;		//NPC１号の持っているカードの情報
+	std::vector<Card> NPC_card_2;		//NPC２号の持っているカードの情報
+	std::vector<Card> NPC_card_3;		//NPC３号の持っているカードの情報
 
+	int field;
 	int player;
 	int npc_1;
 	int npc_2;
