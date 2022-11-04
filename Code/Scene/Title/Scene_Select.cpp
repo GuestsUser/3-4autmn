@@ -15,6 +15,7 @@
 #include"../Code/Scene/BlackJack/BJ_Main.h"
 #include"../Code/Scene/Asuma/Scene_PageOne.h"
 #include"../Code/Scene/Othello/Scene_Othello.h"
+#include"../Code/Scene/Sugoroku/SR_Game.h"
 #include <deque>
 
 
@@ -67,6 +68,7 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 		case 7: //すごろく
 			*img = LoadGraph("Resource/image/Select_Sugoroku.png");
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Sugoroku1.png")), 1));
+			gameScene = new SR_Game(); //個別シーン飛ばし作例、scmに入れていたのがgameSceneになった程度の違い
 			break;
 		case 8: //オセロ
 			*img = LoadGraph("Resource/image/Select_Othello.png");
