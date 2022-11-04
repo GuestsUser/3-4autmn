@@ -12,14 +12,23 @@ protected:
 
   int* data;                /*配列用ポインタ*/
 
+  bool D_BlackJakc;
+
 public:
 
   Dealer();                /*コンストラクタ*/
   ~Dealer();               /*デストラクタ*/
+
   void Initialize();       /*変数の初期化*/
+  void Update();
+  void Draw();
+
+
   int Calc();              /*スコアの計算*/
-  //void Hit(Shoe* shoe);    /*カードの追加*/
-  void Show_Hand();        /*手札を表示*/
+
+  bool BlackJack();
+
+  virtual void Show_Hand();        /*手札を表示*/
   virtual void Hit(Shoe* shoe);    /*カードの追加*/
   virtual bool Play(Shoe* shoe);   /*ゲーム実行*/
 
