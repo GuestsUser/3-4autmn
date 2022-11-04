@@ -19,33 +19,35 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Code\Component\Button.cpp" />
+    <ClCompile Include="Code\Component\Cmp_ButtonGroup.cpp" />
+    <ClCompile Include="Code\Component\Cmp_Image.cpp" />
     <ClCompile Include="Code\GetKey.cpp" />
     <ClCompile Include="Code\GlovalLoading.cpp" />
     <ClCompile Include="Code\main.cpp" />
+    <ClCompile Include="Code\OriginMath.cpp" />
     <ClCompile Include="Code\SceneManager.cpp" />
     <ClCompile Include="Code\Scene\Asuma\PageOne.cpp" />
-
     <ClCompile Include="Code\Scene\BlackJack\BJ_Dealer.cpp" />
     <ClCompile Include="Code\Scene\BlackJack\BJ_Main.cpp" />
     <ClCompile Include="Code\Scene\BlackJack\BJ_Player.cpp" />
     <ClCompile Include="Code\Scene\BlackJack\BJ_Shoe.cpp" />
-
     <ClCompile Include="Code\Scene\Asuma\PO_Player.cpp" />
     <ClCompile Include="Code\Scene\Asuma\Scene_PageOne.cpp" />
-
     <ClCompile Include="Code\Scene\ConnectFour\CF_Player.cpp" />
     <ClCompile Include="Code\Scene\ConnectFour\Scene_ConnectFour.cpp" />
     <ClCompile Include="Code\Scene\daifugou\CP_Player.cpp" />
-
     <ClCompile Include="Code\Scene\Karuta\Karu_Game.cpp" />
     <ClCompile Include="Code\Scene\Karuta\Scene_Karuta.cpp" />
     <ClCompile Include="Code\Scene\Othello\Othello_Board.cpp" />
     <ClCompile Include="Code\Scene\Othello\Othello_Player.cpp" />
     <ClCompile Include="Code\Scene\Othello\Scene_Othello.cpp" />
-
     <ClCompile Include="Code\Scene\daifugou\CP_Scene.cpp" />
-
     <ClCompile Include="Code\Scene\Sample\Title.cpp" />
+    <ClCompile Include="Code\Scene\Title\Cmp_SelectSelector.cpp" />
+    <ClCompile Include="Code\Scene\Title\Scene_Explain.cpp" />
+    <ClCompile Include="Code\Scene\Title\Scene_GameTitle.cpp" />
+    <ClCompile Include="Code\Scene\Title\Scene_Select.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\MapLoad.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\SR_Saikoro.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\SR_Title.cpp" />
@@ -53,40 +55,47 @@
     <ClCompile Include="Code\Worldval.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Code\Component\Button.h" />
+    <ClInclude Include="Code\Component\Cmp_ButtonGroup.h" />
+    <ClInclude Include="Code\Component\Component.h" />
+    <ClInclude Include="Code\Component\Cmp_Image.h" />
+    <ClInclude Include="Code\Component\Cmp_Transform.h" />
     <ClInclude Include="Code\ConstVal.h" />
     <ClInclude Include="Code\GetKey.h" />
     <ClInclude Include="Code\GlovalLoading.h" />
+    <ClInclude Include="Code\OriginMath.h" />
     <ClInclude Include="Code\SceneManager.h" />
     <ClInclude Include="Code\Scene\Asuma\PageOne.h" />
-
     <ClInclude Include="Code\Scene\BlackJack\BJ_Dealer.h" />
     <ClInclude Include="Code\Scene\BlackJack\BJ_Head.h" />
     <ClInclude Include="Code\Scene\BlackJack\BJ_Main.h" />
     <ClInclude Include="Code\Scene\BlackJack\BJ_Player.h" />
     <ClInclude Include="Code\Scene\BlackJack\BJ_Shoe.h" />
-
     <ClInclude Include="Code\Scene\Asuma\PO_Player.h" />
     <ClInclude Include="Code\Scene\Asuma\Scene_PageOne.h" />
-
     <ClInclude Include="Code\Scene\ConnectFour\CF_Player.h" />
     <ClInclude Include="Code\Scene\ConnectFour\Scene_ConnectFour.h" />
     <ClInclude Include="Code\Scene\daifugou\CP_Player.h" />
-
     <ClInclude Include="Code\Scene\Karuta\Karu_Game.h" />
     <ClInclude Include="Code\Scene\Karuta\Scene_Karuta.h" />
     <ClInclude Include="Code\Scene\Othello\Othello_Board.h" />
     <ClInclude Include="Code\Scene\Othello\Othello_Player.h" />
     <ClInclude Include="Code\Scene\Othello\Scene_Othello.h" />
-
     <ClInclude Include="Code\Scene\daifugou\CP_Scene.h" />
-
     <ClInclude Include="Code\Scene\Sample\Title.h" />
     <ClInclude Include="Code\Scene\Scene.h" />
+    <ClInclude Include="Code\Scene\Title\Cmp_SelectSelector.h" />
+    <ClInclude Include="Code\Scene\Title\Scene_Explain.h" />
+    <ClInclude Include="Code\Scene\Title\Scene_GameTitle.h" />
+    <ClInclude Include="Code\Scene\Title\Scene_Select.h" />
     <ClInclude Include="Code\Scene\Sugoroku\MapLoad.h" />
     <ClInclude Include="Code\Scene\Sugoroku\SR_Game.h" />
     <ClInclude Include="Code\Scene\Sugoroku\SR_Saikoro.h" />
     <ClInclude Include="Code\Scene\Sugoroku\SR_Title.h" />
     <ClInclude Include="Code\Worldval.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Code\Scene\Title\SelectScene.cd" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

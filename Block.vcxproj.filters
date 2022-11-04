@@ -33,6 +33,12 @@
     <ClCompile Include="Code\GlovalLoading.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Code\Scene\Title\Scene_GameTitle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Scene\Title\Scene_Select.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
     <ClCompile Include="Code\Scene\ConnectFour\CF_Player.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -40,6 +46,24 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Code\Scene\daifugou\CP_Player.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Scene\Title\Scene_Explain.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Scene\Title\Cmp_SelectSelector.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Component\Button.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Component\Cmp_Image.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\OriginMath.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Component\Cmp_ButtonGroup.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Code\Scene\Asuma\PageOne.cpp">
@@ -70,12 +94,14 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Code\Scene\Othello\Othello_Player.cpp">
-		<Filter>ソース ファイル</Filter>
-	</ClCompile>
+        <Filter>ソース ファイル</Filter>
+    </ClCompile>
     <ClCompile Include="Code\Scene\Asuma\Scene_PageOne.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Code\Scene\Asuma\PO_Player.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -101,6 +127,9 @@
     <ClInclude Include="Code\GlovalLoading.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Code\Scene\Title\Scene_GameTitle.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
     <ClInclude Include="Code\Scene\ConnectFour\CF_Player.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -108,6 +137,33 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Code\Scene\daifugou\CP_Player.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Scene\Title\Scene_Explain.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Scene\Title\Cmp_SelectSelector.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Component\Button.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Component\Component.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Component\Cmp_Image.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\OriginMath.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Component\Cmp_Transform.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Component\Cmp_ButtonGroup.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Scene\Title\Scene_Select.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Code\Scene\Asuma\PageOne.h">
@@ -138,13 +194,16 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Code\Scene\Othello\Othello_Player.h">
-		<Filter>ヘッダー ファイル</Filter>
-	</ClInclude>
+        <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
     <ClInclude Include="Code\Scene\Asuma\Scene_PageOne.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Code\Scene\Asuma\PO_Player.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Code\Scene\Title\SelectScene.cd" />
   </ItemGroup>
 </Project>

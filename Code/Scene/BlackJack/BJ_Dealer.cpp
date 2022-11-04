@@ -7,6 +7,8 @@ Dealer::Dealer() {
   score = 0;      /*スコアを0で初期化*/
   type = 0;       /*トランプのマーク*/
 
+  D_BlackJakc = false;
+
   data = 0;
 
 }
@@ -18,6 +20,8 @@ void Dealer::Initialize() {
   hand.erase(hand.begin(), hand.end());   /*手札をクリア*/
   score = 0;                              /*スコアを初期化*/
   type = 0;                               /*トランプのマーク*/
+
+  D_BlackJakc = false;
 
 }
 /*スコアの計算*/
@@ -89,67 +93,88 @@ void Dealer::Show_Hand() {
   for (int i = 0; i < hand_num; i++) {
     /*カードの種類（スペード、ハート、ダイヤ、クラブ）を探索*/
     type = (hand[i] % 52) / 13;   /*デッキごとに分けた後、13で割った数（0-3）で4種類を分割*/
+    char a = '\0';
     /*分岐条件にtypeをそのまま利用*/
     switch (type) {
 
     case 0:   /*0であればスペードのs*/
       std::cout << 's';
+      a = 's';
       break;
 
     case 1:   /*1であればハートのh*/
       std::cout << 'h';
+      a = 'h';
       break;
 
     case 2:   /*2であればダイヤのd*/
       std::cout << 'd';
+      a = 'd';
       break;
 
     case 3:   /*3であればクラブのc*/
       std::cout << 'c';
+      a = 'c';
       break;
 
     default:    /*0-3でない場合はエラー処理*/
       /*標準出力*/
 
-      DrawFormatString(0,0,0xffffff, "DefTypeError\nPlayer.show_hand");
+      DrawFormatString(0,0,0xffffff, "DefTypeError\nshow_hand");
       break;
 
     }
     /*標準出力*/
 
-    DrawFormatString(100,640,0xffffff," ");
+    DrawFormatString(160+i*50, 220,0xffffff," :%c %d",a,hand[i]%13+1);
 
   }
 
-  if (Dealer::Calc() <= 21) {
+  //if (Dealer::Calc() <= 21) {
 
 
-    DrawFormatString(100, 380, 0xffffff, "score: %d\n", Dealer::Calc());
+    DrawFormatString(100, 400, 0xffffff, "Dealer score: %d\n", Dealer::Calc());
 
-  }
-  else {
-
-    /*スコア表示*/
-    DrawFormatString(100, 380, 0xffffff, "score: %d\n", Dealer::Calc());
-
-  }
+  //}
 
 }
 /*ゲーム実行*/
 bool Dealer::Play(Shoe* shoe) {   /*shoeオブジェクトポインタ*/
+
+  if (hand_num < 2) {
+    Dealer::Hit(shoe);
+    if (Dealer::Calc() == 21) {
+      D_BlackJakc = true;
+    }
+  }
   /*スコアが16以下の場合hitを続ける*/
   while (Dealer::Calc() < 17 && Dealer::Calc() > 0) {
     /*ヒットする*/
     Dealer::Hit(shoe);
 
-    DrawFormatString(100,720,0xffffff,"hit\n");
-    /*手札の表示*/
-    DrawFormatString(100,740,0xffffff, "==============\n");
-    DrawFormatString(100,760,0xffffff, "dealer\n");
-    Dealer::Show_Hand();
-
-    DrawFormatString(100,780,0xffffff, "==============\n");
-
   }
   return true;
+}
+
+bool Dealer::BlackJack(){
+
+  return D_BlackJakc;
+
+}
+
+void Dealer::Update() {
+
+
+}
+
+void Dealer::Draw() {
+
+  DrawFormatString(100, 720, 0xffffff, "hit\n");
+  /*手札の表示*/
+  DrawFormatString(100, 740, 0xffffff, "==============\n");
+  DrawFormatString(100, 760, 0xffffff, "dealer\n");
+  Dealer::Show_Hand();
+
+  DrawFormatString(100, 780, 0xffffff, "==============\n");
+
 }
