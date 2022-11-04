@@ -1,4 +1,4 @@
-#include "DxLib.h"
+ï»¿#include "DxLib.h"
 
 #include "../Code/Scene/Scene.h"
 #include "../Code/Component/Button.h"
@@ -8,7 +8,7 @@
 #include "Scene_Select.h"
 #include "Scene_Explain.h"
 
-//ƒvƒŒƒC‚·‚éƒQ[ƒ€ƒV[ƒ“‚ğƒCƒ“ƒNƒ‹[ƒh
+//ãƒ—ãƒ¬ã‚¤ã™ã‚‹ã‚²ãƒ¼ãƒ ã‚·ãƒ¼ãƒ³ã‚’ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰
 #include"../Code/Scene/Karuta/Scene_Karuta.h"
 #include"../Code/Scene/ConnectFour/Scene_ConnectFour.h"
 #include"../Code/Scene/daifugou/CP_Scene.h"
@@ -19,65 +19,66 @@
 
 
 Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std::deque<Button*>()), run(nullptr) {
-	SetFontSize(36); //•`Ê•¶šƒTƒCƒYw’è
+	SetFontSize(36); //æå†™æ–‡å­—ã‚µã‚¤ã‚ºæŒ‡å®š
 
-	int place = 9; //ƒ{ƒ^ƒ“”z’u”
-	int xSplit = 4; //ƒ{ƒ^ƒ“‚Ì1—ñ‚Ì”z’u”
-	int ySplit = place / xSplit; //ƒ{ƒ^ƒ“‚Ì”z’us”
-	int xSize = 260; //ƒ{ƒ^ƒ“‚Ì‰æ‘œƒTƒCƒYx
-	int ySize = 203; //ƒ{ƒ^ƒ“‚Ì‰æ‘œƒTƒCƒYy
+	int place = 9; //ãƒœã‚¿ãƒ³é…ç½®æ•°
+	int xSplit = 4; //ãƒœã‚¿ãƒ³ã®1åˆ—ã®é…ç½®æ•°
+	int ySplit = place / xSplit; //ãƒœã‚¿ãƒ³ã®é…ç½®è¡Œæ•°
+	int xSize = 260; //ãƒœã‚¿ãƒ³ã®ç”»åƒã‚µã‚¤ã‚ºx
+	int ySize = 203; //ãƒœã‚¿ãƒ³ã®ç”»åƒã‚µã‚¤ã‚ºy
 
 	for (int i = 0; i < place; ++i) {
-		std::deque<Cmp_Image*>* explainImage = new std::deque<Cmp_Image*>(); //à–¾‰æ‘œŠi”[—p•Ï”
-		Scene* gameScene = nullptr; //à–¾‰æ–Ê‚ÅƒNƒŠƒbƒN‚µ‚½Às‚µ‚½‚¢ƒQ[ƒ€ƒV[ƒ“
-		int* img = new int(0); //‰æ‘œƒnƒ“ƒhƒ‹Ši”[—p•Ï”
+		std::deque<Cmp_Image*>* explainImage = new std::deque<Cmp_Image*>(); //èª¬æ˜ç”»åƒæ ¼ç´ç”¨å¤‰æ•°
+		Scene* gameScene = nullptr; //èª¬æ˜ç”»é¢ã§ã‚¯ãƒªãƒƒã‚¯ã—ãŸæ™‚å®Ÿè¡Œã—ãŸã„ã‚²ãƒ¼ãƒ ã‚·ãƒ¼ãƒ³
+		int* img = new int(0); //ç”»åƒãƒãƒ³ãƒ‰ãƒ«æ ¼ç´ç”¨å¤‰æ•°
 		button.push_back(new Button((1240 / xSplit) / 2 + xSize * (i % xSplit), (720 / ySplit) / 2 + ySize * (int)(i / xSplit), xSize / 2, ySize / 2));
 		
 		switch (i) {
-		case 0: //ƒGƒAƒzƒbƒP[‚Ìà–¾‰æ‘œ‚Æ‚©‚ğ“ü‚ê‚é€–Ú
-			*img = LoadGraph("Resource/image/Select_AirHockey.png"); //ƒ{ƒ^ƒ“‰æ‘œ‚ğ“ü‚ê‚é
-			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_AirHockey1.png")), 1)); //à–¾‰æ‘œ‚ğ“ü‚ê‚éAƒy[ƒW‡‚ÍÅ‰‚É“ü‚ê‚½•¨‚ª1ƒy[ƒW‚É‚È‚é
+		case 0: //ã‚¨ã‚¢ãƒ›ãƒƒã‚±ãƒ¼ã®èª¬æ˜ç”»åƒã¨ã‹ã‚’å…¥ã‚Œã‚‹é …ç›®
+			*img = LoadGraph("Resource/image/Select_AirHockey.png"); //ãƒœã‚¿ãƒ³ç”»åƒã‚’å…¥ã‚Œã‚‹
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_AirHockey1.png")), 1)); //èª¬æ˜ç”»åƒã‚’å…¥ã‚Œã‚‹ã€ãƒšãƒ¼ã‚¸é †ã¯æœ€åˆã«å…¥ã‚ŒãŸç‰©ãŒ1ãƒšãƒ¼ã‚¸ã«ãªã‚‹
 			break;
-		case 1: //ƒuƒ‰ƒbƒNƒWƒƒƒbƒN
-			*img = LoadGraph("Resource/image/Select_Blackjack.png");
-			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Blackjack1.png")), 1));
+		case 1: //ãƒ–ãƒ©ãƒƒã‚¯ã‚¸ãƒ£ãƒƒã‚¯
+			*img = LoadGraph("Resource/image/BJ_Image/Select_Blackjack.png");
+      gameScene = new BlackJack();
+      explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/BJ_Image/Explain_Blackjack1.png")), 1));
 			break;
-		case 2: //‘å•x‹
+		case 2: //å¤§å¯Œè±ª
 			*img = LoadGraph("Resource/image/Select_CareerPoker.png");
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_CareerPoker1.png")), 1));
 			break;
-		case 3: //ƒRƒlƒNƒgƒtƒH[
+		case 3: //ã‚³ãƒã‚¯ãƒˆãƒ•ã‚©ãƒ¼
 			*img = LoadGraph("Resource/image/Select_ConnectFour.png");
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_ConnectFour1.png")), 1));
 			break;
-		case 4: //‚©‚é‚½
+		case 4: //ã‹ã‚‹ãŸ
 			*img = LoadGraph("Resource/image/Select_Karuta.png");
-			gameScene = new Scene_Karuta(); //ŒÂ•ÊƒV[ƒ“”ò‚Î‚µì—áAscm‚É“ü‚ê‚Ä‚¢‚½‚Ì‚ªgameScene‚É‚È‚Á‚½’ö“x‚Ìˆá‚¢
+			gameScene = new Scene_Karuta(); //å€‹åˆ¥ã‚·ãƒ¼ãƒ³é£›ã°ã—ä½œä¾‹ã€scmã«å…¥ã‚Œã¦ã„ãŸã®ãŒgameSceneã«ãªã£ãŸç¨‹åº¦ã®é•ã„
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Karuta1.png")), 1));
 			break;
-		case 5: //ƒy[ƒWƒƒ“
+		case 5: //ãƒšãƒ¼ã‚¸ãƒ¯ãƒ³
 			*img = LoadGraph("Resource/image/Select_PageOne.png");
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_PageOne1.png")), 1));
 			break;
-		case 6: //ƒ|[ƒJ[
+		case 6: //ãƒãƒ¼ã‚«ãƒ¼
 			*img = LoadGraph("Resource/image/Select_Poker.png");
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker1.png")), 1));
-			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker2.png")), 1)); //•¡”‚Ìà–¾‰æ–Ê“±“üì—á
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker2.png")), 1)); //è¤‡æ•°ã®èª¬æ˜ç”»é¢å°å…¥ä½œä¾‹
 			break;
-		case 7: //‚·‚²‚ë‚­
+		case 7: //ã™ã”ã‚ã
 			*img = LoadGraph("Resource/image/Select_Sugoroku.png");
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Sugoroku1.png")), 1));
 			break;
-		case 8: //ƒIƒZƒ
+		case 8: //ã‚ªã‚»ãƒ­
 			*img = LoadGraph("Resource/image/Select_Othello.png");
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Othello1.png")), 1));
 			break;
 		}
-		explain.push_back(new Scene_Explain(*explainImage, gameScene)); //ƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚½Û‚Ìà–¾ƒV[ƒ“ì¬
+		explain.push_back(new Scene_Explain(*explainImage, gameScene)); //ãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ãŸéš›ã®èª¬æ˜ã‚·ãƒ¼ãƒ³ä½œæˆ
 
-		button[i]->SetAlways(new Cmp_Image(*img, 1, button[i]->EditTransform())); //ƒ{ƒ^ƒ“‚É‰æ‘œ‚ğ’Ç‰Á
-		button[i]->SetClick(new Cmp_ButtonGroup(*button[i], button)); //ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½ÛA‰Ÿ‚³‚ê‚½ƒ{ƒ^ƒ“ˆÈŠO‚ğ’â~‚·‚é‹@”\‚Ì’Ç‰Á
-		button[i]->SetClick(new Cmp_SelectSelector(explain[i], &run, button)); //ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½ÛArun‚Öexplain[i]‚ğ“ü‚ê‚é‹@”\‚Ì’Ç‰Á
+		button[i]->SetAlways(new Cmp_Image(*img, 1, button[i]->EditTransform())); //ãƒœã‚¿ãƒ³ã«ç”»åƒã‚’è¿½åŠ 
+		button[i]->SetClick(new Cmp_ButtonGroup(*button[i], button)); //ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸéš›ã€æŠ¼ã•ã‚ŒãŸãƒœã‚¿ãƒ³ä»¥å¤–ã‚’åœæ­¢ã™ã‚‹æ©Ÿèƒ½ã®è¿½åŠ 
+		button[i]->SetClick(new Cmp_SelectSelector(explain[i], &run, button)); //ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚ŒãŸéš›ã€runã¸explain[i]ã‚’å…¥ã‚Œã‚‹æ©Ÿèƒ½ã®è¿½åŠ 
 
 		
 	}
@@ -88,31 +89,31 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 
 Scene_Select::~Scene_Select() {
 	for (int i = 0; i < button.size(); ++i) {
-		delete button[i]; //new‚µ‚½button‚Ìíœ
-		delete explain[i]; //new‚µ‚½à–¾ƒV[ƒ“‚Ìíœ
+		delete button[i]; //newã—ãŸbuttonã®å‰Šé™¤
+		delete explain[i]; //newã—ãŸèª¬æ˜ã‚·ãƒ¼ãƒ³ã®å‰Šé™¤
 	}
 }
 
 void Scene_Select::Update() {
-	if (run != nullptr) { //run‚É‰½‚©“ü‚Á‚Ä‚¢‚½ê‡‚»‚¿‚ç‚ğ—DæÀs
-		run->Update(); //runÀs
+	if (run != nullptr) { //runã«ä½•ã‹å…¥ã£ã¦ã„ãŸå ´åˆãã¡ã‚‰ã‚’å„ªå…ˆå®Ÿè¡Œ
+		run->Update(); //runå®Ÿè¡Œ
 
-		run = run->GetNext(); //run‚Éİ’è‚³‚ê‚½Ÿ‚ÌÀsƒV[ƒ“‚ğæ“¾run‚Éİ’è
-		if (run == nullptr) { return; }  //‹ó‚É‚³‚ê‚½‚ç”²‚¯AŸ‰ñ‚©‚ç‚Í•½í‚ÌUpdate‚ğÀs‚·‚é
+		run = run->GetNext(); //runã«è¨­å®šã•ã‚ŒãŸæ¬¡ã®å®Ÿè¡Œã‚·ãƒ¼ãƒ³ã‚’å–å¾—runã«è¨­å®š
+		if (run == nullptr) { return; }  //ç©ºã«ã•ã‚ŒãŸã‚‰æŠœã‘ã€æ¬¡å›ã‹ã‚‰ã¯å¹³å¸¸æ™‚ã®Updateã‚’å®Ÿè¡Œã™ã‚‹
 		for (auto itr : explain) {
-			if (run == itr) { return; } //explain‚Æ“¯‚¶•¨‚ª‚ ‚Á‚½ê‡”²‚¯AŸ‰ñ‚àrun‚ğÀs‚·‚é
+			if (run == itr) { return; } //explainã¨åŒã˜ç‰©ãŒã‚ã£ãŸå ´åˆæŠœã‘ã€æ¬¡å›ã‚‚runã‚’å®Ÿè¡Œã™ã‚‹
 		}
-		SetNext(run); //‚±‚±‚Ü‚Å—ˆ‚½‚çİ’è‚³‚ê‚½ƒV[ƒ“‚ÍƒQ[ƒ€ÀsƒV[ƒ“‚É‚È‚é‚Ì‚ÅƒZƒŒƒNƒg‰æ–Ê‚ğI—¹‚µ‚»‚¿‚ç‚ÉˆÚs‚·‚é
+		SetNext(run); //ã“ã“ã¾ã§æ¥ãŸã‚‰è¨­å®šã•ã‚ŒãŸã‚·ãƒ¼ãƒ³ã¯ã‚²ãƒ¼ãƒ å®Ÿè¡Œã‚·ãƒ¼ãƒ³ã«ãªã‚‹ã®ã§ã‚»ãƒ¬ã‚¯ãƒˆç”»é¢ã‚’çµ‚äº†ã—ãã¡ã‚‰ã«ç§»è¡Œã™ã‚‹
 		return;
 	}
 
-	//run‚É‰½‚à“ü‚Á‚Ä‚È‚¢ê‡
-	for (auto itr : button) { itr->Update(); } //ƒ{ƒ^ƒ“update‚ğÀs
+	//runã«ä½•ã‚‚å…¥ã£ã¦ãªã„å ´åˆ
+	for (auto itr : button) { itr->Update(); } //ãƒœã‚¿ãƒ³updateã‚’å®Ÿè¡Œ
 }
 
 void Scene_Select::Draw() {
-	if (run != nullptr) { run->Draw(); } //run‚É‰½‚©“ü‚Á‚Ä‚¢‚½ê‡‚»‚¿‚ç‚ğ—DæÀs
+	if (run != nullptr) { run->Draw(); } //runã«ä½•ã‹å…¥ã£ã¦ã„ãŸå ´åˆãã¡ã‚‰ã‚’å„ªå…ˆå®Ÿè¡Œ
 	else {
-		for (auto itr : button) { itr->Draw(); } //ƒ{ƒ^ƒ“draw‚ğÀs
+		for (auto itr : button) { itr->Draw(); } //ãƒœã‚¿ãƒ³drawã‚’å®Ÿè¡Œ
 	}
 }
