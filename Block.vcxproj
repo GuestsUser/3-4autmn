@@ -44,11 +44,11 @@
     <ClCompile Include="Code\Scene\Othello\Scene_Othello.cpp" />
     <ClCompile Include="Code\Scene\daifugou\CP_Scene.cpp" />
     <ClCompile Include="Code\Scene\Sample\Title.cpp" />
+    <ClCompile Include="Code\Scene\Sugoroku\SR_Map.cpp" />
     <ClCompile Include="Code\Scene\Title\Cmp_SelectSelector.cpp" />
     <ClCompile Include="Code\Scene\Title\Scene_Explain.cpp" />
     <ClCompile Include="Code\Scene\Title\Scene_GameTitle.cpp" />
     <ClCompile Include="Code\Scene\Title\Scene_Select.cpp" />
-    <ClCompile Include="Code\Scene\Sugoroku\MapLoad.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\SR_Saikoro.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\SR_Title.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\SR_Game.cpp" />
@@ -84,11 +84,11 @@
     <ClInclude Include="Code\Scene\daifugou\CP_Scene.h" />
     <ClInclude Include="Code\Scene\Sample\Title.h" />
     <ClInclude Include="Code\Scene\Scene.h" />
+    <ClInclude Include="Code\Scene\Sugoroku\SR_Map.h" />
     <ClInclude Include="Code\Scene\Title\Cmp_SelectSelector.h" />
     <ClInclude Include="Code\Scene\Title\Scene_Explain.h" />
     <ClInclude Include="Code\Scene\Title\Scene_GameTitle.h" />
     <ClInclude Include="Code\Scene\Title\Scene_Select.h" />
-    <ClInclude Include="Code\Scene\Sugoroku\MapLoad.h" />
     <ClInclude Include="Code\Scene\Sugoroku\SR_Game.h" />
     <ClInclude Include="Code\Scene\Sugoroku\SR_Saikoro.h" />
     <ClInclude Include="Code\Scene\Sugoroku\SR_Title.h" />

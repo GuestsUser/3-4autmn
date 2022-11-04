@@ -18,6 +18,8 @@ Player::Player() {
   hit = std = dbl = spt = bet = false;
   win = los = bst = psh = BlackJack = game_flg = false;
 
+  dealer_calc = 0;
+
   hit_x = 800;
   hit_y = std_y = dbl_y = spt_y = 600;
 
@@ -39,6 +41,8 @@ void Player::Initialize() {
   hand.erase(hand.begin(), hand.end());
   score = 0;
   type = 0;
+
+  dealer_calc = 0;
 
   hit = std = dbl = spt = bet = false;
   win = los = bst = psh = BlackJack = false;
@@ -81,7 +85,6 @@ bool Player::Play(Shoe* shoe) {
       /*カードの配布*/
       Player::Hit(shoe);
 
-
     }
     else if (std || Player::Calc() == 21) {    /*standが入力された場合*/
       color2 = 0x00ff00;
@@ -90,9 +93,12 @@ bool Player::Play(Shoe* shoe) {
       game_flg = false;
       return true;
     }
-    else if (dbl) {
+    else if (dbl && hand_num <= 2) {
       color3 = 0xff00ff;
       c3++;
+      Player::Hit(shoe);
+      game_flg = false;
+      return true;
     }
     else if (spt) {
       color4 = 0xffff00;
@@ -103,9 +109,12 @@ bool Player::Play(Shoe* shoe) {
   else {
     if (Player::Calc() > 21) {
       bst = true;
+      los = true;
+      win = false;
     }
-    //std = true;
+
     game_flg = false;
+    return true;
   }
   /*バーストしているのでfalseを返して終了*/
   return false;
@@ -114,13 +123,17 @@ bool Player::Play(Shoe* shoe) {
 
 void Player::Score(Player player, Dealer dealer) {   /*プレイヤーとディーラーのスコア勝負*/
   /*最終スコアがプレイヤーのほうが高い場合*/
-  //win = los = psh = false;
-  if (std) {
+
+  dealer_calc = dealer.Calc();
+
+  if (std || dbl) {
 
     if (player.Calc() > dealer.Calc()) {
       /*プレイヤーの勝利*/
 
-      win = true;
+      if (!bst) {
+        win = true;
+      }
 
     }
     else if (player.Calc() < dealer.Calc()) {    /*ディーラーのほうが高い場合*/
@@ -128,7 +141,9 @@ void Player::Score(Player player, Dealer dealer) {   /*プレイヤーとディ�
       if (dealer.Calc() > 21) {
         /*プレイヤーの勝ち*/
 
-        win = true;
+        if (!bst) {
+          win = true;
+        }
 
       }
       else {
@@ -142,7 +157,9 @@ void Player::Score(Player player, Dealer dealer) {   /*プレイヤーとディ�
       /*引き分け*/
       if (!BlackJack ||  (dealer.BlackJack() && BlackJack)) {
 
-        psh = true;
+        if (!bst) {
+          psh = true;
+        }
 
       }
 
@@ -233,27 +250,7 @@ bool Player::ButtonHit(int x,int y,int w,int h) {
 
 void Player::Update() {
 
-  //hit = Player::ButtonHit(hit_x, hit_y, hit_w, hit_h);
-  //std = Player::ButtonHit(std_x, std_y, std_w, std_h);
-  //dbl = Player::ButtonHit(dbl_x, dbl_y, dbl_w, dbl_h);
-  //spt = Player::ButtonHit(spt_x, spt_y, spt_w, spt_h);
 
-  //if (hit) {
-  //  color = 0xff0000;
-  //  c++;
-  //}
-  //if (std) {
-  //  color2 = 0x00ff00;
-  //  c2++;
-  //}
-  //if (dbl) {
-  //  color3 = 0xff00ff;
-  //  c3++;
-  //}
-  //if (spt) {
-  //  color4 = 0xffff00;
-  //  c4++;
-  //}
 
 }
 
@@ -272,140 +269,46 @@ void Player::Draw() {
   DrawFormatString(spt_x, spt_y+80, color3, "%d",dbl+c3);
   DrawFormatString(spt_x, spt_y+100, color4, "%d",spt+c4);
 
+  DrawFormatString(spt_x+40, spt_y+100, color4, "%d",dealer_calc);
+
+  DrawFormatString(spt_x-80, spt_y+80, color4, "%Win %d",win);
+  DrawFormatString(spt_x-80, spt_y+100, color4, "Los %d",los);
+
   DrawFormatString(100, 460, 0xffffff, "選択してください");
 
-  if (win) {
+  if (win && !bst) {
     /*プレイヤーの勝利*/
-    if (Dealer::Calc() > 21) {
+    if (dealer_calc > 21 && !BlackJack) {
 
-      DrawFormatString(100, 440, 0xffffff, "DealerBurst \nあなたの勝ちです !!\n");
+      DrawFormatString(100, 500, 0xffffff, "DealerBurst あなたの勝ちです !!\n");
 
     }
     else {
 
-      DrawFormatString(100, 440, 0xffffff, "あなたの勝ちです !!\n");
+      DrawFormatString(100, 520, 0xffffff, "あなたの勝ちです !!\n");
 
     }
 
   }
   if (BlackJack) {
 
-    DrawFormatString(100,420,0xffffff,"BlackJack");
+    DrawFormatString(100,540,0xffffff,"BlackJack あなたの勝ちです");
 
   }
-  if (los) {    /*ディーラーのほうが高い場合*/
+  if (los && !bst) {    /*ディーラーのほうが高い場合*/
 
-      DrawFormatString(100, 440, 0xffffff, "あなたの負けです\n");
+      DrawFormatString(100, 560, 0xffffff, "あなたの負けです\n");
 
   }
   if(psh && !BlackJack) {    /*同点の場合*/
     /*引き分け*/
-    DrawFormatString(100, 440, 0xffffff, "引き分けです\n");
+    DrawFormatString(100, 580, 0xffffff, "引き分けです\n");
 
   }
   if (bst) {
 
-    DrawFormatString(100, 440, 0xffffff, "Burst\n あなたの負けです\n");
+    DrawFormatString(100, 600, 0xffffff, "Burst あなたの負けです\n");
 
   }
 }
 
-//
-//  /*コンストラクタ*/
-//Player::Player() {
-//  /*変数の初期化*/
-//  hand_num = 0;   /*手札枚数を0で初期化*/
-//  score = 0;
-//  type = 0;
-//  data = 0;
-//
-//  mouseX = mouseY = 0;
-//  hit = std = dbl = spt = bet = false;
-//
-//}
-//Player::~Player() {};
-//void Player::Initialize() {
-//
-//  hand_num = 0;
-//  hand.erase(hand.begin(), hand.end());
-//  score = 0;
-//  type = 0;
-//
-//  hit = std = dbl = spt = bet = false;
-//
-//}
-//
-///*カードの追加*/
-//void Player::Hit(Shoe* shoe) {    /*shoeオブジェクトポインタ*/
-//  /*配列の最後にカードを追加*/
-//  hand.push_back(shoe->Take_Card());
-//  hand_num++;   /*手札枚数を増やす*/
-//
-//}
-//
-///*ゲーム実行*/
-//bool Player::Play(Shoe* shoe) {
-//  /*バーストするまでループ処理*/
-//  char buf[10];
-//  
-//  while (Player::Calc() <= 21) {
-//    /*選択肢を聞く（ヒット、スタンド）*/
-//    //DrawFormatString(100,460,0xffffff,"選択してください");
-//    //str = KeyInputSingleCharString(100, 100, 10, buf, TRUE);
-//    str = "stand";
-//    /*hitが入力された場合*/
-//    if (str == "hit") {
-//      /*カードの配布*/
-//      Player::Hit(shoe);
-//      /*手札の表示*/
-//
-//      DrawFormatString(100, 480, 0xffffff, "==============");
-//
-//      DrawFormatString(100,500,0xffffff,"player");
-//      Player::Show_Hand();
-//      DrawFormatString(100, 520, 0xffffff, "==============");
-//
-//    }
-//    else if (str == "stand") {    /*standが入力された場合*/
-//      /*返り値としてtrueとして終了*/
-//      return true;
-//
-//    }
-//
-//  }
-//  /*バーストしているのでfalseを返して終了*/
-//  return false;
-//
-//}
-//
-//void Player::Score(Player player, Dealer dealer) {   /*プレイヤーとディーラーのスコア勝負*/
-//  /*最終スコアがプレイヤーのほうが高い場合*/
-//  if (player.Calc() > dealer.Calc()) {
-//    /*プレイヤーの勝利*/
-//
-//    DrawFormatString(100, 420,0xffffff,"Player win !!\n");
-//
-//  }
-//  else if (player.Calc() < dealer.Calc()) {    /*ディーラーのほうが高い場合*/
-//
-//    if (dealer.Calc() > 21) {
-//      /*プレイヤーの勝ち*/
-//
-//      DrawFormatString(100, 420,0xffffff,"Plaeyr Win !!\n");
-//    }
-//    else {
-//      /*プレイヤーの負け*/
-//
-//      DrawFormatString(100, 420,0xffffff,"Player Lose\n");
-//    }
-//
-//  }
-//  else {    /*同点の場合*/
-//    /*引き分け*/
-//
-//    DrawFormatString(100, 420,0xffffff,"Push\n");
-//
-//  }
-//
-//}
-//
