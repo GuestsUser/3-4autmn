@@ -1,7 +1,7 @@
 #include "./../../GlovalLoading.h"	
 #include "./../../GetKey.h"
 #include "./../../SceneManager.h"
-#include "MapLoad.h"
+#include "SR_Map.h"
 #include "SR_Title.h"
 #include "SR_Game.h"
 #include "SR_Saikoro.h"
