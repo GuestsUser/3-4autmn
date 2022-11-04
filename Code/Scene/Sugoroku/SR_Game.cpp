@@ -15,6 +15,6 @@ void SR_Game::Update() {
 }
 
 void SR_Game::Draw() {
-	DrawGraph(0, 0, SR_MAP,false);
+	DrawGraph(0, 0, SR_MAP, false);
 	saikoro->Draw();
 }
