@@ -6,17 +6,12 @@
 
 #include "DxLib.h"
 #include "ConstVal.h"
-#include "./Scene/Sample/Title.h"
+#include "./Scene/Title/Scene_GameTitle.h"
 #include "GetKey.h"
 #include "SceneManager.h"
 #include "Worldval.h"
 #include "GlovalLoading.h"
-#include"./Scene/Karuta/Scene_Karuta.h"
-#include"./Scene/ConnectFour/Scene_ConnectFour.h"
-#include"./Scene/daifugou/CP_Scene.h"
-#include"./Scene/BlackJack/BJ_Main.h"
-//最初に実行したいシーンのヘッダーをインクルードしておく
-#include"./Scene/Asuma/Scene_PageOne.h"
+
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); //デバッグ表示を可能にする
@@ -38,9 +33,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	GlovalLoading(); //GlovalLoading.cppの関数、WorldVal::Getで取り出せる値の用意を行うサンプル
 
 	key = new KeySystem(); //キー入力受付用クラスの実体作成
-
-	SceneManager* scm = new SceneManager(new Scene_PageOne()); //引数に最初に実行したいシーン実体を入れる
-
+	SceneManager* scm = new SceneManager(new Scene_GameTitle()); //セレクト画面が完成したから最初に実行するシーンはタイトルに固定、其々のシーンに飛ばす処理はScene_Select.cppのswitch文を確認
 	
 	while (ProcessMessage() == 0 && (!CheckHitKey(KEY_INPUT_ESCAPE)) && key->GetKeyState(SELECT_KEY) != KEY_PUSH) { //GetKeyシステム使用例、backボタンが押された瞬間にfalseとなる
 		//_RPTF1(_CRT_WARN, "%s\n", "test"); //デバッグ表示
@@ -48,7 +41,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		now = GetNowHiPerformanceCount(); //現在時刻の取得
 		if (now - old > fps) { //前フレームの現在時刻との差が実行タイミングになっていた場合ゲーム処理、描写の実行
 			key->KeyInput(); //キー入力更新
-			old = now - (now - old); //差が実行タイミング以上だった場合そのままoldに現在時刻を入れると切り捨てられてしまうのでoldから実行タイミング超過分を引く事で超過分を加味した形にする
+			old = now - (now - old - fps); //差が実行タイミング以上だった場合そのままoldに現在時刻を入れると切り捨てられてしまうのでoldから実行タイミング超過分を引く事で超過分を加味した形にする
 			ClearDrawScreen(); //画面の初期化
 			if (!scm->Update()) { break; } //ウィンドウを閉じる指示を出されてたら終了
 			scm->Draw(); //画面描写

@@ -7,10 +7,13 @@ class BlackJack :public Scene {
 private:
 
   int title_img,game_img,end_img;
+
+  int hit_flg;
+
   bool game_endflg;
+  bool next_flg;
 
   std::string next;
-  char buf[10];
 
   /*カードシューオブジェクトの生成*/
   Shoe* shoe;
