@@ -29,10 +29,10 @@ void Othello_Board::Othello_Board_Finalize() {
 void Othello_Board::Othello_Board_Update() {
     // デバッグ用
     if (OrderNum == 0) {
-        DrawFormatString(650, 90, WhiteCr, "左クリック：黒");
+        DrawFormatString(650, 90, WhiteCr, "左クリック：黒の番です");
     }
     else {
-        DrawFormatString(650, 90, WhiteCr, "左クリック：白");
+        DrawFormatString(650, 90, WhiteCr, "左クリック：白の番です");
     }
     DrawFormatString(650, 120, WhiteCr, "CheckNum:%d", CheckNum);
 
@@ -214,12 +214,23 @@ int Othello_Board::PutOnCheck(int board[PB][PB], int p, int q, int enemy, int pl
         //count++;
 
     }
-    for (CheckNum = CheckNum - 1; board[Square_X + CheckNum * p][Square_Y + CheckNum * q] != player; CheckNum--) {
+    //for (CheckNum = CheckNum - 1; board[Square_X + CheckNum * p][Square_Y + CheckNum * q] != player; CheckNum--) {
+    //    if (board[Square_X + CheckNum * p][Square_Y + CheckNum * q] == enemy) {
+    //        board[Square_X + CheckNum * p][Square_Y + CheckNum * q] = player;
+    //    }
+    //}
+    return CheckNum - 1;
+}
+
+int Othello_Board::BWPut(int board[PB][PB], int p, int q, int enemy, int player) {
+    int CNcount;
+
+    for (CNcount = PutOnCheck(Board, p, q, enemy, player); board[Square_X + CheckNum * p][Square_Y + CheckNum * q] != player; CNcount--) {
         if (board[Square_X + CheckNum * p][Square_Y + CheckNum * q] == enemy) {
             board[Square_X + CheckNum * p][Square_Y + CheckNum * q] = player;
         }
     }
-    return 1;
+    return 0;
 }
 
 int Othello_Board::PutOnCheck2(int board[PB][PB], int p, int q, int d, int e, int enemy, int player) {
@@ -242,30 +253,32 @@ int Othello_Board::PutOnCheck2(int board[PB][PB], int p, int q, int d, int e, in
 }
 
 // 黒石を置いた位置から、挟んで変えられる白石を探して黒石に変える
-void Othello_Board::BlackPut() {
-    PutOnCheck(Board, 1, 0, 2, 1);
-    PutOnCheck(Board, -1, 0, 2, 1);
-    PutOnCheck(Board, 0, 1, 2, 1);
-    PutOnCheck(Board, 0, -1, 2, 1);
-    PutOnCheck(Board, 1, 1, 2, 1);
-    PutOnCheck(Board, -1, 1, 2, 1);
-    PutOnCheck(Board, 1, -1, 2, 1);
-    PutOnCheck(Board, -1, -1, 2, 1);
+int Othello_Board::BlackPut() {
+    //PutOnCheck(Board, 1, 0, 2, 1);
+    //PutOnCheck(Board, -1, 0, 2, 1);
+    //PutOnCheck(Board, 0, 1, 2, 1);
+    //PutOnCheck(Board, 0, -1, 2, 1);
+    //PutOnCheck(Board, 1, 1, 2, 1);
+    //PutOnCheck(Board, -1, 1, 2, 1);
+    //PutOnCheck(Board, 1, -1, 2, 1);
+    //PutOnCheck(Board, -1, -1, 2, 1);
+    /* 置く関数と区別する関数を別にしてみる　*/
+    //if (PutOnCheck(Board, 1, 0, 2, 1)) {
+    //    BWPut()
+    //}
+    if (PutOnCheck(Board, -1,  0, 2, 1)) return 1;
+    if (PutOnCheck(Board,  0,  1, 2, 1)) return 1;
+    if (PutOnCheck(Board,  0, -1, 2, 1)) return 1;
+    if (PutOnCheck(Board,  1,  1, 2, 1)) return 1;
+    if (PutOnCheck(Board, -1,  1, 2, 1)) return 1;
+    if (PutOnCheck(Board,  1, -1, 2, 1)) return 1;
+    if (PutOnCheck(Board, -1, -1, 2, 1)) return 1;
 
-    //if (PutOnCheck(Board,  1,  0, 2, 1)) return 1;
-    //if (PutOnCheck(Board, -1,  0, 2, 1)) return 1;
-    //if (PutOnCheck(Board,  0,  1, 2, 1)) return 1;
-    //if (PutOnCheck(Board,  0, -1, 2, 1)) return 1;
-    //if (PutOnCheck(Board,  1,  1, 2, 1)) return 1;
-    //if (PutOnCheck(Board, -1,  1, 2, 1)) return 1;
-    //if (PutOnCheck(Board,  1, -1, 2, 1)) return 1;
-    //if (PutOnCheck(Board, -1, -1, 2, 1)) return 1;
-
-    //return 0;
+    return 0;
 }
 
 // 白石を置いた位置から、挟んで変えられる黒石を探して白石に変える
-void Othello_Board::WhitePut() {
+int Othello_Board::WhitePut() {
     PutOnCheck(Board, 1, 0, 1, 2);
     PutOnCheck(Board, -1, 0, 1, 2);
     PutOnCheck(Board, 0, 1, 1, 2);
@@ -284,7 +297,7 @@ void Othello_Board::WhitePut() {
     //if (PutOnCheck(Board, 1, -1, 1, 2)) return 1;
     //if (PutOnCheck(Board, -1, -1, 1, 2)) return 1;
 
-    //return 1;
+    return 0;
 }
 
 // 左右上斜めに石があるかどうか調べる

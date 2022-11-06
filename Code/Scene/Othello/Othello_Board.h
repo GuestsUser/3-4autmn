@@ -44,13 +44,14 @@ public:
 	int PutSearch(int board[PB][PB], int p, int q, int d, int e, int enemy, int player);
 
 	int BlackPutCheck(int d, int e);
-	void BlackPut();
+	int BlackPut();
 	void BoardSearchBlack(int board[PB][PB]);
 
 	int WhitePutCheck(int d, int e);
-	void WhitePut();
+	int WhitePut();
 	void BoardSearchWhite(int board[PB][PB]);
 
+	int BWPut(int board[PB][PB], int p, int q, int enemy, int player);
 
 };
 
