@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-#define SWAP(type,a,b)          { type work = a; a = b; b = work; }
+#define MAX (2U)
 
 class Card {
 public:
@@ -33,10 +33,6 @@ public:
 
 class PageOne : public Card{
 private:
-	enum Priority {PLAYER, NPC1, NPC2, NPC3};	//親を決める優先度
-	Priority pri;
-	int priority[4];
-
 	int card_type[54];	//画像用ハンドル
 	
 	Card Card_back;		//カードの裏面の情報
@@ -52,9 +48,10 @@ private:
 	std::vector<Card> NPC_card_2;		//NPC２号の持っているカードの情報
 	std::vector<Card> NPC_card_3;		//NPC３号の持っているカードの情報
 
+	int priority;
 	int field;
 
-	int par;
+	int pri;
 
 	int player;
 	bool flg_p;
@@ -67,6 +64,11 @@ private:
 
 	int npc_3;
 	bool flg_3;
+
+	int p_pow;
+	int n1_pow;
+	int n2_pow;
+	int n3_pow;
 
 	int i;
 	int j;
@@ -82,15 +84,6 @@ private:
 
 	int Player_X;		//プレイヤーの手札のX座標
 	int Player_Y;		//プレイヤーの手札のY座標
-
-	void random_shuffle(int* array, size_t size)
-	{
-		for (size_t i = size; i > 1; --i) {
-			size_t a = i - 1;
-			size_t b = rand() % i;
-			SWAP(int, array[a], array[b]);
-		}
-	}
 
 public:
 	PageOne() {}
