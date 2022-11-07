@@ -9,8 +9,8 @@ void CareerPoker::CP_Player_Initialize(){
 	//rule = LoadGraph("Code/Scene/daifugou/images/rule.png");//ƒ‹[ƒ‹‰æ‘œ
 	stage = LoadGraph("Resource/image/CareerPoker.png");//”wŒi‰æ‘œ
 	LoadDivGraph("Resource/image/toranpu_all.png",53,13,5,200,300, card_type,TRUE);
-	for (i = 0; i < 4; i++) {
-		for (j = 0; j < 13; j++) {
+	for (i = 0; i < 5; i++) {
+		for (j = 0; j < 51; j++) {
 			Card_obj.push_back(C(card_type[i + j], j, i));
 		}
 	}
@@ -45,7 +45,7 @@ void CareerPoker::CP_Player_Draw() {
 	DrawRotaGraph(640, 360, 1.0 , 0, stage, TRUE);
 	int i = 0;
 	for (auto itr = Player_card.begin(); itr != Player_card.end(); itr++) {
-		DrawRotaGraph(100 + i * 40, 100, 0.2, 0, (*itr).img, TRUE);
+		DrawRotaGraph(100 + i * 45, 500, 0.3, 0, (*itr).img, TRUE);
 		i++;
 	}
 }
