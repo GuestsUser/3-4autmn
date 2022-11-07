@@ -30,7 +30,37 @@ public:
 	void Karu_Game_Update();
 	void Karu_Game_Draw();
 
+	void Efuda_Storage();
+	void Yomifuda_Storage();
 	void Mouse_HitBox();
 
 	int Karu_Efuda[KARU_MAX_Y][KARU_MAX_X];		//‚©‚é‚½‚ÌŠGŽD”z’u—p
 };
+
+struct EFUDA
+{
+	float x, y;	//‚©‚é‚½‚ÌˆÊ’u
+	int img;	//ŠGŽD‚Ì‰æ‘œŠi”[—p
+	int numX, numY;
+
+	bool kara;	//Žæ‚Á‚Ä‹ó”’‚É‚È‚Á‚Ä‚¢‚é‚©
+};
+
+extern struct EFUDA Efuda[KARU_MAX_Y][KARU_MAX_X];
+
+struct YOMIFUDA
+{
+	float x, y;	//‚©‚é‚½‚ÌˆÊ’u
+	int img;	//ŠGŽD‚Ì‰æ‘œŠi”[—p
+
+	bool kara;	//‹ó”’‚É‚È‚Á‚Ä‚¢‚é‚©
+};
+
+extern struct YOMIFUDA Yomifuda[KARU_MAX_Y][KARU_MAX_X];
+
+struct FUDA
+{
+	bool get;	//Žæ‚Á‚Ä‚é‚©
+};
+
+extern struct FUDA Fuda[100];
