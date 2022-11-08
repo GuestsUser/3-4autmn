@@ -8,6 +8,8 @@
 #define KARU_MAX_X  5			//かるた配置の横の枚数
 #define KARU_MAX_Y  3			//..縦
 
+#define KARU_OTETUKI_MAX  2			//お手付きの制限
+
 class Karu_Game{
 private:
 	int Karu_Bg;				//ゲーム背景
@@ -24,6 +26,10 @@ private:
 	int Mouse_X;	//マウスのX座標
 	int Mouse_Y;	//マウスのY座標
 
+	int Karu_Otetuki;
+
+	bool end;
+
 public:
 	void Karu_Game_Initialize();
 	void Karu_Game_Finalize();
@@ -33,6 +39,8 @@ public:
 	void Efuda_Storage();
 	void Yomifuda_Storage();
 	void Mouse_HitBox();
+
+	void Karu_GameOver();
 
 	int Karu_Efuda[KARU_MAX_Y][KARU_MAX_X];		//かるたの絵札配置用
 };
@@ -64,3 +72,10 @@ struct FUDA
 };
 
 extern struct FUDA Fuda[100];
+
+struct PLAYER
+{
+	int myFuda;	//取ってる枚数
+};
+
+extern struct PLAYER player;

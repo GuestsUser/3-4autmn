@@ -16,6 +16,7 @@ bool Yomiset = false;
 struct EFUDA Efuda[KARU_MAX_Y][KARU_MAX_X];
 struct YOMIFUDA Yomifuda[KARU_MAX_Y][KARU_MAX_X];
 struct FUDA Fuda[100];
+struct PLAYER player;
 
 
 void Karu_Game::Karu_Game_Initialize() {
@@ -34,6 +35,10 @@ void Karu_Game::Karu_Game_Initialize() {
 	for (int z = 0; z < 100; z++) {
 		Fuda[z].get = false;
 	}
+
+	Karu_Otetuki = 0;
+
+	player.myFuda = 0;
 }
 void Karu_Game::Karu_Game_Finalize() {
 	DeleteGraph(Karu_Bg);
@@ -41,19 +46,21 @@ void Karu_Game::Karu_Game_Finalize() {
 }
 void Karu_Game::Karu_Game_Update() {
 	GetMousePoint(&Mouse_X, &Mouse_Y); //マウスの座標取得
-	if(key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+	if (!end) {
+		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
 
-		Mouse_HitBox();		//かるたに触れているか確認
+			Mouse_HitBox();		//かるたに触れているか確認
+
+		}
+		if (reset < 44) {
+			Efuda_Storage();
+		}
+
+		if (!Yomiset) {
+			Yomifuda_Storage();
+		}
 
 	}
-	if (reset < 44) {
-		Efuda_Storage();
-	}
-
-	if (!Yomiset) {
-		Yomifuda_Storage();
-	}
-
 	if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH) { // 右クリックしたら
 		//絵札総入れ替え
 		for (int i = 0; i < KARU_MAX_Y; i++) {
@@ -63,9 +70,13 @@ void Karu_Game::Karu_Game_Update() {
 			for (int z = 0; z < 100; z++) {
 				Fuda[z].get = false;
 			}
+			Yomifuda[0][0].kara = true;
 			Yomiset = false;
 			reset = 0;
 		}
+		end = false;
+		Karu_Otetuki = 0;
+		player.myFuda = 0;
 	}
 
 	/*if (reset >= 44) {
@@ -88,7 +99,13 @@ void Karu_Game::Karu_Game_Draw() {
 	}
 	DrawRotaGraph(1000, 600, 1.0, 0, Yomifuda[0][0].img, TRUE);
 
-	DrawFormatString(0, 0, 0xFF0000, "X: %d  Y: %d  SUCCESS", ix, iy);
+	DrawFormatString(800, 0, 0xFF0000, "X: %d  Y: %d", ix, iy);
+	DrawFormatString(800, 100, 0xFF0000, "Reset_score: %d", reset);
+	DrawFormatString(800, 200, 0xFF0000, "OTETUKI: %d", Karu_Otetuki);
+	DrawFormatString(800, 300, 0xFF0000, "PLAYER 1: %d", player.myFuda);
+	if (end) {
+		DrawFormatString(800, 400, 0xFF0000, "END");
+	}
 }
 
 void Karu_Game::Mouse_HitBox() {
@@ -98,7 +115,20 @@ void Karu_Game::Mouse_HitBox() {
 				Mouse_Y >(Efuda[i][j].y - (Karu_imgY / 2)) && Mouse_Y < (Efuda[i][j].y + (Karu_imgY / 2))) {
 				ix = j;
 				iy = i;
-				Efuda[i][j].kara = true;
+				if (Yomifuda[0][0].img == Karu_fuda[Efuda[i][j].numY][(Efuda[i][j].numX) + 1]) {
+					Efuda[i][j].kara = true;
+					Yomifuda[0][0].kara = true;
+					Yomiset = false;
+					player.myFuda++;
+				}
+				else {
+					if (Karu_Otetuki < KARU_OTETUKI_MAX) {
+						Karu_Otetuki++;
+					}
+					else {
+						Karu_GameOver();
+					}
+				}
 			}
 		}
 	}
@@ -135,12 +165,19 @@ void Karu_Game::Efuda_Storage() {
 * 戻り値:なし
 ******************/
 void Karu_Game::Yomifuda_Storage() {
-	int x = GetRand(KARU_MAX_X);
-	int y = GetRand(KARU_MAX_Y);
+	int x, y;
+	do {
+		x = GetRand(KARU_MAX_X - 1);
+		y = GetRand(KARU_MAX_Y - 1);
+	} while (Efuda[y][x].kara && player.myFuda < 44);
 
 	if (Yomifuda[0][0].kara) {
 		Yomifuda[0][0].img = Karu_fuda[Efuda[y][x].numY][(Efuda[y][x].numX) + 1];
 		Yomifuda[0][0].kara = false;
 		Yomiset = true;
 	}
+}
+
+void Karu_Game::Karu_GameOver() {
+	end = true;
 }
