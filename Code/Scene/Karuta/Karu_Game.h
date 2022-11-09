@@ -1,15 +1,22 @@
 #pragma once
 
-#define KARU_MAX_X  5
-#define KARU_MAX_Y  3
+#define PI    3.1415926535897932384626433832795f
+
+#define KARU_IMAGE_MAX_X  10	//‚©‚é‚½‚Ì‰æ‘œÅ‘å”
+#define KARU_IMAGE_MAX_Y  10	//..c
+
+#define KARU_MAX_X  5			//‚©‚é‚½”z’u‚Ì‰¡‚Ì–‡”
+#define KARU_MAX_Y  3			//..c
+
+#define KARU_OTETUKI_MAX  2			//‚¨è•t‚«‚Ì§ŒÀ
 
 class Karu_Game{
 private:
 	int Karu_Bg;				//ƒQ[ƒ€”wŒi
 	int Karu_SideBg;			//ƒQ[ƒ€”wŒi
-	int Karu_fuda[10][10];		//‚©‚é‚½‚ÌD‰æ‘œŠi”[—p
-
-	int Karu_Efuda[KARU_MAX_Y][KARU_MAX_X];		//‚©‚é‚½‚ÌŠGD”z’u—p
+	int Karu_Otetuki_img[2];			//‚¨è•t‚«‚Ì‰æ‘œŠi”[—p
+	int Karu_fuda[KARU_IMAGE_MAX_X][KARU_IMAGE_MAX_Y];		//‚©‚é‚½‚ÌD‰æ‘œŠi”[—p
+	int Fuda_voice[KARU_IMAGE_MAX_X][KARU_IMAGE_MAX_Y];		//“Ç‚İã‚°‰¹ºŠi”[—p
 
 	float Karu_StartPosX = 105.0f;		//ŠGD‚Ì”z’uŠJnˆÊ’u
 	float Karu_StartPosY = 132.5f;		//..
@@ -18,10 +25,63 @@ private:
 
 	float Karu_Space = 20.0f;	//ŠGD‚ÆŠGD‚ÌŠÔ
 
+	int Mouse_X;	//ƒ}ƒEƒX‚ÌXÀ•W
+	int Mouse_Y;	//ƒ}ƒEƒX‚ÌYÀ•W
+
+	int Karu_Otetuki;
+
+	bool end;
+
 public:
 	void Karu_Game_Initialize();
 	void Karu_Game_Finalize();
 	void Karu_Game_Update();
 	void Karu_Game_Draw();
 
+	void Efuda_Storage();
+	void Yomifuda_Storage();
+	void Mouse_HitBox();
+
+	void Karu_GameOver();
+
+	void Otetuki_Anim();
+
+	int Karu_Efuda[KARU_MAX_Y][KARU_MAX_X];		//‚©‚é‚½‚ÌŠGD”z’u—p
 };
+
+struct EFUDA
+{
+	float x, y;	//‚©‚é‚½‚ÌˆÊ’u
+	int img;	//ŠGD‚Ì‰æ‘œŠi”[—p
+	int numX, numY;
+
+	bool kara;	//æ‚Á‚Ä‹ó”’‚É‚È‚Á‚Ä‚¢‚é‚©
+};
+
+extern struct EFUDA Efuda[KARU_MAX_Y][KARU_MAX_X];
+
+struct YOMIFUDA
+{
+	float x, y;	//‚©‚é‚½‚ÌˆÊ’u
+	int img;	//ŠGD‚Ì‰æ‘œŠi”[—p
+
+	bool kara;	//‹ó”’‚É‚È‚Á‚Ä‚¢‚é‚©
+};
+
+extern struct YOMIFUDA Yomifuda[KARU_MAX_Y][KARU_MAX_X];
+
+struct FUDA
+{
+	bool get;	//æ‚Á‚Ä‚é‚©
+};
+
+extern struct FUDA Fuda[100];
+
+struct PLAYER
+{
+	int myFuda;	//æ‚Á‚Ä‚é–‡”
+
+	int MousePoint[2];//ƒ}ƒEƒXƒ|ƒCƒ“ƒ^[‚Ì‰æ‘œŠi”[—p
+};
+
+extern struct PLAYER player;
