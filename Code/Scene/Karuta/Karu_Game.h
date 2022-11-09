@@ -14,7 +14,9 @@ class Karu_Game{
 private:
 	int Karu_Bg;				//ゲーム背景
 	int Karu_SideBg;			//ゲーム背景
+	int Karu_Otetuki_img[2];			//お手付き時の画像格納用
 	int Karu_fuda[KARU_IMAGE_MAX_X][KARU_IMAGE_MAX_Y];		//かるたの札画像格納用
+	int Fuda_voice[KARU_IMAGE_MAX_X][KARU_IMAGE_MAX_Y];		//読み上げ音声格納用
 
 	float Karu_StartPosX = 105.0f;		//絵札の配置開始位置
 	float Karu_StartPosY = 132.5f;		//..
@@ -41,6 +43,8 @@ public:
 	void Mouse_HitBox();
 
 	void Karu_GameOver();
+
+	void Otetuki_Anim();
 
 	int Karu_Efuda[KARU_MAX_Y][KARU_MAX_X];		//かるたの絵札配置用
 };
@@ -76,6 +80,8 @@ extern struct FUDA Fuda[100];
 struct PLAYER
 {
 	int myFuda;	//取ってる枚数
+
+	int MousePoint[2];//マウスポインターの画像格納用
 };
 
 extern struct PLAYER player;
