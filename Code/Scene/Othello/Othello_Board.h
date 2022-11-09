@@ -14,7 +14,9 @@ private:
 	int WhiteCr;
 	int CheckNum;
 
-	int OrderNum;
+	int OrderNum;	// è”Ô‚ğŒˆ‚ß‚é”‚ğ“ü‚ê‚é•Ï”
+	int BlackNum;	// •Î‚Ì”‚ğ“ü‚ê‚é•Ï”
+	int WhiteNum;	// ”’Î‚Ì”‚ğ“ü‚ê‚é•Ï”
 
 	bool DrawFlag;
 	bool CheckFlag;
@@ -50,6 +52,9 @@ public:
 	int WhitePutCheck(int d, int e);
 	int WhitePut();
 	void BoardSearchWhite(int board[PB][PB]);
+
+	void BoardSearchBWNumber(int board[PB][PB]);
+
 
 	int BWPut(int board[PB][PB], int p, int q, int enemy, int player);
 
