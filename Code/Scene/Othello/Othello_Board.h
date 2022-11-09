@@ -17,9 +17,11 @@ private:
 	int OrderNum;	// è”Ô‚ğŒˆ‚ß‚é”‚ğ“ü‚ê‚é•Ï”
 	int BlackNum;	// •Î‚Ì”‚ğ“ü‚ê‚é•Ï”
 	int WhiteNum;	// ”’Î‚Ì”‚ğ“ü‚ê‚é•Ï”
+	int TimeCount;
 
 	bool DrawFlag;
 	bool CheckFlag;
+	bool TimeFlag;
 public:
 	int Mouse_X;
 	int Mouse_Y;
@@ -47,11 +49,11 @@ public:
 
 	int BlackPutCheck(int d, int e);
 	int BlackPut();
-	void BoardSearchBlack(int board[PB][PB]);
+	int BoardSearchBlack(int board[PB][PB]);
 
 	int WhitePutCheck(int d, int e);
 	int WhitePut();
-	void BoardSearchWhite(int board[PB][PB]);
+	int BoardSearchWhite(int board[PB][PB]);
 
 	void BoardSearchBWNumber(int board[PB][PB]);
 
