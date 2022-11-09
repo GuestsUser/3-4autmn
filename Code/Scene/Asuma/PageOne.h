@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-#define MAX (2U)
+#define MAX (4U)
 
 class Card {
 public:
@@ -52,6 +52,7 @@ private:
 	int field;
 
 	int pri;
+	bool draw;
 
 	int player;
 	bool flg_p;
@@ -82,8 +83,17 @@ private:
 	int Deck_X;		//山札のX座標
 	int Deck_Y;		//山札のY座標
 
-	int Player_X;		//プレイヤーの手札のX座標
-	int Player_Y;		//プレイヤーの手札のY座標
+	int Player_X;	//プレイヤーの手札のX座標
+	int Player_Y;	//プレイヤーの手札のY座標
+
+	int NPC1_X;		//NPC1の手札のX座標
+	int NPC1_Y;		//NPC1の手札のY座標
+
+	int NPC2_X;		//NPC2の手札のX座標
+	int NPC2_Y;		//NPC2の手札のY座標
+
+	int NPC3_X;		//NPC3の手札のX座標
+	int NPC3_Y;		//NPC3の手札のY座標
 
 public:
 	PageOne() {}
