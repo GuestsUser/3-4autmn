@@ -35,6 +35,7 @@
     <ClCompile Include="Code\Scene\Sugoroku\SR_Game.cpp" />
     <ClCompile Include="Code\Worldval.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\SR_Map.cpp" />
+    <ClCompile Include="Code\Scene\daifugou\daigugou.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Component\Button.h" />

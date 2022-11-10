@@ -42,11 +42,8 @@ private:
 	int hand[15];//手札
 	int order[4];//誰から始めるか
 	int pass;//ぱす
-	int rev;//革命
 	int Mouse_X;	//マウスのX座標
 	int Mouse_Y;    //マウスのY座標
-	int card_w = 200;
-	int card_h = 300;
 	int Player_X;
 	int Player_Y;
 	int player;
@@ -58,6 +55,7 @@ private:
 	//Card Card_obj[4][13];		//全カードの情報
 	std::vector<C> Card_obj;		//全カードの情報
 	std::vector<C> Player_card;	//プレイヤーの持っているカードの情報
+	std::vector<C> Field_card;  //場に出すため
 
 public:
 	void CP_Player_Initialize();

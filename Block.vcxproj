@@ -37,6 +37,7 @@
     <ClCompile Include="Code\Scene\ConnectFour\CF_Player.cpp" />
     <ClCompile Include="Code\Scene\ConnectFour\Scene_ConnectFour.cpp" />
     <ClCompile Include="Code\Scene\daifugou\CP_Player.cpp" />
+    <ClCompile Include="Code\Scene\daifugou\daigugou.cpp" />
     <ClCompile Include="Code\Scene\Karuta\Karu_Game.cpp" />
     <ClCompile Include="Code\Scene\Karuta\Scene_Karuta.cpp" />
     <ClCompile Include="Code\Scene\Othello\Othello_Board.cpp" />
