@@ -6,6 +6,7 @@
 
 int ix = 0, iy = 0;
 int reset = 0;
+bool AllSet = false;
 
 bool Yomiset = false;
 
@@ -19,13 +20,16 @@ int Otetuki_AnimTime = 0;
 struct EFUDA Efuda[KARU_MAX_Y][KARU_MAX_X];
 struct YOMIFUDA Yomifuda[KARU_MAX_Y][KARU_MAX_X];
 struct FUDA Fuda[100];
-struct PLAYER player;
+struct KARU_PLAYER Karu_player;
 
 
 void Karu_Game::Karu_Game_Initialize() {
 
 	Karu_Bg = LoadGraph("Resource/image/Karu_Image/Karu_Tatami.png");		//”wŒi‰æ‘œ‚ğKaru_Bg‚ÉŠi”[
 	Karu_SideBg = LoadGraph("Resource/image/Karu_Image/Karu_Side_Bg.png");	//ƒTƒCƒh”wŒi‰æ‘œ‚ğKaru_SideBg‚ÉŠi”[
+	Karu_getText = LoadGraph("Resource/image/Karu_Image/GetCountText.png");	//ƒeƒLƒXƒg‰æ‘œ‚ğKaru_getText‚ÉŠi”[
+	Karu_PlayerText = LoadGraph("Resource/image/Karu_Image/Player.png");	//ƒeƒLƒXƒg‰æ‘œ‚ğKaru_PlayerText‚ÉŠi”[
+	LoadDivGraph("Resource/image/Karu_Image/number.png", 10, 10, 1, 30, 50, Karu_numImg, TRUE);	//”š‰æ‘œ‚ğKaru_numImg‚ÉŠi”[
 
 	LoadDivGraph("Resource/image/Karu_Image/Karu_Otetuki.png", 2, 2, 1, 100, 100, Karu_Otetuki_img, TRUE);
 
@@ -89,7 +93,7 @@ void Karu_Game::Karu_Game_Initialize() {
 
 	Karu_Otetuki = 0;
 
-	player.myFuda = 0;
+	Karu_player.myFuda = 0;
 }
 void Karu_Game::Karu_Game_Finalize() {
 	DeleteGraph(Karu_Bg);
@@ -107,11 +111,14 @@ void Karu_Game::Karu_Game_Update() {
 			Efuda_Storage();
 		}
 
-		if (!Yomiset) {
+		if (!Yomiset && AllSet && Karu_player.myFuda < 44) {
 			Yomifuda_Storage();
 		}
 
 	}
+
+	Otetuki_Anim();
+
 	if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH) { // ‰EƒNƒŠƒbƒN‚µ‚½‚ç
 		//ŠGD‘“ü‚ê‘Ö‚¦
 		for (int i = 0; i < KARU_MAX_Y; i++) {
@@ -127,7 +134,7 @@ void Karu_Game::Karu_Game_Update() {
 		}
 		end = false;
 		Karu_Otetuki = 0;
-		player.myFuda = 0;
+		Karu_player.myFuda = 0;
 	}
 
 	/*if (reset >= 44) {
@@ -136,18 +143,10 @@ void Karu_Game::Karu_Game_Update() {
 		}
 		reset = 0;
 	}*/
-	Otetuki_Anim();
 }
 void Karu_Game::Karu_Game_Draw() {
 	DrawRotaGraph(640, 360, 1.0, 0, Karu_Bg, TRUE);
 	DrawRotaGraph(1100, 360, 1.0, 0, Karu_SideBg, TRUE);
-	for (int i = 0; i < KARU_MAX_Y; i++) {
-		for (int j = 0; j < KARU_MAX_X; j++) {
-			if (!Efuda[i][j].kara) {
-				DrawRotaGraph((Efuda[i][j].x) + (Karu_Space * j + Karu_Space), (Efuda[i][j].y) + (Karu_Space * i + Karu_Space), 1.0, 0, Efuda[i][j].img, TRUE);
-			}
-		}
-	}
 	DrawRotaGraph(1080, 520, 1.7, 0, Yomifuda[0][0].img, TRUE);
 	for (int o = 0; o < 3;o++) {
 		if (Karu_Otetuki > o ) {
@@ -158,17 +157,33 @@ void Karu_Game::Karu_Game_Draw() {
 		}
 	}
 
+	DrawRotaGraph(1080, 60, 1.0, 0, Karu_getText, TRUE);
+	DrawRotaGraph(980, 130, 1.0, 0, Karu_PlayerText, TRUE);
+
+	DrawRotaGraph(1050, 130, 1.0, 0, Karu_numImg[Karu_player.myFuda / 10], TRUE);
+	DrawRotaGraph(1080, 130, 1.0, 0, Karu_numImg[Karu_player.myFuda % 10], TRUE);
+
+
 	if (Otetuki) {
 		DrawRotaGraph(Mouse_X, Mouse_Y, 1.0, 0, Karu_Otetuki_img[1], TRUE);
 	}
 
+	for (int i = 0; i < KARU_MAX_Y; i++) {
+		for (int j = 0; j < KARU_MAX_X; j++) {
+			if (!Efuda[i][j].kara) {
+				DrawRotaGraph((Efuda[i][j].x), (Efuda[i][j].y), 1.0, 0, Efuda[i][j].img, TRUE);
+			}
+		}
+	}
+	AllSet = true;
+
 	/*DrawFormatString(800, 0, 0xFF0000, "X: %d  Y: %d", ix, iy);
 	DrawFormatString(800, 100, 0xFF0000, "Reset_score: %d", reset);
 	DrawFormatString(800, 200, 0xFF0000, "OTETUKI: %d", Karu_Otetuki);
-	DrawFormatString(800, 300, 0xFF0000, "PLAYER 1: %d", player.myFuda);
+	DrawFormatString(800, 300, 0xFF0000, "PLAYER 1: %d", Karu_player.myFuda);*/
 	if (end) {
 		DrawFormatString(800, 400, 0xFF0000, "END");
-	}*/
+	}
 }
 
 void Karu_Game::Mouse_HitBox() {
@@ -179,10 +194,11 @@ void Karu_Game::Mouse_HitBox() {
 				ix = j;
 				iy = i;
 				if (Yomifuda[0][0].img == Karu_fuda[Efuda[i][j].numY][(Efuda[i][j].numX) + 1]) {
+					AllSet = false;
 					Efuda[i][j].kara = true;
 					Yomifuda[0][0].kara = true;
 					Yomiset = false;
-					player.myFuda++;
+					Karu_player.myFuda++;
 				}
 				else {
 					Otetuki = true;
@@ -208,6 +224,7 @@ void Karu_Game::Efuda_Storage() {
 	for (int i = 0; i < KARU_MAX_Y; i++) {
 		for (int j = 0; j < KARU_MAX_X; j++) {
 			if (Efuda[i][j].kara) {
+				AllSet = false;
 				int X = 0, Y = 0;
 				do {
 					Y = GetRand(9);
@@ -216,7 +233,8 @@ void Karu_Game::Efuda_Storage() {
 					(Y == 9 && X == 2) || (Y == 9 && X == 4) ||
 					(Y == 9 && X == 6) || (Y == 9 && X == 8) || Fuda[(Y * 10) + X].get == true);
 
-				Efuda[i][j] = { (j * Karu_imgX) + (Karu_imgX / 2),(i * Karu_imgY) + (Karu_imgY / 2),Karu_fuda[Y][X],X,Y,false };
+				Efuda[i][j] = { (j * Karu_imgX) + (Karu_imgX / 2) + (Karu_Space * (j + 1)),(i * Karu_imgY) + (Karu_imgY / 2) + (Karu_Space * (i + 1)),
+					Karu_fuda[Y][X],X,Y,false };
 				Fuda[(Y * 10) + X].get = true;
 				reset++;
 			}
@@ -234,13 +252,13 @@ void Karu_Game::Yomifuda_Storage() {
 	do {
 		x = GetRand(KARU_MAX_X - 1);
 		y = GetRand(KARU_MAX_Y - 1);
-	} while (Efuda[y][x].kara && player.myFuda < 44);
+	} while (Efuda[y][x].kara);
 
 	if (Yomifuda[0][0].kara) {
 		Yomifuda[0][0].img = Karu_fuda[Efuda[y][x].numY][(Efuda[y][x].numX) + 1];
-		PlaySoundMem(Fuda_voice[Efuda[y][x].numY][Efuda[y][x].numX], DX_PLAYTYPE_NORMAL);
 		Yomifuda[0][0].kara = false;
 		Yomiset = true;
+		PlaySoundMem(Fuda_voice[Efuda[y][x].numY][Efuda[y][x].numX], DX_PLAYTYPE_NORMAL);
 	}
 }
 
