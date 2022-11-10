@@ -11,6 +11,7 @@
 #include "SceneManager.h"
 #include "Worldval.h"
 #include "GlovalLoading.h"
+#include "Scene/Sugoroku/SR_Game.h"
 
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
@@ -33,6 +34,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	GlovalLoading(); //GlovalLoading.cppの関数、WorldVal::Getで取り出せる値の用意を行うサンプル
 
 	key = new KeySystem(); //キー入力受付用クラスの実体作成
+	//SceneManager* scm = new SceneManager(new Scene_GameTitle()); //セレクト画面が完成したから最初に実行するシーンはタイトルに固定、其々のシーンに飛ばす処理はScene_Select.cppのswitch文を確認
 	SceneManager* scm = new SceneManager(new Scene_GameTitle()); //セレクト画面が完成したから最初に実行するシーンはタイトルに固定、其々のシーンに飛ばす処理はScene_Select.cppのswitch文を確認
 	
 	while (ProcessMessage() == 0 && (!CheckHitKey(KEY_INPUT_ESCAPE)) && key->GetKeyState(SELECT_KEY) != KEY_PUSH) { //GetKeyシステム使用例、backボタンが押された瞬間にfalseとなる

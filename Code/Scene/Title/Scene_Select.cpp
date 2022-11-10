@@ -60,6 +60,7 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			break;
 		case 5: //繝壹�ｼ繧ｸ繝ｯ繝ｳ
 			*img = LoadGraph("Resource/image/Select_PageOne.png");
+			gameScene = new Scene_PageOne();
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_PageOne1.png")), 1));
 			break;
 		case 6: //繝昴�ｼ繧ｫ繝ｼ
@@ -74,6 +75,7 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			break;
 		case 8: //繧ｪ繧ｻ繝ｭ
 			*img = LoadGraph("Resource/image/Select_Othello.png");
+			gameScene = new Scene_Othello(); //個別シーン飛ばし作例、scmに入れていたのがgameSceneになった程度の違い
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Othello1.png")), 1));
 			break;
 		}

@@ -35,7 +35,11 @@
     <ClCompile Include="Code\Scene\Sugoroku\SR_Game.cpp" />
     <ClCompile Include="Code\Worldval.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\SR_Map.cpp" />
+
     <ClCompile Include="Code\Scene\daifugou\daigugou.cpp" />
+
+    <ClCompile Include="Code\Scene\Sugoroku\SR_Result.cpp" />
+
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Component\Button.h" />
@@ -76,6 +80,7 @@
     <ClInclude Include="Code\Scene\Sugoroku\SR_Title.h" />
     <ClInclude Include="Code\Worldval.h" />
     <ClInclude Include="Code\Scene\Sugoroku\SR_Map.h" />
+    <ClInclude Include="Code\Scene\Sugoroku\SR_Result.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Scene\Title\SelectScene.cd" />
