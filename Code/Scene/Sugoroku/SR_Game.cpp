@@ -13,10 +13,11 @@ SR_Game::SR_Game() {
 
 void SR_Game::Update() {
 	saikoro->Update();
+	map->Update();
 }
 
 void SR_Game::Draw() {
 	DrawGraph(0, 0, SR_MAP, false);
-	saikoro->Draw();
+	saikoro->Draw();	
 	map->Draw();
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "./../Scene.h"
+	//extern int Player1sum;
 class SR_Saikoro {
 private:
 	int SR_Saikoro1[6];	/*サイコロ画像１*/
@@ -13,6 +14,7 @@ private:
 	/*仮仮仮仮仮仮仮*/
 	int MouseX, MouseY;	/*Mouse座標取得（全体でのが出来るまで）*/
 	/*仮仮仮仮仮仮仮*/
+	int Player1sum;
 public:
 	SR_Saikoro();
 	void Update();
@@ -20,3 +22,4 @@ public:
 	void Saikoro();
 	void Dice();
 };
+
