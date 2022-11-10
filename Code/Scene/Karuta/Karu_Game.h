@@ -14,7 +14,11 @@ class Karu_Game{
 private:
 	int Karu_Bg;				//ゲーム背景
 	int Karu_SideBg;			//ゲーム背景
-	int Karu_Otetuki_img[2];			//お手付き時の画像格納用
+	int Karu_Otetuki_img[2];	//お手付き時の画像格納用
+	int Karu_getText;			//獲得枚数のテキスト画像格納用	
+	int Karu_PlayerText;		//プレイヤーのテキスト画像格納用
+	int Karu_numImg[10];		//数字のテキスト画像格納用
+
 	int Karu_fuda[KARU_IMAGE_MAX_X][KARU_IMAGE_MAX_Y];		//かるたの札画像格納用
 	int Fuda_voice[KARU_IMAGE_MAX_X][KARU_IMAGE_MAX_Y];		//読み上げ音声格納用
 
@@ -77,11 +81,11 @@ struct FUDA
 
 extern struct FUDA Fuda[100];
 
-struct PLAYER
+struct KARU_PLAYER
 {
 	int myFuda;	//取ってる枚数
 
 	int MousePoint[2];//マウスポインターの画像格納用
 };
 
-extern struct PLAYER player;
+extern struct KARU_PLAYER Karu_player;
