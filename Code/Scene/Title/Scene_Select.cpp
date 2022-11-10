@@ -60,6 +60,7 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			break;
 		case 5: //„Éö„Éº„Ç∏„ÉØ„É≥
 			*img = LoadGraph("Resource/image/Select_PageOne.png");
+			gameScene = new Scene_PageOne();
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_PageOne1.png")), 1));
 			break;
 		case 6: //„Éù„Éº„Ç´„Éº
@@ -70,10 +71,11 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 		case 7: //„Åô„Åî„Çç„Åè
 			*img = LoadGraph("Resource/image/Select_Sugoroku.png");
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Sugoroku1.png")), 1));
-			gameScene = new SR_Game(); //å¬ï ÉVÅ[ÉìîÚÇŒÇµçÏó·ÅAscmÇ…ì¸ÇÍÇƒÇ¢ÇΩÇÃÇ™gameSceneÇ…Ç»Ç¡ÇΩíˆìxÇÃà·Ç¢
+			gameScene = new SR_Game(); //ÔøΩ¬ï ÉVÔøΩ[ÔøΩÔøΩÔøΩÔøΩŒÇÔøΩÔøΩÔøΩÔøΩAscmÔøΩ…ìÔøΩÔøΩÔøΩƒÇÔøΩÔøΩÔøΩÔøΩÃÇÔøΩgameSceneÔøΩ…Ç»ÇÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩxÔøΩÃà·Ç¢
 			break;
 		case 8: //„Ç™„Çª„É≠
 			*img = LoadGraph("Resource/image/Select_Othello.png");
+			gameScene = new Scene_Othello(); //å¬ï ÉVÅ[ÉìîÚÇŒÇµçÏó·ÅAscmÇ…ì¸ÇÍÇƒÇ¢ÇΩÇÃÇ™gameSceneÇ…Ç»Ç¡ÇΩíˆìxÇÃà·Ç¢
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Othello1.png")), 1));
 			break;
 		}

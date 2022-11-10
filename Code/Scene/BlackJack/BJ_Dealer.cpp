@@ -7,9 +7,16 @@ Dealer::Dealer() {
   score = 0;      /*スコアを0で初期化*/
   type = 0;       /*トランプのマーク*/
 
-  D_BlackJakc = false;
+  spt_hand_num = 0;
+  spt_score = 0;
 
   data = 0;
+  spt_data = 0;
+
+  split = false;
+
+  D_BlackJakc = false;
+
 
 }
 Dealer::~Dealer() {};
@@ -77,6 +84,60 @@ int Dealer::Calc() {
   return score;     /*計算結果を返す*/
 
 }
+
+int Dealer::Spt_Calc() {
+  /*メモリの動的確保*/
+  spt_data = new int[spt_hand_num];   /*手札枚数確保*/
+  /*手札配列からデータを取得、1-10の値として格納*/
+  for (int i = 0; i < spt_hand_num; i++) {
+    /*配列の値が10以下（0-9）であれば1を加えて格納*/
+    if (spt_hand[i] % 13 < 10) {
+      /*1-13のカードとして扱うために1加えている*/
+      spt_data[i] = spt_hand[i] % 13 + 1;
+
+    }
+    else {    /*配列の値が10以上（10-12）であれば10を格納*/
+      /*ここで10を格納しているのは、11-13のカードのことである*/
+      spt_data[i] = 10;
+
+    }
+
+  }
+  /*ソート*/
+  std::sort(spt_data, spt_data + spt_hand_num);
+  /*返り値用変数（計算結果*/
+  spt_score = 0;
+  /*2番目から順にスコアを足していく（1番目は判定が必要）*/
+  for (int i = 1; i < spt_hand_num; i++) {
+    /*スコアにデータを加える*/
+    spt_score += spt_data[i];
+
+  }
+  if (spt_data[0] == 1) {     /*先頭が1であるか判定*/
+    /*1をどう扱うか判定する*/
+    if (spt_score + 11 < 22) {    /*11として扱ってもバーストしない場合*/
+      /*11を加える*/
+      spt_score += 11;
+
+    }
+    else {    /*11として扱うとバーストする場合*/
+      /*スコアに1を加える*/
+      spt_score += 1;
+
+    }
+
+  }
+  else {    /*先頭が1でないなら、スコアにデータをそのまま加える*/
+    /*スコアにデータを加える*/
+    spt_score += spt_data[0];
+
+  }
+
+  delete[] spt_data;    /*メモリの開放*/
+  return spt_score;     /*計算結果を返す*/
+
+}
+
 /*カードの追加*/
 void Dealer::Hit(Shoe* shoe) {    /*shoeオブジェクトポインタ*/
   /*配列の最後にカードを追加する*/
@@ -130,12 +191,7 @@ void Dealer::Show_Hand() {
 
   }
 
-  //if (Dealer::Calc() <= 21) {
-
-
-    DrawFormatString(100, 400, 0xffffff, "Dealer score: %d\n", Dealer::Calc());
-
-  //}
+    DrawFormatString(100, 420, 0xffffff, "Dealer score: %d\n", Dealer::Calc());
 
 }
 /*ゲーム実行*/

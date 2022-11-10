@@ -14,33 +14,58 @@ private:
 	int WhiteCr;
 	int CheckNum;
 
+	int OrderNum;	// è”Ô‚ğŒˆ‚ß‚é”‚ğ“ü‚ê‚é•Ï”
+	int BlackNum;	// •Î‚Ì”‚ğ“ü‚ê‚é•Ï”
+	int WhiteNum;	// ”’Î‚Ì”‚ğ“ü‚ê‚é•Ï”
+	int TimeCount;
+
 	bool DrawFlag;
 	bool CheckFlag;
+	bool PassFlag;
+	bool EndFlag;
 public:
 	int Mouse_X;
 	int Mouse_Y;
 	int Square_X;
 	int Square_Y;
 	int Board[PB][PB];
+
 	void Othello_Board_Initialize();
 	void Othello_Board_Finalize();
 	void Othello_Board_Update();
 	void Othello_Board_Draw();
+
 	void Init_OthelloBoard(int board[PB][PB]);
 	void Print_OthelloBoard(int board[PB][PB]);
+
 	void CursorOn_OthelloBoard();
 
 	int PutOnCheck(int board[PB][PB], int p, int q, int enemy, int player);
+
+	int PutOnCheck2(int board[PB][PB], int p, int q, int d, int e, int enemy, int player);
+	int put();
+
+
 	int PutSearch(int board[PB][PB], int p, int q, int d, int e, int enemy, int player);
 
 	int BlackPutCheck(int d, int e);
-	void BlackPut();
-	void BoardSearchBlack(int board[PB][PB]);
+	int BlackPut();
+	//void BoardSearchBlack(int board[PB][PB]);
+	int BoardSearchBlack(int board[PB][PB]);
+
 
 	int WhitePutCheck(int d, int e);
-	void WhitePut();
-	void BoardSearchWhite(int board[PB][PB]);
+	int WhitePut();
+	//void BoardSearchWhite(int board[PB][PB]);
+	int BoardSearchWhite(int board[PB][PB]);
 
+
+	void BoardSearchBWNumber(int board[PB][PB]);
+
+
+	int BWPut(int board[PB][PB], int p, int q, int enemy, int player);
+
+	int EndGame(int board[PB][PB]);
 
 };
 
