@@ -21,7 +21,8 @@ private:
 
 	bool DrawFlag;
 	bool CheckFlag;
-	bool TimeFlag;
+	bool PassFlag;
+	bool EndFlag;
 public:
 	int Mouse_X;
 	int Mouse_Y;
@@ -49,16 +50,22 @@ public:
 
 	int BlackPutCheck(int d, int e);
 	int BlackPut();
+	//void BoardSearchBlack(int board[PB][PB]);
 	int BoardSearchBlack(int board[PB][PB]);
+
 
 	int WhitePutCheck(int d, int e);
 	int WhitePut();
+	//void BoardSearchWhite(int board[PB][PB]);
 	int BoardSearchWhite(int board[PB][PB]);
+
 
 	void BoardSearchBWNumber(int board[PB][PB]);
 
 
 	int BWPut(int board[PB][PB], int p, int q, int enemy, int player);
+
+	int EndGame(int board[PB][PB]);
 
 };
 
