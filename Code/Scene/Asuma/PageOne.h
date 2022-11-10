@@ -2,6 +2,7 @@
 #include <vector>
 
 #define MAX (4U)
+#define SWAP(type,a,b)  { type work = a; a = b; b = work; }
 
 class Card {
 public:
@@ -43,6 +44,7 @@ private:
 	std::vector<Card> Player_card;	//プレイヤーの持っているカードの情報
 
 	std::vector<Card> Field_card;		//場に出ているカード
+	std::vector<Card> Cemetery_card;	//使用済みのカード
 
 	std::vector<Card> NPC_card_1;		//NPC１号の持っているカードの情報
 	std::vector<Card> NPC_card_2;		//NPC２号の持っているカードの情報
@@ -94,6 +96,15 @@ private:
 
 	int NPC3_X;		//NPC3の手札のX座標
 	int NPC3_Y;		//NPC3の手札のY座標
+
+	void random_shuffle(Card* array, size_t size)
+	{
+		for (size_t i = size; i > 1; --i) {
+			size_t a = i - 1;
+			size_t b = rand() % i;
+			SWAP(Card, array[a], array[b]);
+		}
+	}
 
 public:
 	PageOne() {}
