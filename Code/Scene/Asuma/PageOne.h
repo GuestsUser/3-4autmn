@@ -1,6 +1,7 @@
 #pragma once
-#include <list>
 #include <vector>
+
+#define MAX (2U)
 
 class Card {
 public:
@@ -13,8 +14,8 @@ public:
 	int num;	//カードの数字
 	int suit;	//カードのスート(マーク)
 
-	bool Hit(int mx, int my, int cx, int cy, int cw, int ch) {
-		if (mx > cx - (cw / 2) && mx < cx + (cw / 2) && my > cy - (ch / 2) && my < cy + (ch / 2)) {
+	bool Hit(int mx, int my, int cx, int cy, int cw, int ch, double ExRate) {
+		if (mx > cx - (cw * ExRate) / 2 && mx < cx + (cw * ExRate) / 2 && my > cy - (ch * ExRate) / 2 && my < cy + (ch * ExRate) / 2) {
 			return true;
 		}
 		else {
@@ -22,7 +23,7 @@ public:
 		}
 	}
 
-	//Card(画像、数値、スート、使用フラグ)
+	//Card(画像、数値、スート)
 	Card(int i, int n, int s) {
 		img = i;
 		num = n;
@@ -32,7 +33,6 @@ public:
 
 class PageOne : public Card{
 private:
-
 	int card_type[54];	//画像用ハンドル
 	
 	Card Card_back;		//カードの裏面の情報
@@ -40,21 +40,41 @@ private:
 
 	//Card Card_obj[4][13];		//全カードの情報
 	std::vector<Card> Card_obj;		//全カードの情報
-	std::list<Card> Player_card;	//プレイヤーの持っているカードの情報
+	std::vector<Card> Player_card;	//プレイヤーの持っているカードの情報
 
-	std::list<Card> NPC_card_1;		//NPC１号の持っているカードの情報
-	std::list<Card> NPC_card_2;		//NPC２号の持っているカードの情報
-	std::list<Card> NPC_card_3;		//NPC３号の持っているカードの情報
+	std::vector<Card> Field_card;		//場に出ているカード
+
+	std::vector<Card> NPC_card_1;		//NPC１号の持っているカードの情報
+	std::vector<Card> NPC_card_2;		//NPC２号の持っているカードの情報
+	std::vector<Card> NPC_card_3;		//NPC３号の持っているカードの情報
+
+	int priority;
+	int field;
+
+	int pri;
 
 	int player;
+	bool flg_p;
+
 	int npc_1;
+	bool flg_1;
+
 	int npc_2;
+	bool flg_2;
+
 	int npc_3;
+	bool flg_3;
+
+	int p_pow;
+	int n1_pow;
+	int n2_pow;
+	int n3_pow;
 
 	int i;
 	int j;
 	int r;
 	int n;
+	int c;
 
 	int Mouse_X;	//マウスのX座標
 	int Mouse_Y;	//マウスのY座標

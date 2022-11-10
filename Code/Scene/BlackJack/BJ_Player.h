@@ -15,6 +15,8 @@ private:
   int color, color2, color3, color4;
   int c, c2, c3, c4;
 
+  int dealer_calc;
+
   bool hit, std, bet, spt, dbl;
   bool win, los, bst, psh, BlackJack, game_flg;
 
