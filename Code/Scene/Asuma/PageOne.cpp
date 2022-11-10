@@ -12,7 +12,7 @@ void PageOne::PageOne_Initialize() {
 	Card_back = Card(card_type[52], 0, 5);	//カードの裏面
 	Card_joker = Card(card_type[53], 99, 5);	//ジョーカー
 
-	for (i = 0; i < 5; i++) {
+	for (i = 0; i < 4; i++) {
 		r = GetRand(sizeof(Card_obj));
 		Player_card.push_back(Card_obj[r]);
 		Card_obj.erase(Card_obj.begin() + r);
