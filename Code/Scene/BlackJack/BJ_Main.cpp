@@ -62,6 +62,9 @@ void BlackJack::Update() {
     player->Score(*player, *dealer);
 
   }
+  else {
+    player->Score(*player, *dealer);
+  }
   if (!game_endflg) {
 
     if (player->ButtonHit(280,480,20,40)) {
@@ -94,7 +97,7 @@ void BlackJack::Draw() {
   DrawFormatString(100, 120, 0xffffff, "BLACK JACK\n");
   DrawFormatString(100, 140, 0xffffff, "==============\n");
   DrawFormatString(100, 160, 0xffffff, "player\n");
-  DrawFormatString(100, 180, 0xffffff, "==============\n");
+  //DrawFormatString(100, 180, 0xffffff, "==============\n");
   DrawFormatString(100, 200, 0xffffff, "==============\n");
   DrawFormatString(100, 220, 0xffffff, "dealer\n");
   DrawFormatString(100, 240, 0xffffff, "==============\n");
