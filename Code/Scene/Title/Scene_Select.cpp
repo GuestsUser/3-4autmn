@@ -60,6 +60,7 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			break;
 		case 5: //ページワン
 			*img = LoadGraph("Resource/image/Select_PageOne.png");
+			gameScene = new Scene_PageOne();
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_PageOne1.png")), 1));
 			break;
 		case 6: //ポーカー
