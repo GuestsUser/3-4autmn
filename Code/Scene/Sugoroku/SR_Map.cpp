@@ -4,7 +4,7 @@
 #include "./../../SceneManager.h"
 #include "SR_Saikoro.h"
 #include "SR_Game.h"
-
+extern int Player1sum;
 SR_Map::SR_Map() {
 	/*スタート*/
 	MassX[0] = 20; MassY[0] = 600;		
@@ -60,8 +60,7 @@ void SR_Map::Update() {
 }
 
 
-void SR_Map::Draw() {
-	DrawGraph(MassX[i], MassY[i], Player1, true);
-	DrawGraph(100,100, Player1, true);
-	DrawFormatString(300, 600, GetColor(255, 255, 255), "i = %d", i);
+void SR_Map::Draw() {	
+	DrawGraph(MassX[Player1sum], MassY[Player1sum], Player1, true);
+	DrawFormatString(300, 600, GetColor(255, 255, 255), "i = %d", Player1sum);
 }
