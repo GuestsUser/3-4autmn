@@ -354,11 +354,19 @@ int Othello_Board::PutOnCheck(int board[PB][PB], int p, int q, int d, int e, int
                 return 0;
             }
         }
+
+        ReturnNum = 0;
+
         // 調べた方向に対して、 もう一度逆順に辿って player の石にひっくり返す
         for (CheckNum = CheckNum - 1; board[d + CheckNum * p][e + CheckNum * q] != player; CheckNum--) {
             // 調べたマスが enemy のマスだったら
             if (board[d + CheckNum * p][e + CheckNum * q] == enemy) {
                 board[d + CheckNum * p][e + CheckNum * q] = player;   // player の石にひっくり返す
+                ReturnNum++;
+            }
+            // 置けるマスのひっくり返せる数を調べたい
+            if (ReturnNumMax < ReturnNum) {
+                ReturnNumMax = ReturnNum;
             }
         }
     }
@@ -569,7 +577,7 @@ int Othello_Board::BoardSearchWhite(int board[PB][PB]) {
                         (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GetColor(100, 0, 0), false);
 
                     board[i][j] = 4;    // 白石が置けるようにする
-                    whitecount++;            // 白石が置ける場所の数だけインクリメント
+                    whitecount++;       // 白石が置ける場所の数だけインクリメント
                 }
             }
         }
@@ -629,7 +637,7 @@ int Othello_Board::ReturnNumWhite(int board[PB][PB]) {
     for (int i = 1; i <= 8; i++) {
         for (int j = 1; j <= 8; j++) {
             if (board[i][j] == 4) {
-                board[i][j] = 2;
+                //board[i][j] = 2;
                 WhitePutCPU(i, j);
                 return 1;
             }
