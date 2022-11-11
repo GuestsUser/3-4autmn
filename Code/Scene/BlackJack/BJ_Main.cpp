@@ -43,9 +43,7 @@ void BlackJack::Initialize() {
 
 void BlackJack::Update() {
 
-  //player->Update();
     /*ゲームを開始 or 続けるか判定*/
-
   if (next_flg) {
 
     BlackJack::Initialize();
@@ -90,18 +88,9 @@ void BlackJack::Draw() {
   player->Draw();
   dealer->Draw();
 
-  DrawFormatString(550, 100, 0xffffff, "ゲーム画面");
-
-  DrawFormatString(100, 80, 0xffffff, "ゲームを開始しますか？\n");
-  DrawFormatString(100, 100, 0xffffff, "==============\n");
-  DrawFormatString(100, 120, 0xffffff, "BLACK JACK\n");
-  DrawFormatString(100, 140, 0xffffff, "==============\n");
+  //DrawFormatString(100, 80, 0xffffff, "ゲームを開始しますか？\n");
   DrawFormatString(100, 160, 0xffffff, "player\n");
-  //DrawFormatString(100, 180, 0xffffff, "==============\n");
-  DrawFormatString(100, 200, 0xffffff, "==============\n");
   DrawFormatString(100, 220, 0xffffff, "dealer\n");
-  DrawFormatString(100, 240, 0xffffff, "==============\n");
-  DrawFormatString(100, 260, 0xffffff, "==============\n");
   if (!next_flg) {
     DrawFormatString(100, 480, 0xffffff, "ゲームを続けますか？ yes or no\n");
   }

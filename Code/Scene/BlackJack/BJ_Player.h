@@ -14,10 +14,7 @@ private:
 
   int spt_type;
   int hit_num;
-  int win_ct , BJ_ct;
   int dbl_ct;
-  int bst_ct;
-  int los_ct;
 
   /*デバッグ用*/
   int color, color2, color3, color4;
@@ -31,9 +28,8 @@ private:
 
   bool hit, std, bet, spt, dbl;
   bool win, los, bst, psh, BlackJack, game_flg;
+  bool spt_win, spt_los, spt_bst, spt_psh, spt_BJ;
   bool spt_a;
-
-  std::string str;          /*文字列型*/
 
 public:
 
@@ -48,6 +44,7 @@ public:
 
   void Show_Hand();
   void Spt_Show_Hand();
+  void Show_Play();
 
   virtual void Hit(Shoe* shoe);        /*カードの追加*/
   virtual bool Play(Shoe* shoe);       /*ゲーム実行*/
