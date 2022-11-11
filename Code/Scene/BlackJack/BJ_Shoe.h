@@ -9,12 +9,15 @@ class Shoe {
 
 protected:
   /*基本的にカードシューはprivate*/
-  int card_shoe[NUM] = {};       /*カード配列*/
+  int card_shoe[NUM];       /*カード配列*/
   int card_num;             /*カード枚数*/
   int place;                /*挿入位置*/
   int top;                  /*カード配列の先頭を格納*/
 
   std::random_device rnd;   /*乱数生成器*/
+
+  int card_hdl[CARD];
+  int card_trans[NUM][CARD];
 
 public:
 

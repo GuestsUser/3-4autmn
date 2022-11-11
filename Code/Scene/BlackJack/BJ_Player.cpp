@@ -7,7 +7,7 @@ Player::Player() {
   score = 0;
   type = 0;
   data = 0;
-  win_ct = los_ct = BJ_ct = dbl_ct = bst_ct = 0;
+  dbl_ct = 0;
 
   spt_hand_num = 0;
   spt_score = 0;
@@ -26,6 +26,8 @@ Player::Player() {
   hit = std = dbl = spt = bet = false;
   win = los = bst = psh = BlackJack = game_flg = spt_a = false;
   D_BJ = D_bst = false;
+  spt_win = spt_los = spt_bst = spt_psh = spt_BJ = false;
+
 
   dealer_calc = 0;
 
@@ -57,7 +59,7 @@ void Player::Initialize() {
   split = false;
   hit_num = 0;
 
-  win_ct = los_ct = BJ_ct = dbl_ct = bst_ct = 0;
+  dbl_ct = 0;
   type = 0;
   spt_type = 0;
 
@@ -70,6 +72,7 @@ void Player::Initialize() {
 
   hit = std = dbl = spt = bet = false;
   win = los = bst = psh = BlackJack = spt_a = false;
+  spt_win = spt_los = spt_bst = spt_psh = spt_BJ = false;
   D_BJ = D_bst = false;
   game_flg = true;
 
@@ -241,18 +244,19 @@ bool Player::Play(Shoe* shoe) {
 
             /*勝負開始（stand自動実行）*/
             BlackJack = true;
+            spt_BJ = true;
             game_flg = false;
             return true;
 
           }
 
-          if (Player::Calc() == 21) {
-            BJ_ct++;
+          if (Player::Calc() == 21 && !BlackJack) {
+            BlackJack = true;
             std = true;
           }
 
-          if (Player::Spt_Calc() == 21 && BJ_ct <= 1) {
-            BJ_ct++;
+          if (Player::Spt_Calc() == 21 && !spt_BJ) {
+            spt_BJ = true;
             std = true;
           }
 
@@ -309,15 +313,15 @@ bool Player::Play(Shoe* shoe) {
 
         if (Player::Calc() > 21 && hit_num < 1) {
 
-          bst_ct++;
-          los_ct++;
+          bst = true;
+          los = true;
           std = true;
 
         }
         else if (Player::Spt_Calc() > 21 && hit_num == 1) {
 
-          bst_ct++;
-          los_ct++;
+          spt_bst = true;
+          spt_los = true;
           hit_num++;
           std = true;
 
@@ -341,20 +345,27 @@ void Player::Score(Player player, Dealer dealer) {   /*プレイヤーとディ�
 
   dealer_calc = dealer.Calc();
   D_BJ = dealer.BlackJack();
-  if (!game_flg) {
 
-    if (dealer.Calc() > 21) {
-      D_bst = true;
+  if (dealer.Calc() > 21) {
+    D_bst = true;
+    if (!bst) {
       win = true;
     }
-
-    if (player.Calc() > 21 || bst_ct >= 2) {
-      bst = true;
-      los = true;
+    if (!spt_bst) {
+      spt_win = true;
     }
+  }
 
-    if (!bst) {
+  if (player.Calc() > 21) {
+    bst = true;
+    los = true;
+  }
 
+  if (!game_flg && !los && !bst && !D_bst && !spt_los && !spt_bst) {
+
+    if (!split) {
+
+      /*プレイヤーのほうが高い場合*/
       if (player.Calc() > dealer.Calc()) {
         /*プレイヤーの勝利*/
         win = true;
@@ -362,18 +373,9 @@ void Player::Score(Player player, Dealer dealer) {   /*プレイヤーとディ�
       }
       else if (player.Calc() < dealer.Calc()) {    /*ディーラーのほうが高い場合*/
 
-        if (dealer.Calc() > 21) {
-          /*プレイヤーの勝ち*/
-          win = true;
-          D_bst = true;
-
-        }
-        else {
           /*プレイヤーの負け*/
+        los = true;
 
-          los = true;
-
-        }
       }
       else {    /*同点の場合*/
         /*引き分け*/
@@ -386,10 +388,50 @@ void Player::Score(Player player, Dealer dealer) {   /*プレイヤーとディ�
       }
 
     }
-    else {
+    else if (split) {
 
+      /*プレイヤーのほうが高い場合*/
+      if (player.Calc() > dealer.Calc()) {
+        /*プレイヤーの勝利*/
+        win = true;
 
-      los = true;
+      }
+      if (player.Spt_Calc() > dealer.Calc()) {
+
+        /*split手札の勝利*/
+        spt_win = true;
+
+      }
+      if (player.Calc() < dealer.Calc()) {    /*ディーラーのほうが高い場合*/
+
+        /*プレイヤーの負け*/
+        los = true;
+
+      }
+      if (player.Spt_Calc() < dealer.Calc()) {
+
+        spt_los = true;
+
+      }
+      /*引き分け*/
+      if (D_BJ && BlackJack) {
+
+        psh = true;
+
+      }
+      if (D_BJ && spt_BJ) {
+        spt_psh = true;
+      }
+      if (player.Calc() == dealer.Calc()) {
+
+        psh = true;
+
+      }
+      if (player.Spt_Calc() == dealer.Calc()) {
+
+        spt_psh = true;
+
+      }
 
     }
 
@@ -555,83 +597,93 @@ void Player::Draw() {
   DrawFormatString(spt_x-80, spt_y+100, color4, "BlJ %d",BlackJack);
   DrawFormatString(spt_x-140, spt_y+100, color4, "bst %d",bst);
   DrawFormatString(spt_x-140, spt_y+80, color4, "spt %d",split);
+  DrawFormatString(spt_x-180, spt_y+60, color4, "hit_num %d",hit_num);
   /*デバッグ用*/
 
   DrawFormatString(100, 460, 0xffffff, "選択してください");
 
-  /*勝ち負け出力*/
-  if (win) {
-    /*プレイヤーの勝利*/
-    if (dealer_calc > 21 && !BlackJack) {
+  Player::Show_Play();
 
-      DrawFormatString(100, 500, 0xffffff, "DealerBurst あなたの勝ちです !!\n");
+}
 
-    }
+void Player::Show_Play() {
 
-      DrawFormatString(100, 520, 0xffffff, "あなたの勝ちです !!\n");
+  if (!split) {
 
+    if (win) {
 
-      if (BlackJack) {
+      if (D_bst) {
+
+        DrawFormatString(100, 500, 0xffffff, "DealerBurst あなたの勝ちです !!\n");
+
+      }
+      else if (BlackJack) {
 
         DrawFormatString(100, 540, 0xffffff, "BlackJack あなたの勝ちです");
 
       }
+      else {
+        DrawFormatString(100, 520, 0xffffff, "あなたの勝ちです !!\n");
+      }
 
-  }
-  if (los) {    /*ディーラーのほうが高い場合*/
-
-      DrawFormatString(100, 560, 0xffffff, "あなたの負けです\n");
+    }
+    else if (los) {
 
       if (bst) {
 
         DrawFormatString(100, 600, 0xffffff, "Burst あなたの負けです\n");
 
       }
+      else {
+
+        DrawFormatString(100, 560, 0xffffff, "あなたの負けです\n");
+
+      }
+
+    }
+    else if (psh) {
+
+      DrawFormatString(100, 580, 0xffffff, "引き分けです\n");
+
+    }
 
   }
-  if(psh) {    /*同点の場合*/
-    /*引き分け*/
-    DrawFormatString(100, 580, 0xffffff, "引き分けです\n");
+  else if (split) {
+
+    if (D_bst) {
+      DrawFormatString(100, 660, 0xffffff, "DealerBust\n");
+    }
+    if (BlackJack) {
+      DrawFormatString(0, 640, 0xffffff, "BlackJack\n");
+    }
+    if (spt_BJ) {
+      DrawFormatString(0, 620, 0xffffff, "BlackJack\n");
+    }
+    if (win) {
+      DrawFormatString(100, 640, 0xffffff, "手札1の勝ち\n");
+    }
+    if (spt_win) {
+      DrawFormatString(100, 620, 0xffffff, "手札2の勝ち\n");
+    }
+    if (los && !bst) {
+      DrawFormatString(100, 600, 0xffffff, "手札1の負け\n");
+    }
+    else if (los && bst) {
+      DrawFormatString(100, 580, 0xffffff, "手札1のバスト\n");
+    }
+    if (spt_los && !spt_bst) {
+      DrawFormatString(100, 560, 0xffffff, "手札2の負け\n");
+    }
+    else if (spt_los && spt_bst) {
+      DrawFormatString(100, 540, 0xffffff, "手札2のバスト\n");
+    }
+    if (psh) {
+      DrawFormatString(100, 520, 0xffffff, "手札1の引き分け\n");
+    }
+    if (spt_psh) {
+      DrawFormatString(100, 500, 0xffffff, "手札2の引き分け\n");
+    }
 
   }
-  /*勝ち負け出力*/
-
-  ///*勝ち負け出力*/
-  //if (win && !bst) {
-  //  /*プレイヤーの勝利*/
-  //  if (dealer_calc > 21 && !BlackJack) {
-
-  //    DrawFormatString(100, 500, 0xffffff, "DealerBurst あなたの勝ちです !!\n");
-
-  //  }
-  //  else {
-
-  //    DrawFormatString(100, 520, 0xffffff, "あなたの勝ちです !!\n");
-
-  //  }
-
-  //}
-  //if (BlackJack) {
-
-  //  DrawFormatString(100,540,0xffffff,"BlackJack あなたの勝ちです");
-
-  //}
-  //if (los && !bst) {    /*ディーラーのほうが高い場合*/
-
-  //    DrawFormatString(100, 560, 0xffffff, "あなたの負けです\n");
-
-  //}
-  //if(psh && !BlackJack) {    /*同点の場合*/
-  //  /*引き分け*/
-  //  DrawFormatString(100, 580, 0xffffff, "引き分けです\n");
-
-  //}
-  //if (bst) {
-
-  //  DrawFormatString(100, 600, 0xffffff, "Burst あなたの負けです\n");
-
-  //}
-  ///*勝ち負け出力*/
 
 }
-
