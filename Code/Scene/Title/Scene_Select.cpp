@@ -51,6 +51,7 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			break;
 		case 3: //ã‚³ãƒã‚¯ãƒˆãƒ•ã‚©ãƒ¼
 			*img = LoadGraph("Resource/image/Select_ConnectFour.png");
+			gameScene = new Scene_ConnectFour();
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_ConnectFour1.png")), 1));
 			break;
 		case 4: //ã‹ã‚‹ãŸ
@@ -70,7 +71,7 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 		case 7: //ã™ã”ã‚ã
 			*img = LoadGraph("Resource/image/Select_Sugoroku.png");
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Sugoroku1.png")), 1));
-			gameScene = new SR_Game(); //ŒÂ•ÊƒV[ƒ“”ò‚Î‚µì—áAscm‚É“ü‚ê‚Ä‚¢‚½‚Ì‚ªgameScene‚É‚È‚Á‚½’ö“x‚Ìˆá‚¢
+			gameScene = new SR_Game(); //ï¿½Â•ÊƒVï¿½[ï¿½ï¿½ï¿½ï¿½Î‚ï¿½ï¿½ï¿½ï¿½Ascmï¿½É“ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½gameSceneï¿½É‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Ìˆá‚¢
 			break;
 		case 8: //ã‚ªã‚»ãƒ­
 			*img = LoadGraph("Resource/image/Select_Othello.png");
