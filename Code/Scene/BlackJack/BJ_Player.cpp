@@ -484,7 +484,7 @@ void Player::Show_Hand() {
 
   }
 
-    DrawFormatString(100, 380, 0xffffff, "Player score: %d\n", Player::Calc());
+    DrawFormatString(570, 490, 0xffffff, "Player score: %d\n", Player::Calc());
 
 }
 /*手札を表示*/
