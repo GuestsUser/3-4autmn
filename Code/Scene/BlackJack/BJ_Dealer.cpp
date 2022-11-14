@@ -17,6 +17,17 @@ Dealer::Dealer() {
 
   D_BlackJakc = false;
 
+  LoadDivGraph("Resource/image/toranpu_all.png",54,13,5,200,300,card_hdl);
+
+  for (int i = 0; i < 5; i++) {
+
+    for (int j = 0; j < 13; j++) {
+
+      card_type[i][j] = 0;
+
+    }
+
+  }
 
 }
 Dealer::~Dealer() {};
@@ -28,6 +39,16 @@ void Dealer::Initialize() {
   score = 0;                              /*スコアを初期化*/
   type = 0;                               /*トランプのマーク*/
 
+  for (int i = 0; i < 5; i++) {
+
+    for (int j = 0; j < 13; j++) {
+
+      card_type[i][j] = 0;
+
+    }
+
+  }
+  
   D_BlackJakc = false;
 
 }
@@ -191,7 +212,7 @@ void Dealer::Show_Hand() {
 
   }
 
-    DrawFormatString(100, 420, 0xffffff, "Dealer score: %d\n", Dealer::Calc());
+    DrawFormatString(540, 200, 0xffffff, "Dealer score: %d\n", Dealer::Calc());
 
 }
 /*ゲーム実行*/
@@ -232,5 +253,25 @@ void Dealer::Draw() {
   Dealer::Show_Hand();
 
   DrawFormatString(100, 780, 0xffffff, "==============\n");
+
+  /*アニメーション予定地_Player*/
+  DrawRotaGraph(600,560,0.35,0,card_hdl[0],1);
+  DrawRotaGraph(610,560,0.35,0,card_hdl[1],1);
+  /*アニメーション予定地_Player*/
+  /*アニメーション予定地_Player_spt*/
+  DrawRotaGraph(520,560,0.35,0,card_hdl[0],1);
+  DrawRotaGraph(530,560,0.35,0,card_hdl[1],1);
+  /*アニメーション予定地_Player_spt*/
+  /*アニメーション予定地_Player_spt2*/
+  DrawRotaGraph(680,560,0.35,0,card_hdl[0],1);
+  DrawRotaGraph(690,560,0.35,0,card_hdl[1],1);
+  /*アニメーション予定地_Player_spt2*/
+  /*アニメーション予定地_Dealer*/
+  DrawRotaGraph(600,140,0.35,0,card_hdl[0],1);
+  DrawRotaGraph(610,140,0.35,0,card_hdl[1],1);
+  /*アニメーション予定地_Dealer*/
+  /*山札予定地*/
+  DrawRotaGraph(1200, 450, 0.35, 0, card_hdl[52], 1);
+  /*山札予定地*/
 
 }

@@ -35,7 +35,8 @@ public:
 class PageOne : public Card{
 private:
 	int card_type[54];	//画像用ハンドル
-	
+	int background;	//背景
+
 	Card Card_back;		//カードの裏面の情報
 	Card Card_joker;	//ジョーカーの情報
 
@@ -55,6 +56,7 @@ private:
 
 	int pri;
 	bool draw;
+	bool finish;
 
 	int player;
 	bool flg_p;
@@ -77,13 +79,17 @@ private:
 	int j;
 	int r;
 	int n;
-	int c;
+
+	int count;	//カウント用変数
 
 	int Mouse_X;	//マウスのX座標
 	int Mouse_Y;	//マウスのY座標
 	
 	int Deck_X;		//山札のX座標
 	int Deck_Y;		//山札のY座標
+
+	int Field_X;		//場に出したカードのX座標
+	int Field_Y;		//場に出したカードのY座標
 
 	int Player_X;	//プレイヤーの手札のX座標
 	int Player_Y;	//プレイヤーの手札のY座標
@@ -106,6 +112,7 @@ private:
 		}
 	}
 
+	int color;	//デバッグ用
 public:
 	PageOne() {}
 
