@@ -73,6 +73,8 @@ void Othello_Board::Othello_Board_Update() {
     DrawFormatString(650, 240, WhiteCr, "TimeCount:%d", TimeCount);
     DrawFormatString(1000, 240, WhiteCr, "BoardX:%d", Board_X);
     DrawFormatString(1000, 290, WhiteCr, "BoardY:%d", Board_Y);
+    DrawFormatString(1000, 340, WhiteCr, "ReturnNumMax:%d", ReturnNumMax);
+
 
 
 
@@ -94,6 +96,7 @@ void Othello_Board::Othello_Board_Update() {
                 if (Board[Square_X][Square_Y] == 3) {   // 黒石が置ける場所にカーソルがあっていたら
                     DrawFlag = true;
                     if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+                        DrawFlag = false;
                         Board[Square_X][Square_Y] = 1;      // 黒石を置く
                         BlackPut();                         // 置いた場所から白を黒にひっくり返す
                         OrderNum = 1;                       // 白の手番にする
@@ -101,7 +104,10 @@ void Othello_Board::Othello_Board_Update() {
                         if (EndGame(Board)) {               // ゲームが終わる条件を満たしたら
                             EndFlag = true;   // エンドフラグを true にする
                         }
+                        DrawFlag = false;
+                        // ReturnNumMax = 0;
                     }
+
                 }
                 else {
                     DrawFlag = false;
@@ -125,6 +131,7 @@ void Othello_Board::Othello_Board_Update() {
                     EndFlag = true;
                 }
 
+                // ------------自分で白石を置くよう-----------------------------
                 //if (Board[Square_X][Square_Y] == 4) {   // 白石が置ける場所にカーソルがあっていたら
                 //    DrawFlag = true;
                 //    if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
@@ -140,6 +147,7 @@ void Othello_Board::Othello_Board_Update() {
                 //else {
                 //    DrawFlag = false;
                 //}
+                // ----------------------------------------------
             }
         }
     }
@@ -328,11 +336,12 @@ int Othello_Board::CursorPutOnCheck(int board[PB][PB], int p, int q, int enemy, 
 int Othello_Board::PutOnCheck(int board[PB][PB], int p, int q, int d, int e, int enemy, int player) {
 
     int count = 0;  // CheckNum の値を入れる用変数
+    ReturnNum = 0;
 
     // 調べた方向に対して敵の石があったら
     if (board[d + p][e + q] == enemy) {
 
-        // カーソルが合っているところから、置いた場合プレイヤーの石があるかどうか調べる
+        // 置いた場合、指定した方向にプレイヤーの石があるかどうか調べる
         for (CheckNum = 1; board[d + CheckNum * p][e + CheckNum * q] != player; CheckNum++) {
 
             // 調べた方向に空いているマスがあったら
@@ -355,7 +364,7 @@ int Othello_Board::PutOnCheck(int board[PB][PB], int p, int q, int d, int e, int
             }
         }
 
-        ReturnNum = 0;
+
 
         // 調べた方向に対して、 もう一度逆順に辿って player の石にひっくり返す
         for (CheckNum = CheckNum - 1; board[d + CheckNum * p][e + CheckNum * q] != player; CheckNum--) {
@@ -364,13 +373,9 @@ int Othello_Board::PutOnCheck(int board[PB][PB], int p, int q, int d, int e, int
                 board[d + CheckNum * p][e + CheckNum * q] = player;   // player の石にひっくり返す
                 ReturnNum++;
             }
-            // 置けるマスのひっくり返せる数を調べたい
-            if (ReturnNumMax < ReturnNum) {
-                ReturnNumMax = ReturnNum;
-            }
         }
     }
-    return 1;
+    return ReturnNum;
 }
 
 
@@ -633,16 +638,26 @@ int Othello_Board::EndGame(int board[PB][PB]) {
 int Othello_Board::ReturnNumWhite(int board[PB][PB]) {
     //board[Board_X][Board_Y] = 2;
     //WhitePutCPU();
+    // マップチップを使ってみる
+    // PutOnSearchを改良してみる
 
     for (int i = 1; i <= 8; i++) {
         for (int j = 1; j <= 8; j++) {
             if (board[i][j] == 4) {
-                //board[i][j] = 2;
-                WhitePutCPU(i, j);
-                return 1;
+                // 置けるマスのひっくり返せる数を調べたい
+                if (ReturnNumMax < ReturnNum) {
+                    ReturnNumMax = ReturnNum;
+                    Board_X = i;
+                    Board_Y = j;
+                }
+
             }
         }
     }
-
-    return 0;
+    board[Board_X][Board_Y] = 2;
+    WhitePutCPU(Board_X, Board_Y);
+    Board_X = 0;
+    Board_Y = 0;
+    ReturnNumMax = 0;
+    return 1;
 }
