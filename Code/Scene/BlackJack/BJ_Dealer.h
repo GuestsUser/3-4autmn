@@ -21,6 +21,14 @@ protected:
   int* data;                /*配列用ポインタ*/
   int* spt_data;            /*スプリット時の配列用ポインタ*/
 
+  int img_x;
+  int img_y;
+
+  const int yama_x = 1200;
+  const int yama_y = 350;
+
+  const float img_size = 0.45f;
+
   bool D_BlackJakc;
   bool split;
 
