@@ -15,6 +15,7 @@ Player::Player() {
   spt_data = 0;
   split = false;
   hit_num = 0;
+  spt_flg = false;
 
   color = 0xffffff;
   color2 = 0xffffff;
@@ -28,6 +29,7 @@ Player::Player() {
   D_BJ = D_bst = false;
   spt_win = spt_los = spt_bst = spt_psh = spt_BJ = false;
 
+  now_game_flg = true;
 
   dealer_calc = 0;
 
@@ -76,6 +78,7 @@ void Player::Initialize() {
   dbl_ct = 0;
   type = 0;
   spt_type = 0;
+  spt_flg = false;
 
   dealer_calc = 0;
 
@@ -89,6 +92,7 @@ void Player::Initialize() {
   spt_win = spt_los = spt_bst = spt_psh = spt_BJ = false;
   D_BJ = D_bst = false;
   game_flg = true;
+  now_game_flg = true;
 
 }
 
@@ -211,24 +215,27 @@ bool Player::Play(Shoe* shoe) {
           c3++;
 
         }
-        /*spliteが入力された場合*/
-        else if (spt && hand_num <= 2) {
+        /*splitが入力された場合*/
+        else if (hand_num == 2) {
 
           if ((hand[0] % 13) == (hand[1] % 13) || (hand[0] % 13 > 8 && hand[1] % 13 > 8)) {
+            spt_flg = true;
+            if (spt) {
 
-            if (hand[0] % 13 == 0 && hand[1] % 13 == 0) {
+              color4 = 0xffff00;
+              c4++;
+              if (hand[0] % 13 == 0 && hand[1] % 13 == 0) {
 
-              spt_a = true;
+                spt_a = true;
 
+              }
+
+              split = true;
+              Player::Hit(shoe);
             }
-
-            split = true;
-            Player::Hit(shoe);
 
           }
 
-          color4 = 0xffff00;
-          c4++;
 
         }
 
@@ -348,10 +355,17 @@ bool Player::Play(Shoe* shoe) {
 
     }
   }
+else {
+now_game_flg = false;
+}
 
   /*バーストしているのでfalseを返して終了*/
   return false;
 
+}
+
+bool Player::Now_Game() {
+  return now_game_flg;
 }
 
 void Player::Score(Player player, Dealer dealer) {   /*プレイヤーとディーラーのスコア勝負*/
@@ -494,7 +508,7 @@ void Player::Show_Hand() {
 
     }
     /*標準出力*/
-      DrawFormatString(160 + i * 50, 160, 0xffffff, " :%c %d", a, hand[i] % 13 + 1);
+      //DrawFormatString(160 + i * 50, 160, 0xffffff, " :%c %d", a, hand[i] % 13 + 1);
 
       if (!split) {
         DrawRotaGraph(img_x + i * 30, img_y, img_size, 0, card_type[type][hand[i] % 13], 1);
@@ -556,7 +570,7 @@ void Player::Spt_Show_Hand() {
     }
     /*標準出力*/
 
-    DrawFormatString(160 + i * 50, 180, 0xffffff, " :%c %d", a, spt_hand[i] % 13 + 1);
+    //DrawFormatString(img_x + 110, img_y, 0, " :%c %d", a, spt_hand[i] % 13 + 1);
 
     /*アニメーション予定地_Player_spt*/
     DrawRotaGraph(img_x + 80 + i * 30, img_y, img_size, 0, card_type[spt_type][spt_hand[i] % 13], 1);
@@ -601,21 +615,25 @@ void Player::Update() {
 
 void Player::Draw() {
 
-  Player::Show_Hand();
-  if (split) {
-    Player::Spt_Show_Hand();
-  }
 
+  SetFontSize(24);
+  DrawFormatString(10, 650, 0xffffff, "アクションを選択してください");
   SetFontSize(32);
   /*ボタン表示*/
   DrawFormatString(hit_x, hit_y, color, "Hit");
   DrawFormatString(std_x, std_y, color2, "Stand");
   DrawFormatString(dbl_x, dbl_y, color3, "Double");
-  DrawFormatString(spt_x, spt_y, color4, "Splite");
-  if (!split) { DrawFormatString(420, hit_y, color, "Bet"); }
+  //DrawFormatString(spt_x, spt_y, color4, "Split");
+
+  if (spt_flg) {
+
+    DrawFormatString(spt_x, spt_y, color4, "Split");
+
+  }
   /*ボタン表示*/
   /*所持金表示*/
   if (!split) {
+    DrawFormatString(420, hit_y, 0xffffff, "Bet");
     DrawFormatString(500, 630, 0xffffff, "掛金：00000");
   }
   else {
@@ -626,29 +644,33 @@ void Player::Draw() {
   /*所持金表示*/
   SetFontSize(DEFAULT_FONT_SIZE);
 
-  /*デバッグ用*/
-  DrawFormatString(spt_x, spt_y/100+40, color, "%d",hit+c);
-  DrawFormatString(spt_x, spt_y / 100 +60, color2, "%d",std+c2);
-  DrawFormatString(spt_x, spt_y / 100 +80, color3, "%d",dbl+c3);
-  DrawFormatString(spt_x, spt_y / 100 +100, color4, "%d",spt+c4);
-  DrawFormatString(spt_x+40, spt_y / 100 +40, color4, "hand_num：%d",hand_num);
-  DrawFormatString(spt_x+40, spt_y / 100 +80, color4, "spt_num：%d",spt_hand_num);
-  DrawFormatString(spt_x+40, spt_y / 100 +60, color4, "spt_a：%d",spt_a);
-
-  DrawFormatString(spt_x+40, spt_y / 100 +100, color4, "%d",dealer_calc);
-
-  DrawFormatString(spt_x-80, spt_y / 100 +40, color4, "%Win %d",win);
-  DrawFormatString(spt_x-80, spt_y / 100 +60, color4, "Los %d",los);
-  DrawFormatString(spt_x-80, spt_y / 100 +80, color4, "psh %d",psh);
-  DrawFormatString(spt_x-80, spt_y / 100 +100, color4, "BlJ %d",BlackJack);
-  DrawFormatString(spt_x-140, spt_y / 100 +100, color4, "bst %d",bst);
-  DrawFormatString(spt_x-140, spt_y / 100 +80, color4, "spt %d",split);
-  DrawFormatString(spt_x-180, spt_y / 100 +60, color4, "hit_num %d",hit_num);
-  /*デバッグ用*/
-
-  DrawFormatString(100, 460, 0xffffff, "選択してください");
-
+  Player::Show_Hand();
+  if (split) {
+    Player::Spt_Show_Hand();
+  }
   Player::Show_Play();
+
+  /*デバッグ用*/
+  //DrawFormatString(spt_x, spt_y/100+40, color, "%d",hit+c);
+  //DrawFormatString(spt_x, spt_y / 100 +60, color2, "%d",std+c2);
+  //DrawFormatString(spt_x, spt_y / 100 +80, color3, "%d",dbl+c3);
+  //DrawFormatString(spt_x, spt_y / 100 +100, color4, "%d",spt+c4);
+  //DrawFormatString(spt_x+40, spt_y / 100 +40, color4, "hand_num：%d",hand_num);
+  //DrawFormatString(spt_x+40, spt_y / 100 +80, color4, "spt_num：%d",spt_hand_num);
+  //DrawFormatString(spt_x+40, spt_y / 100 +60, color4, "spt_a：%d",spt_a);
+
+  //DrawFormatString(spt_x+40, spt_y / 100 +100, color4, "%d",dealer_calc);
+
+  //DrawFormatString(spt_x-80, spt_y / 100 +40, color4, "%Win %d",win);
+  //DrawFormatString(spt_x-80, spt_y / 100 +60, color4, "Los %d",los);
+  //DrawFormatString(spt_x-80, spt_y / 100 +80, color4, "psh %d",psh);
+  //DrawFormatString(spt_x-80, spt_y / 100 +100, color4, "BlJ %d",BlackJack);
+  //DrawFormatString(spt_x-140, spt_y / 100 +100, color4, "bst %d",bst);
+  //DrawFormatString(spt_x-140, spt_y / 100 +80, color4, "spt %d",split);
+  //DrawFormatString(spt_x-180, spt_y / 100 +60, color4, "hit_num %d",hit_num);
+  /*デバッグ用*/
+
+
 
 
 }
@@ -661,16 +683,22 @@ void Player::Show_Play() {
 
       if (D_bst) {
 
-        DrawFormatString(100, 500, 0xffffff, "DealerBurst あなたの勝ちです !!\n");
+        //DrawRotaGraph(640, 40, 1, 0, btn_hdl[2], 1);
+        DrawRotaGraph(620, 300, 1, 0, btn_hdl[2], 1);
+        DrawRotaGraph(620, 400, 1, 0, btn_hdl[0], 1);
+        //DrawFormatString(600, 140, 0, "DealerBurst あなたの勝ちです !!\n");
+        //DrawFormatString(100, 500, 0, "DealerBurst あなたの勝ちです !!\n");
 
       }
       else if (BlackJack) {
 
-        DrawFormatString(100, 540, 0xffffff, "BlackJack あなたの勝ちです");
+        //DrawFormatString(100, 540, 0xffffff, "BlackJack あなたの勝ちです");
+        DrawRotaGraph(620, 400, 1, 0, btn_hdl[4], 1);
 
       }
       else {
-        DrawFormatString(100, 520, 0xffffff, "あなたの勝ちです !!\n");
+        //DrawFormatString(100, 520, 0xffffff, "あなたの勝ちです !!\n");
+        DrawRotaGraph(620, 400, 1, 0, btn_hdl[0], 1);
       }
 
     }
@@ -678,19 +706,22 @@ void Player::Show_Play() {
 
       if (bst) {
 
-        DrawFormatString(100, 600, 0xffffff, "Burst あなたの負けです\n");
+        //DrawFormatString(100, 600, 0xffffff, "Burst あなたの負けです\n");
+        DrawRotaGraph(620, 400, 1, 0, btn_hdl[2], 1);
 
       }
       else {
 
-        DrawFormatString(100, 560, 0xffffff, "あなたの負けです\n");
+        //DrawFormatString(100, 560, 0xffffff, "あなたの負けです\n");
+        DrawRotaGraph(620, 400, 1, 0, btn_hdl[1], 1);
 
       }
 
     }
     else if (psh) {
 
-      DrawFormatString(100, 580, 0xffffff, "引き分けです\n");
+      //DrawFormatString(100, 580, 0xffffff, "引き分けです\n");
+      DrawRotaGraph(620, 400, 1, 0, btn_hdl[3], 1);
 
     }
 
@@ -698,39 +729,52 @@ void Player::Show_Play() {
   else if (split) {
 
     if (D_bst) {
-      DrawFormatString(100, 660, 0xffffff, "DealerBust\n");
+      //DrawFormatString(100, 660, 0xffffff, "DealerBust\n");
+      DrawRotaGraph(620, 300, 1, 0, btn_hdl[2], 1);
     }
     if (BlackJack) {
-      DrawFormatString(0, 640, 0xffffff, "BlackJack\n");
+      //DrawFormatString(0, 640, 0xffffff, "BlackJack\n");
+      DrawRotaGraph(620, 400, 1, 0, btn_hdl[4], 1);
     }
     if (spt_BJ) {
-      DrawFormatString(0, 620, 0xffffff, "BlackJack\n");
+      //DrawFormatString(0, 620, 0xffffff, "BlackJack\n");
+      DrawRotaGraph(620, 400, 1, 0, btn_hdl[4], 1);
     }
     if (win) {
-      DrawFormatString(100, 640, 0xffffff, "手札1の勝ち\n");
+      //DrawFormatString(100, 640, 0xffffff, "手札1の勝ち\n");
+      DrawRotaGraph(490, 400, 1, 0, btn_hdl[0], 1);
     }
     if (spt_win) {
-      DrawFormatString(100, 620, 0xffffff, "手札2の勝ち\n");
+      //DrawFormatString(100, 620, 0xffffff, "手札2の勝ち\n");
+      DrawRotaGraph(700, 400, 1, 0, btn_hdl[0], 1);
     }
     if (los && !bst) {
-      DrawFormatString(100, 600, 0xffffff, "手札1の負け\n");
+      //DrawFormatString(100, 600, 0xffffff, "手札1の負け\n");
+      DrawRotaGraph(490, 400, 1, 0, btn_hdl[1], 1);
     }
     else if (los && bst) {
-      DrawFormatString(100, 580, 0xffffff, "手札1のバスト\n");
+      //DrawFormatString(100, 580, 0xffffff, "手札1のバスト\n");
+      DrawRotaGraph(490, 400, 1, 0, btn_hdl[2], 1);
     }
     if (spt_los && !spt_bst) {
-      DrawFormatString(100, 560, 0xffffff, "手札2の負け\n");
+      //DrawFormatString(100, 560, 0xffffff, "手札2の負け\n");
+      DrawRotaGraph(700, 400, 1, 0, btn_hdl[1], 1);
     }
     else if (spt_los && spt_bst) {
-      DrawFormatString(100, 540, 0xffffff, "手札2のバスト\n");
+      //DrawFormatString(100, 540, 0xffffff, "手札2のバスト\n");
+      DrawRotaGraph(700, 400, 1, 0, btn_hdl[2], 1);
     }
     if (psh) {
-      DrawFormatString(100, 520, 0xffffff, "手札1の引き分け\n");
+      //DrawFormatString(100, 520, 0xffffff, "手札1の引き分け\n");
+      DrawRotaGraph(490, 400, 1, 0, btn_hdl[3], 1);
     }
     if (spt_psh) {
-      DrawFormatString(100, 500, 0xffffff, "手札2の引き分け\n");
+      //DrawFormatString(100, 500, 0xffffff, "手札2の引き分け\n");
+      DrawRotaGraph(700, 400, 1, 0, btn_hdl[3], 1);
     }
 
   }
 
+  //DrawRotaGraph(490, 400, 1, 0, btn_hdl[0], 1);
+  //DrawRotaGraph(700, 400, 1, 0, btn_hdl[0], 1);
 }

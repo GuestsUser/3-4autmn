@@ -23,9 +23,12 @@ private:
 
   int dealer_calc;
 
+  bool now_game_flg;
+
   bool D_BJ;
   bool D_bst;
 
+  bool spt_flg;
   bool hit, std, bet, spt, dbl;
   bool win, los, bst, psh, BlackJack, game_flg;
   bool spt_win, spt_los, spt_bst, spt_psh, spt_BJ;
@@ -41,6 +44,7 @@ public:
   void Draw();
 
   bool ButtonHit(int, int, int, int);
+  bool Now_Game();
 
   void Show_Hand();
   void Spt_Show_Hand();

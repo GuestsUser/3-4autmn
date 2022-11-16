@@ -9,6 +9,7 @@ protected:
   std::vector<int> spt_hand;    /*手札配列*/
   int hand_num;             /*手札枚数*/
   int score;                /*返り値用変数（計算結果)*/
+  int btn_hdl[5];
 
   int spt_hand_num;         /*スプリット時の手札枚数*/
   int spt_score;            /*スプリット時の返り値用変数（計算結果)*/
