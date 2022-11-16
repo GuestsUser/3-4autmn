@@ -93,8 +93,9 @@ void CF_Player::CF_Player_Update() {
 								Coin_Fall();
 							}
 							else {
+								CPU_RandomFall();
 								if (CPU_j != j) {
-									CPU_RandomFall();
+									Coin_Fall();
 								}
 								else {
 									CPU_RandomFall();
@@ -157,6 +158,7 @@ void CF_Player::CF_Player_Update() {
 			CF_ClearText = true;
 		}
 		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
+			StopSoundMem(CF_GameBGM);
 			parent->SetNext(new Scene_Select());
 		}
 	}
@@ -234,8 +236,8 @@ void CF_Player::CF_Player_Draw() {
 			DrawFormatString(500, 300, 0x0000ff, "ＣＰＵの勝ち！");
 		}
 		SetFontSize(24);
-		DrawBox(515, 495, 800, 529, 0xffffff, TRUE);
-		DrawFormatString(520, 500, 0x000000, "左クリックでリスタート");
+		DrawBox(475, 495, 855, 529, 0xffffff, TRUE);
+		DrawFormatString(480, 500, 0x000000, "左クリックでセレクト画面に戻る");
 	}
 	if (CF_Draw == true) {
 		SetFontSize(48);
