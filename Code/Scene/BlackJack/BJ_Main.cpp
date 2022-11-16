@@ -92,9 +92,6 @@ void BlackJack::Draw() {
   player->Draw();
   dealer->Draw();
 
-  //DrawFormatString(100, 80, 0xffffff, "ゲームを開始しますか？\n");
-  //DrawFormatString(100, 160, 0xffffff, "player\n");
-  //DrawFormatString(100, 220, 0xffffff, "dealer\n");
   SetFontSize(24);
   if (!player->Now_Game()) {
     DrawFormatString(450, 340, 0xffffff, "ゲームを続けますか？ yes or no\n");

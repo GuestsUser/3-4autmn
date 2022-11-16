@@ -150,7 +150,7 @@ bool Player::Play(Shoe* shoe) {
   if (Player::ButtonHit(std_x, std_y, std_w, std_h) || dbl) {
     std = true;
   }
-  if (Player::ButtonHit(dbl_x, dbl_y, dbl_w, dbl_h)) {
+  if (Player::ButtonHit(dbl_x, dbl_y, dbl_w, dbl_h) && hand_num == 2) {
     dbl = true;
   }
 
