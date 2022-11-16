@@ -16,19 +16,19 @@ void PageOne::PageOne_Initialize() {
 	Card_back = Card(card_type[52], 0, 5);	//カードの裏面
 
 	for (i = 0; i < 6; i++) {
-		r = GetRand(sizeof(Card_obj));
+		r = GetRand(Card_obj.size() - 1);
 		Player_card.push_back(Card_obj[r]);
 		Card_obj.erase(Card_obj.begin() + r);
 
-		r = GetRand(sizeof(Card_obj));
+		r = GetRand(Card_obj.size() - 1);
 		NPC_card_1.push_back(Card_obj[r]);
 		Card_obj.erase(Card_obj.begin() + r);
 
-		r = GetRand(sizeof(Card_obj));
+		r = GetRand(Card_obj.size() - 1);
 		NPC_card_2.push_back(Card_obj[r]);
 		Card_obj.erase(Card_obj.begin() + r);
 
-		r = GetRand(sizeof(Card_obj));
+		r = GetRand(Card_obj.size() - 1);
 		NPC_card_3.push_back(Card_obj[r]);
 		Card_obj.erase(Card_obj.begin() + r);
 
@@ -43,7 +43,7 @@ void PageOne::PageOne_Initialize() {
 
 	Player_X = 300;
 	Player_Y = 575;
-	
+
 	NPC1_X = 125;
 	NPC1_Y = 75;
 
@@ -60,6 +60,7 @@ void PageOne::PageOne_Initialize() {
 	flg_2 = false;
 	flg_3 = false;
 
+	lead = 0;
 	pri = 1;
 	draw = false;
 	finish = false;
@@ -83,7 +84,7 @@ void PageOne::PageOne_Update() {
 	//デバッグ用
 	//color = GetColor(255, 255, 255);
 
-	if (draw == true) {
+	if (draw == false) {
 		DrawFormatString(700, 350, GetColor(255, 255, 255), "カードは引けないよ");
 	}
 	else {
@@ -97,19 +98,29 @@ void PageOne::PageOne_Update() {
 
 			if (flg_p == false) {
 
+				if (Field_card.empty() == false && Field_card[0].suit == 5) {
+					lead = 1;
+				}
+				else {
+					lead = 0;
+				}
+
 				if (Field_card.empty()) {
-					draw = true;
+					draw = false;
 				}
 				else {
 					for (i = 0; i < Player_card.size(); i++) {
-						if (Field_card[0].suit == Player_card[i].suit || Player_card[i].suit == 99) {
-							draw = true;
+						if (Player_card[i].suit == 5) {
+							draw = false;
+						}
+						if (Field_card[lead].suit == Player_card[i].suit) {
+							draw = false;
 						}
 					}
 				}
 
 				//プレイヤーがカード引く用
-				if (draw == false && Card_obj.empty() == false) {
+				if (draw == true && Card_obj.empty() == false) {
 					if (n > 30) {
 						if ((Mouse_X > Deck_X - (card_w * 0.7) / 2) && (Mouse_X < Deck_X + (card_w * 0.7) / 2) && (Mouse_Y > Deck_Y - (card_h * 0.7) / 2) && (Mouse_Y < Deck_Y + (card_h * 0.7) / 2)) {
 							if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
@@ -129,9 +140,10 @@ void PageOne::PageOne_Update() {
 				for (i = 0; i < Player_card.size(); i++) {
 
 					//山札0枚＆手札に出せるカードがない場合パスをする
-					if (Card_obj.empty() == true && Field_card.empty() == false && Field_card[0].suit != Player_card[i].suit) {
-						DrawFormatString(Deck_X, Deck_Y, GetColor(255, 0, 0), "パス");
-						if ((Mouse_X > Deck_X - 50) && (Mouse_X < Deck_X + 50) && (Mouse_Y > Deck_Y - 75) && (Mouse_Y < Deck_Y + 75)) {
+					if (Card_obj.empty() == true && Field_card.empty() == false && Field_card[lead].suit != Player_card[i].suit && Player_card[i].suit != 5) {
+						DrawBox(890, 440, 980, 500, color, TRUE);
+						DrawFormatString(900, 450, GetColor(255, 0, 0), "パス");
+						if ((Mouse_X > 890) && (Mouse_X < 980) && (Mouse_Y > 440) && (Mouse_Y < 500)) {
 							if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
 								flg_p = true;
 								priority++;
@@ -140,8 +152,8 @@ void PageOne::PageOne_Update() {
 						}
 					}
 					else {
-						if (Card::Hit(Mouse_X, Mouse_Y, Player_X + (card_w * 0.5) * (i % 10), Player_Y + (card_h * pow(0.5, 2)) * (i / 10), card_w, card_h, 0.5)) {
-							if (Field_card.empty() || Field_card[0].suit == Player_card[i].suit) {
+						if (Field_card.empty() || Field_card[0].suit == 5 || Field_card[lead].suit == Player_card[i].suit || Player_card[i].suit == 5) {
+							if (Card::Hit(Mouse_X, Mouse_Y, Player_X + (card_w * 0.5) * (i % 10), Player_Y + (card_h * pow(0.5, 2)) * (i / 10), card_w, card_h, 0.5)) {
 								if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
 									Field_card.push_back(Player_card[i]);
 
@@ -162,16 +174,18 @@ void PageOne::PageOne_Update() {
 									}
 
 									p_pow = Player_card[i].num;
-
-									Player_card.erase(Player_card.begin() + i);
+									p = i;
 									priority++;
-									draw = false;
+									draw = true;
 									flg_p = true;
 									count = 0;
 								}
 							}
 						}
 					}
+				}
+				if (flg_p == true) {
+					Player_card.erase(Player_card.begin() + p);
 				}
 			}
 			else {
@@ -188,19 +202,29 @@ void PageOne::PageOne_Update() {
 
 			if (flg_1 == false) {
 
+				if (Field_card.empty() == false && Field_card[0].suit == 5) {
+					lead = 1;
+				}
+				else {
+					lead = 0;
+				}
+
 				if (Field_card.empty()) {
-					draw = true;
+					draw = false;
 				}
 				else {
 					for (i = 0; i < NPC_card_1.size(); i++) {
-						if (Field_card[0].suit == NPC_card_1[i].suit || NPC_card_1[i].suit == 99) {
-							draw = true;
+						if (NPC_card_1[i].suit == 5) {
+							draw = false;
+						}
+						if (Field_card[lead].suit == NPC_card_1[i].suit) {
+							draw = false;
 						}
 					}
 				}
 
 				//NPCがカード引く用
-				if (draw == false && Card_obj.empty() == false) {
+				if (draw == true && Card_obj.empty() == false) {
 					if (n > 30) {
 						r = GetRand(Card_obj.size());
 						NPC_card_1.push_back(Card_obj[r]);
@@ -214,9 +238,10 @@ void PageOne::PageOne_Update() {
 				for (i = 0; i < NPC_card_1.size(); i++) {
 
 					//山札0枚＆手札に出せるカードがない場合パスをする（手動）
-					if (Card_obj.empty() == true && Field_card.empty() == false && Field_card[0].suit != NPC_card_1[i].suit) {
-						DrawFormatString(Deck_X, Deck_Y, GetColor(255, 0, 0), "パス");
-						if ((Mouse_X > Deck_X - 50) && (Mouse_X < Deck_X + 50) && (Mouse_Y > Deck_Y - 75) && (Mouse_Y < Deck_Y + 75)) {
+					if (Card_obj.empty() == true && Field_card.empty() == false && Field_card[lead].suit != NPC_card_1[i].suit && NPC_card_1[i].suit != 5) {
+						DrawBox(890, 440, 980, 500, color, TRUE);
+						DrawFormatString(900, 450, GetColor(255, 0, 0), "パス");
+						if ((Mouse_X > 890) && (Mouse_X < 980) && (Mouse_Y > 440) && (Mouse_Y < 500)) {
 							if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
 								flg_1 = true;
 								priority++;
@@ -225,8 +250,9 @@ void PageOne::PageOne_Update() {
 						}
 					}
 					else {
-						if(count > 90){
-							if (Field_card.empty() || Field_card[0].suit == NPC_card_1[i].suit) {
+						if (count > 90) {
+
+							if (Field_card.empty() || Field_card[0].suit == 5 || Field_card[lead].suit == NPC_card_1[i].suit || NPC_card_1[i].suit == 5) {
 								Field_card.push_back(NPC_card_1[i]);
 
 								if (NPC_card_1[i].num == 99) {
@@ -246,15 +272,17 @@ void PageOne::PageOne_Update() {
 								}
 
 								n1_pow = NPC_card_1[i].num;
-
-								NPC_card_1.erase(NPC_card_1.begin() + i);
+								n1 = i;
 								priority++;
-								draw = false;
+								draw = true;
 								flg_1 = true;
 								count = 0;
 							}
 						}
 					}
+				}
+				if (flg_1 == true) {
+					NPC_card_1.erase(NPC_card_1.begin() + n1);
 				}
 			}
 			else {
@@ -271,19 +299,29 @@ void PageOne::PageOne_Update() {
 
 			if (flg_2 == false) {
 
+				if (Field_card.empty() == false && Field_card[0].suit == 5) {
+					lead = 1;
+				}
+				else {
+					lead = 0;
+				}
+
 				if (Field_card.empty()) {
-					draw = true;
+					draw = false;
 				}
 				else {
 					for (i = 0; i < NPC_card_2.size(); i++) {
-						if (Field_card[0].suit == NPC_card_2[i].suit || NPC_card_2[i].suit == 99) {
-							draw = true;
+						if (NPC_card_2[i].suit == 5) {
+							draw = false;
+						}
+						if (Field_card[lead].suit == NPC_card_2[i].suit) {
+							draw = false;
 						}
 					}
 				}
 
 				//NPCがカード引く用
-				if (draw == false && Card_obj.empty() == false) {
+				if (draw == true && Card_obj.empty() == false) {
 					if (n > 30) {
 						r = GetRand(Card_obj.size());
 						NPC_card_2.push_back(Card_obj[r]);
@@ -297,9 +335,10 @@ void PageOne::PageOne_Update() {
 				for (i = 0; i < NPC_card_2.size(); i++) {
 
 					//山札0枚＆手札に出せるカードがない場合パスをする（手動）
-					if (Card_obj.empty() == true && Field_card.empty() == false && Field_card[0].suit != NPC_card_2[i].suit) {
-						DrawFormatString(Deck_X, Deck_Y, GetColor(255, 0, 0), "パス");
-						if ((Mouse_X > Deck_X - 50) && (Mouse_X < Deck_X + 50) && (Mouse_Y > Deck_Y - 75) && (Mouse_Y < Deck_Y + 75)) {
+					if (Card_obj.empty() == true && Field_card.empty() == false && Field_card[lead].suit != NPC_card_2[i].suit && NPC_card_2[i].suit != 5) {
+						DrawBox(890, 440, 980, 500, color, TRUE);
+						DrawFormatString(900, 450, GetColor(255, 0, 0), "パス");
+						if ((Mouse_X > 890) && (Mouse_X < 980) && (Mouse_Y > 440) && (Mouse_Y < 500)) {
 							if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
 								flg_2 = true;
 								priority++;
@@ -309,7 +348,7 @@ void PageOne::PageOne_Update() {
 					}
 					else {
 						if (count > 90) {
-							if (Field_card.empty() || Field_card[0].suit == NPC_card_2[i].suit) {
+							if (Field_card.empty() || Field_card[0].suit == 5 || Field_card[lead].suit == NPC_card_2[i].suit || NPC_card_2[i].suit == 5) {
 								Field_card.push_back(NPC_card_2[i]);
 
 								if (NPC_card_2[i].num == 99) {
@@ -329,15 +368,17 @@ void PageOne::PageOne_Update() {
 								}
 
 								n2_pow = NPC_card_2[i].num;
-
-								NPC_card_2.erase(NPC_card_2.begin() + i);
+								n2 = i;
 								priority++;
-								draw = false;
+								draw = true;
 								flg_2 = true;
 								count = 0;
 							}
 						}
 					}
+				}
+				if (flg_2 == true) {
+					NPC_card_2.erase(NPC_card_2.begin() + n2);
 				}
 			}
 			else {
@@ -354,19 +395,29 @@ void PageOne::PageOne_Update() {
 
 			if (flg_3 == false) {
 
+				if (Field_card.empty() == false && Field_card[0].suit == 5) {
+					lead = 1;
+				}
+				else {
+					lead = 0;
+				}
+
 				if (Field_card.empty()) {
-					draw = true;
+					draw = false;
 				}
 				else {
 					for (i = 0; i < NPC_card_3.size(); i++) {
-						if (Field_card[0].suit == NPC_card_3[i].suit || NPC_card_1[i].suit == 99) {
-							draw = true;
+						if (NPC_card_3[i].suit == 5) {
+							draw = false;
+						}
+						if (Field_card[lead].suit == NPC_card_3[i].suit) {
+							draw = false;
 						}
 					}
 				}
 
 				//NPCがカード引く用
-				if (draw == false && Card_obj.empty() == false) {
+				if (draw == true && Card_obj.empty() == false) {
 					if (n > 30) {
 						r = GetRand(Card_obj.size());
 						NPC_card_3.push_back(Card_obj[r]);
@@ -379,9 +430,10 @@ void PageOne::PageOne_Update() {
 				for (i = 0; i < NPC_card_3.size(); i++) {
 
 					//山札0枚＆手札に出せるカードがない場合パスをする（手動）
-					if (Card_obj.empty() == true && Field_card.empty() == false && Field_card[0].suit != NPC_card_3[i].suit) {
-						DrawFormatString(Deck_X, Deck_Y, GetColor(255, 0, 0), "パス");
-						if ((Mouse_X > Deck_X - 50) && (Mouse_X < Deck_X + 50) && (Mouse_Y > Deck_Y - 75) && (Mouse_Y < Deck_Y + 75)) {
+					if (Card_obj.empty() == true && Field_card.empty() == false && Field_card[lead].suit != NPC_card_3[i].suit && NPC_card_3[i].suit != 5) {
+						DrawBox(890, 440, 980, 500, color, TRUE);
+						DrawFormatString(900, 450, GetColor(255, 0, 0), "パス");
+						if ((Mouse_X > 890) && (Mouse_X < 980) && (Mouse_Y > 440) && (Mouse_Y < 500)) {
 							if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
 								flg_3 = true;
 								priority++;
@@ -391,7 +443,7 @@ void PageOne::PageOne_Update() {
 					}
 					else {
 						if (count > 90) {
-							if (Field_card.empty() || Field_card[0].suit == NPC_card_3[i].suit) {
+							if (Field_card.empty() || Field_card[0].suit == 5 || Field_card[lead].suit == NPC_card_3[i].suit || NPC_card_3[i].suit == 5) {
 								Field_card.push_back(NPC_card_3[i]);
 
 								if (NPC_card_3[i].num == 99) {
@@ -412,14 +464,17 @@ void PageOne::PageOne_Update() {
 
 								n3_pow = NPC_card_3[i].num;
 
-								NPC_card_3.erase(NPC_card_3.begin() + i);
+								n3 = i;
 								priority++;
-								draw = false;
+								draw = true;
 								flg_3 = true;
 								count = 0;
 							}
 						}
 					}
+				}
+				if (flg_3 == true) {
+					NPC_card_3.erase(NPC_card_3.begin() + n3);
 				}
 			}
 			else {
@@ -469,8 +524,8 @@ void PageOne::PageOne_Update() {
 					flg_2 = false;
 					flg_3 = false;
 
-					for (j = 0; j < 4; j++) {
-						Cemetery_card.push_back(Field_card[j]);
+					for (i = 0; i < 4; i++) {
+						Cemetery_card.push_back(Field_card[i]);
 					}
 
 					Field_card.erase(Field_card.begin(), Field_card.end());
@@ -545,7 +600,7 @@ void PageOne::PageOne_Draw() {
 		DrawRotaGraph(NPC2_X + (npc_2 % 5) * (card_w * 0.3), NPC2_Y + (npc_2 / 5) * (card_h * pow(0.3, 2)), 0.3, 0, NPC_card_2[i].img, TRUE);
 		npc_2++;
 	}
-	
+
 	//NPC３号の手札描画
 	for (i = 0; i < NPC_card_3.size(); i++) {
 		//DrawRotaGraph(NPC3_X + (npc_3 % 5) * (card_w * 0.3), NPC3_Y + (npc_3 / 5) * (card_h * 0.3), 0.3, 0, Card_back.img, TRUE);
@@ -553,19 +608,20 @@ void PageOne::PageOne_Draw() {
 		npc_3++;
 	}
 
-	DrawFormatString(25,50,GetColor(255,255,255),"NPC");
-	DrawFormatString(25,75,GetColor(255,255,255),"１号");
+	DrawFormatString(25, 50, GetColor(255, 255, 255), "NPC");
+	DrawFormatString(25, 75, GetColor(255, 255, 255), "１号");
 
-	DrawFormatString(450,50,GetColor(255,255,255),"NPC");
-	DrawFormatString(450,75,GetColor(255,255,255),"２号");
+	DrawFormatString(450, 50, GetColor(255, 255, 255), "NPC");
+	DrawFormatString(450, 75, GetColor(255, 255, 255), "２号");
 
-	DrawFormatString(875,50,GetColor(255,255,255),"NPC");
-	DrawFormatString(875,75,GetColor(255,255,255),"３号");
+	DrawFormatString(875, 50, GetColor(255, 255, 255), "NPC");
+	DrawFormatString(875, 75, GetColor(255, 255, 255), "３号");
 
-	DrawFormatString(700,250,GetColor(255,255,255),"デッキ枚数:%d", Card_obj.size());
-	DrawFormatString(700,300,GetColor(255,255,255),"par:%d", pri);
+	DrawFormatString(700, 250, GetColor(255, 255, 255), "デッキ枚数:%d", Card_obj.size());
+	DrawFormatString(700, 300, GetColor(255, 255, 255), "par:%d", pri);
 
 	//デバッグ用
-	//DrawBox(500, 300, 550, 350, color, TRUE);
+	//DrawBox(890, 440,980, 500, color, TRUE);
+	//DrawFormatString(900, 450, GetColor(255, 0, 0), "パス");
 
 }
