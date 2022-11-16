@@ -12,7 +12,7 @@ private:
 	int BlackCr;
 	int GreenCr;
 	int WhiteCr;
-
+	int Cr;
 
 	int OrderNum;	// è”Ô‚ğŒˆ‚ß‚é”‚ğ“ü‚ê‚é•Ï”
 	int BlackNum;	// •Î‚Ì”‚ğ“ü‚ê‚é•Ï”
@@ -45,11 +45,8 @@ public:
 	void CursorOn_OthelloBoard();
 
 	int CursorPutOnCheck(int board[PB][PB], int p, int q, int enemy, int player);
-	int PutOnCheck(int board[PB][PB], int p, int q, int d, int e, int enemy, int player);
+	int CPUPutOnCheck(int board[PB][PB], int p, int q, int d, int e, int enemy, int player);
 
-
-	int PutOnCheck2(int board[PB][PB], int p, int q, int d, int e, int enemy, int player);
-	int put();
 
 
 	int PutSearch(int board[PB][PB], int p, int q, int d, int e, int enemy, int player);
@@ -69,7 +66,7 @@ public:
 
 	void BoardSearchBWNumber(int board[PB][PB]);
 
-	int ReturnNumWhite(int board[PB][PB]);
+	int CPUWhite(int board[PB][PB]);
 	int EndGame(int board[PB][PB]);
 
 };
