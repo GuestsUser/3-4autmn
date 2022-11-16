@@ -31,8 +31,11 @@ Player::Player() {
 
   dealer_calc = 0;
 
+  img_x = 600;
+  img_y = 560;
+
   hit_x = 800;
-  hit_y = std_y = dbl_y = spt_y = 600;
+  hit_y = std_y = dbl_y = spt_y = 650;
 
   std_x = hit_x + 80;
   dbl_x = hit_x + 200;
@@ -44,6 +47,17 @@ Player::Player() {
   hit_h = std_h = dbl_h = spt_h = 60;
 
   c = c2 = c3 = c4 = 0;
+
+  for (int i = 0; i < 5; i++) {
+
+    for (int j = 0; j < 13; j++) {
+
+      card_type[i][j] = card_hdl[j + (i * 13)];
+
+    }
+
+  }
+
 }
 
 Player::~Player() {};
@@ -482,9 +496,23 @@ void Player::Show_Hand() {
     /*標準出力*/
       DrawFormatString(160 + i * 50, 160, 0xffffff, " :%c %d", a, hand[i] % 13 + 1);
 
+      if (!split) {
+        DrawRotaGraph(img_x + i * 30, img_y, img_size, 0, card_type[type][hand[i] % 13], 1);
+      }
+      else {
+        DrawRotaGraph(img_x - 120 + i * 30, img_y, img_size, 0, card_type[type][hand[i] % 13], 1);
+      }
+
   }
 
-    DrawFormatString(570, 490, 0xffffff, "Player score: %d\n", Player::Calc());
+  SetFontSize(60);
+  if (!split) {
+    DrawFormatString(570, 440, 0, "%d\n", Player::Calc());
+  }
+  else {
+    DrawFormatString(460, 440, 0, "%d\n", Player::Calc());
+  }
+  SetFontSize(DEFAULT_FONT_SIZE);
 
 }
 /*手札を表示*/
@@ -528,11 +556,16 @@ void Player::Spt_Show_Hand() {
     }
     /*標準出力*/
 
-      DrawFormatString(160 + i * 50, 180, 0xffffff, " :%c %d", a, spt_hand[i] % 13 + 1);
+    DrawFormatString(160 + i * 50, 180, 0xffffff, " :%c %d", a, spt_hand[i] % 13 + 1);
+
+    /*アニメーション予定地_Player_spt*/
+    DrawRotaGraph(img_x + 80 + i * 30, img_y, img_size, 0, card_type[spt_type][spt_hand[i] % 13], 1);
 
   }
 
-    DrawFormatString(100, 400, 0xffffff, "Player_Splite score: %d\n", Player::Spt_Calc());
+  SetFontSize(60);
+  DrawFormatString(650, 440, 0, "%d\n", Player::Spt_Calc());
+  SetFontSize(DEFAULT_FONT_SIZE);
 
 }
 
@@ -574,35 +607,49 @@ void Player::Draw() {
   }
 
   SetFontSize(32);
+  /*ボタン表示*/
   DrawFormatString(hit_x, hit_y, color, "Hit");
   DrawFormatString(std_x, std_y, color2, "Stand");
   DrawFormatString(dbl_x, dbl_y, color3, "Double");
   DrawFormatString(spt_x, spt_y, color4, "Splite");
+  if (!split) { DrawFormatString(420, hit_y, color, "Bet"); }
+  /*ボタン表示*/
+  /*所持金表示*/
+  if (!split) {
+    DrawFormatString(500, 630, 0xffffff, "掛金：00000");
+  }
+  else {
+    DrawFormatString(440, 630, 0xffffff, "00000");
+    DrawFormatString(640, 630, 0xffffff, "00000");
+  }
+  DrawFormatString(500, 680, 0xffffff, "所持金：0000000");
+  /*所持金表示*/
   SetFontSize(DEFAULT_FONT_SIZE);
 
   /*デバッグ用*/
-  DrawFormatString(spt_x, spt_y+40, color, "%d",hit+c);
-  DrawFormatString(spt_x, spt_y+60, color2, "%d",std+c2);
-  DrawFormatString(spt_x, spt_y+80, color3, "%d",dbl+c3);
-  DrawFormatString(spt_x, spt_y+100, color4, "%d",spt+c4);
-  DrawFormatString(spt_x+40, spt_y+40, color4, "hand_num：%d",hand_num);
-  DrawFormatString(spt_x+40, spt_y+80, color4, "spt_num：%d",spt_hand_num);
-  DrawFormatString(spt_x+40, spt_y+60, color4, "spt_a：%d",spt_a);
+  DrawFormatString(spt_x, spt_y/100+40, color, "%d",hit+c);
+  DrawFormatString(spt_x, spt_y / 100 +60, color2, "%d",std+c2);
+  DrawFormatString(spt_x, spt_y / 100 +80, color3, "%d",dbl+c3);
+  DrawFormatString(spt_x, spt_y / 100 +100, color4, "%d",spt+c4);
+  DrawFormatString(spt_x+40, spt_y / 100 +40, color4, "hand_num：%d",hand_num);
+  DrawFormatString(spt_x+40, spt_y / 100 +80, color4, "spt_num：%d",spt_hand_num);
+  DrawFormatString(spt_x+40, spt_y / 100 +60, color4, "spt_a：%d",spt_a);
 
-  DrawFormatString(spt_x+40, spt_y+100, color4, "%d",dealer_calc);
+  DrawFormatString(spt_x+40, spt_y / 100 +100, color4, "%d",dealer_calc);
 
-  DrawFormatString(spt_x-80, spt_y+40, color4, "%Win %d",win);
-  DrawFormatString(spt_x-80, spt_y+60, color4, "Los %d",los);
-  DrawFormatString(spt_x-80, spt_y+80, color4, "psh %d",psh);
-  DrawFormatString(spt_x-80, spt_y+100, color4, "BlJ %d",BlackJack);
-  DrawFormatString(spt_x-140, spt_y+100, color4, "bst %d",bst);
-  DrawFormatString(spt_x-140, spt_y+80, color4, "spt %d",split);
-  DrawFormatString(spt_x-180, spt_y+60, color4, "hit_num %d",hit_num);
+  DrawFormatString(spt_x-80, spt_y / 100 +40, color4, "%Win %d",win);
+  DrawFormatString(spt_x-80, spt_y / 100 +60, color4, "Los %d",los);
+  DrawFormatString(spt_x-80, spt_y / 100 +80, color4, "psh %d",psh);
+  DrawFormatString(spt_x-80, spt_y / 100 +100, color4, "BlJ %d",BlackJack);
+  DrawFormatString(spt_x-140, spt_y / 100 +100, color4, "bst %d",bst);
+  DrawFormatString(spt_x-140, spt_y / 100 +80, color4, "spt %d",split);
+  DrawFormatString(spt_x-180, spt_y / 100 +60, color4, "hit_num %d",hit_num);
   /*デバッグ用*/
 
   DrawFormatString(100, 460, 0xffffff, "選択してください");
 
   Player::Show_Play();
+
 
 }
 
