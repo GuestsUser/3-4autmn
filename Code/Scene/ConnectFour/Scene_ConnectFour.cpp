@@ -3,7 +3,7 @@
 
 Scene_ConnectFour::Scene_ConnectFour() {
 	player = new CF_Player();
-	player->CF_Player_Initialize();
+	player->CF_Player_Initialize(this);
 }
 Scene_ConnectFour::	~Scene_ConnectFour() {
 	delete player;

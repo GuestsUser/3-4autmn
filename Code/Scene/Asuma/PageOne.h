@@ -6,7 +6,7 @@
 
 class Card {
 public:
-	Card(){}
+	Card() {}
 
 	int card_w = 200;	//カード１枚の幅
 	int card_h = 300;	//カード１枚の高さ
@@ -32,10 +32,11 @@ public:
 	}
 };
 
-class PageOne : public Card{
+class PageOne : public Card {
 private:
 	int card_type[54];	//画像用ハンドル
-	
+	int background;	//背景
+
 	Card Card_back;		//カードの裏面の情報
 	Card Card_joker;	//ジョーカーの情報
 
@@ -55,6 +56,7 @@ private:
 
 	int pri;
 	bool draw;
+	bool finish;
 
 	int player;
 	bool flg_p;
@@ -73,17 +75,27 @@ private:
 	int n2_pow;
 	int n3_pow;
 
+	int lead;	//場のスートの基準にするカードの順番（基本は先頭（0番目））
+
+	int p;
+	int n1;
+	int n2;
+	int n3;
+
 	int i;
-	int j;
-	int r;
-	int n;
-	int c;
+	int r;	//ランダム用変数
+
+	int n;	//クールタイム用変数
+	int count;	//カウント用変数
 
 	int Mouse_X;	//マウスのX座標
 	int Mouse_Y;	//マウスのY座標
-	
+
 	int Deck_X;		//山札のX座標
 	int Deck_Y;		//山札のY座標
+
+	int Field_X;		//場に出したカードのX座標
+	int Field_Y;		//場に出したカードのY座標
 
 	int Player_X;	//プレイヤーの手札のX座標
 	int Player_Y;	//プレイヤーの手札のY座標
@@ -106,6 +118,7 @@ private:
 		}
 	}
 
+	int color;	//デバッグ用
 public:
 	PageOne() {}
 

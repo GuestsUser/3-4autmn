@@ -5,8 +5,11 @@
 #define Coin_Player 1 //プレイヤーのコインがある場所
 #define Coin_CPU 2 //CPUのコインがある場所
 
-class CF_Player {
+#include "./../Scene.h"
+
+class CF_Player{
 private:
+	Scene* parent;
 	int CF_Back; //背景
 	int CF_Panel; //パネル
 	int CF_Board[Board_Xsize][Board_Ysize]; //パネルの情報の二次元配列
@@ -43,14 +46,10 @@ private:
 	bool CF_Start; //ゲームがスタートしたかどうかのフラグ
 	bool FallSEflg; //CoinFallSEが鳴っているかどうかのフラグ
 	bool CF_ClearText; //勝利者を出すテキストを出すフラグ
-	bool check;
-	bool upcheck;
-	bool lsidecheck;
-	bool rsidecheck;
 
 
 public:
-	void CF_Player_Initialize();
+	void CF_Player_Initialize(Scene* scene);
 	void CF_Player_Finalize();
 	void CF_Player_Update();
 	void CF_Player_Draw();
@@ -60,6 +59,7 @@ public:
 	void ChangeTurn(int *PlayUser);
 	void SpaceCheck(int board[Board_Xsize][Board_Ysize], int x, int y);
 	void CPU_CoinCheck(int board[Board_Xsize][Board_Ysize], int x, int y);
+	void CPU_RandomFall();
 
 	int ClearCheck(int board[Board_Xsize][Board_Ysize], int x, int y);
 	int DrawCheck(int board[Board_Xsize][Board_Ysize]);

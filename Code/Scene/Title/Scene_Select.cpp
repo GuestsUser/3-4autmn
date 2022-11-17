@@ -51,6 +51,7 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			break;
 		case 3: //コネクトフォー
 			*img = LoadGraph("Resource/image/Select_ConnectFour.png");
+			gameScene = new Scene_ConnectFour();
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_ConnectFour1.png")), 1));
 			break;
 		case 4: //かるた

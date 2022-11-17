@@ -8,6 +8,7 @@ BlackJack::BlackJack() {
 
   game_endflg = false;
   next_flg = true;
+  now_game_flg = false;
 
   hit_flg = 0;
 
@@ -36,6 +37,7 @@ void BlackJack::Initialize() {
   player->Initialize();
   dealer->Initialize();
   next_flg = true;
+  now_game_flg = true;
 
   hit_flg = 0;
 
@@ -43,9 +45,7 @@ void BlackJack::Initialize() {
 
 void BlackJack::Update() {
 
-  //player->Update();
     /*ゲームを開始 or 続けるか判定*/
-
   if (next_flg) {
 
     BlackJack::Initialize();
@@ -60,21 +60,23 @@ void BlackJack::Update() {
 
     dealer->Play(shoe);
     player->Score(*player, *dealer);
-
+    //now_game_flg = false;
   }
   else {
     player->Score(*player, *dealer);
+    //now_game_flg = false;
   }
   if (!game_endflg) {
 
-    if (player->ButtonHit(280,480,20,40)) {
+    if (player->ButtonHit(700,340,60,40)) {
 
       next_flg = true;
 
     }
-    if (player->ButtonHit(340,480,20,40)) {
+    if (player->ButtonHit(760,340,60,40)) {
 
       game_endflg = true;
+      SetNext(nullptr);
 
     }
 
@@ -90,25 +92,15 @@ void BlackJack::Draw() {
   player->Draw();
   dealer->Draw();
 
-  DrawFormatString(550, 100, 0xffffff, "ゲーム画面");
-
-  DrawFormatString(100, 80, 0xffffff, "ゲームを開始しますか？\n");
-  DrawFormatString(100, 100, 0xffffff, "==============\n");
-  DrawFormatString(100, 120, 0xffffff, "BLACK JACK\n");
-  DrawFormatString(100, 140, 0xffffff, "==============\n");
-  DrawFormatString(100, 160, 0xffffff, "player\n");
-  //DrawFormatString(100, 180, 0xffffff, "==============\n");
-  DrawFormatString(100, 200, 0xffffff, "==============\n");
-  DrawFormatString(100, 220, 0xffffff, "dealer\n");
-  DrawFormatString(100, 240, 0xffffff, "==============\n");
-  DrawFormatString(100, 260, 0xffffff, "==============\n");
-  if (!next_flg) {
-    DrawFormatString(100, 480, 0xffffff, "ゲームを続けますか？ yes or no\n");
+  SetFontSize(24);
+  if (!player->Now_Game()) {
+    DrawFormatString(450, 340, 0xffffff, "ゲームを続けますか？ yes or no\n");
+    //DrawFormatString(500, 340, 0xffffff, "デバッグ用コマンド: yes or no\n");
   }
   if (game_endflg) {
-    DrawFormatString(100, 500, 0xffffff, "ゲームを終了します\n");
+    DrawFormatString(450, 340, 0xffffff, "ゲームを終了します\n");
   }
-
+  SetFontSize(DEFAULT_FONT_SIZE);
 
 }
 
