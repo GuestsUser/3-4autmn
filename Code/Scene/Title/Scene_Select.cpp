@@ -51,6 +51,7 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			break;
 		case 3: //„Ç≥„Éç„ÇØ„Éà„Éï„Ç©„Éº
 			*img = LoadGraph("Resource/image/Select_ConnectFour.png");
+			gameScene = new Scene_ConnectFour();
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_ConnectFour1.png")), 1));
 			break;
 		case 4: //„Åã„Çã„Åü
@@ -74,8 +75,8 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			gameScene = new SR_Game(); //ÔøΩ¬ï ÉVÔøΩ[ÔøΩÔøΩÔøΩÔøΩŒÇÔøΩÔøΩÔøΩÔøΩAscmÔøΩ…ìÔøΩÔøΩÔøΩƒÇÔøΩÔøΩÔøΩÔøΩÃÇÔøΩgameSceneÔøΩ…Ç»ÇÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩxÔøΩÃà·Ç¢
 			break;
 		case 8: //„Ç™„Çª„É≠
-			*img = LoadGraph("Resource/image/Select_Othello.png");
-			gameScene = new Scene_Othello(); //å¬ï ÉVÅ[ÉìîÚÇŒÇµçÏó·ÅAscmÇ…ì¸ÇÍÇƒÇ¢ÇΩÇÃÇ™gameSceneÇ…Ç»Ç¡ÇΩíˆìxÇÃà·Ç¢
+			*img = LoadGraph("Resource/image/Othello_Image/OthelloAicon2.png");
+			gameScene = new Scene_Othello(); //ÔøΩ¬ï ÉVÔøΩ[ÔøΩÔøΩÔøΩÔøΩŒÇÔøΩÔøΩÔøΩÔøΩAscmÔøΩ…ìÔøΩÔøΩÔøΩƒÇÔøΩÔøΩÔøΩÔøΩÃÇÔøΩgameSceneÔøΩ…Ç»ÇÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩxÔøΩÃà·Ç¢
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Othello1.png")), 1));
 			break;
 		}

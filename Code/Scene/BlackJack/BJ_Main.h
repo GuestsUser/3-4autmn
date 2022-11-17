@@ -12,6 +12,7 @@ private:
 
   bool game_endflg;
   bool next_flg;
+  bool now_game_flg;
 
   std::string next;
 

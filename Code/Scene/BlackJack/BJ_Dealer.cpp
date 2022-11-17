@@ -17,6 +17,26 @@ Dealer::Dealer() {
 
   D_BlackJakc = false;
 
+  img_x = 600;
+  img_y = 180;
+
+  LoadDivGraph("Resource/image/toranpu_all.png",54,13,5,200,300,card_hdl);
+
+  btn_hdl[0] = LoadGraph("Resource/image/BJ_Image/Win.png");
+  btn_hdl[1] = LoadGraph("Resource/image/BJ_Image/Los.png");
+  btn_hdl[2] = LoadGraph("Resource/image/BJ_Image/Bust.png");
+  btn_hdl[3] = LoadGraph("Resource/image/BJ_Image/Push.png");
+  btn_hdl[4] = LoadGraph("Resource/image/BJ_Image/BlackJack.png");
+
+  for (int i = 0; i < 5; i++) {
+
+    for (int j = 0; j < 13; j++) {
+
+      card_type[i][j] = card_hdl[j + (i * 13)];
+
+    }
+
+  }
 
 }
 Dealer::~Dealer() {};
@@ -27,7 +47,7 @@ void Dealer::Initialize() {
   hand.erase(hand.begin(), hand.end());   /*手札をクリア*/
   score = 0;                              /*スコアを初期化*/
   type = 0;                               /*トランプのマーク*/
-
+  
   D_BlackJakc = false;
 
 }
@@ -181,17 +201,22 @@ void Dealer::Show_Hand() {
     default:    /*0-3でない場合はエラー処理*/
       /*標準出力*/
 
-      DrawFormatString(0,0,0xffffff, "DefTypeError\nshow_hand");
+      DrawFormatString(0, 0, 0xffffff, "DefTypeError\nshow_hand");
       break;
 
     }
     /*標準出力*/
 
-    DrawFormatString(160+i*50, 220,0xffffff," :%c %d",a,hand[i]%13+1);
+    //DrawFormatString(160 + i * 50, 220, 0xffffff, " :%c %d", a, hand[i] % 13 + 1);
+
+    DrawRotaGraph(600 + i * 30, 140, img_size, 0,card_type[type][hand[i] % 13 ], 1);
 
   }
 
-    DrawFormatString(100, 420, 0xffffff, "Dealer score: %d\n", Dealer::Calc());
+  if(hand_num < 2)DrawRotaGraph(630, 140, img_size, 0, card_type[4][0], 1);
+  SetFontSize(60);
+  DrawFormatString(580, 200, 0, "%d\n", Dealer::Calc());
+  SetFontSize(DEFAULT_FONT_SIZE);
 
 }
 /*ゲーム実行*/
@@ -225,12 +250,9 @@ void Dealer::Update() {
 
 void Dealer::Draw() {
 
-  DrawFormatString(100, 720, 0xffffff, "hit\n");
-  /*手札の表示*/
-  DrawFormatString(100, 740, 0xffffff, "==============\n");
-  DrawFormatString(100, 760, 0xffffff, "dealer\n");
   Dealer::Show_Hand();
 
-  DrawFormatString(100, 780, 0xffffff, "==============\n");
+  DrawRotaGraph(yama_x, yama_y, img_size, 0, card_hdl[52], 1);
+  /*山札予定地*/
 
 }
