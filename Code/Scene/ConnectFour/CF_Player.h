@@ -30,6 +30,7 @@ private:
 	int CPU_j;
 	int PlayUser; //今プレイしているコインの所持者
 	int DlayCount; //コインが落ちてからプレイヤーに変わるまでのディレイ時間
+	int CoinCheck;
 	 
 	float yadd; //重力加速度
 	float Yajirusi_Move; //矢印のアニメーションの値
