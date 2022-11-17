@@ -9,6 +9,12 @@
 //
 class Othello_Board {
 private:
+	int PutCheckImage;
+
+	int BGM;
+	int PutSE;
+	int PassSE;
+
 	int BlackCr;
 	int GreenCr;
 	int WhiteCr;
