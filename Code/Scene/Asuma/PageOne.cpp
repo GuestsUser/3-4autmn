@@ -6,6 +6,8 @@ void PageOne::PageOne_Initialize() {
 
 	LoadDivGraph("Resource/image/toranpu_all.png", 54, 13, 5, 200, 300, card_type);
 	background = LoadGraph("Resource/image/CareerPoker.png");
+	Pass_Icon = LoadGraph("Resource/image/PageOne_Image/Pass.png");
+	PageOne_Icon = LoadGraph("Resource/image/PageOne_Image/Page_One.png");
 
 	for (i = 0; i < 52; i++) {
 		Card_obj.push_back(Card(card_type[i], i % 13, i / 13));
@@ -13,23 +15,27 @@ void PageOne::PageOne_Initialize() {
 
 	Card_obj.push_back(Card(card_type[53], 99, 5));	//ジョーカー
 
-	Card_back = Card(card_type[52], 0, 5);	//カードの裏面
+	Card_back = Card(card_type[52], 0, 0);	//カードの裏面
 
 	for (i = 0; i < 6; i++) {
-		r = GetRand(Card_obj.size() - 1);
+		r = GetRand(sizeof(Card_obj));
 		Player_card.push_back(Card_obj[r]);
+		Cemetery_card.push_back(Card_obj[r]);
 		Card_obj.erase(Card_obj.begin() + r);
 
-		r = GetRand(Card_obj.size() - 1);
+		r = GetRand(sizeof(Card_obj));
 		NPC_card_1.push_back(Card_obj[r]);
+		Cemetery_card.push_back(Card_obj[r]);
 		Card_obj.erase(Card_obj.begin() + r);
 
-		r = GetRand(Card_obj.size() - 1);
+		r = GetRand(sizeof(Card_obj));
 		NPC_card_2.push_back(Card_obj[r]);
+		Cemetery_card.push_back(Card_obj[r]);
 		Card_obj.erase(Card_obj.begin() + r);
 
-		r = GetRand(Card_obj.size() - 1);
+		r = GetRand(sizeof(Card_obj));
 		NPC_card_3.push_back(Card_obj[r]);
+		Cemetery_card.push_back(Card_obj[r]);
 		Card_obj.erase(Card_obj.begin() + r);
 
 	}
@@ -124,7 +130,7 @@ void PageOne::PageOne_Update() {
 					if (n > 30) {
 						if ((Mouse_X > Deck_X - (card_w * 0.7) / 2) && (Mouse_X < Deck_X + (card_w * 0.7) / 2) && (Mouse_Y > Deck_Y - (card_h * 0.7) / 2) && (Mouse_Y < Deck_Y + (card_h * 0.7) / 2)) {
 							if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
-								r = GetRand(Card_obj.size());
+								r = GetRand(sizeof(Card_obj));
 								Player_card.push_back(Card_obj[r]);
 								Card_obj.erase(Card_obj.begin() + r);
 								n = 0;
@@ -141,9 +147,10 @@ void PageOne::PageOne_Update() {
 
 					//山札0枚＆手札に出せるカードがない場合パスをする
 					if (Card_obj.empty() == true && Field_card.empty() == false && Field_card[lead].suit != Player_card[i].suit && Player_card[i].suit != 5) {
-						DrawBox(890, 440, 980, 500, color, TRUE);
-						DrawFormatString(900, 450, GetColor(255, 0, 0), "パス");
-						if ((Mouse_X > 890) && (Mouse_X < 980) && (Mouse_Y > 440) && (Mouse_Y < 500)) {
+						//DrawBox(890, 440, 980, 500, color, TRUE);
+						//DrawFormatString(900, 450, GetColor(255, 0, 0), "パス");
+						DrawGraph(890, 440, Pass_Icon, true);
+						if ((Mouse_X > 890) && (Mouse_X < 1040) && (Mouse_Y > 440) && (Mouse_Y < 515)) {
 							if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
 								flg_p = true;
 								priority++;
@@ -153,39 +160,53 @@ void PageOne::PageOne_Update() {
 					}
 					else {
 						if (Field_card.empty() || Field_card[0].suit == 5 || Field_card[lead].suit == Player_card[i].suit || Player_card[i].suit == 5) {
-							if (Card::Hit(Mouse_X, Mouse_Y, Player_X + (card_w * 0.5) * (i % 10), Player_Y + (card_h * pow(0.5, 2)) * (i / 10), card_w, card_h, 0.5)) {
-								if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
-									Field_card.push_back(Player_card[i]);
-
-									if (Player_card[i].num == 99) {
-										pri = 99;
+							if (PageOne_flg == true) {
+								DrawGraph(500, 400, PageOne_Icon, true);
+								if ((Mouse_X > 500) && (Mouse_X < 800) && (Mouse_Y > 400) && (Mouse_Y < 500)) {
+									if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
+										PageOne_flg = false;
 									}
+								}
+							}
+							if (PageOne_flg == false) {
+								if (Card::Hit(Mouse_X, Mouse_Y, Player_X + (card_w * 0.5) * (i % 10), Player_Y + (card_h * pow(0.5, 2)) * (i / 10), card_w, card_h, 0.5)) {
+									if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
+										Field_card.push_back(Player_card[i]);
 
-									if (Player_card[i].num == 0) {
-										pri = 0;
+										if (Player_card[i].num == 99) {
+											pri = 99;
+										}
+
+										if (Player_card[i].num == 0) {
+											pri = 0;
+										}
+
+										if (pri != 0 && pri < Player_card[i].num) {
+											pri = Player_card[i].num;
+										}
+
+										if (pri == 0 && Player_card[i].num != 99) {
+											pri = 0;
+										}
+
+										p_pow = Player_card[i].num;
+										p = i;
+										priority++;
+										draw = true;
+										flg_p = true;
+										count = 0;
+
+										if (sizeof(Player_card) == 2) {
+											PageOne_flg = true;
+										}
 									}
-
-									if (pri != 0 && pri < Player_card[i].num) {
-										pri = Player_card[i].num;
-									}
-
-									if (pri == 0 && Player_card[i].num != 99) {
-										pri = 0;
-									}
-
-									p_pow = Player_card[i].num;
-									p = i;
-									priority++;
-									draw = true;
-									flg_p = true;
-									count = 0;
 								}
 							}
 						}
 					}
-				}
-				if (flg_p == true) {
-					Player_card.erase(Player_card.begin() + p);
+					if (flg_p == true) {
+						Player_card.erase(Player_card.begin() + p);
+					}
 				}
 			}
 			else {
@@ -226,7 +247,7 @@ void PageOne::PageOne_Update() {
 				//NPCがカード引く用
 				if (draw == true && Card_obj.empty() == false) {
 					if (n > 30) {
-						r = GetRand(Card_obj.size());
+						r = GetRand(sizeof(Card_obj));
 						NPC_card_1.push_back(Card_obj[r]);
 						Card_obj.erase(Card_obj.begin() + r);
 						n = 0;
@@ -323,7 +344,7 @@ void PageOne::PageOne_Update() {
 				//NPCがカード引く用
 				if (draw == true && Card_obj.empty() == false) {
 					if (n > 30) {
-						r = GetRand(Card_obj.size());
+						r = GetRand(sizeof(Card_obj));
 						NPC_card_2.push_back(Card_obj[r]);
 						Card_obj.erase(Card_obj.begin() + r);
 						n = 0;
@@ -419,7 +440,7 @@ void PageOne::PageOne_Update() {
 				//NPCがカード引く用
 				if (draw == true && Card_obj.empty() == false) {
 					if (n > 30) {
-						r = GetRand(Card_obj.size());
+						r = GetRand(sizeof(Card_obj));
 						NPC_card_3.push_back(Card_obj[r]);
 						Card_obj.erase(Card_obj.begin() + r);
 						n = 0;
@@ -623,5 +644,6 @@ void PageOne::PageOne_Draw() {
 	//デバッグ用
 	//DrawBox(890, 440,980, 500, color, TRUE);
 	//DrawFormatString(900, 450, GetColor(255, 0, 0), "パス");
-
+	//DrawGraph(890, 430, Pass_Icon, true);
+	//DrawGraph(500, 400, PageOne_Icon, true);
 }
