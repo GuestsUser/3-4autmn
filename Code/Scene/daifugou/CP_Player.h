@@ -37,17 +37,26 @@ private:
 	int n;
 	int rule;//ルールの画像
 	int stage;//ステージの画像
-	int T_cards[54];//山札
 	int cards[5][13];//トランプ画像
 	int hand[15];//手札
+
+
+	int T_cards[54];//山札
 	int order[4];//誰から始めるか
+	int trash[15] = { 0 };
+	int rev = 0;
+	
+	
+	
 	int pass;//ぱす
+	int pc = -1; //最後に誰が出したかカウント
 	int Mouse_X;	//マウスのX座標
 	int Mouse_Y;    //マウスのY座標
 	int Player_X;
 	int Player_Y;
 	int player;
 	int card_type[54];	//画像用ハンドル
+
 
 	C Card_back;		//カードの裏面の情報
 	C Card_joker;	//ジョーカーの情報
@@ -62,6 +71,14 @@ public:
 	void CP_Player_Finalize();
 	void CP_Player_Update();
 	void CP_Player_Draw();
-	void deckmake();
 	void onesec();
+	void deckmake();//山札生成
+	void datareset(void);//データの設定
+	void deckshuffle(void);//シャッフル
+	void phase(int n);
+	void turn(int n);
+	void sort(int sort_x, int* sort_y, int sort_z);//ソートを決める
+	void pl_routine(int n);
+	void expend(int n);//手札が無くなった時
+	void slash8(int n);//8切り用
 };

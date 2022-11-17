@@ -78,6 +78,7 @@
     <ClInclude Include="Code\Scene\ConnectFour\CF_Player.h" />
     <ClInclude Include="Code\Scene\ConnectFour\Scene_ConnectFour.h" />
     <ClInclude Include="Code\Scene\daifugou\CP_Player.h" />
+    <ClInclude Include="Code\Scene\daifugou\daifugou.h" />
     <ClInclude Include="Code\Scene\Karuta\Karu_Game.h" />
     <ClInclude Include="Code\Scene\Karuta\Scene_Karuta.h" />
     <ClInclude Include="Code\Scene\Othello\Othello_Board.h" />
