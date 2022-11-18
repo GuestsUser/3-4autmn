@@ -53,7 +53,13 @@ private:
 
 	int Pass_Icon;		//パスのアイコン画像
 	int PageOne_Icon;	//ページワン宣言のアイコン画像
-	bool PageOne_flg;	//ページワン宣言をしたかどうか
+
+	bool PageOne_flg;	//ページワン宣言をしたかどうか(true:した	false:してない)
+
+	bool PageOne_player;	//プレイヤーのページワン宣言
+	bool PageOne_npc1;	//NPC１号のページワン宣言
+	bool PageOne_npc2;	//NPC２号のページワン宣言
+	bool PageOne_npc3;	//NPC３号のページワン宣言
 
 	int priority;	//手番を決める優先度
 	int field;		//場に出ているカードの枚数
@@ -90,7 +96,6 @@ private:
 	int r;	//ランダム用変数
 
 	int n;	//クールタイム用変数
-	int count;	//カウント用変数
 
 	int Mouse_X;	//マウスのX座標
 	int Mouse_Y;	//マウスのY座標
