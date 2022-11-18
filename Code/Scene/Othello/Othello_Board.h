@@ -9,30 +9,34 @@
 //
 class Othello_Board {
 private:
-	int PutCheckImage;
+	int PutCheckImage;	// かっこの画像を入れる用の変数
 
-	int BGM;
-	int PutSE;
-	int PassSE;
+	int BGM;		// BGM用の変数
+	int PutSE;		// 石を置くときのSE用の変数
+	int PassSE;		// パスされたときのSE用の変数
 
-	int BlackCr;
-	int GreenCr;
-	int WhiteCr;
+	int BlackCr;	// 黒色をセットしておく用の変数
+	int WhiteCr;	// 白色をセットしておく用の変数
+	int GreenCr;	// 緑色をセットしておく用の変数
 	int Cr;
 
 	int OrderNum;	// 手番を決める数を入れる変数
 	int BlackNum;	// 黒石の数を入れる変数
 	int WhiteNum;	// 白石の数を入れる変数
-	int TimeCount;
-	int CheckNum;
+	int TimeCount;	// 時間を測る用の変数
+	int CheckNum;	// 
 	int ReturnNum;
 	int ReturnNumMax;
 	int Board_X, Board_Y;
+	int RandomNum;
+	int Player;
 
 	bool DrawFlag;
 	bool CheckFlag;
 	bool PassFlag;
 	bool EndFlag;
+	bool RandomFlag;
+
 public:
 	int Mouse_X;
 	int Mouse_Y;
@@ -59,21 +63,27 @@ public:
 
 	int BlackPutCheck(int d, int e);
 	int BlackPut();
-	//void BoardSearchBlack(int board[PB][PB]);
+	int BlackPutCPU(int d, int e);
 	int BoardSearchBlack(int board[PB][PB]);
 
 
 	int WhitePutCheck(int d, int e);
 	int WhitePut();
 	int WhitePutCPU(int d, int e);
-	//void BoardSearchWhite(int board[PB][PB]);
 	int BoardSearchWhite(int board[PB][PB]);
 
 
 	void BoardSearchBWNumber(int board[PB][PB]);
 
 	int CPUWhite(int board[PB][PB]);
+	int CPUBlack(int board[PB][PB]);
 	int EndGame(int board[PB][PB]);
+
+	int RandomOrder();
+	/*
+	* プレイヤーが黒色（先手）の場合、白色をＣＰＵにしたい
+	* プレイヤーが白色（後手）の場合、黒色をＣＰＵにしたい
+	*/
 
 };
 
