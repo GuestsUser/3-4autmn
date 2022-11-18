@@ -4,6 +4,7 @@
 #include<time.h>
 #include <vector>
 #include <list>
+#define MAX (4U)
 
 class C{
 public:
@@ -33,13 +34,14 @@ public:
 };
 class CareerPoker : public C{
 private:
+	int pri = 1;
 	int i, x, r, j;
 	int n;
 	int rule;//ルールの画像
 	int stage;//ステージの画像
 	int cards[5][13];//トランプ画像
 	int hand[15];//手札
-
+	int Player_state;//switch文用のなんか
 
 	int T_cards[54];//山札
 	int order[4];//誰から始めるか
@@ -62,7 +64,7 @@ private:
 	C Card_joker;	//ジョーカーの情報
 
 	//Card Card_obj[4][13];		//全カードの情報
-	std::vector<C> Card_obj;		//全カードの情報
+	std::vector<C> Card_obj;		//全カードの情報・画像の情報・マークの情報・数字の情報
 	std::vector<C> Player_card;	//プレイヤーの持っているカードの情報
 	std::vector<C> Field_card;  //場に出すため
 
@@ -70,15 +72,5 @@ public:
 	void CP_Player_Initialize();
 	void CP_Player_Finalize();
 	void CP_Player_Update();
-	void CP_Player_Draw();
-	void onesec();
-	void deckmake();//山札生成
-	void datareset(void);//データの設定
-	void deckshuffle(void);//シャッフル
-	void phase(int n);
-	void turn(int n);
-	void sort(int sort_x, int* sort_y, int sort_z);//ソートを決める
-	void pl_routine(int n);
-	void expend(int n);//手札が無くなった時
-	void slash8(int n);//8切り用
+	void CP_Player_Draw();	
 };
