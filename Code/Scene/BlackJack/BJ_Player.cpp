@@ -150,7 +150,7 @@ bool Player::Play(Shoe* shoe) {
   if (Player::ButtonHit(std_x, std_y, std_w, std_h) || dbl) {
     std = true;
   }
-  if (Player::ButtonHit(dbl_x, dbl_y, dbl_w, dbl_h) && hand_num == 2) {
+  if (Player::ButtonHit(dbl_x, dbl_y, dbl_w, dbl_h) && (hand_num == 2 || spt_hand_num == 2 )) {
     dbl = true;
   }
 
@@ -622,7 +622,7 @@ void Player::Draw() {
   /*ボタン表示*/
   DrawFormatString(hit_x, hit_y, color, "Hit");
   DrawFormatString(std_x, std_y, color2, "Stand");
-  DrawFormatString(dbl_x, dbl_y, color3, "Double");
+  if (hand_num == 2 || spt_hand_num == 2)DrawFormatString(dbl_x, dbl_y, color3, "Double");
   //DrawFormatString(spt_x, spt_y, color4, "Split");
 
   if (spt_flg) {

@@ -9,7 +9,17 @@ Othello_Board* OB;
 
 // 初期化
 void Othello_Board::Othello_Board_Initialize() {
-	//Board = LoadGraph("Resource/image/Othello_Board.jpg");
+
+    PutCheckImage = LoadGraph("Resource/image/Othello_Image/OthelloPutCheck2.png");   // 置ける場所のカッコの画像の読み込み
+
+    BGM = LoadSoundMem("Resource/bgm/Othello_BGM/OthelloBGM.mp3");      // ゲーム中のBGMの読み込み
+    PutSE = LoadSoundMem("Resource/se/Othello_SE/OthelloPut.mp3");      // 石を置いた時のSEの読み込み
+    PassSE = LoadSoundMem("Resource/se/Othello_SE/OthelloPass.mp3");    // パスされたときのSEの読み込み
+
+    ChangeVolumeSoundMem(55, BGM);      // BGMの音量設定
+    ChangeVolumeSoundMem(100, PutSE);   // 石を置いた時のSEの音量設定
+    ChangeVolumeSoundMem(100, PassSE);  // パスされたときのSEの音量設定
+
 
     BlackCr = GetColor(0, 0, 0);        // 黒色を設定
     GreenCr = GetColor(0, 255, 0);      // 緑色を設定
@@ -17,11 +27,10 @@ void Othello_Board::Othello_Board_Initialize() {
     Cr = GetColor(255, 222, 173);
 
     OrderNum = 0;   // 0 = 黒石、 1 = 白石
-    BlackNum = 0;
-    WhiteNum = 0;
-    TimeCount = 0;
-    ReturnNum = 0;
-    ReturnNumMax = 0;
+    BlackNum = 0;   // 黒石の総数の初期化
+    WhiteNum = 0;   // 白石の総数の初期化
+    TimeCount = 0;  // 秒数をカウントするための変数を初期化
+    ReturnNumMax = 0;   // 一番多くひっくり返せる数を入れる変数
 
     DrawFlag = false;
     CheckFlag = false;
@@ -32,42 +41,20 @@ void Othello_Board::Othello_Board_Initialize() {
     
 }
 
-// 終了処理
+// -------------終了処理---------------------------
 void Othello_Board::Othello_Board_Finalize() {
-	//DeleteGraph(Board);
+	DeleteGraph(PutCheckImage);
+    DeleteSoundMem(PutSE);
+    DeleteSoundMem(BGM);
 }
+// ------------------------------------------------
 
-// 更新
+
+// ---------------更新---------------------------
 void Othello_Board::Othello_Board_Update() {
 
-    if (PassFlag == false) {    // パスをするフラグが false なら
-        if (OrderNum == 0) {    // 手番が黒なら
-            DrawFormatString(650, 90, WhiteCr, "左クリック：黒の番です");
-        }
-        else {      // 手番が白なら
-            DrawFormatString(650, 90, WhiteCr, "左クリック：白の番です");
-        }
-    }
-    else {      // パスをするフラグが true なら
-        DrawFormatString(650, 90, WhiteCr, "パス！");      // パス！と表示する
-        TimeCount++;
-        // 1秒経ったら
-        if (TimeCount >= 60)
-        {
-            TimeCount = 0;      // TimeCount を初期化
+    
 
-            // 黒の手番なら白の手番にして、白の手番なら黒の手番にする
-            if (OrderNum == 0) 
-            {
-                OrderNum = 1;
-            }
-            else 
-            {
-                OrderNum = 0;
-            }
-            PassFlag = false;   // パスフラグを false にする
-        }
-    }
     // デバッグ用
     DrawFormatString(650, 140, WhiteCr, "黒石:%d", BlackNum);
     DrawFormatString(650, 190, WhiteCr, "白石:%d", WhiteNum);
@@ -85,12 +72,16 @@ void Othello_Board::Othello_Board_Update() {
     Square_Y = Mouse_Y / MAP_SIZE;      // マウスカーソルの位置を MAP_SIZE で割った値を代入
 
     if (EndFlag == false) {   // ゲームが終わったかどうか
+
+        PlaySoundMem(BGM, DX_PLAYTYPE_LOOP, false);
+
         if (PassFlag == false) {    // パスフラグが false なら
             if (OrderNum == 0) {    // 黒の番だったら
 
                 // 黒石の置ける場所がないなら
                 if (!BoardSearchBlack(Board))
                 {
+                    PlaySoundMem(PassSE, DX_PLAYTYPE_BACK, true);
                     PassFlag = true;    // パスフラグを true にする
                 }
 
@@ -100,13 +91,13 @@ void Othello_Board::Othello_Board_Update() {
                         DrawFlag = false;
                         Board[Square_X][Square_Y] = 1;      // 黒石を置く
                         BlackPut();                         // 置いた場所から白を黒にひっくり返す
+                        PlaySoundMem(PutSE, DX_PLAYTYPE_BACK, true);
                         OrderNum = 1;                       // 白の手番にする
                         BoardSearchBWNumber(Board);         // 黒石と白石の数を数える関数実行
                         if (EndGame(Board)) {               // ゲームが終わる条件を満たしたら
                             EndFlag = true;   // エンドフラグを true にする
                         }
                         DrawFlag = false;
-                        // ReturnNumMax = 0;
                     }
 
                 }
@@ -120,6 +111,7 @@ void Othello_Board::Othello_Board_Update() {
 
                 // もし置く場所が無かったら
                 if (!BoardSearchWhite(Board)) {
+                    PlaySoundMem(PassSE, DX_PLAYTYPE_BACK, true);
                     PassFlag = true;    // パスフラグを true にする
                 }
 
@@ -127,8 +119,11 @@ void Othello_Board::Othello_Board_Update() {
                 if (TimeCount++ >= 60) {
                     TimeCount = 0;      // TimeCount を初期化
                     CPUWhite(Board);    // 一番ひっくり返せる場所に置く
+                    PlaySoundMem(PutSE, DX_PLAYTYPE_BACK, true);
                     OrderNum = 0;       // 黒の番にする
                 }
+
+                
 
                 BoardSearchBWNumber(Board);     // 黒石と白石の数を数える
 
@@ -160,29 +155,61 @@ void Othello_Board::Othello_Board_Update() {
         }
     }
 }
+// -----------------------------------------------
 
 
 // 描画
 void Othello_Board::Othello_Board_Draw() {
     DrawBox(0, 0, 1280, 720, Cr, TRUE);
+    //DrawGraph(1000, 100, PutCheckImage, false);
+    DrawBox(60, 60, 66 * 9 + 6, 66 * 9 + 6, BlackCr, TRUE);
     Print_OthelloBoard(Board);      // オセロボードの描画
+
+    DrawCircle(800, 187, 27, BlackCr, TRUE);
+    DrawCircle(800, 307, 27, WhiteCr, TRUE);
+    DrawFormatString(800 + MAP_SIZE / 2, 167, BlackCr, "黒石:%d", BlackNum);
+    DrawFormatString(800 + MAP_SIZE / 2 , 287, BlackCr, "白石:%d", WhiteNum);
 
     if (PassFlag == false) {    // パスされてないなら
         if (OrderNum == 0) {    // 黒の番だったら
+            DrawFormatString(800, 90, BlackCr, "黒の番です");
             BoardSearchBlack(Board);    // 黒石が置ける場所を描画する
         }
         else {                  // 白の番だったら
+            DrawFormatString(800, 90, BlackCr, "白の番です");
             BoardSearchWhite(Board);    // 白石が置ける場所を描画する
         }
     }
+    else {
+
+        DrawFormatString(800, 90, BlackCr, "パス！");      // パス！と表示する
+        TimeCount++;
+        // 1秒経ったら
+        if (TimeCount >= 60)
+        {
+            TimeCount = 0;      // TimeCount を初期化
+
+            // 黒の手番なら白の手番にして、白の手番なら黒の手番にする
+            if (OrderNum == 0)
+            {
+                OrderNum = 1;
+            }
+            else
+            {
+                OrderNum = 0;
+            }
+            PassFlag = false;   // パスフラグを false にする
+        }
+    }
+
     // ゲームが終了したら
     if (EndFlag == true) {
 
-        DrawFormatString(650, 400, WhiteCr, "ゲーム終了！");
-        DrawFormatString(650, 500, WhiteCr, "3秒後にリセットします");
+        DrawFormatString(800, 400, BlackCr, "ゲーム終了！");
+        DrawFormatString(800, 500, BlackCr, "3秒後にリセットします");
 
         if (WhiteNum < BlackNum) {  // 黒石の数の方が多かったら、黒の勝利
-            DrawFormatString(650, 450, WhiteCr, "黒の勝ち！");
+            DrawFormatString(800, 450, BlackCr, "黒の勝ち！");
             if (TimeCount++ >= 180) {   // 3秒経ったら
                 TimeCount = 0;      // TimeCount を初期化
                 BlackNum = 0;       // 黒石の数を初期化
@@ -193,7 +220,7 @@ void Othello_Board::Othello_Board_Draw() {
             }
         }
         else if (BlackNum < WhiteNum) { // 白石の数の方が多かったら、白の勝利
-            DrawFormatString(650, 450, WhiteCr, "白の勝ち！");
+            DrawFormatString(800, 450, BlackCr, "白の勝ち！");
             if (TimeCount++ >= 180) {   // 3秒経ったら
                 TimeCount = 0;      // TimeCount を初期化
                 BlackNum = 0;       // 黒石の数を初期化
@@ -313,9 +340,9 @@ void Othello_Board::CursorOn_OthelloBoard() {
 
 /*
 * メモ
-* 1.置けるところを探す
-* 2.置けるところに石を置く
-* 3.石をひっくり返す
+* 〇1.置けるところを探す
+* 〇2.置けるところに石を置く
+* 〇3.石をひっくり返す
 */
 
 
@@ -593,8 +620,8 @@ int Othello_Board::BoardSearchBlack(int board[PB][PB]) {
             if (board[i][j] == 0) {
                 if (BlackPutCheck(i, j)) {  // 黒石が置ける場所があったら
 
-                    DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
-                        (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GetColor(100, 0, 0), false);
+                    // 置ける場所を分かりやすくするために囲む
+                    DrawGraph(i * MAP_SIZE, j * MAP_SIZE, PutCheckImage, true);
 
                     board[i][j] = 3;    // 黒石が置けるようにする
                     blackcount++;       // 黒石が置ける場所の数だけインクリメント
@@ -629,8 +656,7 @@ int Othello_Board::BoardSearchWhite(int board[PB][PB]) {
                 if (WhitePutCheck(i, j)) {  // 白石が置ける場所があったら
 
                     // 置ける場所を分かりやすくするために囲む
-                    DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
-                        (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GetColor(100, 0, 0), false);
+                    DrawGraph(i * MAP_SIZE, j * MAP_SIZE, PutCheckImage, true);
 
                     board[i][j] = 4;    // 白石が置けるようにする
                     whitecount++;       // 白石が置ける場所の数だけインクリメント

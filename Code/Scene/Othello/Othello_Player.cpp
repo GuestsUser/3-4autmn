@@ -15,7 +15,6 @@ void Othello_Player::Othello_Plyaer_Initialize() {
     
     Flag = false;
 
-    //SetOB(Othello_Board* ob);
 }
 
 void Othello_Player::Othello_Player_Finalize() {
@@ -43,17 +42,10 @@ void Othello_Player::Othello_Player_Update() {
 }
 
 void Othello_Player::Othello_Player_Draw() {
-    if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_FREE) {
-        if (Flag == true) {
+    //if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_FREE) {
 
-            //if (OB->Board[Mouse_X / MAP_SIZE][Mouse_Y / MAP_SIZE] == 0) {
-            //    // çïêŒÇíuÇ≠
-            //    DrawCircle(Player_X * MAP_SIZE + (MAP_SIZE / 2), Player_Y * MAP_SIZE + (MAP_SIZE / 2), 27, BlackCr, TRUE);
-            //}
-                //DrawCircle((Mouse_X / MAP_SIZE) * MAP_SIZE + (MAP_SIZE / 2), 
-                //    (Mouse_Y / MAP_SIZE) * MAP_SIZE + (MAP_SIZE / 2), 27, BlackCr, TRUE);
-        }
-    }
+
+    //}
 }
 
 //void Othello_Player::SetOB(Othello_Board* ob) {
