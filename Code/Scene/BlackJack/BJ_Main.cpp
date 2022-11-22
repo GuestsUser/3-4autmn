@@ -5,6 +5,7 @@ BlackJack::BlackJack() {
   shoe = new Shoe();
   player = new Player();
   dealer = new Dealer();
+  slider = new Slider();
 
   game_endflg = false;
   next_flg = true;
@@ -26,6 +27,7 @@ BlackJack::~BlackJack() {
   delete shoe;
   delete player;
   delete dealer;
+  delete slider;
 
   BlackJack::Finalize();
 
@@ -36,18 +38,19 @@ void BlackJack::Initialize() {
   shoe->Inisialize();
   player->Initialize();
   dealer->Initialize();
+  slider->Inisialize();
   next_flg = true;
   now_game_flg = true;
 
   hit_flg = 0;
 
 }
-
+int a = 1000;
 void BlackJack::Update() {
-
     /*ゲームを開始 or 続けるか判定*/
   if (next_flg) {
-
+    
+    player->Set_Bet((int)slider->GetValue());
     BlackJack::Initialize();
     next_flg = false;
 
@@ -60,11 +63,13 @@ void BlackJack::Update() {
 
     dealer->Play(shoe);
     player->Score(*player, *dealer);
-    //now_game_flg = false;
   }
   else {
     player->Score(*player, *dealer);
-    //now_game_flg = false;
+    if (hit_flg < 2 && !player->Now_Game()) {
+      dealer->Hit(shoe);
+      hit_flg++;
+    }
   }
   if (!game_endflg) {
 
@@ -84,10 +89,20 @@ void BlackJack::Update() {
 
 }
 void BlackJack::Draw() {
-
+  
   //DrawGraph(0,0,title_img,true);
   DrawGraph(0,0,game_img,true);
   //DrawGraph(0,0,end_img,true);
+
+  /*slider*/
+  GetMousePoint(&mousePosX, &mousePosY);
+  isClick = GetMouseInput() == MOUSE_INPUT_LEFT;
+  slider->Update(mousePosX, mousePosY, isClick);
+
+  slider->Draw();
+
+  DrawFormatString(320 - 125, 240 + 50, 0xffffff, "%.1f ～ %.1f : value = %.1f", -100.0f, 100.0f, slider->GetValue());
+  /*slider*/
 
   player->Draw();
   dealer->Draw();
