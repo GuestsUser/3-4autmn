@@ -19,11 +19,14 @@ private:
   /*デバッグ用*/
   int color, color2, color3, color4;
   int c, c2, c3, c4;
+  int dealer_calc;
   /*デバッグ用*/
 
-  int dealer_calc;
+  int p_coin = 1000;
 
   bool now_game_flg;
+
+  bool bet_flg = false;
 
   bool D_BJ;
   bool D_bst;
@@ -43,6 +46,7 @@ public:
   void Update();
   void Draw();
 
+
   bool ButtonHit(int, int, int, int);
   bool Now_Game();
 
@@ -50,6 +54,7 @@ public:
   void Spt_Show_Hand();
   void Show_Play();
 
+  virtual void Set_Bet(int getbet);
   virtual void Hit(Shoe* shoe);        /*カードの追加*/
   virtual bool Play(Shoe* shoe);       /*ゲーム実行*/
   virtual void Score(Player player, Dealer dealer);
