@@ -11,6 +11,7 @@ private:
 	bool Click = true;	/*サイコロクリック可否フラグ*/
 	bool Goalflg;
 	bool Sumflg;	/*Player移動量計算するとき用のフラグ*/
+	bool Whoisplay = true;
 
 	int count;
 	int countdiff;

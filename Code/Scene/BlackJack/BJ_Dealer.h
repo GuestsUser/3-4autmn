@@ -10,6 +10,7 @@ protected:
   int hand_num;             /*手札枚数*/
   int score;                /*返り値用変数（計算結果)*/
   int btn_hdl[5];
+  int bet_coin = 0;
 
   int spt_hand_num;         /*スプリット時の手札枚数*/
   int spt_score;            /*スプリット時の返り値用変数（計算結果)*/
@@ -48,6 +49,7 @@ public:
 
   bool BlackJack();
 
+  virtual int Set_Magnification(float setrate,int getcoin);
   virtual void Show_Hand();        /*手札を表示*/
   virtual void Hit(Shoe* shoe);    /*カードの追加*/
   virtual bool Play(Shoe* shoe);   /*ゲーム実行*/
