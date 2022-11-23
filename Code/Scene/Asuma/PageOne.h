@@ -51,8 +51,14 @@ private:
 	std::vector<Card> NPC_card_2;		//NPC２号の持っているカードの情報
 	std::vector<Card> NPC_card_3;		//NPC３号の持っているカードの情報
 
-	int Pass_Icon;		//パスのアイコン画像
-	int PageOne_Icon;	//ページワン宣言のアイコン画像
+	int Player_Pass_Icon;		//パスのアイコン画像
+	int NPC_Pass_Icon;		//パスのアイコン画像
+	int Player_PageOne_Icon;	//ページワン宣言のアイコン画像
+	int NPC_PageOne_Icon;	//ページワン宣言のアイコン画像
+
+	bool NPC1_Pass_Flg;		//NPC1パスフラグ
+	bool NPC2_Pass_Flg;		//NPC2パスフラグ
+	bool NPC3_Pass_Flg;		//NPC3パスフラグ
 
 	bool PageOne_flg;	//ページワン宣言をしたかどうか(true:した	false:してない)
 
