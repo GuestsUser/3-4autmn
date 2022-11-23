@@ -76,7 +76,7 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			break;
 		case 8: //ã‚ªã‚»ãƒ­
 			*img = LoadGraph("Resource/image/Select_Othello.png");
-			gameScene = new Scene_Othello(); //ŒÂ•ÊƒV[ƒ“”ò‚Î‚µì—áAscm‚É“ü‚ê‚Ä‚¢‚½‚Ì‚ªgameScene‚É‚È‚Á‚½’ö“x‚Ìˆá‚¢
+			gameScene = new Scene_Othello(); //ï¿½Â•ÊƒVï¿½[ï¿½ï¿½ï¿½ï¿½Î‚ï¿½ï¿½ï¿½ï¿½Ascmï¿½É“ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½gameSceneï¿½É‚È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Ìˆá‚¢
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Othello1.png")), 1));
 			break;
 		}

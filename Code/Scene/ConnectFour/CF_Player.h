@@ -7,6 +7,7 @@
 
 #include "./../Scene.h"
 
+
 class CF_Player{
 private:
 	Scene* parent;
@@ -46,7 +47,7 @@ private:
 	bool CF_Start; //ゲームがスタートしたかどうかのフラグ
 	bool FallSEflg; //CoinFallSEが鳴っているかどうかのフラグ
 	bool CF_ClearText; //勝利者を出すテキストを出すフラグ
-
+	bool PauseFlg;
 
 public:
 	void CF_Player_Initialize(Scene* scene);
