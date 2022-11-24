@@ -23,7 +23,7 @@ void CareerPoker::CP_Player_Initialize(){
 
 	Player_X = 150;
 	Player_Y = 575;
-	Player_state = 0;//GetRand(MAX - 1);
+	Player_state = 1;//GetRand(MAX - 1);
 }
 
 
@@ -193,8 +193,11 @@ void CareerPoker::CP_Player_Draw() {
 	for (i = 0; i < Field_card.size(); i++) {
 		DrawRotaGraph(500 + field * 100, 350, 0.5, 0, Field_card[i].img, TRUE);
 		field++;
-		DrawFormatString(700, 200, GetColor(255, 255, 255), "適当に出せる");
-		
+		if (Field_card.empty() || Field_card[0].suit || Player_card[i].suit) {
+			DrawFormatString(700, 200, GetColor(255, 255, 255), "適当に出せる");
+		}else if(Field_card.empty() || Field_card[0].suit == Player_card[i].suit){
+			DrawFormatString(700, 200, GetColor(255, 255, 255), "スート縛り");
+		}
 			//DrawFormatString(700, 200, GetColor(255, 255, 255), "二が出たよ");
 	}
 	DrawBox(100, 100, 200, 200, Color, TRUE);
