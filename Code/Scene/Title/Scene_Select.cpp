@@ -75,7 +75,7 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			gameScene = new SR_Game(); //�ʃV�[����΂����Ascm�ɓ���Ă����̂�gameScene�ɂȂ������x�̈Ⴂ
 			break;
 		case 8: //オセロ
-			*img = LoadGraph("Resource/image/Select_Othello.png");
+			*img = LoadGraph("Resource/image/Othello_Image/OthelloAicon2.png");
 			gameScene = new Scene_Othello(); //�ʃV�[����΂����Ascm�ɓ���Ă����̂�gameScene�ɂȂ������x�̈Ⴂ
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Othello1.png")), 1));
 			break;
