@@ -50,7 +50,7 @@ void BlackJack::Update() {
     /*ゲームを開始 or 続けるか判定*/
   if (next_flg) {
     
-    player->Set_Bet((int)slider->GetValue());
+    player->Set_Bet(slider->GetValue());
     BlackJack::Initialize();
     next_flg = false;
 

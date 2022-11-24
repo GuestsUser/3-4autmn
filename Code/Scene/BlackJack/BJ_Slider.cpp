@@ -10,6 +10,12 @@ Slider::Slider() {
   SetBackSize(0, 0);
   SetBackColor(0xc8c8c8);
   SetFillColor(0x00ffff);
+  SetFillColor(0x00ffff);
+
+  SetMinValue(100); //最大値と最小値の指定する順番に注意
+  SetMaxValue(10000);  //先に最大値を指定しようとすると、その指定した値が現在の最小値よりも小さいと指定できません
+
+  SetValue(0);
 }
 
 void Slider::SetValue(float setValue) {
@@ -35,7 +41,7 @@ void Slider::SetMinValue(float setMinValue) {
 }
 
 float Slider::GetValue() {
-  return value;
+  return (int)value;
 }
 
 void Slider::SetPosition(float setPositionX, float setPositionY) {
@@ -78,7 +84,7 @@ void Slider::Inisialize() {
 
   SetFillColor(0x00ffff);
 
-  SetMinValue(0); //最大値と最小値の指定する順番に注意
+  SetMinValue(100); //最大値と最小値の指定する順番に注意
   SetMaxValue(10000);  //先に最大値を指定しようとすると、その指定した値が現在の最小値よりも小さいと指定できません
 
   SetValue(0);
@@ -105,8 +111,10 @@ void Slider::Update(int mousePosX, int mousePoxY, bool isClick) {
     else if (handlePosition.x < position.x - backSize.x) handlePosition.x = position.x - backSize.x;
 
 
-    value = (int)((handlePosition.x - (position.x - backSize.x)) / (backSize.x * 2.0f) * (maxValue - minValue) + minValue) / 100;
+    //value = (int)(handlePosition.x - (position.x - backSize.x)) / (backSize.x * 2.0f) * (maxValue - minValue) + minValue / 100;
 
+    //value = ((handlePosition.x - (position.x - backSize.x)) / (backSize.x * 2.0f) * (maxValue - minValue) + minValue) /*+ value / 1000*/;
+    value = ( ( ( handlePosition.x  - (position.x - backSize.x ) ) / (backSize.x * 2.0f ) ) * (maxValue - minValue) + minValue);
 
     if (value < minValue) value = minValue;
     else if (value > maxValue) value = maxValue;

@@ -698,11 +698,8 @@ void Player::Show_Play() {
 
       if (D_bst) {
 
-        //DrawRotaGraph(640, 40, 1, 0, btn_hdl[2], 1);
         DrawRotaGraph(620, 300, 1, 0, btn_hdl[2], 1);
         DrawRotaGraph(620, 400, 1, 0, btn_hdl[0], 1);
-        //DrawFormatString(600, 140, 0, "DealerBurst あなたの勝ちです !!\n");
-        //DrawFormatString(100, 500, 0, "DealerBurst あなたの勝ちです !!\n");
 
       }
       else if (BlackJack) {
