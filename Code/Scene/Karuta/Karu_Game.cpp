@@ -80,6 +80,12 @@ void Karu_Game::Karu_Game_Initialize() {
 
 	//ì«Ç›è„Ç∞âπê∫Çäiî[
 	Voice_Storage();
+
+	//SEäiî[
+	Touch_Sound = LoadSoundMem("Resource/se/Karu_SE/Touch.wav");
+	ChangeVolumeSoundMem(255 * 80 / 100, Touch_Sound);
+	Otetuki_Sound = LoadSoundMem("Resource/se/Karu_SE/Buzzer.wav");
+	ChangeVolumeSoundMem(255 * 80 / 100, Otetuki_Sound);
 }
 
 /*************************
@@ -119,6 +125,7 @@ void Karu_Game::Karu_Game_Update() {
 
 			Click_check = 1;	//ÉNÉäÉbÉNÇµÇΩÇ±Ç∆Ç…Ç∑ÇÈ
 			Mouse_HitBox();		//Ç©ÇÈÇΩÇ…êGÇÍÇƒÇ¢ÇÈÇ©ämîF
+			PlaySoundMem(Touch_Sound, DX_PLAYTYPE_BACK);
 		}
 
 		if (reset < 44) {		//äGéDÇ™èÍÇ…ëSïîèoÇ≥ÇÍÇƒÇ»ÇØÇÍÇŒ
@@ -361,6 +368,7 @@ void Karu_Game::Mouse_HitBox() {
 				}
 				else {
 					Otetuki = true;
+					PlaySoundMem(Otetuki_Sound, DX_PLAYTYPE_BACK);
 					if (Karu_player.Otetuki < KARU_OTETUKI_MAX) {
 						Karu_player.Otetuki++;
 					}
@@ -433,6 +441,7 @@ void Karu_Game::Cpu_config() {
 						cpu_1.x = Efuda[i][j].x;
 						cpu_1.y = Efuda[i][j].y;
 						Rank_All++;
+						PlaySoundMem(Touch_Sound, DX_PLAYTYPE_BACK);
 						cpu_1.Rank = Rank_All;
 						cpu_1.onClick = true;
 					}
@@ -454,6 +463,7 @@ void Karu_Game::Cpu_config() {
 						cpu_2.x = Efuda[i][j].x;
 						cpu_2.y = Efuda[i][j].y;
 						Rank_All++;
+						PlaySoundMem(Touch_Sound, DX_PLAYTYPE_BACK);
 						cpu_2.Rank = Rank_All;
 						cpu_2.onClick = true;
 					}
@@ -475,6 +485,7 @@ void Karu_Game::Cpu_config() {
 						cpu_3.x = Efuda[i][j].x;
 						cpu_3.y = Efuda[i][j].y;
 						Rank_All++;
+						PlaySoundMem(Touch_Sound, DX_PLAYTYPE_BACK);
 						cpu_3.Rank = Rank_All;
 						cpu_3.onClick = true;
 					}

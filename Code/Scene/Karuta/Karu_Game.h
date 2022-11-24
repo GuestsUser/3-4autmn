@@ -51,6 +51,9 @@ private:
 	int Enemy2_HandIcon[HAND_ICON];	//マウスカーソルアイコン格納用
 	int Enemy3_HandIcon[HAND_ICON];	//マウスカーソルアイコン格納用
 
+	int Touch_Sound;	//クリック音格納用
+	int Otetuki_Sound;	//お手付き音格納用
+
 	bool end;
 
 

@@ -23,6 +23,13 @@ private:
   /*ディーラーオブジェクトの生成*/
   Dealer* dealer;
 
+  /*slider*/
+  class Slider* slider;
+  bool isClick;
+  int mousePosX;
+  int mousePosY;
+  /*slider*/
+
 public:
 
   BlackJack();
