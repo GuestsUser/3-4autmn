@@ -10,7 +10,7 @@ Scene_ConnectFour::	~Scene_ConnectFour() {
 }
 
 void Scene_ConnectFour::Update() {
-	player->CF_Player_Update();
+	player->CF_Player_Update(); 
 }
 void Scene_ConnectFour::Draw() {
 	player->CF_Player_Draw();

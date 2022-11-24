@@ -8,6 +8,7 @@
 #include "./../Scene.h"
 #include "./../Title/Scene_Select.h"
 
+
 //CF_Player cf_player;
 void CF_Player::CF_Player_Initialize(Scene* scene) {
 	parent = scene;
@@ -32,6 +33,7 @@ void CF_Player::CF_Player_Initialize(Scene* scene) {
 	CF_Draw = false; //ドローフラグの初期値
 	CF_Start = false; //ゲームがスタートしたかのフラグの初期値
 	FallSEflg = false; //CoinFallSEが鳴ったかどうかのフラグ
+	PauseFlg = false; //ポーズ画面を表示するかどうかのフラグ
 	Board_Init();//パネル情報の初期化
 	srand((unsigned int)time(NULL)); //乱数を現在時刻の情報で初期化
 	PlayUser = rand() % 2 + 1; //プレイヤーの先攻後攻をランダムで取得
@@ -55,12 +57,12 @@ void CF_Player::CF_Player_Update() {
 			CF_Start = true;
 		}
 	}
-	if (CF_Clear == false && CF_Draw == false && CF_Start == true) {
+	if (CF_Clear == false && CF_Draw == false && CF_Start == true && PauseFlg == false) {
 		if (CheckSoundMem(CF_GameBGM) == 0) {
 			ChangeVolumeSoundMem(130, CF_GameBGM);
 			PlaySoundMem(CF_GameBGM, DX_PLAYTYPE_LOOP);
 		}
-		if (Mouse_Push == false && PlayUser == Coin_Player) {
+		if (Mouse_Push == false) {
 			GetMousePoint(&Mouse_X, &Mouse_Y); //マウスの座標取得
 		}
 		if (PlayUser == Coin_Player) {
@@ -83,6 +85,11 @@ void CF_Player::CF_Player_Update() {
 		else if (Yajirusi_Y >= 115) {
 			Yajirusi_Y = 115;
 			Yajirusi_Move = -Yajirusi_Move;
+		}
+		if (30 <= Mouse_X && Mouse_X <= 147 && 35 <= Mouse_Y && Mouse_Y <= 89) {
+			if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH) {
+				PauseFlg = true;
+			}
 		}
 		for (i = 0; i < Board_Ysize; i++) {
 			for (j = 0; j < Board_Xsize; j++) {
@@ -157,6 +164,14 @@ void CF_Player::CF_Player_Update() {
 			StopSoundMem(CF_GameBGM);
 			parent->SetNext(new Scene_Select());
 		}
+	}else if (PauseFlg == true) {
+		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+			PauseFlg = false;
+		}
+		if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH) { // 左クリックしたら
+			StopSoundMem(CF_GameBGM);
+			parent->SetNext(new Scene_Select());
+		}
 	}
 }
 void CF_Player::CF_Player_Draw() {
@@ -188,10 +203,12 @@ void CF_Player::CF_Player_Draw() {
 	}
 	else{
 		SetFontSize(24);
-		//ポーズ画面
-		/*DrawBox(30, 35, 147, 89, 0xffffff, TRUE);
-		DrawFormatString(50, 50, 0x000000, "ポーズ");*/
 		if (CF_Clear == false) {
+			//ポーズ画面
+			DrawBox(30, 35, 147, 89, 0xffffff, TRUE);
+			DrawFormatString(50, 50, 0x000000, "ポーズ");
+			DrawFormatString(50, 200, 0x000000, "%d",Mouse_X); 
+			DrawFormatString(50, 250, 0x000000, "%d", Mouse_Y);
 			if (PlayUser == Coin_Player) {
 				DrawFormatString(1080, 50, 0x000000, "あなたの番です");
 				DrawRotaGraph(Player_X, Player_Y, 0.17, 0, CF_PCoin, TRUE);
@@ -226,6 +243,12 @@ void CF_Player::CF_Player_Draw() {
 					}
 				}
 			}
+		}
+		if (PauseFlg == true) {
+			DrawBox(150, 100, 1110, 660, 0xffffff, TRUE);
+			SetFontSize(80);
+			DrawFormatString(460, 250, 0x000000, "つづける");
+			DrawFormatString(340, 470, 0x000000, "セレクトに戻る");
 		}
 	}
 	if (CF_ClearText == true) {
@@ -487,4 +510,3 @@ void CF_Player::CPU_RandomFall() {
 		DlayCount = 1;
 	}
 }
-

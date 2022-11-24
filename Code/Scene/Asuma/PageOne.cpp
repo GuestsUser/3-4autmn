@@ -6,8 +6,10 @@ void PageOne::PageOne_Initialize() {
 
 	LoadDivGraph("Resource/image/toranpu_all.png", 54, 13, 5, 200, 300, card_type);
 	background = LoadGraph("Resource/image/CareerPoker.png");
-	Pass_Icon = LoadGraph("Resource/image/PageOne_Image/Pass.png");
-	PageOne_Icon = LoadGraph("Resource/image/PageOne_Image/Page_One.png");
+	Player_Pass_Icon = LoadGraph("Resource/image/PageOne_Image/Pass.png");
+	NPC_Pass_Icon = LoadGraph("Resource/image/PageOne_Image/NPC_Pass.png");
+	Player_PageOne_Icon = LoadGraph("Resource/image/PageOne_Image/Page_One.png");
+	NPC_PageOne_Icon = LoadGraph("Resource/image/PageOne_Image/Page_One.png");
 
 	for (i = 0; i < 52; i++) {
 		Card_obj.push_back(Card(card_type[i], i % 13, i / 13));
@@ -17,7 +19,7 @@ void PageOne::PageOne_Initialize() {
 
 	Card_back = Card(card_type[52], 0, 0);	//カードの裏面
 
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < 6; i++) {
 		r = GetRand(sizeof(Card_obj));
 		Player_card.push_back(Card_obj[r]);
 		Cemetery_card.push_back(Card_obj[r]);
@@ -78,6 +80,10 @@ void PageOne::PageOne_Initialize() {
 	finish = false;
 
 	priority = GetRand(MAX - 1);
+
+	NPC1_Pass_Flg = false;
+	NPC2_Pass_Flg = false;
+	NPC3_Pass_Flg = false;
 }
 
 void PageOne::PageOne_Finalize() {
@@ -108,18 +114,6 @@ void PageOne::PageOne_Update() {
 			DrawFormatString(700, 200, GetColor(255, 255, 255), "手番：プレイヤー");
 
 			if (flg_p == false) {
-
-				//手札が残り二枚だとページワン宣言できる
-				if (Player_card.size() == 2 && PageOne_flg == false) {
-					PageOne_player = true;
-				}
-
-				if (Field_card.empty() == false && Field_card[0].suit == 5) {
-					lead = 1;
-				}
-				else {
-					lead = 0;
-				}
 
 				if (Field_card.empty()) {
 					draw = false;
@@ -152,14 +146,27 @@ void PageOne::PageOne_Update() {
 					}
 				}
 
+				//手札が残り二枚だとページワン宣言できる
+				if (Player_card.size() == 2 && PageOne_flg == false) {
+					PageOne_player = true;
+				}
+				else {
+					PageOne_player = false;
+				}
+
+				if (Field_card.empty() == false && Field_card[0].suit == 5) {
+					lead = 1;
+				}
+				else {
+					lead = 0;
+				}
+
 				//プレイヤーの手札からカードだす
 				for (i = 0; i < Player_card.size(); i++) {
 
 					//山札0枚＆手札に出せるカードがない場合パスをする
 					if (Card_obj.empty() == true && Field_card.empty() == false && Field_card[lead].suit != Player_card[i].suit && Player_card[i].suit != 5) {
-						//DrawBox(890, 440, 980, 500, color, TRUE);
-						//DrawFormatString(900, 450, GetColor(255, 0, 0), "パス");
-						DrawGraph(890, 440, Pass_Icon, true);
+						DrawGraph(890, 440, Player_Pass_Icon, true);
 						if ((Mouse_X > 890) && (Mouse_X < 1040) && (Mouse_Y > 440) && (Mouse_Y < 515)) {
 							if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
 								flg_p = true;
@@ -172,7 +179,7 @@ void PageOne::PageOne_Update() {
 						if (Field_card.empty() || Field_card[0].suit == 5 || Field_card[lead].suit == Player_card[i].suit || Player_card[i].suit == 5) {
 							//ページワン宣言ボタン
 							if (PageOne_player == true) {
-								DrawGraph(500, 400, PageOne_Icon, true);
+								DrawGraph(500, 400, Player_PageOne_Icon, true);
 								if ((Mouse_X > 500) && (Mouse_X < 800) && (Mouse_Y > 400) && (Mouse_Y < 500)) {
 									if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
 										PageOne_player = false;
@@ -232,18 +239,6 @@ void PageOne::PageOne_Update() {
 
 			if (flg_1 == false) {
 
-				//手札が残り二枚だとページワン宣言できる
-				if (NPC_card_1.size() == 2 && PageOne_flg == false) {
-					PageOne_npc1 = true;
-				}
-
-				if (Field_card.empty() == false && Field_card[0].suit == 5) {
-					lead = 1;
-				}
-				else {
-					lead = 0;
-				}
-
 				if (Field_card.empty()) {
 					draw = false;
 				}
@@ -268,20 +263,35 @@ void PageOne::PageOne_Update() {
 					}
 				}
 
+				//手札が残り二枚だとページワン宣言できる
+				if (NPC_card_1.size() == 2 && PageOne_flg == false) {
+					PageOne_npc1 = true;
+				}
+				else {
+					PageOne_npc1 = false;
+				}
+
+				if (Field_card.empty() == false && Field_card[0].suit == 5) {
+					lead = 1;
+				}
+				else {
+					lead = 0;
+				}
 
 				//NPCの手札からカードだす
 				for (i = 0; i < NPC_card_1.size(); i++) {
 
 					//山札0枚＆手札に出せるカードがない場合パスをする（手動）
 					if (Card_obj.empty() == true && Field_card.empty() == false && Field_card[lead].suit != NPC_card_1[i].suit && NPC_card_1[i].suit != 5) {
-						DrawBox(890, 440, 980, 500, color, TRUE);
-						DrawFormatString(900, 450, GetColor(255, 0, 0), "パス");
-						if ((Mouse_X > 890) && (Mouse_X < 980) && (Mouse_Y > 440) && (Mouse_Y < 500)) {
-							if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
-								flg_1 = true;
-								priority++;
-								n = 0;
-							}
+						if (50 < n && n <= 90) {
+							NPC1_Pass_Flg = true;
+						}
+
+						if(n > 90){
+							flg_1 = true;
+							priority++;
+							n = 0;
+							NPC1_Pass_Flg = false;
 						}
 					}
 					else {
@@ -289,14 +299,16 @@ void PageOne::PageOne_Update() {
 
 							if (Field_card.empty() || Field_card[0].suit == 5 || Field_card[lead].suit == NPC_card_1[i].suit || NPC_card_1[i].suit == 5) {
 								//ページワン宣言ボタン
-								if (PageOne_npc1 == true) {
-									DrawGraph(500, 400, PageOne_Icon, true);
-									if ((Mouse_X > 500) && (Mouse_X < 800) && (Mouse_Y > 400) && (Mouse_Y < 500)) {
-										if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
-											PageOne_npc1 = false;
-											PageOne_flg = true;
-										}
-									}
+								if (50 < n && n <= 90) {
+									PageOne_npc1 = true;
+								}
+
+								if (n > 90) {
+									flg_1 = true;
+									priority++;
+									n = 0;
+									PageOne_npc1 = false;
+									PageOne_flg = true;
 								}
 								if (PageOne_npc1 == false) {
 									Field_card.push_back(NPC_card_1[i]);
@@ -347,18 +359,6 @@ void PageOne::PageOne_Update() {
 
 			if (flg_2 == false) {
 
-				//手札が残り二枚だとページワン宣言できる
-				if (NPC_card_2.size() == 2 && PageOne_flg == false) {
-					PageOne_npc2 = true;
-				}
-
-				if (Field_card.empty() == false && Field_card[0].suit == 5) {
-					lead = 1;
-				}
-				else {
-					lead = 0;
-				}
-
 				if (Field_card.empty()) {
 					draw = false;
 				}
@@ -383,34 +383,51 @@ void PageOne::PageOne_Update() {
 					}
 				}
 
+				//手札が残り二枚だとページワン宣言できる
+				if (NPC_card_2.size() == 2 && PageOne_flg == false) {
+					PageOne_npc2 = true;
+				}
+				else {
+					PageOne_npc2 = false;
+				}
+
+				if (Field_card.empty() == false && Field_card[0].suit == 5) {
+					lead = 1;
+				}
+				else {
+					lead = 0;
+				}
 
 				//NPCの手札からカードだす
 				for (i = 0; i < NPC_card_2.size(); i++) {
 
 					//山札0枚＆手札に出せるカードがない場合パスをする（手動）
 					if (Card_obj.empty() == true && Field_card.empty() == false && Field_card[lead].suit != NPC_card_2[i].suit && NPC_card_2[i].suit != 5) {
-						DrawBox(890, 440, 980, 500, color, TRUE);
-						DrawFormatString(900, 450, GetColor(255, 0, 0), "パス");
-						if ((Mouse_X > 890) && (Mouse_X < 980) && (Mouse_Y > 440) && (Mouse_Y < 500)) {
-							if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
-								flg_2 = true;
-								priority++;
-								n = 0;
-							}
+						if (50 < n && n <= 90) {
+							NPC2_Pass_Flg = true;
+						}
+
+						if (n > 90) {
+							flg_2 = true;
+							priority++;
+							n = 0;
+							NPC2_Pass_Flg = false;
 						}
 					}
 					else {
 						if (n > 90) {
 							if (Field_card.empty() || Field_card[0].suit == 5 || Field_card[lead].suit == NPC_card_2[i].suit || NPC_card_2[i].suit == 5) {
 								//ページワン宣言ボタン
-								if (PageOne_npc2 == true) {
-									DrawGraph(500, 400, PageOne_Icon, true);
-									if ((Mouse_X > 500) && (Mouse_X < 800) && (Mouse_Y > 400) && (Mouse_Y < 500)) {
-										if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
-											PageOne_npc2 = false;
-											PageOne_flg = true;
-										}
-									}
+								if (50 < n && n <= 90) {
+									PageOne_npc2 = true;
+								}
+
+								if (n > 90) {
+									flg_2 = true;
+									priority++;
+									n = 0;
+									PageOne_npc2 = false;
+									PageOne_flg = true;
 								}
 								if (PageOne_npc2 == false) {
 									Field_card.push_back(NPC_card_2[i]);
@@ -461,18 +478,6 @@ void PageOne::PageOne_Update() {
 
 			if (flg_3 == false) {
 
-				//手札が残り二枚だとページワン宣言できる
-				if (NPC_card_3.size() == 2 && PageOne_flg == false) {
-					PageOne_npc3 = true;
-				}
-
-				if (Field_card.empty() == false && Field_card[0].suit == 5) {
-					lead = 1;
-				}
-				else {
-					lead = 0;
-				}
-
 				if (Field_card.empty()) {
 					draw = false;
 				}
@@ -497,34 +502,53 @@ void PageOne::PageOne_Update() {
 					}
 				}
 
+				//手札が残り二枚だとページワン宣言できる
+				if (NPC_card_3.size() == 2 && PageOne_flg == false) {
+					PageOne_npc3 = true;
+				}
+				else {
+					PageOne_npc3 = false;
+				}
+
+				if (Field_card.empty() == false && Field_card[0].suit == 5) {
+					lead = 1;
+				}
+				else {
+					lead = 0;
+				}
+
 				//NPCの手札からカードだす
 				for (i = 0; i < NPC_card_3.size(); i++) {
 
 					//山札0枚＆手札に出せるカードがない場合パスをする（手動）
 					if (Card_obj.empty() == true && Field_card.empty() == false && Field_card[lead].suit != NPC_card_3[i].suit && NPC_card_3[i].suit != 5) {
-						DrawBox(890, 440, 980, 500, color, TRUE);
-						DrawFormatString(900, 450, GetColor(255, 0, 0), "パス");
-						if ((Mouse_X > 890) && (Mouse_X < 980) && (Mouse_Y > 440) && (Mouse_Y < 500)) {
-							if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
-								flg_3 = true;
-								priority++;
-								n = 0;
-							}
+						if (50 < n && n <= 90) {
+							NPC3_Pass_Flg = true;
+						}
+
+						if (n > 90) {
+							flg_3 = true;
+							priority++;
+							n = 0;
+							NPC3_Pass_Flg = false;
 						}
 					}
 					else {
 						if (n > 90) {
 							if (Field_card.empty() || Field_card[0].suit == 5 || Field_card[lead].suit == NPC_card_3[i].suit || NPC_card_3[i].suit == 5) {
 								//ページワン宣言ボタン
-								if (PageOne_npc3 == true) {
-									DrawGraph(500, 400, PageOne_Icon, true);
-									if ((Mouse_X > 500) && (Mouse_X < 800) && (Mouse_Y > 400) && (Mouse_Y < 500)) {
-										if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
-											PageOne_npc3 = false;
-											PageOne_flg = true;
-										}
-									}
+								if (50 < n && n <= 90) {
+									PageOne_npc3 = true;
 								}
+
+								if (n > 90) {
+									flg_3 = true;
+									priority++;
+									n = 0;
+									PageOne_npc3 = false;
+									PageOne_flg = true;
+								}
+
 								if (PageOne_npc3 == false) {
 									Field_card.push_back(NPC_card_3[i]);
 
@@ -628,19 +652,19 @@ void PageOne::PageOne_Update() {
 	}
 
 	if (Player_card.size() == 0) {
-		DrawFormatString(500, 500, GetColor(255, 255, 255), "PLAYER_WIN");
+		DrawFormatString(700, 400, GetColor(255, 0, 0), "PLAYER_WIN");
 		finish = true;
 	}
 	if (NPC_card_1.size() == 0) {
-		DrawFormatString(500, 500, GetColor(255, 255, 255), "NPC1_WIN");
+		DrawFormatString(700, 400, GetColor(255, 0, 0), "NPC1_WIN");
 		finish = true;
 	}
 	if (NPC_card_2.size() == 0) {
-		DrawFormatString(500, 500, GetColor(255, 255, 255), "NPC2_WIN");
+		DrawFormatString(700, 400, GetColor(255, 0, 0), "NPC2_WIN");
 		finish = true;
 	}
 	if (NPC_card_3.size() == 0) {
-		DrawFormatString(500, 500, GetColor(255, 255, 255), "NPC3_WIN");
+		DrawFormatString(700, 400, GetColor(255, 0, 0), "NPC3_WIN");
 		finish = true;
 	}
 }
@@ -678,6 +702,13 @@ void PageOne::PageOne_Draw() {
 		npc_1++;
 	}
 
+	if (NPC1_Pass_Flg == true) {
+		DrawGraph(0, 175, NPC_Pass_Icon, true);
+	}
+	if (PageOne_npc1 == true) {
+		DrawGraph(800, 175, NPC_PageOne_Icon, true);
+	}
+
 	//NPC２号の手札描画
 	for (i = 0; i < NPC_card_2.size(); i++) {
 		//DrawRotaGraph(NPC2_X + (npc_2 % 5) * (card_w * 0.3), NPC2_Y + (npc_2 / 5) * (card_h * 0.3), 0.3, 0, Card_back.img, TRUE);
@@ -685,11 +716,25 @@ void PageOne::PageOne_Draw() {
 		npc_2++;
 	}
 
+	if (NPC2_Pass_Flg == true) {
+		DrawGraph(400, 105, NPC_Pass_Icon, true);
+	}
+	if (PageOne_npc2 == true) {
+		DrawGraph(800, 175, NPC_PageOne_Icon, true);
+	}
+
 	//NPC３号の手札描画
 	for (i = 0; i < NPC_card_3.size(); i++) {
 		//DrawRotaGraph(NPC3_X + (npc_3 % 5) * (card_w * 0.3), NPC3_Y + (npc_3 / 5) * (card_h * 0.3), 0.3, 0, Card_back.img, TRUE);
 		DrawRotaGraph(NPC3_X + (npc_3 % 5) * (card_w * 0.3), NPC3_Y + (npc_3 / 5) * (card_h * pow(0.3, 2)), 0.3, 0, NPC_card_3[i].img, TRUE);
 		npc_3++;
+	}
+
+	if (NPC3_Pass_Flg == true) {
+		DrawGraph(800, 175, NPC_Pass_Icon, true);
+	}
+	if (PageOne_npc3 == true) {
+		DrawGraph(800, 175, NPC_PageOne_Icon, true);
 	}
 
 	DrawFormatString(25, 100, GetColor(255, 255, 255), "NPC");
@@ -708,6 +753,6 @@ void PageOne::PageOne_Draw() {
 	//デバッグ用
 	//DrawBox(890, 440,980, 500, color, TRUE);
 	//DrawFormatString(900, 450, GetColor(255, 0, 0), "パス");
-	//DrawGraph(890, 430, Pass_Icon, true);
-	//DrawGraph(500, 400, PageOne_Icon, true);
+	//DrawGraph(0, 175, NPC_Pass_Icon, true);
+	//DrawGraph(500, 400, NPC_PageOne_Icon, true);
 }
