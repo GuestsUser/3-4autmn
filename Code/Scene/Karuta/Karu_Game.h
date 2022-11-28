@@ -54,6 +54,8 @@ private:
 	int Touch_Sound;	//ƒNƒŠƒbƒN‰¹Ši”[—p
 	int Otetuki_Sound;	//‚¨è•t‚«‰¹Ši”[—p
 
+	int Karu_Bgm;		//BGM
+
 	bool end;
 
 
