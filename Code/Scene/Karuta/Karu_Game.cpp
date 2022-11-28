@@ -23,8 +23,12 @@ int Click_AnimTime = 0;
 bool Touch_once = false;
 
 bool Cpu_Set = false;
+bool now_voice = false;
+int voice = 0;
 
 int Rank_All = 0;
+
+bool once_bgm = false;
 
 /*************************
 ** 構造体 **
@@ -86,6 +90,10 @@ void Karu_Game::Karu_Game_Initialize() {
 	ChangeVolumeSoundMem(255 * 80 / 100, Touch_Sound);
 	Otetuki_Sound = LoadSoundMem("Resource/se/Karu_SE/Buzzer.wav");
 	ChangeVolumeSoundMem(255 * 80 / 100, Otetuki_Sound);
+
+	//BGM格納
+	Karu_Bgm = LoadSoundMem("Resource/bgm/Karu_BGM/Karuta_Bgm.wav");
+	ChangeVolumeSoundMem(255 * 50 / 100, Karu_Bgm);
 }
 
 /*************************
@@ -119,13 +127,22 @@ void Karu_Game::Karu_Game_Finalize() {
 void Karu_Game::Karu_Game_Update() {
 	GetMousePoint(&Mouse_X, &Mouse_Y); //マウスの座標取得
 
+	if (!once_bgm) {
+		PlaySoundMem(Karu_Bgm, DX_PLAYTYPE_LOOP);
+		once_bgm = true;
+	}
+
 	//ゲームオーバーになるまで
 	if (!end) {
-		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+		if (!now_voice) {
+			if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
 
-			Click_check = 1;	//クリックしたことにする
-			Mouse_HitBox();		//かるたに触れているか確認
-			PlaySoundMem(Touch_Sound, DX_PLAYTYPE_BACK);
+				Click_check = 1;	//クリックしたことにする
+				Mouse_HitBox();		//かるたに触れているか確認
+				PlaySoundMem(Touch_Sound, DX_PLAYTYPE_BACK);
+			}
+
+			Cpu_config();
 		}
 
 		if (reset < 44) {		//絵札が場に全部出されてなければ
@@ -165,7 +182,12 @@ void Karu_Game::Karu_Game_Update() {
 		cpu_3 = { 0,0,0,0 };
 	}
 
-	Cpu_config();
+	if (CheckSoundMem(voice) == 1) {
+		now_voice = true;
+	}
+	else {
+		now_voice = false;
+	}
 }
 
 /*************************
@@ -185,6 +207,7 @@ void Karu_Game::Karu_Game_Draw() {
 	}
 
 	DrawRotaGraph(1080, 60, 1.0, 0, Karu_getText, TRUE);
+
 	//プレイヤー
 	DrawRotaGraph(950, 150, 1.0, 0, Karu_PlayerText, TRUE);
 	DrawRotaGraph(1020, 150, 1.0, 0, Karu_numImg[Karu_player.myFuda / 10], TRUE);
@@ -219,10 +242,7 @@ void Karu_Game::Karu_Game_Draw() {
 	DrawFormatString(800, 300, 0xFF0000, "PLAYER 1: %d", Karu_player.myFuda);*/
 	//DrawFormatString(800, 200, 0xFF0000, "Rank_All: %d", Rank_All);
 	//DrawFormatString(800, 100, 0xFF0000, "Player_Rank: %d", Karu_player.Rank);
-	//DrawFormatString(800, 300, 0xFF0000, "CPU 1: %d", cpu_1.myFuda);
-
-
-	DrawRotaGraph(Mouse_X, Mouse_Y, 1.0, 0, Player_HandIcon[Click_check], TRUE);
+	DrawFormatString(800, 300, 0xFF0000, "now_voice: %d", now_voice);
 
 	if (cpu_1.onClick) {
 		DrawRotaGraph(cpu_1.x, cpu_1.y, 1.0, 0, Enemy1_HandIcon[1], TRUE);
@@ -233,6 +253,9 @@ void Karu_Game::Karu_Game_Draw() {
 	if (cpu_3.onClick) {
 		DrawRotaGraph(cpu_3.x, cpu_3.y, 1.0, 0, Enemy3_HandIcon[1], TRUE);
 	}
+
+	DrawRotaGraph(Mouse_X, Mouse_Y, 1.0, 0, Player_HandIcon[Click_check], TRUE);
+
 	if (Otetuki) {
 		DrawRotaGraph(Mouse_X, Mouse_Y, 1.0, 0, Karu_Otetuki_img[1], TRUE);
 	}
@@ -285,7 +308,8 @@ void Karu_Game::Yomifuda_Storage() {
 		Yomifuda[0][0].img = Karu_fuda[Efuda[y][x].numY][(Efuda[y][x].numX) + 1];
 		Yomifuda[0][0].kara = false;
 		Yomiset = true;
-		PlaySoundMem(Fuda_voice[Efuda[y][x].numY][Efuda[y][x].numX], DX_PLAYTYPE_NORMAL);
+		voice = Fuda_voice[Efuda[y][x].numY][Efuda[y][x].numX];
+		PlaySoundMem(voice, DX_PLAYTYPE_BACK);
 	}
 }
 
@@ -366,7 +390,7 @@ void Karu_Game::Mouse_HitBox() {
 						Player_Reset();
 					}
 				}
-				else {
+				else if(!Efuda[i][j].kara){
 					Otetuki = true;
 					PlaySoundMem(Otetuki_Sound, DX_PLAYTYPE_BACK);
 					if (Karu_player.Otetuki < KARU_OTETUKI_MAX) {
