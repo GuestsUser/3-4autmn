@@ -36,6 +36,7 @@ private:
 	bool PassFlag;
 	bool EndFlag;
 	bool RandomFlag;
+	bool CornerFlag;
 
 public:
 	int Mouse_X;
