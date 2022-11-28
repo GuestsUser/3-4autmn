@@ -48,15 +48,15 @@ void SR_Saikoro::Update() {
 		case 1 :	/*プレイヤーの時*/
 			//DrawString(500, 600, "Playerのターン", GetColor(0, 0, 0));
 			if (Click == true) {
-				if (MouseX >= 1020 && MouseY >= 580 && MouseX <= 1250 && MouseY <= 700) {
+				if (MouseX >= 1020 && MouseY >= 580 && MouseX <= 1250 && MouseY <= 700 && Whoisplay == true) {
 					if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {	/*もし左クリックしたら*/
-						Whoisplay = false;
 						Shuffle = true;	/*シャッフルフラグをONに*/
 					}
 					else if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH && Shuffle == true) {
 						Player1sum += Sum;
 						Shuffle = false;
 						countdiff = count;
+						Whoisplay = false;
 					}
 				}
 			}
