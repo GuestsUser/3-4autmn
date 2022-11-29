@@ -23,7 +23,7 @@ void CareerPoker::CP_Player_Initialize(){
 
 	Player_X = 150;
 	Player_Y = 575;
-	Player_state = 1;//GetRand(MAX - 1);
+	Player_state = 0;
 }
 
 
@@ -160,7 +160,7 @@ void CareerPoker::CP_Player_Update() {
 				}
 				break;
 			case 2:
-				if (Field_card.empty() || Field_card[0].suit == Player_card[8].num) {//八切がしたい
+				if (Field_card.empty() == Player_card[8].num) {//八切がしたい
 					if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
 						Field_card.push_back(Player_card[i]);
 						Player_card.erase(Player_card.begin() + i);
@@ -194,9 +194,9 @@ void CareerPoker::CP_Player_Draw() {
 		DrawRotaGraph(500 + field * 100, 350, 0.5, 0, Field_card[i].img, TRUE);
 		field++;
 		if (Field_card.empty() || Field_card[0].suit || Player_card[i].suit) {
-			DrawFormatString(700, 200, GetColor(255, 255, 255), "適当に出せる");
-		}else if(Field_card.empty() || Field_card[0].suit == Player_card[i].suit){
-			DrawFormatString(700, 200, GetColor(255, 255, 255), "スート縛り");
+			//DrawFormatString(700, 200, GetColor(255, 255, 255), "適当に出せる");
+		}else if(Field_card.empty() || Field_card[0].suit == Player_card[8].num){
+			DrawFormatString(700, 200, GetColor(255, 255, 255), "八切り");
 		}
 			//DrawFormatString(700, 200, GetColor(255, 255, 255), "二が出たよ");
 	}
