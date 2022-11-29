@@ -120,13 +120,10 @@ void Othello_Board::Othello_Board_Update() {
                         // 1秒経ってから
                         if (TimeCount++ >= 60) {
                             TimeCount = 0;      // TimeCount を初期化
-                            BoardSearchWhite(Board);
                             CPUWhite(Board);    // 一番ひっくり返せる場所に置く
                             PlaySoundMem(PutSE, DX_PLAYTYPE_BACK, true);
                             OrderNum = 0;       // 黒の番にする
                         }
-
-
 
                         BoardSearchBWNumber(Board);     // 黒石と白石の数を数える
 
@@ -155,8 +152,6 @@ void Othello_Board::Othello_Board_Update() {
                             OrderNum = 1;       // 白の番にする
                         }
 
-
-
                         BoardSearchBWNumber(Board);     // 黒石と白石の数を数える
 
                         // ゲームの終了条件が揃っていたら  
@@ -177,12 +172,14 @@ void Othello_Board::Othello_Board_Update() {
                             Board[Square_X][Square_Y] == 8 ) {   // 黒石が置ける場所にカーソルがあっていたら
                             DrawFlag = true;
                             if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+
                                 DrawFlag = false;
                                 Board[Square_X][Square_Y] = 2;      // 白石を置く
                                 WhitePut();                         // 置いた場所から黒を白にひっくり返す
                                 PlaySoundMem(PutSE, DX_PLAYTYPE_BACK, true);
                                 OrderNum = 0;                       // 黒の手番にする
                                 BoardSearchBWNumber(Board);         // 黒石と白石の数を数える関数実行
+
                                 if (EndGame(Board)) {               // ゲームが終わる条件を満たしたら
                                     EndFlag = true;   // エンドフラグを true にする
                                 }
@@ -356,14 +353,14 @@ void Othello_Board::Init_OthelloBoard(int board[PB][PB]) {
     static int InitBoard[PB][PB] =
     {
      {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
-     {-1,  5,  7,  0,  0,  0,  0,  7,  5, -1},
-     {-1,  7,  7,  0,  0,  0,  0,  7,  7, -1},
+     {-1,  5,  0,  0,  0,  0,  0,  0,  5, -1},
+     {-1,  0,  0,  0,  0,  0,  0,  0,  0, -1},
      {-1,  0,  0,  0,  0,  0,  0,  0,  0, -1},
      {-1,  0,  0,  0,  2,  1,  0,  0,  0, -1},
      {-1,  0,  0,  0,  1,  2,  0,  0,  0, -1},
      {-1,  0,  0,  0,  0,  0,  0,  0,  0, -1},
-     {-1,  7,  7,  0,  0,  0,  0,  7,  7, -1},
-     {-1,  5,  7,  0,  0,  0,  0,  7,  5, -1},
+     {-1,  0,  0,  0,  0,  0,  0,  0,  0, -1},
+     {-1,  5,  0,  0,  0,  0,  0,  0,  5, -1},
      {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1}
     };
     memcpy(board, InitBoard, sizeof(InitBoard));
@@ -984,29 +981,34 @@ int Othello_Board::EndGame(int board[PB][PB]) {
 
 // 白石のCPU
 int Othello_Board::CPUWhite(int board[PB][PB]) {
-    if (CornerFlag == false) {
-        for (int i = 1; i <= 8; i++) {
-            for (int j = 1; j <= 8; j++) {
-                if (board[i][j] == 6) {
-                    Board_X = i;
-                    Board_Y = j;
-                    CornerFlag = true;
-                }
-                if (board[i][j] == 4) {
+    for (int i = 1; i <= 8; i++) {
+        for (int j = 1; j <= 8; j++) {
+            //if (board[i][j] == 8) {
+            //    Board_X = i;
+            //    Board_Y = j;
+            //}
 
-                    if (ReturnNumMax < WhitePutCheck(i, j)) {
-                        ReturnNumMax = WhitePutCheck(i, j);
-                        Board_X = i;
-                        Board_Y = j;
-                    }
-                }
-                else if (board[i][j] == 8) {
+            if (board[i][j] == 4) {
+
+                if (ReturnNumMax < WhitePutCheck(i, j)) {
+                    ReturnNumMax = WhitePutCheck(i, j);
                     Board_X = i;
                     Board_Y = j;
                 }
             }
+
+            if (board[i][j] == 6) {
+                Board_X = i;
+                Board_Y = j;
+                CornerFlag = true;
+                break;
+            }
+        }
+        if (CornerFlag == true) {
+            break;
         }
     }
+
     board[Board_X][Board_Y] = 2;
     WhitePutCPU(Board_X, Board_Y);
     Board_X = 0;
