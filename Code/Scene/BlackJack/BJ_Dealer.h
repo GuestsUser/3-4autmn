@@ -29,6 +29,12 @@ protected:
   const int yama_x = 1200;
   const int yama_y = 350;
 
+  const float rate_ps = 1.0f;
+  const float rate_wn = 2.0f;
+  const float rate_bj = 2.5f;
+  const float rate_db = 4.0f;
+  const float rate_is = 3.0f;
+
   const float img_size = 0.45f;
 
   bool D_BlackJakc;
