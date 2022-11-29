@@ -4,11 +4,15 @@
 #include "./../Code/GetKey.h"
 #include "./Othello_Board.h"
 #include "./Othello_Player.h"
+#include "./../Scene.h"
+#include "./../Title/Scene_Select.h"
 
-Othello_Board* OB;
+//Othello_Board* OB;
 
 // 初期化
-void Othello_Board::Othello_Board_Initialize() {
+void Othello_Board::Othello_Board_Initialize(Scene* scene) {
+
+    Parent = scene;
 
     PutCheckImage = LoadGraph("Resource/image/Othello_Image/OthelloPutCheck2.png");   // 置ける場所のカッコの画像の読み込み
 
@@ -277,6 +281,7 @@ void Othello_Board::Othello_Board_Draw() {
                     OrderNum = 0;       // 黒の手番にする
                     EndFlag = false;    // 終了条件を初期化
                     RandomFlag = false;
+                    Parent->SetNext(new Scene_Select());
                     Init_OthelloBoard(Board);   // オセロボードを初期化
                 }
                 break;
@@ -290,6 +295,7 @@ void Othello_Board::Othello_Board_Draw() {
                     OrderNum = 0;       // 黒の手番にする
                     EndFlag = false;    // 終了条件を初期化
                     RandomFlag = false;
+                    Parent->SetNext(new Scene_Select());
                     Init_OthelloBoard(Board);   // オセロボードを初期化
                 }
                 break;
@@ -306,6 +312,7 @@ void Othello_Board::Othello_Board_Draw() {
                     OrderNum = 0;       // 黒の手番にする
                     EndFlag = false;    // 終了条件を初期化
                     RandomFlag = false;
+                    Parent->SetNext(new Scene_Select());
                     Init_OthelloBoard(Board);   // オセロボードを初期化
                 }
                 break;
@@ -319,6 +326,7 @@ void Othello_Board::Othello_Board_Draw() {
                     OrderNum = 0;       // 黒の手番にする
                     EndFlag = false;    // 終了条件を初期化
                     RandomFlag = false;
+                    Parent->SetNext(new Scene_Select());
                     Init_OthelloBoard(Board);   // オセロボードを初期化
                 }
                 break;
@@ -333,6 +341,7 @@ void Othello_Board::Othello_Board_Draw() {
                 OrderNum = 0;       // 黒の手番にする
                 EndFlag = false;    // 終了条件を初期化
                 RandomFlag = false;
+                Parent->SetNext(new Scene_Select());
                 Init_OthelloBoard(Board);   // オセロボードを初期化
             }
         }
@@ -353,14 +362,14 @@ void Othello_Board::Init_OthelloBoard(int board[PB][PB]) {
     static int InitBoard[PB][PB] =
     {
      {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
-     {-1,  5,  0,  0,  0,  0,  0,  0,  5, -1},
-     {-1,  0,  0,  0,  0,  0,  0,  0,  0, -1},
+     {-1,  5,  7,  0,  0,  0,  0,  7,  5, -1},
+     {-1,  7,  7,  0,  0,  0,  0,  7,  7, -1},
      {-1,  0,  0,  0,  0,  0,  0,  0,  0, -1},
      {-1,  0,  0,  0,  2,  1,  0,  0,  0, -1},
      {-1,  0,  0,  0,  1,  2,  0,  0,  0, -1},
      {-1,  0,  0,  0,  0,  0,  0,  0,  0, -1},
-     {-1,  0,  0,  0,  0,  0,  0,  0,  0, -1},
-     {-1,  5,  0,  0,  0,  0,  0,  0,  5, -1},
+     {-1,  7,  7,  0,  0,  0,  0,  7,  7, -1},
+     {-1,  5,  7,  0,  0,  0,  0,  7,  5, -1},
      {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1}
     };
     memcpy(board, InitBoard, sizeof(InitBoard));
@@ -983,10 +992,10 @@ int Othello_Board::EndGame(int board[PB][PB]) {
 int Othello_Board::CPUWhite(int board[PB][PB]) {
     for (int i = 1; i <= 8; i++) {
         for (int j = 1; j <= 8; j++) {
-            //if (board[i][j] == 8) {
-            //    Board_X = i;
-            //    Board_Y = j;
-            //}
+            if (board[i][j] == 8) {
+                Board_X = i;
+                Board_Y = j;
+            }
 
             if (board[i][j] == 4) {
 
