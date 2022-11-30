@@ -20,8 +20,11 @@
 
 #define TOTAL_PLAYER 4			//Q‰Ál”
 
+#include "./../Scene.h"
+
 class Karu_Game{
 private:
+	Scene* parent;
 	int Karu_Bg;				//ƒQ[ƒ€”wŒi
 	int Karu_SideBg;			//ƒQ[ƒ€”wŒi
 	int Karu_Otetuki_img[OTETUKI_IMG];	//‚¨è•t‚«‚Ì‰æ‘œŠi”[—p
@@ -67,7 +70,7 @@ private:
 
 
 public:
-	void Karu_Game_Initialize();
+	void Karu_Game_Initialize(Scene* scene);
 	void Karu_Game_Finalize();
 	void Karu_Game_Update();
 	void Karu_Game_Draw();
