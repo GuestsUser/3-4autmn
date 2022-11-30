@@ -4,11 +4,15 @@
 #include "./../Code/GetKey.h"
 #include "./Othello_Board.h"
 #include "./Othello_Player.h"
+#include "./../Scene.h"
+#include "./../Title/Scene_Select.h"
 
-Othello_Board* OB;
+//Othello_Board* OB;
 
 // 初期化
-void Othello_Board::Othello_Board_Initialize() {
+void Othello_Board::Othello_Board_Initialize(Scene* scene) {
+
+    Parent = scene;
 
     PutCheckImage = LoadGraph("Resource/image/Othello_Image/OthelloPutCheck2.png");   // 置ける場所のカッコの画像の読み込み
 
@@ -38,6 +42,7 @@ void Othello_Board::Othello_Board_Initialize() {
     PassFlag = false;
     EndFlag = false;
     RandomFlag = false;
+    CornerFlag = false;
 
     Init_OthelloBoard(Board);           // ボードを初期化
     
@@ -115,7 +120,6 @@ void Othello_Board::Othello_Board_Update() {
                             PassFlag = true;    // パスフラグを true にする
                         }
 
-                        BoardSearchWhite(Board);
 
                         // 1秒経ってから
                         if (TimeCount++ >= 60) {
@@ -124,8 +128,6 @@ void Othello_Board::Othello_Board_Update() {
                             PlaySoundMem(PutSE, DX_PLAYTYPE_BACK, true);
                             OrderNum = 0;       // 黒の番にする
                         }
-
-
 
                         BoardSearchBWNumber(Board);     // 黒石と白石の数を数える
 
@@ -154,8 +156,6 @@ void Othello_Board::Othello_Board_Update() {
                             OrderNum = 1;       // 白の番にする
                         }
 
-
-
                         BoardSearchBWNumber(Board);     // 黒石と白石の数を数える
 
                         // ゲームの終了条件が揃っていたら  
@@ -176,12 +176,14 @@ void Othello_Board::Othello_Board_Update() {
                             Board[Square_X][Square_Y] == 8 ) {   // 黒石が置ける場所にカーソルがあっていたら
                             DrawFlag = true;
                             if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+
                                 DrawFlag = false;
                                 Board[Square_X][Square_Y] = 2;      // 白石を置く
                                 WhitePut();                         // 置いた場所から黒を白にひっくり返す
                                 PlaySoundMem(PutSE, DX_PLAYTYPE_BACK, true);
                                 OrderNum = 0;                       // 黒の手番にする
                                 BoardSearchBWNumber(Board);         // 黒石と白石の数を数える関数実行
+
                                 if (EndGame(Board)) {               // ゲームが終わる条件を満たしたら
                                     EndFlag = true;   // エンドフラグを true にする
                                 }
@@ -279,6 +281,7 @@ void Othello_Board::Othello_Board_Draw() {
                     OrderNum = 0;       // 黒の手番にする
                     EndFlag = false;    // 終了条件を初期化
                     RandomFlag = false;
+                    Parent->SetNext(new Scene_Select());
                     Init_OthelloBoard(Board);   // オセロボードを初期化
                 }
                 break;
@@ -292,6 +295,7 @@ void Othello_Board::Othello_Board_Draw() {
                     OrderNum = 0;       // 黒の手番にする
                     EndFlag = false;    // 終了条件を初期化
                     RandomFlag = false;
+                    Parent->SetNext(new Scene_Select());
                     Init_OthelloBoard(Board);   // オセロボードを初期化
                 }
                 break;
@@ -308,6 +312,7 @@ void Othello_Board::Othello_Board_Draw() {
                     OrderNum = 0;       // 黒の手番にする
                     EndFlag = false;    // 終了条件を初期化
                     RandomFlag = false;
+                    Parent->SetNext(new Scene_Select());
                     Init_OthelloBoard(Board);   // オセロボードを初期化
                 }
                 break;
@@ -321,6 +326,7 @@ void Othello_Board::Othello_Board_Draw() {
                     OrderNum = 0;       // 黒の手番にする
                     EndFlag = false;    // 終了条件を初期化
                     RandomFlag = false;
+                    Parent->SetNext(new Scene_Select());
                     Init_OthelloBoard(Board);   // オセロボードを初期化
                 }
                 break;
@@ -335,6 +341,7 @@ void Othello_Board::Othello_Board_Draw() {
                 OrderNum = 0;       // 黒の手番にする
                 EndFlag = false;    // 終了条件を初期化
                 RandomFlag = false;
+                Parent->SetNext(new Scene_Select());
                 Init_OthelloBoard(Board);   // オセロボードを初期化
             }
         }
@@ -387,7 +394,7 @@ void Othello_Board::Print_OthelloBoard(int board[PB][PB]) {
                 // ボードのマスの設定
                 DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
                     (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
-                DrawFormatString(i * MAP_SIZE, j * MAP_SIZE, GetColor(255, 0, 0), "0");
+                DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "0");
             }
 
             /* 黒石が置かれている */
@@ -402,7 +409,7 @@ void Othello_Board::Print_OthelloBoard(int board[PB][PB]) {
 
                 // 黒石を置く
                 DrawCircle(i * MAP_SIZE + (MAP_SIZE / 2), j * MAP_SIZE + (MAP_SIZE / 2), 27, BlackCr, TRUE);
-                DrawFormatString(i * MAP_SIZE, j * MAP_SIZE, GetColor(255, 0, 0), "1");
+                DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "1");
 
             }
 
@@ -418,7 +425,7 @@ void Othello_Board::Print_OthelloBoard(int board[PB][PB]) {
 
                 // 白石を置く
                 DrawCircle(i * MAP_SIZE + (MAP_SIZE / 2), j * MAP_SIZE + (MAP_SIZE / 2), 27, WhiteCr, TRUE);
-                DrawFormatString(i * MAP_SIZE, j * MAP_SIZE, GetColor(255, 0, 0), "2");
+                DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "2");
 
             }
 
@@ -433,7 +440,7 @@ void Othello_Board::Print_OthelloBoard(int board[PB][PB]) {
                     (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
 
                 CursorOn_OthelloBoard();    // マウスカーソルの位置がボードのマス目の上に来たマスを赤く表示する
-                DrawFormatString(i * MAP_SIZE, j * MAP_SIZE, GetColor(255, 0, 0), "3");
+                DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "3");
 
             }
 
@@ -448,7 +455,7 @@ void Othello_Board::Print_OthelloBoard(int board[PB][PB]) {
                     (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
 
                 CursorOn_OthelloBoard();    // マウスカーソルの位置がボードのマス目の上に来たマスを赤く表示する
-                DrawFormatString(i * MAP_SIZE, j * MAP_SIZE, GetColor(255, 0, 0), "4");
+                DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "4");
 
             }
 
@@ -461,7 +468,7 @@ void Othello_Board::Print_OthelloBoard(int board[PB][PB]) {
                 // ボードのマスの設定
                 DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
                     (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
-                DrawFormatString(i * MAP_SIZE, j * MAP_SIZE, GetColor(255, 0, 0), "5");
+                DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "5");
 
             }
 
@@ -476,7 +483,7 @@ void Othello_Board::Print_OthelloBoard(int board[PB][PB]) {
                     (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
 
                 CursorOn_OthelloBoard();    // マウスカーソルの位置がボードのマス目の上に来たマスを赤く表示する
-                DrawFormatString(i * MAP_SIZE, j * MAP_SIZE, GetColor(255, 0, 0), "6");
+                DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "6");
             }
 
             /* 角の周りの 3 マス */
@@ -488,7 +495,7 @@ void Othello_Board::Print_OthelloBoard(int board[PB][PB]) {
                 // ボードのマスの設定
                 DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
                     (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
-                DrawFormatString(i* MAP_SIZE, j* MAP_SIZE, GetColor(255, 0, 0), "7");
+                DrawFormatString(i* MAP_SIZE + 5, j* MAP_SIZE + 5, GetColor(255, 0, 0), "7");
 
             }
 
@@ -503,7 +510,7 @@ void Othello_Board::Print_OthelloBoard(int board[PB][PB]) {
                     (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
 
                 CursorOn_OthelloBoard();    // マウスカーソルの位置がボードのマス目の上に来たマスを赤く表示する
-                DrawFormatString(i* MAP_SIZE, j* MAP_SIZE, GetColor(255, 0, 0), "8");
+                DrawFormatString(i* MAP_SIZE + 5, j* MAP_SIZE + 5, GetColor(255, 0, 0), "8");
 
             }
         }
@@ -985,10 +992,11 @@ int Othello_Board::EndGame(int board[PB][PB]) {
 int Othello_Board::CPUWhite(int board[PB][PB]) {
     for (int i = 1; i <= 8; i++) {
         for (int j = 1; j <= 8; j++) {
-            if (board[i][j] == 6) {
+            if (board[i][j] == 8) {
                 Board_X = i;
                 Board_Y = j;
             }
+
             if (board[i][j] == 4) {
 
                 if (ReturnNumMax < WhitePutCheck(i, j)) {
@@ -996,15 +1004,26 @@ int Othello_Board::CPUWhite(int board[PB][PB]) {
                     Board_X = i;
                     Board_Y = j;
                 }
+            }
 
+            if (board[i][j] == 6) {
+                Board_X = i;
+                Board_Y = j;
+                CornerFlag = true;
+                break;
             }
         }
+        if (CornerFlag == true) {
+            break;
+        }
     }
+
     board[Board_X][Board_Y] = 2;
     WhitePutCPU(Board_X, Board_Y);
     Board_X = 0;
     Board_Y = 0;
     ReturnNumMax = 0;
+    CornerFlag = false;
     return 1;
 }
 

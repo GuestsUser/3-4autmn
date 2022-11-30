@@ -36,15 +36,17 @@ private:
 	int Karu_fuda[KARU_IMAGE_MAX_X][KARU_IMAGE_MAX_Y];		//かるたの札画像格納用
 	int Fuda_voice[KARU_IMAGE_MAX_X][KARU_IMAGE_MAX_Y];		//読み上げ音声格納用
 
-	float Karu_StartPosX = 105.0f;		//絵札の配置開始位置
-	float Karu_StartPosY = 132.5f;		//..
+	float Karu_StartPosX = 40.0f;		//絵札の配置開始位置
+	float Karu_StartPosY = 40.0f;		//..
 	float Karu_imgX = 150.0f;	//かるたの画像の大きさ
 	float Karu_imgY = 205.0f;	//..
 
-	float Karu_Space = 20.0f;	//絵札と絵札の間
+	float Karu_Space = 10.0f;	//絵札と絵札の間
 
 	int Mouse_X;	//マウスのX座標
+	int Old_mX;
 	int Mouse_Y;	//マウスのY座標
+	int Old_mY;
 
 	int Player_HandIcon[HAND_ICON];	//マウスカーソルアイコン格納用
 	int Enemy1_HandIcon[HAND_ICON];	//マウスカーソルアイコン格納用
@@ -53,6 +55,12 @@ private:
 
 	int Touch_Sound;	//クリック音格納用
 	int Otetuki_Sound;	//お手付き音格納用
+
+	int Karu_Bgm;		//BGM
+
+	int PauseIcon;				//ポーズボタン画像格納用
+	int PauseBackImg;			//ポーズ画面背景画像格納
+	int PauseContinueButton[2];	//つづけるボタン画像格納
 
 	bool end;
 
@@ -76,6 +84,7 @@ public:
 	void Cpu_reset();
 
 	void Player_Reset();
+	void Pause();
 
 	void Karu_GameOver();
 

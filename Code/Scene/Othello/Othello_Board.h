@@ -1,14 +1,15 @@
 #pragma once
 //#include "./Othello_Player.h"
 #include "DxLib.h"
+#include "./../Scene.h"
 #define PB 10
 #define MAP_SIZE 66
 
-//extern const int  PB = 10;
-//extern const int  MAP_SIZE = 66;
 //
 class Othello_Board {
 private:
+	Scene* Parent;
+
 	int PutCheckImage;	// ‚©‚Á‚±‚Ì‰æ‘œ‚ğ“ü‚ê‚é—p‚Ì•Ï”
 
 	int BGM;		// BGM—p‚Ì•Ï”
@@ -36,6 +37,7 @@ private:
 	bool PassFlag;
 	bool EndFlag;
 	bool RandomFlag;
+	bool CornerFlag;
 
 public:
 	int Mouse_X;
@@ -44,7 +46,7 @@ public:
 	int Square_Y;
 	int Board[PB][PB];
 
-	void Othello_Board_Initialize();
+	void Othello_Board_Initialize(Scene* scene);
 	void Othello_Board_Finalize();
 	void Othello_Board_Update();
 	void Othello_Board_Draw();

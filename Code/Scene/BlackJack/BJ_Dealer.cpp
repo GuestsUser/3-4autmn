@@ -17,6 +17,9 @@ Dealer::Dealer() {
 
   D_BlackJakc = false;
 
+
+  cd_x = cd_y = cd_w = cd_h = 0;
+
   img_x = 600;
   img_y = 180;
 
@@ -39,12 +42,22 @@ Dealer::Dealer() {
   }
 
 }
-Dealer::~Dealer() {};
+Dealer::~Dealer() {
+
+  //for (auto& a:btn_hdl) {
+  //  DeleteGraph(a);
+  //}
+
+  //for (auto& a:card_hdl) {
+  //  DeleteGraph(a);
+  //}
+
+}
 /*変数初期化*/
 void Dealer::Initialize() {
 
   hand_num = 0;                           /*手札枚数を0で初期化*/
-  hand.erase(hand.begin(), hand.end());   /*手札をクリア*/
+  if (!hand.empty()) { hand.erase(hand.begin(), hand.end()); }   /*手札をクリア*/
   score = 0;                              /*スコアを初期化*/
   type = 0;                               /*トランプのマーク*/
   
@@ -54,6 +67,8 @@ void Dealer::Initialize() {
 /*スコアの計算*/
 int Dealer::Calc() {
   /*メモリの動的確保*/
+  score = 0;
+  data = 0;
   data = new int[hand_num];   /*手札枚数確保*/
   /*手札配列からデータを取得、1-10の値として格納*/
   for (int i = 0; i < hand_num; i++) {
@@ -73,7 +88,6 @@ int Dealer::Calc() {
   /*ソート*/
   std::sort(data, data + hand_num);
   /*返り値用変数（計算結果*/
-  score = 0;
   /*2番目から順にスコアを足していく（1番目は判定が必要）*/
   for (int i = 1; i < hand_num; i++) {
     /*スコアにデータを加える*/
@@ -174,37 +188,37 @@ void Dealer::Show_Hand() {
   for (int i = 0; i < hand_num; i++) {
     /*カードの種類（スペード、ハート、ダイヤ、クラブ）を探索*/
     type = (hand[i] % 52) / 13;   /*デッキごとに分けた後、13で割った数（0-3）で4種類を分割*/
-    char a = '\0';
-    /*分岐条件にtypeをそのまま利用*/
-    switch (type) {
+    //char a = '\0';
+    ///*分岐条件にtypeをそのまま利用*/
+    //switch (type) {
 
-    case 0:   /*0であればスペードのs*/
-      std::cout << 's';
-      a = 's';
-      break;
+    //case 0:   /*0であればスペードのs*/
+    //  std::cout << 's';
+    //  a = 's';
+    //  break;
 
-    case 1:   /*1であればハートのh*/
-      std::cout << 'h';
-      a = 'h';
-      break;
+    //case 1:   /*1であればハートのh*/
+    //  std::cout << 'h';
+    //  a = 'h';
+    //  break;
 
-    case 2:   /*2であればダイヤのd*/
-      std::cout << 'd';
-      a = 'd';
-      break;
+    //case 2:   /*2であればダイヤのd*/
+    //  std::cout << 'd';
+    //  a = 'd';
+    //  break;
 
-    case 3:   /*3であればクラブのc*/
-      std::cout << 'c';
-      a = 'c';
-      break;
+    //case 3:   /*3であればクラブのc*/
+    //  std::cout << 'c';
+    //  a = 'c';
+    //  break;
 
-    default:    /*0-3でない場合はエラー処理*/
-      /*標準出力*/
+    //default:    /*0-3でない場合はエラー処理*/
+    //  /*標準出力*/
 
-      DrawFormatString(0, 0, 0xffffff, "DefTypeError\nshow_hand");
-      break;
+    //  DrawFormatString(0, 0, 0xffffff, "DefTypeError\nshow_hand");
+    //  break;
 
-    }
+    //}
     /*標準出力*/
 
     //DrawFormatString(160 + i * 50, 220, 0xffffff, " :%c %d", a, hand[i] % 13 + 1);

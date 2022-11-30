@@ -60,6 +60,7 @@ public:
 	void ChangeTurn(int *PlayUser);
 	void SpaceCheck(int board[Board_Xsize][Board_Ysize], int x, int y);
 	void CPU_CoinCheck(int board[Board_Xsize][Board_Ysize], int x, int y);
+	void CPU_DoubleCheck(int board[Board_Xsize][Board_Ysize], int x, int y);
 	void CPU_RandomFall();
 
 	int ClearCheck(int board[Board_Xsize][Board_Ysize], int x, int y);
