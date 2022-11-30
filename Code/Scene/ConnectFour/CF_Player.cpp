@@ -89,6 +89,7 @@ void CF_Player::CF_Player_Update() {
 			Yajirusi_Y = 115;
 			Yajirusi_Move = -Yajirusi_Move;
 		}
+		/*ポーズボタンを押したらポーズ画面を開くフラグをtrueにする*/
 		if (30 <= Mouse_X && Mouse_X <= 147 && 35 <= Mouse_Y && Mouse_Y <= 89) {
 			if(OldKey != KEY_FREE && nowKey == KEY_PULL) {
 				PauseFlg = true;
@@ -170,8 +171,8 @@ void CF_Player::CF_Player_Update() {
 			StopSoundMem(CF_GameBGM);
 			parent->SetNext(new Scene_Select());
 		}
+		/*ポーズ画面の内容*/
 	}else if (PauseFlg == true) {
-		
 		if ((450 <= Mouse_X && Mouse_X <= 790 && 240 <= Mouse_Y && Mouse_Y <= 340) || (30 <= Mouse_X && Mouse_X <= 147 && 35 <= Mouse_Y && Mouse_Y <= 89)) {
 			if (OldKey != KEY_FREE && nowKey == KEY_PULL) {  //マウスの左キーを離した時
 				PauseFlg = false;
@@ -184,7 +185,7 @@ void CF_Player::CF_Player_Update() {
 			}
 		}
 	}
-	OldKey = nowKey;
+	OldKey = nowKey; //前の入力していたキーを今入力していたキーに上書きする
 }
 void CF_Player::CF_Player_Draw() {
 	DrawRotaGraph(640, 360, 1.0, 0, CF_Back, TRUE);
@@ -253,6 +254,7 @@ void CF_Player::CF_Player_Draw() {
 				}
 			}
 		}
+		/*ポーズ画面の画像*/
 		if (PauseFlg == true) {
 			DrawBox(150, 100, 1110, 660, 0xffffff, TRUE);
 			SetFontSize(80);
