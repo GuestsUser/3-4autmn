@@ -218,7 +218,7 @@ void SR_Map::Update() {
 
 
 void SR_Map::Draw() {	
-	/*if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
+	/*if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH) {
 		Player1sum+=1;
 		Player2sum+=1;
 		Player3sum+=1;

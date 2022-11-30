@@ -12,6 +12,7 @@ private:
 	bool Goalflg;
 	bool Sumflg;	/*Player移動量計算するとき用のフラグ*/
 	bool Whoisplay = true;
+	bool Replay = false;
 
 	int count;
 	int countdiff;
@@ -19,6 +20,7 @@ private:
 	int Dice1, Dice2;
 	int Sum;	/*サイコロの目の合計数*/
 	int num; /*switch文よう変数*/
+	int current;
 	/*仮仮仮仮仮仮仮*/
 	int MouseX, MouseY;	/*Mouse座標取得（全体でのが出来るまで）*/
 	/*仮仮仮仮仮仮仮*/
@@ -30,6 +32,8 @@ public:
 	void Dice();
 	void Goal();
 	void Restart();
+	void Plus();
+	void ReDice();
 	void SR_Enemy1();
 	void SR_Enemy2();
 	void SR_Enemy3();
