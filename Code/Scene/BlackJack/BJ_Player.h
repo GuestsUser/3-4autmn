@@ -42,6 +42,7 @@ public:
   void Update();
   void Draw();
 
+  int P_MaxCoin();
 
   bool ButtonHit(int, int, int, int);
   bool Now_Game();

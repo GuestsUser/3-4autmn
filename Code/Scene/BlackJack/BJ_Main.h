@@ -9,6 +9,8 @@ private:
   int title_img,game_img,end_img;
 
   int hit_flg;
+  int wait_time;
+  float time_count;
 
   bool game_endflg;
   bool next_flg;
@@ -34,6 +36,8 @@ public:
 
   BlackJack();
   ~BlackJack();
+
+  bool Wait_Time(float);
 
   void Initialize();
   void Update();

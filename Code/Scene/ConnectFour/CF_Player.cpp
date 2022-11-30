@@ -10,7 +10,7 @@
 
 
 //CF_Player cf_player;
-void CF_Player::CF_Player_Initialize(Scene* scene) {
+void CF_Player::CF_Player_Initialize(Scene* scene){
 	parent = scene;
 
 	CF_Back = LoadGraph("Resource/image/CF_Back.png"); //背景
@@ -38,6 +38,7 @@ void CF_Player::CF_Player_Initialize(Scene* scene) {
 	srand((unsigned int)time(NULL)); //乱数を現在時刻の情報で初期化
 	PlayUser = rand() % 2 + 1; //プレイヤーの先攻後攻をランダムで取得
 	CPU_j = rand() % 7;
+	OldKey = KEY_FREE;
 
 	Circle_Exp = 0.5f;
 	Circle_Radius = 32.0f;
@@ -47,6 +48,7 @@ void CF_Player::CF_Player_Finalize() {
 	DeleteGraph(CF_Panel);
 }
 void CF_Player::CF_Player_Update() {
+	nowKey = key->GetKeyState(REQUEST_MOUSE_LEFT); //現在のマウス左ボタンの入力状態の取得
 	if (CF_Start == false) {
 		DlayCount++;
 		if (DlayCount % 40 == 0 && DlayCount <= 120) {
@@ -87,8 +89,9 @@ void CF_Player::CF_Player_Update() {
 			Yajirusi_Y = 115;
 			Yajirusi_Move = -Yajirusi_Move;
 		}
+		/*ポーズボタンを押したらポーズ画面を開くフラグをtrueにする*/
 		if (30 <= Mouse_X && Mouse_X <= 147 && 35 <= Mouse_Y && Mouse_Y <= 89) {
-			if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
+			if(OldKey != KEY_FREE && nowKey == KEY_PULL) {
 				PauseFlg = true;
 			}
 		}
@@ -168,19 +171,21 @@ void CF_Player::CF_Player_Update() {
 			StopSoundMem(CF_GameBGM);
 			parent->SetNext(new Scene_Select());
 		}
+		/*ポーズ画面の内容*/
 	}else if (PauseFlg == true) {
-		if (450 <= Mouse_X && Mouse_X <= 790 && 240 <= Mouse_Y && Mouse_Y <= 340 ) {
-			if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+		if ((450 <= Mouse_X && Mouse_X <= 790 && 240 <= Mouse_Y && Mouse_Y <= 340) || (30 <= Mouse_X && Mouse_X <= 147 && 35 <= Mouse_Y && Mouse_Y <= 89)) {
+			if (OldKey != KEY_FREE && nowKey == KEY_PULL) {  //マウスの左キーを離した時
 				PauseFlg = false;
 			}
 		}
 		if (330 <= Mouse_X && Mouse_X <= 910  && 460 <= Mouse_Y && Mouse_Y <= 560) {
-			if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+			if (OldKey != KEY_FREE && nowKey == KEY_PULL) {  //マウスの左キーを離した時
 				StopSoundMem(CF_GameBGM);
 				parent->SetNext(new Scene_Select());
 			}
 		}
 	}
+	OldKey = nowKey; //前の入力していたキーを今入力していたキーに上書きする
 }
 void CF_Player::CF_Player_Draw() {
 	DrawRotaGraph(640, 360, 1.0, 0, CF_Back, TRUE);
@@ -249,14 +254,31 @@ void CF_Player::CF_Player_Draw() {
 				}
 			}
 		}
+		/*ポーズ画面の画像*/
 		if (PauseFlg == true) {
 			DrawBox(150, 100, 1110, 660, 0xffffff, TRUE);
 			SetFontSize(80);
-			DrawFormatString(490, 120, 0x000000, "ポーズ");
-			DrawBox(450, 240, 790, 340, 0xff0000, TRUE);
-			DrawFormatString(460, 250, 0x000000, "つづける");
-			DrawBox(330, 460, 910, 560, 0xff0000, TRUE);
-			DrawFormatString(340, 470, 0x000000, "セレクトに戻る");
+			DrawFormatString(500, 120, 0x000000, "ポーズ");
+			if (450 <= Mouse_X && Mouse_X <= 790 && 240 <= Mouse_Y && Mouse_Y <= 340 && nowKey == KEY_HOLD) {
+				DrawBox(490, 250, 750, 330, 0xff0000, TRUE);
+				SetFontSize(60); 
+				DrawFormatString(500, 260, 0x000000, "つづける");
+			}
+			else {
+				SetFontSize(80);
+				DrawBox(450, 240, 790, 340, 0xff0000, TRUE);
+				DrawFormatString(460, 250, 0x000000, "つづける");
+			}
+			if (330 <= Mouse_X && Mouse_X <= 910 && 460 <= Mouse_Y && Mouse_Y <= 560 && nowKey == KEY_HOLD) {
+				DrawBox(400, 470, 840, 540, 0xff0000, TRUE);
+				SetFontSize(60);
+				DrawFormatString(410, 475, 0x000000, "セレクトに戻る");
+			}
+			else {
+				SetFontSize(80);
+				DrawBox(330, 460, 930, 560, 0xff0000, TRUE);
+				DrawFormatString(350, 470, 0x000000, "セレクトに戻る");
+			}
 		}
 	}
 	if (CF_ClearText == true) {
