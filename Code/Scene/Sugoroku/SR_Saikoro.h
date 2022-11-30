@@ -9,9 +9,11 @@ private:
 
 	bool Shuffle = false;	/*サイコロシャッフル可否フラグ*/
 	bool Click = true;	/*サイコロクリック可否フラグ*/
-	bool Goalflg;
+	bool Goalflg;	/*ゴールしているかのフラグ*/
 	bool Sumflg;	/*Player移動量計算するとき用のフラグ*/
-	bool Whoisplay = true;
+	bool Whoisplay = true;	/*テキストが被らないようにするフラグ*/
+	bool Replay = false;	/*サイコロを振りなおすフラグ*/
+	bool Back = false;	/*サイコロを振った分だけ戻るフラグ*/
 
 	int count;
 	int countdiff;
@@ -19,6 +21,7 @@ private:
 	int Dice1, Dice2;
 	int Sum;	/*サイコロの目の合計数*/
 	int num; /*switch文よう変数*/
+	int current;
 	/*仮仮仮仮仮仮仮*/
 	int MouseX, MouseY;	/*Mouse座標取得（全体でのが出来るまで）*/
 	/*仮仮仮仮仮仮仮*/
@@ -30,6 +33,9 @@ public:
 	void Dice();
 	void Goal();
 	void Restart();
+	void Plus();
+	void Minus();
+	void ReDice();
 	void SR_Enemy1();
 	void SR_Enemy2();
 	void SR_Enemy3();

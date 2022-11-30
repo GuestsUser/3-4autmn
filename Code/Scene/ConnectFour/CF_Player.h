@@ -22,6 +22,12 @@ private:
 	int CF_StartSE; //先攻後攻を表示する時のSE
 	int CF_ClickSE;
 	int CF_CoinFallSE;
+	int Pause_Button;
+	int Pause_Back;
+	int Pause_Continue;
+	int pause_continue[2];
+	int Pause_Select;
+	int pause_select[2];
 	int i,j,k; //for分の変数
 	int Yajirusi_Col[7]; //矢印の色
 	int Mouse_X; //マウスのX座標

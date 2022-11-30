@@ -1,6 +1,7 @@
 #include"DxLib.h"
 #include"./../Code/GetKey.h"
 #include"Karu_Game.h"
+#include "./../Title/Scene_Select.h"
 
 #include <random>
 
@@ -29,6 +30,7 @@ int voice = 0;
 int Rank_All = 0;
 
 bool now_pause = false;
+bool now_push = false;
 bool on_ContinueButton = false;
 bool on_MenuButton = false;
 
@@ -49,7 +51,9 @@ struct KARU_CPU cpu_3;
 /*************************
 ** 初期化 **
 *************************/
-void Karu_Game::Karu_Game_Initialize() {
+void Karu_Game::Karu_Game_Initialize(Scene* scene) {
+
+	parent = scene;
 
 	Karu_Bg = LoadGraph("Resource/image/Karu_Image/Karu_Tatami.png");		//背景画像をKaru_Bgに格納
 	Karu_SideBg = LoadGraph("Resource/image/Karu_Image/Karu_Side_Bg.png");	//サイド背景画像をKaru_SideBgに格納
@@ -145,10 +149,8 @@ void Karu_Game::Karu_Game_Update() {
 		if (!now_pause) {
 			if (!now_voice) {
 				if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
-
 					Click_check = 1;	//クリックしたことにする
 					Mouse_HitBox();		//かるたに触れているか確認
-					Pause();
 					PlaySoundMem(Touch_Sound, DX_PLAYTYPE_BACK);
 				}
 
@@ -172,6 +174,9 @@ void Karu_Game::Karu_Game_Update() {
 			}
 			else {
 				now_voice = false;
+			}
+			if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+				Pause();
 			}
 		}
 	}
@@ -599,10 +604,14 @@ void Karu_Game::Player_Reset() {
 void Karu_Game::Pause() {
 	if (Mouse_X > 0 && Mouse_X < 80 && Mouse_Y > 0 && Mouse_Y < 40) {
 		now_pause = true;
+		now_push = true;
 		StopSoundMem(Touch_Sound);
 		StopSoundMem(Otetuki_Sound);
 		StopSoundMem(Karu_Bgm);
 		StopSoundMem(voice);
+		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PULL) { // 左クリックしたら
+			now_push = false;
+		}
 	}
 }
 
@@ -614,15 +623,33 @@ void Karu_Game::Pause() {
 void Karu_Game::Pause_Controller() {
 	if (Mouse_X > 440 && Mouse_X < 840 && Mouse_Y > 300 && Mouse_Y < 420) {
 		on_ContinueButton = true;
+		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+			now_pause = false;
+			//PlaySoundMem(Otetuki_Sound,DX_PLAYTYPE_BACK,FALSE);	//お手付きじゃなくてもなる
+			PlaySoundMem(Karu_Bgm, DX_PLAYTYPE_LOOP, FALSE);
+			PlaySoundMem(voice,DX_PLAYTYPE_BACK,FALSE);
+		}
 	}
 	else {
 		on_ContinueButton = false;
 	}
+
 	if (Mouse_X > 440 && Mouse_X < 840 && Mouse_Y > 450 && Mouse_Y < 570) {
 		on_MenuButton = true;
+		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+			parent->SetNext(new Scene_Select());
+		}	
 	}
 	else {
 		on_MenuButton = false;
+	}
+	if (Mouse_X > 0 && Mouse_X < 80 && Mouse_Y > 0 && Mouse_Y < 40) {
+		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH && !now_push) { // 左クリックしたら
+			now_pause = false;
+			//PlaySoundMem(Otetuki_Sound,DX_PLAYTYPE_BACK,FALSE);	//お手付きじゃなくてもなる
+			PlaySoundMem(Karu_Bgm, DX_PLAYTYPE_LOOP, FALSE);
+			PlaySoundMem(voice, DX_PLAYTYPE_BACK, FALSE);
+		}
 	}
 }
 
