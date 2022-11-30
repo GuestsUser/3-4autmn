@@ -31,18 +31,20 @@ Player::Player() {
   img_y = 560;
 
   hit_x = 800;
-  hit_y = std_y = dbl_y = spt_y = bet_y = 650;
+  hit_y = std_y = dbl_y = spt_y = 650;
+  //bet_y = 650;
 
   std_x = hit_x + 80;
   dbl_x = hit_x + 200;
   spt_x = hit_x + 320;
-  bet_x = 420;
+  //bet_x = 420;  bet_y = 650;
 
   hit_w = 60;
   std_w = 95;
   dbl_w = spt_w = 110;
-  bet_w = 60;
-  hit_h = std_h = dbl_h = spt_h = bet_h = 60;
+  //bet_w = 60;
+  //bet_h = 60;  bet_x = 420;  bet_y = 650;
+  hit_h = std_h = dbl_h = spt_h = 60;
 
   for (int i = 0; i < 5; i++) {
 
@@ -74,9 +76,11 @@ void Player::Initialize() {
   spt_type = 0;
   spt_flg = false;
 
+  D_dbl = false;
+
   hit = std = dbl = spt = bet = false;
   win = los = bst = psh = BlackJack = spt_a = false;
-  bet_flg = false;
+  //bet_flg = false;
   spt_win = spt_los = spt_bst = spt_psh = spt_BJ = false;
   D_BJ = D_bst = false;
   game_flg = true;
@@ -87,14 +91,12 @@ void Player::Initialize() {
 void Player::Update() {
 
 
+  DrawFormatString(0, 0, 0xffffff, "%d", game_flg);
 
 }
 
 void Player::Draw() {
 
-
-  SetFontSize(24);
-  DrawFormatString(10, 650, 0xffffff, "アクションを選択してください");
   SetFontSize(32);
   /*ボタン表示*/
   DrawFormatString(hit_x, hit_y, 0xffffff, "Hit");
@@ -109,13 +111,16 @@ void Player::Draw() {
   /*ボタン表示*/
   /*所持金表示*/
   if (!split) {
-    DrawFormatString(420, hit_y, 0xffffff, "Bet");
+    //DrawFormatString(420, hit_y, 0xffffff, "Bet");
     DrawFormatString(420, hit_y-50, 0xffffff, "Bet: %d",bet_flg);
+    //DrawFormatString(420, hit_y-50, 0xffffff, "Bet: %d",D_dbl);
     DrawFormatString(500, 630, 0xffffff, "掛金：%d", bet_coin);
   }
   else {
-    DrawFormatString(440, 630, 0xffffff, "00000");
-    DrawFormatString(640, 630, 0xffffff, "00000");
+    //DrawFormatString(440, 630, 0xffffff, "00000");
+    //DrawFormatString(640, 630, 0xffffff, "00000");
+    DrawFormatString(440, 630, 0xffffff, "%d", bet_coin);
+    DrawFormatString(640, 630, 0xffffff, "%d", bet_coin);
   }
   DrawFormatString(500, 680, 0xffffff, "所持金：%d", p_coin);
   /*所持金表示*/
@@ -149,6 +154,12 @@ void Player::Draw() {
 
 
 
+
+}
+
+int Player::P_MaxCoin() {
+
+  return p_coin;
 
 }
 
@@ -196,28 +207,27 @@ void Player::Hit(Shoe* shoe) {    /*shoeオブジェクトポインタ*/
 
 }
 
-bool Player::Bet_Flg() {
-  return bet_flg;
+void Player::Bet_Flg(bool get_flg) {
+  bet_flg =  get_flg;
 }
 
 /*ゲーム実行*/
 bool Player::Play(Shoe* shoe) {
 
-  /*ボタン処理（hit,stand,double,splite）*/
-  hit = Player::ButtonHit(hit_x, hit_y, hit_w, hit_h);
-  spt = Player::ButtonHit(spt_x, spt_y, spt_w, spt_h);
+  if (game_flg) {
+    /*ボタン処理（hit,stand,double,splite）*/
+    hit = Player::ButtonHit(hit_x, hit_y, hit_w, hit_h);
+    spt = Player::ButtonHit(spt_x, spt_y, spt_w, spt_h);
 
-  if (Player::ButtonHit(std_x, std_y, std_w, std_h) || dbl) {
-    std = true;
-  }
-  if (Player::ButtonHit(dbl_x, dbl_y, dbl_w, dbl_h) && (hand_num == 2 || spt_hand_num == 2 )) {
-    dbl = true;
-  }
+    if (Player::ButtonHit(std_x, std_y, std_w, std_h) || dbl) {
+      std = true;
+    }
+    if (Player::ButtonHit(dbl_x, dbl_y, dbl_w, dbl_h) && (hand_num == 2 || spt_hand_num == 2)) {
+      dbl = true;
+    }
 
-  if (Player::ButtonHit(bet_x, bet_y, bet_w, bet_h)) {
-    bet_flg = true;
+    /*ボタン処理（hit,stand,double,splite）*/
   }
-  //else bet_flg = false;
 
   /*バーストするまでループ処理*/
   if (game_flg) {
@@ -263,7 +273,7 @@ bool Player::Play(Shoe* shoe) {
           /*勝負開始して返り値をtrueとして終了*/
           game_flg = false;
           std = false;
-          bet_flg = true;
+          //bet_flg = true;
           now_game_flg = false;
           return true;
 
@@ -273,6 +283,8 @@ bool Player::Play(Shoe* shoe) {
 
           /*カードを引いて勝負開始*/
           Player::Hit(shoe);
+          Player::Set_Bet(bet_coin);
+          D_dbl = true;
 
         }
         /*splitが入力された場合*/
@@ -431,8 +443,13 @@ void Player::Score(Player player, Dealer dealer) {   /*プレイヤーとディ�
   if (win) {
     if (bet_flg) {
 
-      if(!BlackJack)p_coin += dealer.Set_Magnification(rate_wn, bet_coin);
+      if(!BlackJack && !D_dbl)p_coin += dealer.Set_Magnification(rate_wn, bet_coin);
+      if (D_dbl) {
+        p_coin += dealer.Set_Magnification(rate_db, bet_coin * 200);
+        //D_dbl = false;
+      }
       else p_coin += dealer.Set_Magnification(rate_bj, bet_coin);
+
       bet_flg = false;
     }
   }

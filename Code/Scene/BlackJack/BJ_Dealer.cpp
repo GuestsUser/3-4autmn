@@ -181,47 +181,11 @@ void Dealer::Hit(Shoe* shoe) {    /*shoeオブジェクトポインタ*/
 }
 /*手札を表示*/
 void Dealer::Show_Hand() {
-  /*標準出力*/
 
-  //DrawFormatString(100,620,0xffffff,"hand:");
   /*配列の最初から最後までを順に表示*/
   for (int i = 0; i < hand_num; i++) {
     /*カードの種類（スペード、ハート、ダイヤ、クラブ）を探索*/
     type = (hand[i] % 52) / 13;   /*デッキごとに分けた後、13で割った数（0-3）で4種類を分割*/
-    //char a = '\0';
-    ///*分岐条件にtypeをそのまま利用*/
-    //switch (type) {
-
-    //case 0:   /*0であればスペードのs*/
-    //  std::cout << 's';
-    //  a = 's';
-    //  break;
-
-    //case 1:   /*1であればハートのh*/
-    //  std::cout << 'h';
-    //  a = 'h';
-    //  break;
-
-    //case 2:   /*2であればダイヤのd*/
-    //  std::cout << 'd';
-    //  a = 'd';
-    //  break;
-
-    //case 3:   /*3であればクラブのc*/
-    //  std::cout << 'c';
-    //  a = 'c';
-    //  break;
-
-    //default:    /*0-3でない場合はエラー処理*/
-    //  /*標準出力*/
-
-    //  DrawFormatString(0, 0, 0xffffff, "DefTypeError\nshow_hand");
-    //  break;
-
-    //}
-    /*標準出力*/
-
-    //DrawFormatString(160 + i * 50, 220, 0xffffff, " :%c %d", a, hand[i] % 13 + 1);
 
     DrawRotaGraph(600 + i * 30, 140, img_size, 0,card_type[type][hand[i] % 13 ], 1);
 
@@ -259,14 +223,19 @@ bool Dealer::BlackJack(){
 
 int Dealer::Set_Magnification(float setrate, int getcoin) {
   float setcoin = 0;
-
+  float spt_setcoin = 0;
+  if (split)spt_setcoin = setrate * getcoin;
   setcoin = setrate * getcoin;
 
-  return (int)setcoin;
+  return (int)setcoin+(int)spt_bet_coin;
 }
 
 void Dealer::Update() {
 
+  DrawRotaGraph(yama_x, yama_y, img_size, 0, card_hdl[52], 1);
+  SetFontSize(24);
+  DrawFormatString(10, 650, 0xffffff, "アクションを選択してください");
+  SetFontSize(DEFAULT_FONT_SIZE);
 
 }
 

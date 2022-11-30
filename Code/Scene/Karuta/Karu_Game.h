@@ -61,6 +61,7 @@ private:
 	int PauseIcon;				//ポーズボタン画像格納用
 	int PauseBackImg;			//ポーズ画面背景画像格納
 	int PauseContinueButton[2];	//つづけるボタン画像格納
+	int PauseMenuButton[2];		//セレクトへ戻るボタン画像格納
 
 	bool end;
 
@@ -85,6 +86,7 @@ public:
 
 	void Player_Reset();
 	void Pause();
+	void Pause_Controller();
 
 	void Karu_GameOver();
 

@@ -19,14 +19,14 @@ Slider::Slider() {
 
 void Slider::Inisialize() {
 
-  SetPosition(320, 600);
+  SetPosition(180, 600);
   SetHandleSize(25, 25);
   SetBackSize(150, 20);
 
   SetFillColor(0x00ffff);
 
-  SetMinValue(100); //最大値と最小値の指定する順番に注意
-  SetMaxValue(10000);  //先に最大値を指定しようとすると、その指定した値が現在の最小値よりも小さいと指定できません
+  //SetMinValue(100); //最大値と最小値の指定する順番に注意
+  //SetMaxValue(10000);  //先に最大値を指定しようとすると、その指定した値が現在の最小値よりも小さいと指定できません
 
   //SetValue(100);
 
@@ -59,6 +59,7 @@ void Slider::Update(int mousePosX, int mousePoxY, bool isClick) {
 
     if (value < minValue) value = minValue;
     else if (value > maxValue) value = maxValue;
+    if (minValue <= 1)SetMinValue(1);
 
   }
   else {
@@ -83,7 +84,7 @@ void Slider::Draw() {
     handlePosition.x - 1, position.y + backSize.y - 1,
     fillColor, true);
 
-  DrawFormatString(320 - 125, 500 + 50, 0xffffff, "%.1f ～ %.1f : BET = %.1f", 100.0f, 10000.0f, Slider::GetValue());
+  DrawFormatString(30, 550, 0xffffff, "BET = %.1f",Slider::GetValue());
 
   if (GetHandleEnabled()) {
 
