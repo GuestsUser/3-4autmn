@@ -14,6 +14,9 @@ public:
 	int num;	//カードの数字
 	int suit;	//カードのスート(マーク)
 
+	int card_x;
+	int card_y;
+
 	//カードごとの当たり判定（マウスX座標、マウスY座標、カードX座標、カードY座標、カードの幅、カードの高さ、カードの画像倍率）
 	bool Hit(int mx, int my, int cx, int cy, int cw, int ch, double ExRate) {
 		if (mx > cx - (cw * ExRate) / 2 && mx < cx + (cw * ExRate) / 2 && my > cy - (ch * ExRate) / 2 && my < cy + (ch * ExRate) / 2) {
@@ -24,11 +27,14 @@ public:
 		}
 	}
 
-	//Card(画像、数値、スート)
-	Card(int i, int n, int s) {
+	//Card(画像、数値、スート、カードごとのX座標、カードごとのY座標)
+	Card(int i, int n, int s, int x, int y) {
 		img = i;
 		num = n;
 		suit = s;
+
+		card_x = x;
+		card_y = y;
 	}
 };
 
@@ -37,7 +43,7 @@ private:
 	int card_type[54];	//画像用ハンドル
 	int background;	//背景
 
-	Card Card_back;		//カードの裏面の情報
+	int Card_back;		//カードの裏面の情報
 	Card Card_joker;	//ジョーカーの情報
 
 	//Card Card_obj[4][13];		//全カードの情報
@@ -51,11 +57,20 @@ private:
 	std::vector<Card> NPC_card_2;		//NPC２号の持っているカードの情報
 	std::vector<Card> NPC_card_3;		//NPC３号の持っているカードの情報
 
-	int Crown_Icon;		//王冠のアイコン画像
+	int PlayerCrown;		//王冠のアイコン画像
+	int NPC1_Icon;		//王冠のアイコン画像
+	int NPC2_Icon;		//王冠のアイコン画像
+	int NPC3_Icon;		//王冠のアイコン画像
+
 	int Player_Pass_Icon;		//パスのアイコン画像
-	int NPC_Pass_Icon;		//パスのアイコン画像
+	int NPC1_Pass_Icon;		//パスのアイコン画像
+	int NPC2_Pass_Icon;		//パスのアイコン画像
+	int NPC3_Pass_Icon;		//パスのアイコン画像
+
 	int Player_PageOne_Icon;	//ページワン宣言のアイコン画像
-	int NPC_PageOne_Icon;	//ページワン宣言のアイコン画像
+	int NPC1_PageOne_Icon;	//ページワン宣言のアイコン画像
+	int NPC2_PageOne_Icon;	//ページワン宣言のアイコン画像
+	int NPC3_PageOne_Icon;	//ページワン宣言のアイコン画像
 
 	bool NPC1_Pass_Flg;		//NPC1パスフラグ
 	bool NPC2_Pass_Flg;		//NPC2パスフラグ
@@ -79,7 +94,6 @@ private:
 	bool NPC2_setup;		//NPC2準備フラグ
 	bool NPC3_setup;		//NPC3準備フラグ
 
-	bool setup;		//ゲーム開始フラグ
 	bool finish;	//ゲーム終了フラグ
 
 	int player;		//プレイヤーの手札の枚数
