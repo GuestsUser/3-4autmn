@@ -6,22 +6,24 @@ void PageOne::PageOne_Initialize() {
 
 	LoadDivGraph("Resource/image/toranpu_all.png", 54, 13, 5, 200, 300, card_type);
 	background = LoadGraph("Resource/image/CareerPoker.png");
-	Crown_Icon = LoadGraph("Resource/image/PageOne_Image/Crown.png");
+
+	PlayerCrown = LoadGraph("Resource/image/PageOne_Image/Player_Crown.png");
+	NPC1_Icon = LoadGraph("Resource/image/PageOne_Image/NPC1_Crown.png");
+	NPC2_Icon = LoadGraph("Resource/image/PageOne_Image/NPC2_Crown.png");
+	NPC3_Icon = LoadGraph("Resource/image/PageOne_Image/NPC3_Crown.png");
+	
 	Player_Pass_Icon = LoadGraph("Resource/image/PageOne_Image/Pass.png");
-	NPC_Pass_Icon = LoadGraph("Resource/image/PageOne_Image/NPC_Pass.png");
+	NPC1_Pass_Icon = LoadGraph("Resource/image/PageOne_Image/NPC1_Pass.png");
+	NPC2_Pass_Icon = LoadGraph("Resource/image/PageOne_Image/NPC2_Pass.png");
+	NPC3_Pass_Icon = LoadGraph("Resource/image/PageOne_Image/NPC3_Pass.png");
+	
 	Player_PageOne_Icon = LoadGraph("Resource/image/PageOne_Image/Page_One.png");
-	NPC_PageOne_Icon = LoadGraph("Resource/image/PageOne_Image/Page_One.png");
+	NPC1_PageOne_Icon = LoadGraph("Resource/image/PageOne_Image/Page_One_N1.png");
+	NPC2_PageOne_Icon = LoadGraph("Resource/image/PageOne_Image/Page_One_N2.png");
+	NPC3_PageOne_Icon = LoadGraph("Resource/image/PageOne_Image/Page_One_N3.png");
 
-	for (i = 0; i < 52; i++) {
-		Card_obj.push_back(Card(card_type[i], i % 13, i / 13));
-	}
-
-	Card_obj.push_back(Card(card_type[53], 99, 5));	//ジョーカー
-
-	Card_back = Card(card_type[52], 0, 0);	//カードの裏面
-
-	Deck_X = 100;
-	Deck_Y = 600;
+	Deck_X = 130;
+	Deck_Y = 550;
 
 	Field_X = 500;
 	Field_Y = 350;
@@ -45,11 +47,20 @@ void PageOne::PageOne_Initialize() {
 	flg_2 = false;
 	flg_3 = false;
 
+	Player_setup = false;
+	NPC1_setup = false;
+	NPC2_setup = false;
+	NPC3_setup = false;
+
 	PageOne_flg = false;
 	PageOne_player = false;
 	PageOne_npc1 = false;
 	PageOne_npc2 = false;
 	PageOne_npc3 = false;
+
+	NPC1_Pass_Flg = false;
+	NPC2_Pass_Flg = false;
+	NPC3_Pass_Flg = false;
 
 	lead = 0;
 	pri = 1;
@@ -58,14 +69,13 @@ void PageOne::PageOne_Initialize() {
 
 	priority = GetRand(MAX - 1);
 
-	NPC1_Pass_Flg = false;
-	NPC2_Pass_Flg = false;
-	NPC3_Pass_Flg = false;
+	for (i = 0; i < 52; i++) {
+		Card_obj.push_back(Card(card_type[i], i % 13, i / 13, Deck_X, Deck_Y));
+	}
 
-	Player_setup = false;
-	NPC1_setup = false;
-	NPC2_setup = false;
-	NPC3_setup = false;
+	Card_obj.push_back(Card(card_type[53], 99, 5, Deck_X, Deck_Y));	//ジョーカー
+
+	Card_back = card_type[52];	//カードの裏面
 }
 
 void PageOne::PageOne_Finalize() {
@@ -78,7 +88,7 @@ void PageOne::PageOne_Update() {
 	GetMousePoint(&Mouse_X, &Mouse_Y);
 	DrawRotaGraph(640, 360, 1.0, 0, background, TRUE);
 
-	n++;	//山札からカード引くときのクールタイム（早すぎるとアクセス違反でるから）
+	n++;	//山札からカード引くときのクールタイム（早すぎると違和感があるから）
 
 	//デバッグ用
 	//color = GetColor(255, 255, 255);
@@ -89,6 +99,8 @@ void PageOne::PageOne_Update() {
 			if (Player_setup == false) {
 				if (n > 15) {
 					r = GetRand(sizeof(Card_obj));
+					Card_obj[r].card_x = Player_X;
+					Card_obj[r].card_y = Player_Y;
 					Player_card.push_back(Card_obj[r]);
 					Cemetery_card.push_back(Card_obj[r]);
 					Card_obj.erase(Card_obj.begin() + r);
@@ -102,7 +114,7 @@ void PageOne::PageOne_Update() {
 			}
 			else {
 				if (flg_p == false) {
-					DrawFormatString(700, 200, GetColor(255, 255, 255), "手番：プレイヤー");
+					DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：プレイヤー");
 
 					if (Field_card.empty()) {
 						draw = false;
@@ -118,7 +130,7 @@ void PageOne::PageOne_Update() {
 						}
 					}
 					if (draw != false) {
-						DrawFormatString(50, 450, GetColor(100, 100, 255), "カードを引いてください");
+						DrawFormatString(50, 400, GetColor(100, 100, 255), "カードを引いてください");
 					}
 
 					//プレイヤーがカード引く用
@@ -180,7 +192,8 @@ void PageOne::PageOne_Update() {
 									}
 								}
 								if (PageOne_player == false) {
-									if (Card::Hit(Mouse_X, Mouse_Y, Player_X + (card_w * 0.5) * (i % 10), Player_Y + (card_h * pow(0.5, 2)) * (i / 10), card_w, card_h, 0.5)) {
+									if (Card::Hit(Mouse_X, Mouse_Y, Player_X + (card_w * 0.5) * (i % 10), Player_Y + (card_h * 0.5) * (i / 10), card_w, card_h, 0.5)) {
+										Player_card[i].card_y = Player_Y - 50;
 										if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
 											Field_card.push_back(Player_card[i]);
 
@@ -209,6 +222,9 @@ void PageOne::PageOne_Update() {
 											PageOne_flg = false;
 										}
 									}
+									else {
+										Player_card[i].card_y = Player_Y;
+									}
 								}
 							}
 						}
@@ -231,6 +247,8 @@ void PageOne::PageOne_Update() {
 			if (NPC1_setup == false) {
 				if (n > 15) {
 					r = GetRand(sizeof(Card_obj));
+					Card_obj[r].card_x = NPC1_X;
+					Card_obj[r].card_y = NPC1_Y;
 					NPC_card_1.push_back(Card_obj[r]);
 					Cemetery_card.push_back(Card_obj[r]);
 					Card_obj.erase(Card_obj.begin() + r);
@@ -244,7 +262,7 @@ void PageOne::PageOne_Update() {
 			}
 			else {
 				if (flg_1 == false) {
-					DrawFormatString(700, 200, GetColor(255, 255, 255), "手番：NPC１号");
+					DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：NPC１号");
 
 					if (Field_card.empty()) {
 						draw = false;
@@ -362,6 +380,8 @@ void PageOne::PageOne_Update() {
 			if (NPC2_setup == false) {
 				if (n > 15) {
 					r = GetRand(sizeof(Card_obj));
+					Card_obj[r].card_x = NPC2_X;
+					Card_obj[r].card_y = NPC2_Y;
 					NPC_card_2.push_back(Card_obj[r]);
 					Cemetery_card.push_back(Card_obj[r]);
 					Card_obj.erase(Card_obj.begin() + r);
@@ -376,7 +396,7 @@ void PageOne::PageOne_Update() {
 			else {
 
 				if (flg_2 == false) {
-					DrawFormatString(700, 200, GetColor(255, 255, 255), "手番：NPC２号");
+					DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：NPC２号");
 
 					if (Field_card.empty()) {
 						draw = false;
@@ -493,6 +513,8 @@ void PageOne::PageOne_Update() {
 			if (NPC3_setup == false) {
 				if (n > 15) {
 					r = GetRand(sizeof(Card_obj));
+					Card_obj[r].card_x = NPC3_X;
+					Card_obj[r].card_y = NPC3_Y;
 					NPC_card_3.push_back(Card_obj[r]);
 					Cemetery_card.push_back(Card_obj[r]);
 					Card_obj.erase(Card_obj.begin() + r);
@@ -506,7 +528,7 @@ void PageOne::PageOne_Update() {
 			}
 			else {
 				if (flg_3 == false) {
-					DrawFormatString(700, 200, GetColor(255, 255, 255), "手番：NPC３号");
+					DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：NPC３号");
 
 					if (Field_card.empty()) {
 						draw = false;
@@ -687,11 +709,23 @@ void PageOne::PageOne_Draw() {
 	npc_2 = 0;
 	npc_3 = 0;
 
-	//DrawRotaGraph(640, 360, 1.0, 0, background, TRUE);
+	if (Field_card.empty() == false) {
+		switch (Field_card[0].suit) {
+		case 0:
+
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		}
+	}
 
 	//山札の描画
 	if (Card_obj.empty() == false) {
-		DrawRotaGraph(Deck_X, Deck_Y, 0.7, 0, Card_back.img, TRUE);
+		DrawRotaGraph(Deck_X, Deck_Y, 0.7, 0, Card_back, TRUE);
 	}
 
 	//場に出ているカードの描画
@@ -702,70 +736,73 @@ void PageOne::PageOne_Draw() {
 
 	//プレイヤーの手札描画
 	for (i = 0; i < Player_card.size(); i++) {
-		DrawRotaGraph(Player_X + (player % 10) * (card_w * 0.5), Player_Y + (player / 10) * (card_h * pow(0.5, 2)), 0.5, 0, Player_card[i].img, TRUE);
+		DrawRotaGraph(Player_card[i].card_x + (player % 10) * (card_w * 0.5), Player_card[i].card_y + (player / 10) * (card_h * 0.5), 0.5, 0, Player_card[i].img, TRUE);
 		player++;
 	}
+	//勝利時のUI
 	if (Player_setup == true && Player_card.size() == 0) {
-		DrawRotaGraph(600, 400, 1.0, 0, Crown_Icon, TRUE);
-		DrawFormatString(500, 450, GetColor(255, 255, 255), "PLAYER_WIN");
+		DrawRotaGraph(600, 400, 1.0, 0, PlayerCrown, TRUE);
 		finish = true;
 	}
 
 
 	//NPC１号の手札描画
 	for (i = 0; i < NPC_card_1.size(); i++) {
-		//DrawRotaGraph(NPC1_X + (npc_1 % 5) * (card_w * 0.3), NPC1_Y + (npc_1 / 5) * (card_h * 0.3), 0.3, 0, Card_back.img, TRUE);
+		//DrawRotaGraph(NPC1_X + (npc_1 % 5) * (card_w * 0.3), NPC1_Y + (npc_1 / 5) * (card_h * 0.3), 0.3, 0, Card_back, TRUE);
 		DrawRotaGraph(NPC1_X + (npc_1 % 5) * (card_w * 0.3), NPC1_Y + (npc_1 / 5) * (card_h * pow(0.3, 2)), 0.3, 0, NPC_card_1[i].img, TRUE);
 		npc_1++;
 	}
-
+	//パスのUI
 	if (NPC1_Pass_Flg == true) {
-		DrawGraph(0, 175, NPC_Pass_Icon, true);
+		DrawGraph(0, 175, NPC1_Pass_Icon, true);
 	}
+	//ページワン宣言時のUI
 	if (PageOne_npc1 == true) {
-		DrawGraph(800, 175, NPC_PageOne_Icon, true);
+		DrawGraph(0, 175, NPC1_PageOne_Icon, true);
 	}
+	//勝利時のUI
 	if (NPC1_setup == true && NPC_card_1.size() == 0) {
-		DrawRotaGraph(600, 400, 1.0, 0, Crown_Icon, TRUE);
-		DrawFormatString(500, 450, GetColor(255, 255, 255), "NPC1_WIN");
+		DrawRotaGraph(600, 400, 1.0, 0, NPC1_Icon, TRUE);
 		finish = true;
 	}
 
 	//NPC２号の手札描画
 	for (i = 0; i < NPC_card_2.size(); i++) {
-		//DrawRotaGraph(NPC2_X + (npc_2 % 5) * (card_w * 0.3), NPC2_Y + (npc_2 / 5) * (card_h * 0.3), 0.3, 0, Card_back.img, TRUE);
+		//DrawRotaGraph(NPC2_X + (npc_2 % 5) * (card_w * 0.3), NPC2_Y + (npc_2 / 5) * (card_h * 0.3), 0.3, 0, Card_back, TRUE);
 		DrawRotaGraph(NPC2_X + (npc_2 % 5) * (card_w * 0.3), NPC2_Y + (npc_2 / 5) * (card_h * pow(0.3, 2)), 0.3, 0, NPC_card_2[i].img, TRUE);
 		npc_2++;
 	}
-
+	//パスのUI
 	if (NPC2_Pass_Flg == true) {
-		DrawGraph(400, 105, NPC_Pass_Icon, true);
+		DrawGraph(400, 105, NPC2_Pass_Icon, true);
 	}
+	//ページワン宣言時のUI
 	if (PageOne_npc2 == true) {
-		DrawGraph(800, 175, NPC_PageOne_Icon, true);
+		DrawGraph(400, 105, NPC2_PageOne_Icon, true);
 	}
+	//勝利時のUI
 	if (NPC2_setup == true && NPC_card_2.size() == 0) {
-		DrawRotaGraph(600, 400, 1.0, 0, Crown_Icon, TRUE);
-		DrawFormatString(500, 450, GetColor(255, 255, 255), "NPC2_WIN");
+		DrawRotaGraph(600, 400, 1.0, 0, NPC2_Icon, TRUE);
 		finish = true;
 	}
 
 	//NPC３号の手札描画
 	for (i = 0; i < NPC_card_3.size(); i++) {
-		//DrawRotaGraph(NPC3_X + (npc_3 % 5) * (card_w * 0.3), NPC3_Y + (npc_3 / 5) * (card_h * 0.3), 0.3, 0, Card_back.img, TRUE);
+		//DrawRotaGraph(NPC3_X + (npc_3 % 5) * (card_w * 0.3), NPC3_Y + (npc_3 / 5) * (card_h * 0.3), 0.3, 0, Card_back, TRUE);
 		DrawRotaGraph(NPC3_X + (npc_3 % 5) * (card_w * 0.3), NPC3_Y + (npc_3 / 5) * (card_h * pow(0.3, 2)), 0.3, 0, NPC_card_3[i].img, TRUE);
 		npc_3++;
 	}
-
+	//パスのUI
 	if (NPC3_Pass_Flg == true) {
-		DrawGraph(800, 175, NPC_Pass_Icon, true);
+		DrawGraph(800, 175, NPC3_Pass_Icon, true);
 	}
+	//ページワン宣言時のUI
 	if (PageOne_npc3 == true) {
-		DrawGraph(800, 175, NPC_PageOne_Icon, true);
+		DrawGraph(800, 175, NPC3_PageOne_Icon, true);
 	}
+	//勝利時のUI
 	if (NPC3_setup == true && NPC_card_3.size() == 0) {
-		DrawRotaGraph(600, 400, 1.0, 0, Crown_Icon, TRUE);
-		DrawFormatString(500, 450, GetColor(255, 255, 255), "NPC3_WIN");
+		DrawRotaGraph(600, 400, 1.0, 0, NPC3_Icon, TRUE);
 		finish = true;
 	}
 
@@ -778,9 +815,7 @@ void PageOne::PageOne_Draw() {
 	DrawFormatString(875, 100, GetColor(255, 255, 255), "NPC");
 	DrawFormatString(875, 125, GetColor(255, 255, 255), "３号");
 
-	DrawFormatString(700, 250, GetColor(255, 255, 255), "デッキ枚数:%d", Card_obj.size());
-	DrawFormatString(700, 300, GetColor(255, 255, 255), "par:%d", pri);
-	DrawFormatString(500, 200, GetColor(0, 0, 0), "Player_card.size:%d", Player_card.size());
+	DrawFormatString(0, 665, GetColor(255, 255, 255), "山札:残り%d枚", Card_obj.size());
 
 	//デバッグ用
 	//DrawBox(890, 440,980, 500, color, TRUE);
