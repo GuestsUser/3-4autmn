@@ -3,7 +3,7 @@
 
 Scene_Karuta::Scene_Karuta() {
 	game = new Karu_Game();
-	game->Karu_Game_Initialize();
+	game->Karu_Game_Initialize(this);
 }
 Scene_Karuta::	~Scene_Karuta() {
 	delete game;
