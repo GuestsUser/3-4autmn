@@ -29,6 +29,8 @@ int voice = 0;
 int Rank_All = 0;
 
 bool now_pause = false;
+bool on_ContinueButton = false;
+bool on_MenuButton = false;
 
 bool once_bgm = false;
 
@@ -66,7 +68,8 @@ void Karu_Game::Karu_Game_Initialize() {
 	LoadDivGraph("Resource/image/Karu_Image/CpuHand_3.png", 2, 2, 1, 150, 150, Enemy3_HandIcon, TRUE);	//マウスカーソル画像をEnemy3_HandIconに格納
 	LoadDivGraph("Resource/image/Karu_Image/Karu_Otetuki.png", 2, 2, 1, 100, 100, Karu_Otetuki_img, TRUE);	//お手付きの画像をKaru_Otetuki_imgに格納
 	LoadDivGraph("Resource/image/Karu_Image/Karu_Fuda.png", 100, 10, 10, Karu_imgX, Karu_imgY, *Karu_fuda, TRUE);//絵札画像を分割してKaru_fudaに格納
-	LoadDivGraph("Resource/image/Karu_Image/Karu_PauseButton.png", 2, 2, 1, 400, 120, PauseContinueButton, TRUE);//ボタン画像を分割してPauseContinueButtonに格納
+	LoadDivGraph("Resource/image/Karu_Image/Karu_ContinueButton.png", 2, 2, 1, 400, 120, PauseContinueButton, TRUE);//ボタン画像を分割してPauseContinueButtonに格納
+	LoadDivGraph("Resource/image/Karu_Image/Karu_MenuButton.png", 2, 2, 1, 400, 120, PauseMenuButton, TRUE);//ボタン画像を分割してPauseMenuButtonに格納
 
 	//EfudaとYomifudaの構造体を初期化
 	for (int i = 0; i < KARU_MAX_Y; i++) {
@@ -174,6 +177,7 @@ void Karu_Game::Karu_Game_Update() {
 	}
 	Click_Anim();
 	Otetuki_Anim();
+	Pause_Controller();
 
 	if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH) { // 右クリックしたら
 		//絵札総入れ替え
@@ -276,6 +280,8 @@ void Karu_Game::Karu_Game_Draw() {
 
 	if (now_pause) {
 		DrawRotaGraph(640, 360, 1.0, 0, PauseBackImg, TRUE);
+		DrawRotaGraph(640, 360, 1.0, 0, PauseContinueButton[on_ContinueButton], TRUE);
+		DrawRotaGraph(640, 510, 1.0, 0, PauseMenuButton[on_MenuButton], TRUE);
 		DrawRotaGraph(Mouse_X, Mouse_Y, 1.0, 0, Player_HandIcon[Click_check], TRUE);
 	}
 }
@@ -586,7 +592,7 @@ void Karu_Game::Player_Reset() {
 }
 
 /**************
-** ポーズ関連 **
+** ポーズボタン押したら **
 * 引数  :なし
 * 戻り値:なし
 ***************/
@@ -597,6 +603,26 @@ void Karu_Game::Pause() {
 		StopSoundMem(Otetuki_Sound);
 		StopSoundMem(Karu_Bgm);
 		StopSoundMem(voice);
+	}
+}
+
+/**************
+** ポーズ関連 **
+* 引数  :なし
+* 戻り値:なし
+***************/
+void Karu_Game::Pause_Controller() {
+	if (Mouse_X > 440 && Mouse_X < 840 && Mouse_Y > 300 && Mouse_Y < 420) {
+		on_ContinueButton = true;
+	}
+	else {
+		on_ContinueButton = false;
+	}
+	if (Mouse_X > 440 && Mouse_X < 840 && Mouse_Y > 450 && Mouse_Y < 570) {
+		on_MenuButton = true;
+	}
+	else {
+		on_MenuButton = false;
 	}
 }
 
