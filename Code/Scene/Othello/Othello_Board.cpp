@@ -268,7 +268,7 @@ void Othello_Board::Othello_Board_Draw() {
     if (EndFlag == true) {
 
         DrawFormatString(800, 400, BlackCr, "ゲーム終了！");
-        DrawFormatString(800, 500, BlackCr, "3秒後にリセットします");
+        DrawFormatString(800, 500, BlackCr, "3秒後にセレクト画面\nに戻ります");
 
         if (WhiteNum < BlackNum) {  // 黒石の数の方が多かったら、黒の勝利
             switch (Player) {
@@ -658,14 +658,6 @@ int Othello_Board::BlackPut() {
     CursorPutOnCheck(Board, 1, -1, 2, 1);
     CursorPutOnCheck(Board, -1, -1, 2, 1);
 
-    //if (CursorPutOnCheck(Board, -1,  0, 2, 1)) return 1;
-    //if (CursorPutOnCheck(Board,  0,  1, 2, 1)) return 1;
-    //if (CursorPutOnCheck(Board,  0, -1, 2, 1)) return 1;
-    //if (CursorPutOnCheck(Board,  1,  1, 2, 1)) return 1;
-    //if (CursorPutOnCheck(Board, -1,  1, 2, 1)) return 1;
-    //if (CursorPutOnCheck(Board,  1, -1, 2, 1)) return 1;
-    //if (CursorPutOnCheck(Board, -1, -1, 2, 1)) return 1;
-
     return 0;
 }
 
@@ -685,33 +677,15 @@ int Othello_Board::WhitePut() {
     CursorPutOnCheck(Board, 1, -1, 1, 2);
     CursorPutOnCheck(Board, -1, -1, 1, 2);
 
-    //if (CursorPutOnCheck(Board, 1, 0, 1, 2)) return 1;
-    //if (CursorPutOnCheck(Board, -1, 0, 1, 2)) return 1;
-    //if (CursorPutOnCheck(Board, 0, 1, 1, 2)) return 1;
-    //if (CursorPutOnCheck(Board, 0, -1, 1, 2)) return 1;
-    //if (CursorPutOnCheck(Board, 1, 1, 1, 2)) return 1;
-    //if (CursorPutOnCheck(Board, -1, 1, 1, 2)) return 1;
-    //if (CursorPutOnCheck(Board, 1, -1, 1, 2)) return 1;
-    //if (CursorPutOnCheck(Board, -1, -1, 1, 2)) return 1;
-
     return 0;
 }
 
 
-// 
-int Othello_Board::WhitePutCPU(int d, int e) {
-    CPUPutOnCheck(Board,  1,  0, d, e, 1, 2);
-    CPUPutOnCheck(Board, -1,  0, d, e, 1, 2);
-    CPUPutOnCheck(Board,  0,  1, d, e, 1, 2);
-    CPUPutOnCheck(Board,  0, -1, d, e, 1, 2);
-    CPUPutOnCheck(Board,  1,  1, d, e, 1, 2);
-    CPUPutOnCheck(Board, -1,  1, d, e, 1, 2);
-    CPUPutOnCheck(Board,  1, -1, d, e, 1, 2);
-    CPUPutOnCheck(Board, -1, -1, d, e, 1, 2);
-
-    return 0;
-}
-
+/*
+* CPUが黒石を置いた位置から、挟んで変えられる白石を探して黒石に変える
+* 引数：なし
+* 戻り値：ひっくり返せる場所がなかったら retun 0 を返す
+*/
 int Othello_Board::BlackPutCPU(int d, int e) {
     CPUPutOnCheck(Board,  1,  0, d, e, 2, 1);
     CPUPutOnCheck(Board, -1,  0, d, e, 2, 1);
@@ -725,7 +699,31 @@ int Othello_Board::BlackPutCPU(int d, int e) {
     return 0;
 }
 
-// 左右上斜めに石があるかどうか調べる
+
+/*
+* CPUが白石を置いた位置から、挟んで変えられる黒石を探して白石に変える
+* 引数：なし
+* 戻り値：ひっくり返せる場所がなかったら retun 0 を返す
+*/
+int Othello_Board::WhitePutCPU(int d, int e) {
+    CPUPutOnCheck(Board, 1, 0, d, e, 1, 2);
+    CPUPutOnCheck(Board, -1, 0, d, e, 1, 2);
+    CPUPutOnCheck(Board, 0, 1, d, e, 1, 2);
+    CPUPutOnCheck(Board, 0, -1, d, e, 1, 2);
+    CPUPutOnCheck(Board, 1, 1, d, e, 1, 2);
+    CPUPutOnCheck(Board, -1, 1, d, e, 1, 2);
+    CPUPutOnCheck(Board, 1, -1, d, e, 1, 2);
+    CPUPutOnCheck(Board, -1, -1, d, e, 1, 2);
+
+    return 0;
+}
+
+
+/*
+* 黒石を置いた位置から、左右上下斜めにひっくり返せる石がないか調べる
+* 引数：なし
+* 戻り値：ひっくり返せる場所がなかったら retun 0 を返す
+*/
 int Othello_Board::BlackPutCheck(int d, int e) {
 
     if (PutSearch(Board, 1, 0, d, e, 2, 1)){    // 右

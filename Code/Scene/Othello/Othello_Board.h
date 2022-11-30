@@ -1,11 +1,10 @@
 #pragma once
-//#include "./Othello_Player.h"
 #include "DxLib.h"
 #include "./../Scene.h"
-#define PB 10
-#define MAP_SIZE 66
+#define PB 10			// ボードの配列の数
+#define MAP_SIZE 66		// ボードの1マス当たりの大きさ
 
-//
+
 class Othello_Board {
 private:
 	Scene* Parent;
@@ -26,62 +25,60 @@ private:
 	int WhiteNum;	// 白石の数を入れる変数
 	int TimeCount;	// 時間を測る用の変数
 	int CheckNum;	// 
-	int ReturnNum;
-	int ReturnNumMax;
-	int Board_X, Board_Y;
-	int RandomNum;
-	int Player;
+	int ReturnNum;	// 
+	int ReturnNumMax;		// 
+	int Board_X, Board_Y;	//　board[Board_X][Board_Y] みたいな感じで、ボードのマスを入れる変数
+	int RandomNum;	// 
+	int Player;		// プレイヤーかどうかを判定するための変数
 
-	bool DrawFlag;
-	bool CheckFlag;
-	bool PassFlag;
-	bool EndFlag;
-	bool RandomFlag;
-	bool CornerFlag;
+	bool DrawFlag;		// カーソルがマスの上に来た時に赤く描画していいか判定
+	bool CheckFlag;		// 
+	bool PassFlag;		// パスされたかどうかを判定
+	bool EndFlag;		// 終了条件を満たしているかどうかを判定
+	bool RandomFlag;	// 
+	bool CornerFlag;	// 角が取れるかどうかを判定
 
 public:
-	int Mouse_X;
-	int Mouse_Y;
-	int Square_X;
-	int Square_Y;
-	int Board[PB][PB];
+	int Mouse_X;		// マウスのX座標のポインタを入れる用変数
+	int Mouse_Y;		// マウスのY座標のポインタを入れる用変数
+	int Square_X;		// マウスから読みとったX座標を、MAP_SIZEで割った値を入れた変数
+	int Square_Y;		// マウスから読み取ったY座標を、MAP_SIZEで割った値を入れた変数
+	int Board[PB][PB];	// ボードのマップチップ情報を入れる用変数
 
-	void Othello_Board_Initialize(Scene* scene);
-	void Othello_Board_Finalize();
-	void Othello_Board_Update();
-	void Othello_Board_Draw();
+	void Othello_Board_Initialize(Scene* scene);	// 初期化
+	void Othello_Board_Finalize();					// 終了処理
+	void Othello_Board_Update();					// 更新
+	void Othello_Board_Draw();						// 描画
 
-	void Init_OthelloBoard(int board[PB][PB]);
-	void Print_OthelloBoard(int board[PB][PB]);
+	void Init_OthelloBoard(int board[PB][PB]);		// ボードを初期化
+	void Print_OthelloBoard(int board[PB][PB]);		// ボードを表示
 
-	void CursorOn_OthelloBoard();
+	void CursorOn_OthelloBoard();		// 置ける場所にカーソルが来たマスを赤くする
 
-	int CursorPutOnCheck(int board[PB][PB], int p, int q, int enemy, int player);
-	int CPUPutOnCheck(int board[PB][PB], int p, int q, int d, int e, int enemy, int player);
+	int CursorPutOnCheck(int board[PB][PB], int p, int q, int enemy, int player);			// 選択したマスに石を置いて石をひっくり返す
+	int CPUPutOnCheck(int board[PB][PB], int p, int q, int d, int e, int enemy, int player);	// CPUが選択したマスに石を置いてひっくり返す
 
+	int PutSearch(int board[PB][PB], int p, int q, int d, int e, int enemy, int player);	// 置ける場所がないか探す
 
-
-	int PutSearch(int board[PB][PB], int p, int q, int d, int e, int enemy, int player);
-
-	int BlackPutCheck(int d, int e);
-	int BlackPut();
-	int BlackPutCPU(int d, int e);
-	int BoardSearchBlack(int board[PB][PB]);
-
-
-	int WhitePutCheck(int d, int e);
-	int WhitePut();
-	int WhitePutCPU(int d, int e);
-	int BoardSearchWhite(int board[PB][PB]);
+	int BlackPutCheck(int d, int e);			// 黒石が置ける場所があるかどうか調べる
+	int BlackPut();								// 黒石を置く
+	int BlackPutCPU(int d, int e);				// 黒石がCPUの場合の置ける場所があるかどうか調べる関数
+	int BoardSearchBlack(int board[PB][PB]);	// 黒石を置けるようにする処理の関数
+	int CPUBlack(int board[PB][PB]);			// 黒石がCPUの場合の黒石を置く処理
 
 
-	void BoardSearchBWNumber(int board[PB][PB]);
+	int WhitePutCheck(int d, int e);			// 白石が置ける場所があるかどうか調べる
+	int WhitePut();								// 白石を置く
+	int WhitePutCPU(int d, int e);				// 白石がCPUの場合の置ける場所があるかどうか調べる関数
+	int BoardSearchWhite(int board[PB][PB]);	// 白石を置けるようにする処理の関数	
+	int CPUWhite(int board[PB][PB]);			// 白石がCPUの場合の置く処理
 
-	int CPUWhite(int board[PB][PB]);
-	int CPUBlack(int board[PB][PB]);
-	int EndGame(int board[PB][PB]);
+	void BoardSearchBWNumber(int board[PB][PB]);	// 黒・白石が、現在どれだけあるか調べる関数
 
-	int RandomOrder();
+
+	int EndGame(int board[PB][PB]);				// ゲームの終了条件を満たしたら終了する
+
+	int RandomOrder();							// 先手・後手を決める関数
 	/*
 	* プレイヤーが黒色（先手）の場合、白色をＣＰＵにしたい
 	* プレイヤーが白色（後手）の場合、黒色をＣＰＵにしたい

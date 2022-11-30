@@ -6,6 +6,7 @@
 #include "./../Code/GetKey.h"
 
 Othello_Player* OP;
+Othello_Board* OB;
 
 void Othello_Player::Othello_Plyaer_Initialize() {
 
@@ -44,10 +45,11 @@ void Othello_Player::Othello_Player_Update() {
 void Othello_Player::Othello_Player_Draw() {
     //if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_FREE) {
 
-
+    //OB->CPUBlack(OB->Board);
     //}
 }
 
 //void Othello_Player::SetOB(Othello_Board* ob) {
 //    OB = ob;
 //}
+
