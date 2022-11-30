@@ -17,6 +17,10 @@ void CF_Player::CF_Player_Initialize(Scene* scene){
 	CF_Panel = LoadGraph("Resource/image/CF_Panel.png"); //パネル
 	CF_PCoin = LoadGraph("Resource/image/Player_Coin.png"); //プレイヤーコイン
 	CF_CCoin = LoadGraph("Resource/image/CPU_Coin.png"); //CPUコイン
+	Pause_Button = LoadGraph("Resource/image/PauseButton.png");
+	Pause_Back = LoadGraph("Resource/image/PauseBack.png");
+	Pause_Continue = LoadDivGraph("Resource/image/ContinueButton.png", 2, 2, 1, 400, 120, pause_continue);
+	Pause_Select = LoadDivGraph("Resource/image/MenuButton.png", 2, 2, 1, 400, 120, pause_select);
 	CF_GameBGM = LoadSoundMem("Resource/bgm/CF_BGM.wav"); //ゲーム中のBGM
 	CF_StartSE = LoadSoundMem("Resource/se/CF_SoundofCollision.wav"); //先攻後攻の文字を表示する時のSE
 	CF_CoinFallSE = LoadSoundMem("Resource/se/CF_CoinFallSound.wav"); //コインがぶつかったときのSE
@@ -90,7 +94,7 @@ void CF_Player::CF_Player_Update() {
 			Yajirusi_Move = -Yajirusi_Move;
 		}
 		/*ポーズボタンを押したらポーズ画面を開くフラグをtrueにする*/
-		if (30 <= Mouse_X && Mouse_X <= 147 && 35 <= Mouse_Y && Mouse_Y <= 89) {
+		if (20 <= Mouse_X && Mouse_X <= 200 && 25 <= Mouse_Y && Mouse_Y <= 105) {
 			if(OldKey != KEY_FREE && nowKey == KEY_PULL) {
 				PauseFlg = true;
 			}
@@ -173,19 +177,19 @@ void CF_Player::CF_Player_Update() {
 		}
 		/*ポーズ画面の内容*/
 	}else if (PauseFlg == true) {
-		if ((450 <= Mouse_X && Mouse_X <= 790 && 240 <= Mouse_Y && Mouse_Y <= 340) || (30 <= Mouse_X && Mouse_X <= 147 && 35 <= Mouse_Y && Mouse_Y <= 89)) {
+		if ((450 <= Mouse_X && Mouse_X <= 850 && 320 <= Mouse_Y && Mouse_Y <= 440) ||(20 <= Mouse_X && Mouse_X <= 200 && 25 <= Mouse_Y && Mouse_Y <= 105)) {
 			if (OldKey != KEY_FREE && nowKey == KEY_PULL) {  //マウスの左キーを離した時
 				PauseFlg = false;
 			}
 		}
-		if (330 <= Mouse_X && Mouse_X <= 910  && 460 <= Mouse_Y && Mouse_Y <= 560) {
+		if (450 <= Mouse_X && Mouse_X <= 850 && 470 <= Mouse_Y && Mouse_Y <= 590) {
 			if (OldKey != KEY_FREE && nowKey == KEY_PULL) {  //マウスの左キーを離した時
 				StopSoundMem(CF_GameBGM);
 				parent->SetNext(new Scene_Select());
 			}
 		}
 	}
-	OldKey = nowKey; //前の入力していたキーを今入力していたキーに上書きする
+	OldKey = nowKey; //前に入力していたキーを今入力していたキーに上書きする
 }
 void CF_Player::CF_Player_Draw() {
 	DrawRotaGraph(640, 360, 1.0, 0, CF_Back, TRUE);
@@ -218,8 +222,7 @@ void CF_Player::CF_Player_Draw() {
 		SetFontSize(24);
 		if (CF_Clear == false) {
 			//ポーズ画面
-			DrawBox(30, 35, 147, 89, 0xffffff, TRUE);
-			DrawFormatString(50, 50, 0x000000, "ポーズ");
+			DrawRotaGraph(110, 65, 0.9, 0, Pause_Button, TRUE);
 			if (PlayUser == Coin_Player) {
 				DrawFormatString(1080, 50, 0x000000, "あなたの番です");
 				DrawRotaGraph(Player_X, Player_Y, 0.17, 0, CF_PCoin, TRUE);
@@ -256,28 +259,28 @@ void CF_Player::CF_Player_Draw() {
 		}
 		/*ポーズ画面の画像*/
 		if (PauseFlg == true) {
-			DrawBox(150, 100, 1110, 660, 0xffffff, TRUE);
-			SetFontSize(80);
-			DrawFormatString(500, 120, 0x000000, "ポーズ");
-			if (450 <= Mouse_X && Mouse_X <= 790 && 240 <= Mouse_Y && Mouse_Y <= 340 && nowKey == KEY_HOLD) {
-				DrawBox(490, 250, 750, 330, 0xff0000, TRUE);
-				SetFontSize(60); 
-				DrawFormatString(500, 260, 0x000000, "つづける");
+			DrawRotaGraph(650, 380, 1.15, 0, Pause_Back, TRUE);
+			if (450 <= Mouse_X && Mouse_X <= 850 && 320 <= Mouse_Y && Mouse_Y <= 440) {
+				if (nowKey == KEY_HOLD) {
+					DrawRotaGraph(650, 380, 0.9, 0, pause_continue[1], TRUE);
+				}
+				else {
+					DrawRotaGraph(650, 380, 1.0, 0, pause_continue[1], TRUE);
+				}
 			}
 			else {
-				SetFontSize(80);
-				DrawBox(450, 240, 790, 340, 0xff0000, TRUE);
-				DrawFormatString(460, 250, 0x000000, "つづける");
+				DrawRotaGraph(650, 380, 1.0, 0, pause_continue[0], TRUE);
 			}
-			if (330 <= Mouse_X && Mouse_X <= 910 && 460 <= Mouse_Y && Mouse_Y <= 560 && nowKey == KEY_HOLD) {
-				DrawBox(400, 470, 840, 540, 0xff0000, TRUE);
-				SetFontSize(60);
-				DrawFormatString(410, 475, 0x000000, "セレクトに戻る");
+			if (450 <= Mouse_X && Mouse_X <= 850 && 470 <= Mouse_Y && Mouse_Y <= 590) {
+				if (nowKey == KEY_HOLD) {
+					DrawRotaGraph(650, 530, 0.9, 0, pause_select[1], TRUE);
+				}
+				else {
+					DrawRotaGraph(650, 530, 1.0, 0, pause_select[1], TRUE);
+				}
 			}
 			else {
-				SetFontSize(80);
-				DrawBox(330, 460, 930, 560, 0xff0000, TRUE);
-				DrawFormatString(350, 470, 0x000000, "セレクトに戻る");
+				DrawRotaGraph(650, 530, 1.0, 0, pause_select[0], TRUE);
 			}
 		}
 	}
