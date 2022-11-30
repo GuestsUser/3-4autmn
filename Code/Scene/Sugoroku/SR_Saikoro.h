@@ -9,10 +9,11 @@ private:
 
 	bool Shuffle = false;	/*サイコロシャッフル可否フラグ*/
 	bool Click = true;	/*サイコロクリック可否フラグ*/
-	bool Goalflg;
+	bool Goalflg;	/*ゴールしているかのフラグ*/
 	bool Sumflg;	/*Player移動量計算するとき用のフラグ*/
-	bool Whoisplay = true;
-	bool Replay = false;
+	bool Whoisplay = true;	/*テキストが被らないようにするフラグ*/
+	bool Replay = false;	/*サイコロを振りなおすフラグ*/
+	bool Back = false;	/*サイコロを振った分だけ戻るフラグ*/
 
 	int count;
 	int countdiff;
@@ -33,6 +34,7 @@ public:
 	void Goal();
 	void Restart();
 	void Plus();
+	void Minus();
 	void ReDice();
 	void SR_Enemy1();
 	void SR_Enemy2();
