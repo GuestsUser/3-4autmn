@@ -6,7 +6,7 @@ Scene_Othello::Scene_Othello() {
 	C_Board = new Othello_Board();
 	C_Player = new Othello_Player();
 
-	C_Board->Othello_Board_Initialize();
+	C_Board->Othello_Board_Initialize(this);
 	C_Player->Othello_Plyaer_Initialize();
 }
 

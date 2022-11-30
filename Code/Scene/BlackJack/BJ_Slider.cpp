@@ -2,7 +2,6 @@
 
 Slider::Slider() {
 
-  SetValue(0);
   SetPosition(0, 0);
   SetHandleSize(0, 0);
   SetHandleColor(0xffffff);
@@ -15,7 +14,84 @@ Slider::Slider() {
   SetMinValue(100); //最大値と最小値の指定する順番に注意
   SetMaxValue(10000);  //先に最大値を指定しようとすると、その指定した値が現在の最小値よりも小さいと指定できません
 
-  SetValue(0);
+  SetValue(100);
+}
+
+void Slider::Inisialize() {
+
+  SetPosition(320, 600);
+  SetHandleSize(25, 25);
+  SetBackSize(150, 20);
+
+  SetFillColor(0x00ffff);
+
+  //SetMinValue(100); //最大値と最小値の指定する順番に注意
+  //SetMaxValue(10000);  //先に最大値を指定しようとすると、その指定した値が現在の最小値よりも小さいと指定できません
+
+  //SetValue(100);
+
+}
+
+void Slider::Update(int mousePosX, int mousePoxY, bool isClick) {
+
+
+  if (PixelAndBoxHit(mousePosX, mousePoxY, handlePosition.x, handlePosition.y, handleSize.x, handleSize.y) == true && isClick == true) {
+
+    isHandleMove = true;
+  }
+  else if (PixelAndBoxHit(mousePosX, mousePoxY, position.x, position.y, backSize.x + 100, backSize.y + 50) == false || isClick == false) {
+
+    isHandleMove = false;
+  }
+
+  if (isHandleMove == true) {
+
+    handlePosition.x = mousePosX;
+
+    if (handlePosition.x > position.x + backSize.x) handlePosition.x = position.x + backSize.x;
+    else if (handlePosition.x < position.x - backSize.x) handlePosition.x = position.x - backSize.x;
+
+
+    //value = (int)(handlePosition.x - (position.x - backSize.x)) / (backSize.x * 2.0f) * (maxValue - minValue) + minValue / 100;
+
+    //value = ((handlePosition.x - (position.x - backSize.x)) / (backSize.x * 2.0f) * (maxValue - minValue) + minValue) /*+ value / 1000*/;
+    value = (((handlePosition.x - (position.x - backSize.x)) / (backSize.x * 2.0f)) * (maxValue - minValue) + minValue);
+
+    if (value < minValue) value = minValue;
+    else if (value > maxValue) value = maxValue;
+
+  }
+  else {
+
+    handlePosition = {
+        (position.x - backSize.x) + (value - minValue) / (maxValue - minValue) * (backSize.x * 2),
+        position.y,
+    };
+  }
+}
+
+void Slider::Draw() {
+
+  DrawBox(
+    position.x - backSize.x, position.y - backSize.y,
+    position.x + backSize.x, position.y + backSize.y,
+    backColor, true);
+
+
+  DrawBox(
+    position.x - backSize.x + 1, position.y - backSize.y + 1,
+    handlePosition.x - 1, position.y + backSize.y - 1,
+    fillColor, true);
+
+  DrawFormatString(320 - 125, 500 + 50, 0xffffff, "%d ～ %d : BET = %.1f", (int)minValue, (int)maxValue, Slider::GetValue());
+
+  if (GetHandleEnabled()) {
+
+    DrawBox(
+      handlePosition.x - handleSize.x, handlePosition.y - handleSize.y,
+      handlePosition.x + handleSize.x, handlePosition.y + handleSize.y,
+      handleColor, true);
+  }
 }
 
 void Slider::SetValue(float setValue) {
@@ -74,80 +150,4 @@ void Slider::SetBackColor(int setBackColor) {
 
 void Slider::SetFillColor(int setFillColor) {
   fillColor = setFillColor;
-}
-
-void Slider::Inisialize() {
-
-  SetPosition(320, 240);
-  SetHandleSize(25, 25);
-  SetBackSize(150, 20);
-
-  SetFillColor(0x00ffff);
-
-  SetMinValue(100); //最大値と最小値の指定する順番に注意
-  SetMaxValue(10000);  //先に最大値を指定しようとすると、その指定した値が現在の最小値よりも小さいと指定できません
-
-  SetValue(0);
-
-}
-
-void Slider::Update(int mousePosX, int mousePoxY, bool isClick) {
-
-
-  if (PixelAndBoxHit(mousePosX, mousePoxY, handlePosition.x, handlePosition.y, handleSize.x, handleSize.y) == true && isClick == true) {
-
-    isHandleMove = true;
-  }
-  else if (PixelAndBoxHit(mousePosX, mousePoxY, position.x, position.y, backSize.x + 100, backSize.y + 50) == false || isClick == false) {
-
-    isHandleMove = false;
-  }
-
-  if (isHandleMove == true) {
-
-    handlePosition.x = mousePosX;
-
-    if (handlePosition.x > position.x + backSize.x) handlePosition.x = position.x + backSize.x;
-    else if (handlePosition.x < position.x - backSize.x) handlePosition.x = position.x - backSize.x;
-
-
-    //value = (int)(handlePosition.x - (position.x - backSize.x)) / (backSize.x * 2.0f) * (maxValue - minValue) + minValue / 100;
-
-    //value = ((handlePosition.x - (position.x - backSize.x)) / (backSize.x * 2.0f) * (maxValue - minValue) + minValue) /*+ value / 1000*/;
-    value = ( ( ( handlePosition.x  - (position.x - backSize.x ) ) / (backSize.x * 2.0f ) ) * (maxValue - minValue) + minValue);
-
-    if (value < minValue) value = minValue;
-    else if (value > maxValue) value = maxValue;
-
-  }
-  else {
-
-    handlePosition = {
-        (position.x - backSize.x) + (value - minValue) / (maxValue - minValue) * (backSize.x * 2),
-        position.y,
-    };
-  }
-}
-
-void Slider::Draw() {
-
-  DrawBox(
-    position.x - backSize.x, position.y - backSize.y,
-    position.x + backSize.x, position.y + backSize.y,
-    backColor, true);
-
-
-  DrawBox(
-    position.x - backSize.x + 1, position.y - backSize.y + 1,
-    handlePosition.x - 1, position.y + backSize.y - 1,
-    fillColor, true);
-
-
-  if (GetHandleEnabled()) {
-
-    DrawBox(
-      handlePosition.x - handleSize.x, handlePosition.y - handleSize.y,
-      handlePosition.x + handleSize.x, handlePosition.y + handleSize.y,
-      handleColor, true);
-  }
 }

@@ -26,6 +26,8 @@ private:
 	int Yajirusi_Col[7]; //矢印の色
 	int Mouse_X; //マウスのX座標
 	int Mouse_Y; //マウスのY座標
+	int OldKey; 
+	int nowKey;
 	int Player_X; //プレイヤーのX座標
 	int CPU_X;
 	int CPU_j;

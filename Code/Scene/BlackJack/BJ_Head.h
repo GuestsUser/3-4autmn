@@ -10,6 +10,7 @@
 #include"DxLib.h"
 
 #include"../Scene.h"
+#include"../Title/Scene_Select.h"
 
 #include"BJ_Shoe.h"
 #include"BJ_Dealer.h"
@@ -18,3 +19,4 @@
 #include"BJ_Slider.h"
 
 #include"./../Code/GetKey.h"
+#include"./../../ConstVal.h"

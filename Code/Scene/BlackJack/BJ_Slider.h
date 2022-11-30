@@ -22,6 +22,8 @@ private:
 
 public:
 
+  int Get_MaxValue();
+
   Slider();
 
   void SetValue(float setValue);

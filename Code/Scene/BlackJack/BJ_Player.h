@@ -11,16 +11,12 @@ private:
   int std_x, std_y, std_w, std_h;
   int spt_x, spt_y, spt_w, spt_h;
   int dbl_x, dbl_y, dbl_w, dbl_h;
+  int bet_x, bet_y, bet_w, bet_h;
 
   int spt_type;
   int hit_num;
-  int dbl_ct;
+  //int dbl_ct;
 
-  /*デバッグ用*/
-  int color, color2, color3, color4;
-  int c, c2, c3, c4;
-  int dealer_calc;
-  /*デバッグ用*/
 
   int p_coin = 1000;
 
@@ -46,9 +42,11 @@ public:
   void Update();
   void Draw();
 
+  int P_MaxCoin();
 
   bool ButtonHit(int, int, int, int);
   bool Now_Game();
+  bool Bet_Flg();
 
   void Show_Hand();
   void Spt_Show_Hand();
