@@ -44,6 +44,7 @@ public:
 	int Square_X;		// マウスから読みとったX座標を、MAP_SIZEで割った値を入れた変数
 	int Square_Y;		// マウスから読み取ったY座標を、MAP_SIZEで割った値を入れた変数
 	int Board[PB][PB];	// ボードのマップチップ情報を入れる用変数
+	int ScoreBoard[PB][PB];
 
 	void Othello_Board_Initialize(Scene* scene);	// 初期化
 	void Othello_Board_Finalize();					// 終了処理
@@ -71,7 +72,7 @@ public:
 	int WhitePut();								// 白石を置く
 	int WhitePutCPU(int d, int e);				// 白石がCPUの場合の置ける場所があるかどうか調べる関数
 	int BoardSearchWhite(int board[PB][PB]);	// 白石を置けるようにする処理の関数	
-	int CPUWhite(int board[PB][PB]);			// 白石がCPUの場合の置く処理
+	int CPUWhite(int board[PB][PB], int scoreboard[PB][PB]);			// 白石がCPUの場合の置く処理
 
 	void BoardSearchBWNumber(int board[PB][PB]);	// 黒・白石が、現在どれだけあるか調べる関数
 
@@ -79,11 +80,9 @@ public:
 	int EndGame(int board[PB][PB]);				// ゲームの終了条件を満たしたら終了する
 
 	int RandomOrder();							// 先手・後手を決める関数
-	/*
-	* プレイヤーが黒色（先手）の場合、白色をＣＰＵにしたい
-	* プレイヤーが白色（後手）の場合、黒色をＣＰＵにしたい
-	*/
 
+	void BoardScore(int board[PB][PB]);			//　静的評価を合計する関数
+	void ScoreCompare(int board[PB][PB]);
 };
 
 extern Othello_Board* OB;

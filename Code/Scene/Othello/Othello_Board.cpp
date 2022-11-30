@@ -45,7 +45,7 @@ void Othello_Board::Othello_Board_Initialize(Scene* scene) {
     CornerFlag = false;
 
     Init_OthelloBoard(Board);           // ボードを初期化
-    
+    BoardScore(ScoreBoard);
 }
 
 // -------------終了処理---------------------------
@@ -124,7 +124,7 @@ void Othello_Board::Othello_Board_Update() {
                         // 1秒経ってから
                         if (TimeCount++ >= 60) {
                             TimeCount = 0;      // TimeCount を初期化
-                            CPUWhite(Board);    // 一番ひっくり返せる場所に置く
+                            CPUWhite(Board, ScoreBoard);    // 一番ひっくり返せる場所に置く
                             PlaySoundMem(PutSE, DX_PLAYTYPE_BACK, true);
                             OrderNum = 0;       // 黒の番にする
                         }
@@ -268,7 +268,7 @@ void Othello_Board::Othello_Board_Draw() {
     if (EndFlag == true) {
 
         DrawFormatString(800, 400, BlackCr, "ゲーム終了！");
-        DrawFormatString(800, 500, BlackCr, "3秒後にセレクト画面\nに戻ります");
+        DrawFormatString(800, 500, BlackCr, "3秒後にセレクト\n画面に戻ります");
 
         if (WhiteNum < BlackNum) {  // 黒石の数の方が多かったら、黒の勝利
             switch (Player) {
@@ -359,22 +359,64 @@ void Othello_Board::Othello_Board_Draw() {
 * 戻り値：なし
 */
 void Othello_Board::Init_OthelloBoard(int board[PB][PB]) {
+
     static int InitBoard[PB][PB] =
     {
      {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
-     {-1,  5,  7,  0,  0,  0,  0,  7,  5, -1},
-     {-1,  7,  7,  0,  0,  0,  0,  7,  7, -1},
-     {-1,  0,  0,  0,  0,  0,  0,  0,  0, -1},
-     {-1,  0,  0,  0,  2,  1,  0,  0,  0, -1},
-     {-1,  0,  0,  0,  1,  2,  0,  0,  0, -1},
-     {-1,  0,  0,  0,  0,  0,  0,  0,  0, -1},
-     {-1,  7,  7,  0,  0,  0,  0,  7,  7, -1},
-     {-1,  5,  7,  0,  0,  0,  0,  7,  5, -1},
+     {-1,  0, 0,   0,  0,  0,  0,  0,  0, -1},
+     {-1,  0, 0,   0,  0,  0,  0,  0,  0, -1},
+     {-1,  0, 0,   0,  0,  0,  0,  0,  0, -1},
+     {-1,  0, 0,   0,  2,  1,  0,  0,  0, -1},
+     {-1,  0, 0,   0,  1,  2,  0,  0,  0, -1},
+     {-1,  0, 0,   0,  0,  0,  0,  0,  0, -1},
+     {-1,  0, 0,   0,  0,  0,  0,  0,  0, -1},
+     {-1,  0, 0,   0,  0,  0,  0,  0,  0, -1},
      {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1}
     };
     memcpy(board, InitBoard, sizeof(InitBoard));
 }
 
+void Othello_Board::BoardScore(int scoreboard[PB][PB]) {
+    static int boardScore[PB][PB] =
+    {
+     {-99, -1, -1, -1, -1, -1, -1, -1, -1, -1},
+     {-1, 50,-10, 10, -2, -2, 10,-10, 50, -1},
+     {-1,-10,-20, -2, -5, -5, -2,-20,-10, -1},
+     {-1, 10, -2,  5, -2, 11,  5, -1, 10, -1},
+     {-1, -2, -5, -2,  0,  0, -2, -5, -2, -1},
+     {-1, -2, -5, -2,  0,  0, -2, -5, -2, -1},
+     {-1, 10, -2,  5, -2, -2,  5, -1, 10, -1},
+     {-1,-10,-20, -2, -5, -5, -2,-20,-10, -1},
+     {-1, 50,-10, 10, -2, -2, 10,-10, 50, -1},
+     {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1}
+    };
+    memcpy(scoreboard, boardScore, sizeof(boardScore));
+}
+
+void Othello_Board::ScoreCompare(int board[PB][PB]) {
+    for (int i = 0; i <= 8; i++) {
+        for (int j = 0; j <= 8; j++) {
+            if (WhitePutCheck(i, j)) {
+                switch (board[i][j]) {
+                case -20:
+                    break;
+                case -10:
+                    break;
+                case -5:
+                    break;
+                case -2:
+                    break;
+                case 5:
+                    break;
+                case 10:
+                    break;
+                case 50:
+                    break;
+                }
+            }
+        }
+    }
+}
 
 /*
 * ボードを表示する
@@ -987,28 +1029,38 @@ int Othello_Board::EndGame(int board[PB][PB]) {
 
 
 // 白石のCPU
-int Othello_Board::CPUWhite(int board[PB][PB]) {
+int Othello_Board::CPUWhite(int board[PB][PB], int scoreboard[PB][PB]) {
+    Board_X = 0;
+    Board_Y = 0;
     for (int i = 1; i <= 8; i++) {
         for (int j = 1; j <= 8; j++) {
-            if (board[i][j] == 8) {
-                Board_X = i;
-                Board_Y = j;
-            }
+            //// 角周辺
+            //if (board[i][j] == 8) {
+            //    Board_X = i;
+            //    Board_Y = j;
+            //}
+            //// 何もない場所
+            //if (board[i][j] == 4) {
+            //    if (ReturnNumMax < WhitePutCheck(i, j)) {
+            //        ReturnNumMax = WhitePutCheck(i, j);
+            //        Board_X = i;
+            //        Board_Y = j;
+            //    }
+            //}
+            //// 角
+            //if (board[i][j] == 6) {
+            //    Board_X = i;
+            //    Board_Y = j;
+            //    CornerFlag = true;
+            //    break;
+            //}
 
+            // scoreboard[][]に最小値を入れて、毎回比べさせたい
             if (board[i][j] == 4) {
-
-                if (ReturnNumMax < WhitePutCheck(i, j)) {
-                    ReturnNumMax = WhitePutCheck(i, j);
+                if (scoreboard[Board_X][Board_Y] < scoreboard[i][j]) {
                     Board_X = i;
                     Board_Y = j;
                 }
-            }
-
-            if (board[i][j] == 6) {
-                Board_X = i;
-                Board_Y = j;
-                CornerFlag = true;
-                break;
             }
         }
         if (CornerFlag == true) {
