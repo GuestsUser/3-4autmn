@@ -19,3 +19,4 @@
 #include"BJ_Slider.h"
 
 #include"./../Code/GetKey.h"
+#include"./../../ConstVal.h"

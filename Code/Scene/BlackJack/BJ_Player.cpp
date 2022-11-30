@@ -87,11 +87,11 @@ void Player::Initialize() {
 void Player::Update() {
 
 
+  DrawFormatString(0, 0, 0xffffff, "%d", game_flg);
 
 }
 
 void Player::Draw() {
-
 
   SetFontSize(24);
   DrawFormatString(10, 650, 0xffffff, "アクションを選択してください");
@@ -111,7 +111,7 @@ void Player::Draw() {
   if (!split) {
     DrawFormatString(420, hit_y, 0xffffff, "Bet");
     DrawFormatString(420, hit_y-50, 0xffffff, "Bet: %d",bet_flg);
-    DrawFormatString(500, 630, 0xffffff, "掛金：%d", bet_coin);
+    //DrawFormatString(500, 630, 0xffffff, "掛金：%d", bet_coin);
   }
   else {
     DrawFormatString(440, 630, 0xffffff, "00000");
@@ -149,6 +149,12 @@ void Player::Draw() {
 
 
 
+
+}
+
+int Player::P_MaxCoin() {
+
+  return p_coin;
 
 }
 
@@ -203,21 +209,24 @@ bool Player::Bet_Flg() {
 /*ゲーム実行*/
 bool Player::Play(Shoe* shoe) {
 
-  /*ボタン処理（hit,stand,double,splite）*/
-  hit = Player::ButtonHit(hit_x, hit_y, hit_w, hit_h);
-  spt = Player::ButtonHit(spt_x, spt_y, spt_w, spt_h);
+  if (game_flg) {
+    /*ボタン処理（hit,stand,double,splite）*/
+    hit = Player::ButtonHit(hit_x, hit_y, hit_w, hit_h);
+    spt = Player::ButtonHit(spt_x, spt_y, spt_w, spt_h);
 
-  if (Player::ButtonHit(std_x, std_y, std_w, std_h) || dbl) {
-    std = true;
-  }
-  if (Player::ButtonHit(dbl_x, dbl_y, dbl_w, dbl_h) && (hand_num == 2 || spt_hand_num == 2 )) {
-    dbl = true;
-  }
+    if (Player::ButtonHit(std_x, std_y, std_w, std_h) || dbl) {
+      std = true;
+    }
+    if (Player::ButtonHit(dbl_x, dbl_y, dbl_w, dbl_h) && (hand_num == 2 || spt_hand_num == 2)) {
+      dbl = true;
+    }
 
-  if (Player::ButtonHit(bet_x, bet_y, bet_w, bet_h)) {
-    bet_flg = true;
+    if (Player::ButtonHit(bet_x, bet_y, bet_w, bet_h)) {
+      bet_flg = true;
+    }
+    //else bet_flg = false;
+    /*ボタン処理（hit,stand,double,splite）*/
   }
-  //else bet_flg = false;
 
   /*バーストするまでループ処理*/
   if (game_flg) {
