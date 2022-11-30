@@ -11,7 +11,7 @@ private:
   int std_x, std_y, std_w, std_h;
   int spt_x, spt_y, spt_w, spt_h;
   int dbl_x, dbl_y, dbl_w, dbl_h;
-  int bet_x, bet_y, bet_w, bet_h;
+  //int bet_x, bet_y, bet_w, bet_h;
 
   int spt_type;
   int hit_num;
@@ -46,7 +46,7 @@ public:
 
   bool ButtonHit(int, int, int, int);
   bool Now_Game();
-  bool Bet_Flg();
+  void Bet_Flg(bool);
 
   void Show_Hand();
   void Spt_Show_Hand();
