@@ -18,6 +18,7 @@ private:
 	int BlackCr;	// 黒色をセットしておく用の変数
 	int WhiteCr;	// 白色をセットしておく用の変数
 	int GreenCr;	// 緑色をセットしておく用の変数
+	int RedCr;
 	int Cr;
 
 	int OrderNum;	// 手番を決める数を入れる変数
@@ -30,6 +31,7 @@ private:
 	int Board_X, Board_Y;	//　board[Board_X][Board_Y] みたいな感じで、ボードのマスを入れる変数
 	int RandomNum;	// 
 	int Player;		// プレイヤーかどうかを判定するための変数
+	int PutPlace_X, PutPlace_Y;		// 置いた場所を保存する変数
 
 	bool DrawFlag;		// カーソルがマスの上に来た時に赤く描画していいか判定
 	bool CheckFlag;		// 
@@ -65,7 +67,7 @@ public:
 	int BlackPut();								// 黒石を置く
 	int BlackPutCPU(int d, int e);				// 黒石がCPUの場合の置ける場所があるかどうか調べる関数
 	int BoardSearchBlack(int board[PB][PB]);	// 黒石を置けるようにする処理の関数
-	int CPUBlack(int board[PB][PB]);			// 黒石がCPUの場合の黒石を置く処理
+	int CPUBlack(int board[PB][PB], int scoreboard[PB][PB]);			// 黒石がCPUの場合の黒石を置く処理
 
 
 	int WhitePutCheck(int d, int e);			// 白石が置ける場所があるかどうか調べる
@@ -82,7 +84,7 @@ public:
 	int RandomOrder();							// 先手・後手を決める関数
 
 	void BoardScore(int board[PB][PB]);			//　静的評価を合計する関数
-	void ScoreCompare(int board[PB][PB]);
+	//void ScoreCompare(int board[PB][PB]);
 };
 
 extern Othello_Board* OB;
