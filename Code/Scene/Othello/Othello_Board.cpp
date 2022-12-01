@@ -1,4 +1,6 @@
 #include"DxLib.h"
+#include<stdlib.h>
+#include<time.h>
 #include"windows.h"
 #include <string.h>
 #include "./../Code/GetKey.h"
@@ -39,6 +41,8 @@ void Othello_Board::Othello_Board_Initialize(Scene* scene) {
     RandomNum = 0;
     PutPlace_X = 0;
     PutPlace_Y = 0;
+
+    srand(time(NULL));
 
     DrawFlag = false;
     CheckFlag = false;
@@ -233,7 +237,7 @@ void Othello_Board::Othello_Board_Draw() {
             switch (Player) {
             case 0:
                 DrawFormatString(800, 450, BlackCr, "あなたの勝ち！");
-                DrawFormatString(800, 90, BlackCr, "(*^^)v <勝利！");
+                DrawFormatString(800, 90, BlackCr, "(*^^)v < 勝利！");
                 if (TimeCount++ >= 180) {   // 3秒経ったら
                     TimeCount = 0;      // TimeCount を初期化
                     BlackNum = 0;       // 黒石の数を初期化
@@ -248,7 +252,7 @@ void Othello_Board::Othello_Board_Draw() {
 
             case 1:
                 DrawFormatString(800, 450, BlackCr, "CPUの勝ち！");
-                DrawFormatString(800, 90, BlackCr, "(;´･ω･) <残念…");
+                DrawFormatString(800, 90, BlackCr, "(;´･ω･) < 残念…");
                 if (TimeCount++ >= 180) {   // 3秒経ったら
                     TimeCount = 0;      // TimeCount を初期化
                     BlackNum = 0;       // 黒石の数を初期化
@@ -266,7 +270,7 @@ void Othello_Board::Othello_Board_Draw() {
             switch (Player) {
             case 0:
                 DrawFormatString(800, 450, BlackCr, "CPUの勝ち！");
-                DrawFormatString(800, 90, BlackCr, "(;´･ω･) <残念…");
+                DrawFormatString(800, 90, BlackCr, "(;´･ω･) < 残念…");
                 if (TimeCount++ >= 180) {   // 3秒経ったら
                     TimeCount = 0;      // TimeCount を初期化
                     BlackNum = 0;       // 黒石の数を初期化
@@ -281,7 +285,7 @@ void Othello_Board::Othello_Board_Draw() {
 
             case 1:
                 DrawFormatString(800, 450, BlackCr, "あなたの勝ち！");
-                DrawFormatString(800, 90, BlackCr, "(*^^)v <勝利！");
+                DrawFormatString(800, 90, BlackCr, "(*^^)v < 勝利！");
                 if (TimeCount++ >= 180) {   // 3秒経ったら
                     TimeCount = 0;      // TimeCount を初期化
                     BlackNum = 0;       // 黒石の数を初期化
@@ -360,14 +364,15 @@ void Othello_Board::Othello_Board_Draw() {
             }
         }
     }
-    DrawFormatString(800, 600, BlackCr, "%d", RandomNum);
 
-    // --- 置いた場所を示す十字の線を描画 ---
+    DrawFormatString(800, 600, BlackCr, "%d", RandomNum % 2);
+
+    // ----- 置いた場所を示す十字の線を描画 -----
     DrawLine((PutPlace_X * MAP_SIZE - 10) + (MAP_SIZE / 2), PutPlace_Y * MAP_SIZE + (MAP_SIZE / 2),
-        (PutPlace_X * MAP_SIZE + 10) + (MAP_SIZE / 2), PutPlace_Y * MAP_SIZE + (MAP_SIZE / 2), RedCr, 2);
+        (PutPlace_X * MAP_SIZE + 10) + (MAP_SIZE / 2), PutPlace_Y * MAP_SIZE + (MAP_SIZE / 2), RedCr, 3);
     DrawLine(PutPlace_X * MAP_SIZE + (MAP_SIZE / 2), (PutPlace_Y * MAP_SIZE - 10) + (MAP_SIZE / 2),
-        PutPlace_X * MAP_SIZE + (MAP_SIZE / 2), (PutPlace_Y * MAP_SIZE + 10) + (MAP_SIZE / 2), RedCr, 2);
-    // --------------------------------------
+        PutPlace_X * MAP_SIZE + (MAP_SIZE / 2), (PutPlace_Y * MAP_SIZE + 10) + (MAP_SIZE / 2), RedCr, 3);
+    // ------------------------------------------
 }
 // ---------------------------------------------------------------------
 
@@ -431,7 +436,7 @@ void Othello_Board::Print_OthelloBoard(int board[PB][PB]) {
                 // ボードのマスの設定
                 DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
                     (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
-                DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "0");
+                //DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "0");
             }
 
             /* 黒石が置かれている */
@@ -446,7 +451,7 @@ void Othello_Board::Print_OthelloBoard(int board[PB][PB]) {
 
                 // 黒石を置く
                 DrawCircle(i * MAP_SIZE + (MAP_SIZE / 2), j * MAP_SIZE + (MAP_SIZE / 2), 27, BlackCr, TRUE);
-                DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "1");
+                //DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "1");
 
             }
 
@@ -462,7 +467,7 @@ void Othello_Board::Print_OthelloBoard(int board[PB][PB]) {
 
                 // 白石を置く
                 DrawCircle(i * MAP_SIZE + (MAP_SIZE / 2), j * MAP_SIZE + (MAP_SIZE / 2), 27, WhiteCr, TRUE);
-                DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "2");
+                //DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "2");
 
             }
 
@@ -477,7 +482,7 @@ void Othello_Board::Print_OthelloBoard(int board[PB][PB]) {
                     (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
 
                 CursorOn_OthelloBoard();    // マウスカーソルの位置がボードのマス目の上に来たマスを赤く表示する
-                DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "3");
+                //DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "3");
 
             }
 
@@ -492,64 +497,65 @@ void Othello_Board::Print_OthelloBoard(int board[PB][PB]) {
                     (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
 
                 CursorOn_OthelloBoard();    // マウスカーソルの位置がボードのマス目の上に来たマスを赤く表示する
-                DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "4");
+                //DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "4");
 
             }
 
-            /* 角 */
-            if (board[i][j] == 5) {
-                // ボードのマス目を見やすくするために黒色で囲む
-                DrawBox(i * MAP_SIZE, j * MAP_SIZE,
-                    (i * MAP_SIZE) + MAP_SIZE, (j * MAP_SIZE) + MAP_SIZE, BlackCr, TRUE);
+            //    /* 角 */
+            //    if (board[i][j] == 5) {
+            //        // ボードのマス目を見やすくするために黒色で囲む
+            //        DrawBox(i * MAP_SIZE, j * MAP_SIZE,
+            //            (i * MAP_SIZE) + MAP_SIZE, (j * MAP_SIZE) + MAP_SIZE, BlackCr, TRUE);
 
-                // ボードのマスの設定
-                DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
-                    (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
-                DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "5");
+            //        // ボードのマスの設定
+            //        DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
+            //            (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
+            //       // DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "5");
 
-            }
+            //    }
 
-            /* 置けるようになった角 */
-            if (board[i][j] == 6) {
-                // ボードのマス目を見やすくするために黒色で囲む
-                DrawBox(i * MAP_SIZE, j * MAP_SIZE,
-                    (i * MAP_SIZE) + MAP_SIZE, (j * MAP_SIZE) + MAP_SIZE, BlackCr, TRUE);
+            //    /* 置けるようになった角 */
+            //    if (board[i][j] == 6) {
+            //        // ボードのマス目を見やすくするために黒色で囲む
+            //        DrawBox(i * MAP_SIZE, j * MAP_SIZE,
+            //            (i * MAP_SIZE) + MAP_SIZE, (j * MAP_SIZE) + MAP_SIZE, BlackCr, TRUE);
 
-                // ボードのマスの設定
-                DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
-                    (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
+            //        // ボードのマスの設定
+            //        DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
+            //            (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
 
-                CursorOn_OthelloBoard();    // マウスカーソルの位置がボードのマス目の上に来たマスを赤く表示する
-                DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "6");
-            }
+            //        CursorOn_OthelloBoard();    // マウスカーソルの位置がボードのマス目の上に来たマスを赤く表示する
+            //        //DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "6");
+            //    }
 
-            /* 角の周りの 3 マス */
-            if (board[i][j] == 7) {
-                // ボードのマス目を見やすくするために黒色で囲む
-                DrawBox(i * MAP_SIZE, j * MAP_SIZE,
-                    (i * MAP_SIZE) + MAP_SIZE, (j * MAP_SIZE) + MAP_SIZE, BlackCr, TRUE);
+            //    /* 角の周りの 3 マス */
+            //    if (board[i][j] == 7) {
+            //        // ボードのマス目を見やすくするために黒色で囲む
+            //        DrawBox(i * MAP_SIZE, j * MAP_SIZE,
+            //            (i * MAP_SIZE) + MAP_SIZE, (j * MAP_SIZE) + MAP_SIZE, BlackCr, TRUE);
 
-                // ボードのマスの設定
-                DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
-                    (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
-                DrawFormatString(i* MAP_SIZE + 5, j* MAP_SIZE + 5, GetColor(255, 0, 0), "7");
+            //        // ボードのマスの設定
+            //        DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
+            //            (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
+            //        //DrawFormatString(i* MAP_SIZE + 5, j* MAP_SIZE + 5, GetColor(255, 0, 0), "7");
 
-            }
+            //    }
 
-            /* 取れるようになった角の周りの 3 マス*/
-            if (board[i][j] == 8) {
-                // ボードのマス目を見やすくするために黒色で囲む
-                DrawBox(i * MAP_SIZE, j * MAP_SIZE,
-                    (i * MAP_SIZE) + MAP_SIZE, (j * MAP_SIZE) + MAP_SIZE, BlackCr, TRUE);
+            //    /* 取れるようになった角の周りの 3 マス*/
+            //    if (board[i][j] == 8) {
+            //        // ボードのマス目を見やすくするために黒色で囲む
+            //        DrawBox(i * MAP_SIZE, j * MAP_SIZE,
+            //            (i * MAP_SIZE) + MAP_SIZE, (j * MAP_SIZE) + MAP_SIZE, BlackCr, TRUE);
 
-                // ボードのマスの設定
-                DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
-                    (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
+            //        // ボードのマスの設定
+            //        DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
+            //            (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
 
-                CursorOn_OthelloBoard();    // マウスカーソルの位置がボードのマス目の上に来たマスを赤く表示する
-                DrawFormatString(i* MAP_SIZE + 5, j* MAP_SIZE + 5, GetColor(255, 0, 0), "8");
+            //        CursorOn_OthelloBoard();    // マウスカーソルの位置がボードのマス目の上に来たマスを赤く表示する
+            //        DrawFormatString(i* MAP_SIZE + 5, j* MAP_SIZE + 5, GetColor(255, 0, 0), "8");
 
-            }
+            //    }
+            //}
         }
     }
 }
@@ -1040,13 +1046,12 @@ int Othello_Board::CPUBlack(int board[PB][PB], int scoreboard[PB][PB]) {
 
 int Othello_Board::RandomOrder() {
     if (RandomFlag == false) {
-        //RandomNum = GetRand(100);
-        RandomNum = 40;
+        RandomNum = rand();
         RandomFlag = true;
     }
 
     // 50以上で黒色がプレイヤー、それ以外は白色がプレイヤー
-    if (RandomNum >= 50) {
+    if (RandomNum % 2 == 0) {
         Player = 0;
     }
     else {
