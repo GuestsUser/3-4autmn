@@ -15,11 +15,11 @@ private:
 
   int spt_type;
   int hit_num;
-  //int dbl_ct;
 
 
   int p_coin = 1000;
 
+  /*bool*/
   bool now_game_flg;
 
   bool bet_flg = false;
@@ -32,6 +32,7 @@ private:
   bool win, los, bst, psh, BlackJack, game_flg;
   bool spt_win, spt_los, spt_bst, spt_psh, spt_BJ;
   bool spt_a;
+  /*bool*/
 
 public:
 
