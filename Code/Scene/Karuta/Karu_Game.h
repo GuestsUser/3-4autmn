@@ -66,6 +66,13 @@ private:
 	int PauseContinueButton[2];	//‚Â‚Ã‚¯‚éƒ{ƒ^ƒ“‰æ‘œŠi”[
 	int PauseMenuButton[2];		//ƒZƒŒƒNƒg‚Ö–ß‚éƒ{ƒ^ƒ“‰æ‘œŠi”[
 
+	int ResultBackImg;			//ƒŠƒUƒ‹ƒg”wŒi‰æ‘œŠi”[—p
+	int ResultRank1;			//‡ˆÊ1ˆÊ‰æ‘œŠi”[—p
+	int ResultRank2;			//‡ˆÊ2ˆÊ‰æ‘œŠi”[—p
+	int ResultRank3;			//‡ˆÊ3ˆÊ‰æ‘œŠi”[—p
+
+	int End_Rank[TOTAL_PLAYER];			//ÅI‡ˆÊ
+
 	bool end;
 
 
@@ -90,6 +97,8 @@ public:
 	void Player_Reset();
 	void Pause();
 	void Pause_Controller();
+
+	void Rank();
 
 	void Karu_GameOver();
 
