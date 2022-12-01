@@ -22,6 +22,12 @@ void PageOne::PageOne_Initialize() {
 	NPC2_PageOne_Icon = LoadGraph("Resource/image/PageOne_Image/Page_One_N2.png");
 	NPC3_PageOne_Icon = LoadGraph("Resource/image/PageOne_Image/Page_One_N3.png");
 
+	Spade = LoadGraph("Resource/image/PageOne_Image/Spade.png");
+	Heart = LoadGraph("Resource/image/PageOne_Image/Heart.png");
+	Diamond = LoadGraph("Resource/image/PageOne_Image/Diamond.png");
+	Club = LoadGraph("Resource/image/PageOne_Image/Club.png");
+	free = LoadGraph("Resource/image/PageOne_Image/Free.png");
+
 	Deck_X = 130;
 	Deck_Y = 550;
 
@@ -66,6 +72,7 @@ void PageOne::PageOne_Initialize() {
 	pri = 1;
 	draw = false;
 	finish = false;
+	reset = false;
 
 	priority = GetRand(MAX - 1);
 
@@ -114,6 +121,7 @@ void PageOne::PageOne_Update() {
 			}
 			else {
 				if (flg_p == false) {
+					reset = false;
 					DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：プレイヤー");
 
 					if (Field_card.empty()) {
@@ -139,6 +147,8 @@ void PageOne::PageOne_Update() {
 							if ((Mouse_X > Deck_X - (card_w * 0.7) / 2) && (Mouse_X < Deck_X + (card_w * 0.7) / 2) && (Mouse_Y > Deck_Y - (card_h * 0.7) / 2) && (Mouse_Y < Deck_Y + (card_h * 0.7) / 2)) {
 								if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
 									r = GetRand(sizeof(Card_obj));
+									Card_obj[r].card_x = Player_X;
+									Card_obj[r].card_y = Player_Y;
 									Player_card.push_back(Card_obj[r]);
 									Card_obj.erase(Card_obj.begin() + r);
 									n = 0;
@@ -192,7 +202,7 @@ void PageOne::PageOne_Update() {
 									}
 								}
 								if (PageOne_player == false) {
-									if (Card::Hit(Mouse_X, Mouse_Y, Player_X + (card_w * 0.5) * (i % 10), Player_Y + (card_h * 0.5) * (i / 10), card_w, card_h, 0.5)) {
+									if (Card::Hit(Mouse_X, Mouse_Y, Player_X + (card_w * 0.5) * (i % 10), Player_Y + (card_h * pow(0.5, 2)) * (i / 10), card_w, card_h, 0.5)) {
 										Player_card[i].card_y = Player_Y - 50;
 										if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
 											Field_card.push_back(Player_card[i]);
@@ -262,6 +272,7 @@ void PageOne::PageOne_Update() {
 			}
 			else {
 				if (flg_1 == false) {
+					reset = false;
 					DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：NPC１号");
 
 					if (Field_card.empty()) {
@@ -396,6 +407,7 @@ void PageOne::PageOne_Update() {
 			else {
 
 				if (flg_2 == false) {
+					reset = false;
 					DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：NPC２号");
 
 					if (Field_card.empty()) {
@@ -528,6 +540,7 @@ void PageOne::PageOne_Update() {
 			}
 			else {
 				if (flg_3 == false) {
+					reset = false;
 					DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：NPC３号");
 
 					if (Field_card.empty()) {
@@ -650,6 +663,7 @@ void PageOne::PageOne_Update() {
 				priority = 0;
 			}
 			else {
+				reset = true;
 				if (n < 90) {
 					n++;
 				}
@@ -691,15 +705,12 @@ void PageOne::PageOne_Update() {
 						Card_obj = Cemetery_card;
 						Cemetery_card.erase(Cemetery_card.begin(), Cemetery_card.end());
 					}
-
 					n = 0;
 				}
-
 			}
 			break;
 		}
 	}
-
 }
 
 void PageOne::PageOne_Draw() {
@@ -709,17 +720,29 @@ void PageOne::PageOne_Draw() {
 	npc_2 = 0;
 	npc_3 = 0;
 
-	if (Field_card.empty() == false) {
-		switch (Field_card[0].suit) {
-		case 0:
-
-			break;
-		case 1:
-			break;
-		case 2:
-			break;
-		case 3:
-			break;
+	if (reset == false && Player_setup == true && NPC1_setup == true && NPC2_setup == true && NPC3_setup == true) {
+		DrawFormatString(1000, 375, GetColor(255, 255, 255), "現在のスート");
+		if (Field_card.empty() == false) {
+			switch (Field_card[0].suit) {
+			case 0:
+				DrawRotaGraph(1100, 450, 0.8, 0, Spade, TRUE);
+				break;
+			case 1:
+				DrawRotaGraph(1100, 450, 0.8, 0, Heart, TRUE);
+				break;
+			case 2:
+				DrawRotaGraph(1100, 450, 0.8, 0, Diamond, TRUE);
+				break;
+			case 3:
+				DrawRotaGraph(1100, 450, 0.8, 0, Club, TRUE);
+				break;
+			default:
+				DrawRotaGraph(1100, 450, 0.8, 0, free, TRUE);
+				break;
+			}
+		}
+		else {
+			DrawRotaGraph(1100, 450, 0.8, 0, free, TRUE);
 		}
 	}
 
@@ -736,7 +759,7 @@ void PageOne::PageOne_Draw() {
 
 	//プレイヤーの手札描画
 	for (i = 0; i < Player_card.size(); i++) {
-		DrawRotaGraph(Player_card[i].card_x + (player % 10) * (card_w * 0.5), Player_card[i].card_y + (player / 10) * (card_h * 0.5), 0.5, 0, Player_card[i].img, TRUE);
+		DrawRotaGraph(Player_card[i].card_x + (player % 10) * (card_w * 0.5), Player_card[i].card_y + (player / 10) * (card_h * pow(0.5, 2)), 0.5, 0, Player_card[i].img, TRUE);
 		player++;
 	}
 	//勝利時のUI

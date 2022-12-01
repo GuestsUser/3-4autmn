@@ -43,6 +43,13 @@ private:
 	int card_type[54];	//画像用ハンドル
 	int background;	//背景
 
+	//スートUI
+	int Spade;	//スペード
+	int Heart;	//ハート
+	int Diamond;//ダイヤ
+	int Club;	//クラブ
+	int free;	//何でもよい
+
 	int Card_back;		//カードの裏面の情報
 	Card Card_joker;	//ジョーカーの情報
 
@@ -95,6 +102,7 @@ private:
 	bool NPC3_setup;		//NPC3準備フラグ
 
 	bool finish;	//ゲーム終了フラグ
+	bool reset;	//盤面リセットフラグ
 
 	int player;		//プレイヤーの手札の枚数
 	bool flg_p;		//プレイヤーの手番が終わったかどうか
