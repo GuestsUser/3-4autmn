@@ -20,4 +20,10 @@
 //	void dealcards(void);
 //	void d3start(void);
 //	void status(int n);
+//	void print(int n);
+//	void revolution(void);
+//	void elevenback(void);
+//	void cp_routine(int n);
+//	void arrange(int n);
+//	void main(void);
 //};

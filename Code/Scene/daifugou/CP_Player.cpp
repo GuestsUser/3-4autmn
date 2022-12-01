@@ -23,7 +23,7 @@ void CareerPoker::CP_Player_Initialize(){
 
 	Player_X = 150;
 	Player_Y = 575;
-	Player_state = 0;
+	Player_state = 2;
 }
 
 
@@ -160,7 +160,7 @@ void CareerPoker::CP_Player_Update() {
 				}
 				break;
 			case 2:
-				if (Field_card.empty() == Player_card[8].num) {//”ªØ‚ª‚µ‚½‚¢
+				if (Field_card.empty()||Player_card[8].num == (trash[i]) == 8) {//”ªØ‚ª‚µ‚½‚¢
 					if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
 						Field_card.push_back(Player_card[i]);
 						Player_card.erase(Player_card.begin() + i);

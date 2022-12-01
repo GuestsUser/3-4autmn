@@ -45,8 +45,8 @@ private:
 
 	int T_cards[54];//ŽRŽD
 	int order[4];//’N‚©‚çŽn‚ß‚é‚©
-	int trash[15] = { 0 };
-	int rev = 0;
+	int trash[15] = { 0 };//ŽÌ‚ÄŽD
+	int rev = 0;//Šv–½
 	
 	
 	
