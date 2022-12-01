@@ -236,5 +236,5 @@ int Dealer::Set_Magnification(float setrate, int getcoin) {
   //float setcoin = 0;
   //setcoin = setrate * getcoin;
 
-  return /*(int)setcoin*/(int)setrate*getcoin;
+  return setrate*getcoin;
 }

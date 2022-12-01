@@ -542,6 +542,7 @@ bool Player::Play(Shoe* shoe) {
             Set_Bet(spt_bet_coin);
             bet_coin *= 2;
             spt_bet_coin *= 2;
+            D_spt_dbl = true;
           }
           Player::Hit(shoe);
           dbl = false;
@@ -587,13 +588,32 @@ void Player::Score(Player player, Dealer dealer) {   /*プレイヤーとディ�
   if (win) {
     if (bet_flg) {
 
-      if (!BlackJack && !D_dbl)p_coin += dealer.Set_Magnification(rate_wn, bet_coin);
-      if (D_dbl) {
-        p_coin += dealer.Set_Magnification(rate_db, bet_coin);
-      }
-      else if(BlackJack)p_coin += dealer.Set_Magnification(rate_bj, bet_coin);
+      if (split) {
+        if (!BlackJack && !D_dbl)p_coin += dealer.Set_Magnification(rate_wn, bet_coin);
+        if (D_dbl) {
+          p_coin += dealer.Set_Magnification(rate_db, bet_coin);
+        }
+        if (BlackJack && !D_dbl)p_coin += dealer.Set_Magnification(rate_bj, bet_coin);
 
-      bet_flg = false;
+        if (!spt_BJ && !D_dbl)p_coin += dealer.Set_Magnification(rate_wn, spt_bet_coin);
+        if (D_spt_dbl) {
+          p_coin += dealer.Set_Magnification(rate_db, spt_bet_coin);
+        }
+        if (BlackJack && !D_dbl)p_coin += dealer.Set_Magnification(rate_bj, spt_bet_coin);
+        if (spt_BJ && !D_spt_dbl)p_coin += dealer.Set_Magnification(rate_bj, spt_bet_coin);
+       
+
+        bet_flg = false;
+      }
+      else {
+        if (!BlackJack && !D_dbl)p_coin += dealer.Set_Magnification(rate_wn, bet_coin);
+        if (D_dbl) {
+          p_coin += dealer.Set_Magnification(rate_db, bet_coin);
+        }
+        if (BlackJack && !D_dbl)p_coin += dealer.Set_Magnification(rate_bj, bet_coin);
+
+        bet_flg = false;
+      }
     }
   }
   else if (psh) {
