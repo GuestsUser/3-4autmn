@@ -146,15 +146,15 @@ void Player::Draw() {
 
   //DrawFormatString(spt_x+40, spt_y / 100 +100, color4, "%d",dealer_calc);
 
-  DrawFormatString(spt_x-80, spt_y / 100 +40, 0xffffff, "%Win %d",win);
-  DrawFormatString(spt_x-80, spt_y / 100 +60, 0xffffff, "Los %d",los);
-  DrawFormatString(spt_x-80, spt_y / 100 +80, 0xffffff, "psh %d",psh);
-  DrawFormatString(spt_x-80, spt_y / 100 +100, 0xffffff, "BlJ %d",BlackJack);
-  DrawFormatString(spt_x-80, spt_y / 100 +120, 0xffffff, "bst %d",bst);
-  DrawFormatString(spt_x-80, spt_y / 100 +140, 0xffffff, "spt_win %d",spt_win);
-  DrawFormatString(spt_x-80, spt_y / 100 +160, 0xffffff, "spt_bst %d",spt_bst);
-  DrawFormatString(spt_x-80, spt_y / 100 +180, 0xffffff, "spt_los %d",spt_los);
-  DrawFormatString(spt_x-80, spt_y / 100 +200, 0xffffff, "spt_psh %d",spt_psh);
+  //DrawFormatString(spt_x-80, spt_y / 100 +40, 0xffffff, "%Win %d",win);
+  //DrawFormatString(spt_x-80, spt_y / 100 +60, 0xffffff, "Los %d",los);
+  //DrawFormatString(spt_x-80, spt_y / 100 +80, 0xffffff, "psh %d",psh);
+  //DrawFormatString(spt_x-80, spt_y / 100 +100, 0xffffff, "BlJ %d",BlackJack);
+  //DrawFormatString(spt_x-80, spt_y / 100 +120, 0xffffff, "bst %d",bst);
+  //DrawFormatString(spt_x-80, spt_y / 100 +140, 0xffffff, "spt_win %d",spt_win);
+  //DrawFormatString(spt_x-80, spt_y / 100 +160, 0xffffff, "spt_bst %d",spt_bst);
+  //DrawFormatString(spt_x-80, spt_y / 100 +180, 0xffffff, "spt_los %d",spt_los);
+  //DrawFormatString(spt_x-80, spt_y / 100 +200, 0xffffff, "spt_psh %d",spt_psh);
   /*デバッグ用*/
 
 
