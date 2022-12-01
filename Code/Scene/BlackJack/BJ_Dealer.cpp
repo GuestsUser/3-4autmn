@@ -44,13 +44,6 @@ Dealer::Dealer() {
 }
 Dealer::~Dealer() {
 
-  //for (auto& a:btn_hdl) {
-  //  DeleteGraph(a);
-  //}
-
-  //for (auto& a:card_hdl) {
-  //  DeleteGraph(a);
-  //}
 
 }
 /*変数初期化*/
@@ -62,6 +55,50 @@ void Dealer::Initialize() {
   type = 0;                               /*トランプのマーク*/
   
   D_BlackJakc = false;
+
+}
+
+void Dealer::Update() {
+
+  DrawRotaGraph(yama_x, yama_y, img_size, 0, card_hdl[52], 1);
+  SetFontSize(24);
+  DrawFormatString(10, 650, 0xffffff, "アクションを選択してください");
+  SetFontSize(DEFAULT_FONT_SIZE);
+
+}
+
+void Dealer::Draw() {
+
+  Dealer::Show_Hand();
+
+  DrawRotaGraph(yama_x, yama_y, img_size, 0, card_hdl[52], 1);
+  /*山札予定地*/
+
+}
+/*カードの追加*/
+void Dealer::Hit(Shoe* shoe) {    /*shoeオブジェクトポインタ*/
+  /*配列の最後にカードを追加する*/
+  hand.push_back(shoe->Take_Card());
+  hand_num++;   /*手札枚数を増やす*/
+
+}
+
+/*手札を表示*/
+void Dealer::Show_Hand() {
+
+  /*配列の最初から最後までを順に表示*/
+  for (int i = 0; i < hand_num; i++) {
+    /*カードの種類（スペード、ハート、ダイヤ、クラブ）を探索*/
+    type = (hand[i] % 52) / 13;   /*デッキごとに分けた後、13で割った数（0-3）で4種類を分割*/
+
+    DrawRotaGraph(600 + i * 30, 140, img_size, 0, card_type[type][hand[i] % 13], 1);
+
+  }
+
+  if (hand_num < 2)DrawRotaGraph(630, 140, img_size, 0, card_type[4][0], 1);
+  SetFontSize(60);
+  DrawFormatString(580, 200, 0, "%d\n", Dealer::Calc());
+  SetFontSize(DEFAULT_FONT_SIZE);
 
 }
 /*スコアの計算*/
@@ -171,32 +208,6 @@ int Dealer::Spt_Calc() {
   return spt_score;     /*計算結果を返す*/
 
 }
-
-/*カードの追加*/
-void Dealer::Hit(Shoe* shoe) {    /*shoeオブジェクトポインタ*/
-  /*配列の最後にカードを追加する*/
-  hand.push_back(shoe->Take_Card());
-  hand_num++;   /*手札枚数を増やす*/
-
-}
-/*手札を表示*/
-void Dealer::Show_Hand() {
-
-  /*配列の最初から最後までを順に表示*/
-  for (int i = 0; i < hand_num; i++) {
-    /*カードの種類（スペード、ハート、ダイヤ、クラブ）を探索*/
-    type = (hand[i] % 52) / 13;   /*デッキごとに分けた後、13で割った数（0-3）で4種類を分割*/
-
-    DrawRotaGraph(600 + i * 30, 140, img_size, 0,card_type[type][hand[i] % 13 ], 1);
-
-  }
-
-  if(hand_num < 2)DrawRotaGraph(630, 140, img_size, 0, card_type[4][0], 1);
-  SetFontSize(60);
-  DrawFormatString(580, 200, 0, "%d\n", Dealer::Calc());
-  SetFontSize(DEFAULT_FONT_SIZE);
-
-}
 /*ゲーム実行*/
 bool Dealer::Play(Shoe* shoe) {   /*shoeオブジェクトポインタ*/
 
@@ -222,28 +233,8 @@ bool Dealer::BlackJack(){
 }
 
 int Dealer::Set_Magnification(float setrate, int getcoin) {
-  float setcoin = 0;
-  float spt_setcoin = 0;
-  if (split)spt_setcoin = setrate * getcoin;
-  setcoin = setrate * getcoin;
+  //float setcoin = 0;
+  //setcoin = setrate * getcoin;
 
-  return (int)setcoin+(int)spt_bet_coin;
-}
-
-void Dealer::Update() {
-
-  DrawRotaGraph(yama_x, yama_y, img_size, 0, card_hdl[52], 1);
-  SetFontSize(24);
-  DrawFormatString(10, 650, 0xffffff, "アクションを選択してください");
-  SetFontSize(DEFAULT_FONT_SIZE);
-
-}
-
-void Dealer::Draw() {
-
-  Dealer::Show_Hand();
-
-  DrawRotaGraph(yama_x, yama_y, img_size, 0, card_hdl[52], 1);
-  /*山札予定地*/
-
+  return setrate*getcoin;
 }

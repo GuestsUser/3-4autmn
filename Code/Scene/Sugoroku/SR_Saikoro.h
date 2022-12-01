@@ -5,6 +5,7 @@ class SR_Saikoro : public Scene {
 private:
 	int SR_Saikoro1[6];	/*サイコロ画像１*/
 	int SR_Saikoro2[6];	/*サイコロ画像２*/
+	int array[4];
 	int i, y, d,p;
 
 	bool Shuffle = false;	/*サイコロシャッフル可否フラグ*/
@@ -32,10 +33,12 @@ public:
 	void Saikoro();
 	void Dice();
 	void Goal();
+	void Sort();
 	void Restart();
 	void Plus();
 	void Minus();
 	void ReDice();
+	void Frontback();
 	void SR_Enemy1();
 	void SR_Enemy2();
 	void SR_Enemy3();
