@@ -8,6 +8,8 @@
 #include "./Othello_Player.h"
 #include "./../Scene.h"
 #include "./../Title/Scene_Select.h"
+#include "../Title/Scene_GameTitle.h"
+#include "../../SceneManager.h"
 
 //Othello_Board* OB;
 
@@ -17,6 +19,11 @@ void Othello_Board::Othello_Board_Initialize(Scene* scene) {
     Parent = scene;
 
     PutCheckImage = LoadGraph("Resource/image/Othello_Image/OthelloPutCheck2.png");   // 置ける場所のカッコの画像の読み込み
+
+    Pause_Button = LoadGraph("Resource/image/PauseButton.png");
+    Pause_Back = LoadGraph("Resource/image/PauseBack.png");
+    Pause_Continue = LoadDivGraph("Resource/image/ContinueButton.png", 2, 2, 1, 400, 120, pause_continue);
+    Pause_Select = LoadDivGraph("Resource/image/MenuButton.png", 2, 2, 1, 400, 120, pause_select);
 
     BGM = LoadSoundMem("Resource/bgm/Othello_BGM/OthelloBGM.mp3");      // ゲーム中のBGMの読み込み
     PutSE = LoadSoundMem("Resource/se/Othello_SE/OthelloPut.mp3");      // 石を置いた時のSEの読み込み
@@ -39,8 +46,8 @@ void Othello_Board::Othello_Board_Initialize(Scene* scene) {
     TimeCount = 0;  // 秒数をカウントするための変数を初期化
     ReturnNumMax = 0;   // 一番多くひっくり返せる数を入れる変数
     RandomNum = 0;
-    PutPlace_X = 0;
-    PutPlace_Y = 0;
+    PutPlace_X = -10;
+    PutPlace_Y = -10;
 
     srand(time(NULL));
 
@@ -50,6 +57,7 @@ void Othello_Board::Othello_Board_Initialize(Scene* scene) {
     EndFlag = false;
     RandomFlag = false;
     CornerFlag = false;
+    PauseFlg = false;
 
     Init_OthelloBoard(Board);           // ボードを初期化
     BoardScore(ScoreBoard);
@@ -58,6 +66,10 @@ void Othello_Board::Othello_Board_Initialize(Scene* scene) {
 // -------------終了処理---------------------------
 void Othello_Board::Othello_Board_Finalize() {
 	DeleteGraph(PutCheckImage);
+    DeleteGraph(Pause_Button);
+    DeleteGraph(Pause_Back);
+    DeleteGraph(Pause_Continue);
+    DeleteGraph(Pause_Select);
     DeleteSoundMem(PutSE);
     DeleteSoundMem(BGM);
 }
@@ -66,151 +78,176 @@ void Othello_Board::Othello_Board_Finalize() {
 
 // ---------------更新---------------------------
 void Othello_Board::Othello_Board_Update() {
-
-    RandomOrder();
-
     GetMousePoint(&Mouse_X, &Mouse_Y);  // マウスカーソルの位置を取得
+
     Square_X = Mouse_X / MAP_SIZE;      // マウスカーソルの位置を MAP_SIZE で割った値を代入
     Square_Y = Mouse_Y / MAP_SIZE;      // マウスカーソルの位置を MAP_SIZE で割った値を代入
 
-    if (EndFlag == false) {   // ゲームが終わったかどうか
+    RandomOrder();
 
-        PlaySoundMem(BGM, DX_PLAYTYPE_LOOP, false);
+    if (PauseFlg == false) {
+        if (EndFlag == false) {   // ゲームが終わったかどうか
 
-        if (PassFlag == false) {    // パスフラグが false なら
+            PlaySoundMem(BGM, DX_PLAYTYPE_LOOP, false);
 
-            if (RandomFlag == true) {
-                switch (Player) {
-                case 0:
-                    if (OrderNum == 0) {    // 黒の番だったら
+            if (PassFlag == false) {    // パスフラグが false なら
 
-                         // 黒石の置ける場所がないなら
-                        if (!BoardSearchBlack(Board))
-                        {
-                            PlaySoundMem(PassSE, DX_PLAYTYPE_BACK, true);
-                            PassFlag = true;    // パスフラグを true にする
-                        }
+                if (RandomFlag == true) {
+                    switch (Player) {
+                    case 0:
+                        if (OrderNum == 0) {    // 黒の番だったら
 
-                        BoardSearchBlack(Board);
-
-                        if (Board[Square_X][Square_Y] == 3 ||
-                            Board[Square_X][Square_Y] == 6 ||
-                            Board[Square_X][Square_Y] == 8 ) {   // 黒石が置ける場所にカーソルがあっていたら
-                            DrawFlag = true;
-                            if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
-                                DrawFlag = false;
-                                Board[Square_X][Square_Y] = 1;      // 黒石を置く
-                                PutPlace_X = Square_X;
-                                PutPlace_Y = Square_Y;
-                                BlackPut();                         // 置いた場所から白を黒にひっくり返す
-                                PlaySoundMem(PutSE, DX_PLAYTYPE_BACK, true);
-                                OrderNum = 1;                       // 白の手番にする
-                                BoardSearchBWNumber(Board);         // 黒石と白石の数を数える関数実行
-
-                                if (EndGame(Board)) {               // ゲームが終わる条件を満たしたら
-                                    EndFlag = true;   // エンドフラグを true にする
-                                }
-
-                                DrawFlag = false;
+                             // 黒石の置ける場所がないなら
+                            if (!BoardSearchBlack(Board))
+                            {
+                                PlaySoundMem(PassSE, DX_PLAYTYPE_BACK, true);
+                                PassFlag = true;    // パスフラグを true にする
                             }
 
-                        }
-                        else {
-                            DrawFlag = false;
-                        }
-                    }
-                    else {      // 白の番だったら
+                            BoardSearchBlack(Board);
 
-                        //---------- CPU ----------------------
+                            if (Board[Square_X][Square_Y] == 3 ||
+                                Board[Square_X][Square_Y] == 6 ||
+                                Board[Square_X][Square_Y] == 8) {   // 黒石が置ける場所にカーソルがあっていたら
+                                DrawFlag = true;
+                                if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+                                    DrawFlag = false;
+                                    Board[Square_X][Square_Y] = 1;      // 黒石を置く
+                                    PutPlace_X = Square_X;
+                                    PutPlace_Y = Square_Y;
+                                    BlackPut();                         // 置いた場所から白を黒にひっくり返す
+                                    PlaySoundMem(PutSE, DX_PLAYTYPE_BACK, true);
+                                    OrderNum = 1;                       // 白の手番にする
+                                    BoardSearchBWNumber(Board);         // 黒石と白石の数を数える関数実行
 
-                        // もし置く場所が無かったら
-                        if (!BoardSearchWhite(Board)) {
-                            PlaySoundMem(PassSE, DX_PLAYTYPE_BACK, true);
-                            PassFlag = true;    // パスフラグを true にする
-                        }
+                                    if (EndGame(Board)) {               // ゲームが終わる条件を満たしたら
+                                        EndFlag = true;   // エンドフラグを true にする
+                                    }
 
-
-                        // 1秒経ってから
-                        if (TimeCount++ >= 60) {
-                            TimeCount = 0;      // TimeCount を初期化
-                            CPUWhite(Board, ScoreBoard);    // 一番ひっくり返せる場所に置く
-                            PlaySoundMem(PutSE, DX_PLAYTYPE_BACK, true);
-                            OrderNum = 0;       // 黒の番にする
-                        }
-
-                        BoardSearchBWNumber(Board);     // 黒石と白石の数を数える
-
-                        // ゲームの終了条件が揃っていたら  
-                        if (EndGame(Board)) {
-                            EndFlag = true;     // エンドフラグを true にする
-                        }
-                    }
-                    break;
-
-                case 1:
-                    // ここにプレイヤーが白色で、CPUが黒色の処理を入れる
-                    if (OrderNum == 0) {
-                        //--------------- CPU ---------------------
-                        // もし置く場所が無かったら
-                        if (!BoardSearchBlack(Board)) {
-                            PlaySoundMem(PassSE, DX_PLAYTYPE_BACK, true);
-                            PassFlag = true;    // パスフラグを true にする
-                        }
-
-                        // 1秒経ってから
-                        if (TimeCount++ >= 60) {
-                            TimeCount = 0;      // TimeCount を初期化
-                            CPUBlack(Board, ScoreBoard);    // 一番ひっくり返せる場所に置く
-                            PlaySoundMem(PutSE, DX_PLAYTYPE_BACK, true);
-                            OrderNum = 1;       // 白の番にする
-                        }
-
-                        BoardSearchBWNumber(Board);     // 黒石と白石の数を数える
-
-                        // ゲームの終了条件が揃っていたら  
-                        if (EndGame(Board)) {
-                            EndFlag = true;     // エンドフラグを true にする
-                        }
-                    }
-                    else {
-                        // 白石の置ける場所がないなら
-                        if (!BoardSearchWhite(Board))
-                        {
-                            PlaySoundMem(PassSE, DX_PLAYTYPE_BACK, true);
-                            PassFlag = true;    // パスフラグを true にする
-                        }
-
-                        if (Board[Square_X][Square_Y] == 4 ||
-                            Board[Square_X][Square_Y] == 6 ||
-                            Board[Square_X][Square_Y] == 8 ) {   // 白石が置ける場所にカーソルがあっていたら
-                            DrawFlag = true;
-                            if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
-                                DrawFlag = false;
-                                Board[Square_X][Square_Y] = 2;      // 白石を置く
-                                PutPlace_X = Square_X;
-                                PutPlace_Y = Square_Y;
-                                WhitePut();                         // 置いた場所から黒を白にひっくり返す
-                                PlaySoundMem(PutSE, DX_PLAYTYPE_BACK, true);
-                                OrderNum = 0;                       // 黒の手番にする
-                                BoardSearchBWNumber(Board);         // 黒石と白石の数を数える関数実行
-
-                                if (EndGame(Board)) {               // ゲームが終わる条件を満たしたら
-                                    EndFlag = true;   // エンドフラグを true にする
+                                    DrawFlag = false;
                                 }
+
+                            }
+                            else {
                                 DrawFlag = false;
                             }
+                        }
+                        else {      // 白の番だったら
 
+                            //---------- CPU ----------------------
+
+                            // もし置く場所が無かったら
+                            if (!BoardSearchWhite(Board)) {
+                                PlaySoundMem(PassSE, DX_PLAYTYPE_BACK, true);
+                                PassFlag = true;    // パスフラグを true にする
+                            }
+
+
+                            // 1秒経ってから
+                            if (TimeCount++ >= 60) {
+                                TimeCount = 0;      // TimeCount を初期化
+                                CPUWhite(Board, ScoreBoard);    // 一番ひっくり返せる場所に置く
+                                PlaySoundMem(PutSE, DX_PLAYTYPE_BACK, true);
+                                OrderNum = 0;       // 黒の番にする
+                            }
+
+                            BoardSearchBWNumber(Board);     // 黒石と白石の数を数える
+
+                            // ゲームの終了条件が揃っていたら  
+                            if (EndGame(Board)) {
+                                EndFlag = true;     // エンドフラグを true にする
+                            }
+                        }
+                        break;
+
+                    case 1:
+                        // ここにプレイヤーが白色で、CPUが黒色の処理を入れる
+                        if (OrderNum == 0) {
+                            //--------------- CPU ---------------------
+                            // もし置く場所が無かったら
+                            if (!BoardSearchBlack(Board)) {
+                                PlaySoundMem(PassSE, DX_PLAYTYPE_BACK, true);
+                                PassFlag = true;    // パスフラグを true にする
+                            }
+
+                            // 1秒経ってから
+                            if (TimeCount++ >= 60) {
+                                TimeCount = 0;      // TimeCount を初期化
+                                CPUBlack(Board, ScoreBoard);    // 一番ひっくり返せる場所に置く
+                                PlaySoundMem(PutSE, DX_PLAYTYPE_BACK, true);
+                                OrderNum = 1;       // 白の番にする
+                            }
+
+                            BoardSearchBWNumber(Board);     // 黒石と白石の数を数える
+
+                            // ゲームの終了条件が揃っていたら  
+                            if (EndGame(Board)) {
+                                EndFlag = true;     // エンドフラグを true にする
+                            }
                         }
                         else {
-                            DrawFlag = false;
+                            // 白石の置ける場所がないなら
+                            if (!BoardSearchWhite(Board))
+                            {
+                                PlaySoundMem(PassSE, DX_PLAYTYPE_BACK, true);
+                                PassFlag = true;    // パスフラグを true にする
+                            }
+
+                            if (Board[Square_X][Square_Y] == 4 ||
+                                Board[Square_X][Square_Y] == 6 ||
+                                Board[Square_X][Square_Y] == 8) {   // 白石が置ける場所にカーソルがあっていたら
+                                DrawFlag = true;
+                                if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+                                    DrawFlag = false;
+                                    Board[Square_X][Square_Y] = 2;      // 白石を置く
+                                    PutPlace_X = Square_X;
+                                    PutPlace_Y = Square_Y;
+                                    WhitePut();                         // 置いた場所から黒を白にひっくり返す
+                                    PlaySoundMem(PutSE, DX_PLAYTYPE_BACK, true);
+                                    OrderNum = 0;                       // 黒の手番にする
+                                    BoardSearchBWNumber(Board);         // 黒石と白石の数を数える関数実行
+
+                                    if (EndGame(Board)) {               // ゲームが終わる条件を満たしたら
+                                        EndFlag = true;   // エンドフラグを true にする
+                                    }
+                                    DrawFlag = false;
+                                }
+
+                            }
+                            else {
+                                DrawFlag = false;
+                            }
                         }
+                        break;
                     }
-                    break;
                 }
-                
             }
         }
     }
+
+    nowKey = key->GetKeyState(REQUEST_MOUSE_LEFT); //現在のマウス左ボタンの入力状態の取得
+    /*ポーズボタンを押したらポーズ画面を開くフラグをtrueにする*/
+    if (20 <= Mouse_X && Mouse_X <= 200 && 25 <= Mouse_Y && Mouse_Y <= 105) {
+        if (OldKey != KEY_FREE && nowKey == KEY_PULL) {
+            PauseFlg = true;
+        }
+    }
+    if (PauseFlg == true) {
+        if ((450 <= Mouse_X && Mouse_X <= 850 && 320 <= Mouse_Y && Mouse_Y <= 440) ||
+            (20 <= Mouse_X && Mouse_X <= 200 && 25 <= Mouse_Y && Mouse_Y <= 105)) {
+            if (OldKey != KEY_FREE && nowKey == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
+                PauseFlg = false;
+            }
+        }
+        if (450 <= Mouse_X && Mouse_X <= 850 && 470 <= Mouse_Y && Mouse_Y <= 590) {
+            if (OldKey != KEY_FREE && nowKey == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
+                StopSoundMem(BGM);
+                Parent->SetNext(new Scene_Select());
+            }
+        }
+    }
+    OldKey = nowKey; //前に入力していたキーを今入力していたキーに上書きする
+
 }
 // -----------------------------------------------
 
@@ -219,7 +256,7 @@ void Othello_Board::Othello_Board_Update() {
 void Othello_Board::Othello_Board_Draw() {
     DrawBox(0, 0, 1280, 720, Cr, TRUE);
     //DrawGraph(1000, 100, PutCheckImage, false);
-    DrawBox(60, 60, 66 * 9 + 6, 66 * 9 + 6, BlackCr, TRUE);
+    DrawBox(60, 60, MAP_SIZE * 9 + 6, MAP_SIZE * 9 + 6, BlackCr, TRUE);
     Print_OthelloBoard(Board);      // オセロボードの描画
 
     DrawCircle(800, 187, 27, BlackCr, TRUE);
@@ -365,7 +402,8 @@ void Othello_Board::Othello_Board_Draw() {
         }
     }
 
-    DrawFormatString(800, 600, BlackCr, "%d", RandomNum % 2);
+    // ランダムな値を取ったものを表示
+    //DrawFormatString(800, 600, BlackCr, "%d", RandomNum % 2);
 
     // ----- 置いた場所を示す十字の線を描画 -----
     DrawLine((PutPlace_X * MAP_SIZE - 10) + (MAP_SIZE / 2), PutPlace_Y * MAP_SIZE + (MAP_SIZE / 2),
@@ -373,6 +411,34 @@ void Othello_Board::Othello_Board_Draw() {
     DrawLine(PutPlace_X * MAP_SIZE + (MAP_SIZE / 2), (PutPlace_Y * MAP_SIZE - 10) + (MAP_SIZE / 2),
         PutPlace_X * MAP_SIZE + (MAP_SIZE / 2), (PutPlace_Y * MAP_SIZE + 10) + (MAP_SIZE / 2), RedCr, 3);
     // ------------------------------------------
+
+    //ポーズボタン
+    DrawRotaGraph(90, 40, 0.9, 0, Pause_Button, TRUE);
+    if (PauseFlg == true) {
+        DrawRotaGraph(650, 380, 1.15, 0, Pause_Back, TRUE);
+        if (450 <= Mouse_X && Mouse_X <= 850 && 320 <= Mouse_Y && Mouse_Y <= 440) {
+            if (nowKey == KEY_HOLD) {
+                DrawRotaGraph(650, 380, 0.9, 0, pause_continue[1], TRUE);
+            }
+            else {
+                DrawRotaGraph(650, 380, 1.0, 0, pause_continue[1], TRUE);
+            }
+        }
+        else {
+            DrawRotaGraph(650, 380, 1.0, 0, pause_continue[0], TRUE);
+        }
+        if (450 <= Mouse_X && Mouse_X <= 850 && 470 <= Mouse_Y && Mouse_Y <= 590) {
+            if (nowKey == KEY_HOLD) {
+                DrawRotaGraph(650, 530, 0.9, 0, pause_select[1], TRUE);
+            }
+            else {
+                DrawRotaGraph(650, 530, 1.0, 0, pause_select[1], TRUE);
+            }
+        }
+        else {
+            DrawRotaGraph(650, 530, 1.0, 0, pause_select[0], TRUE);
+        }
+    }
 }
 // ---------------------------------------------------------------------
 
@@ -500,62 +566,6 @@ void Othello_Board::Print_OthelloBoard(int board[PB][PB]) {
                 //DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "4");
 
             }
-
-            //    /* 角 */
-            //    if (board[i][j] == 5) {
-            //        // ボードのマス目を見やすくするために黒色で囲む
-            //        DrawBox(i * MAP_SIZE, j * MAP_SIZE,
-            //            (i * MAP_SIZE) + MAP_SIZE, (j * MAP_SIZE) + MAP_SIZE, BlackCr, TRUE);
-
-            //        // ボードのマスの設定
-            //        DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
-            //            (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
-            //       // DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "5");
-
-            //    }
-
-            //    /* 置けるようになった角 */
-            //    if (board[i][j] == 6) {
-            //        // ボードのマス目を見やすくするために黒色で囲む
-            //        DrawBox(i * MAP_SIZE, j * MAP_SIZE,
-            //            (i * MAP_SIZE) + MAP_SIZE, (j * MAP_SIZE) + MAP_SIZE, BlackCr, TRUE);
-
-            //        // ボードのマスの設定
-            //        DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
-            //            (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
-
-            //        CursorOn_OthelloBoard();    // マウスカーソルの位置がボードのマス目の上に来たマスを赤く表示する
-            //        //DrawFormatString(i * MAP_SIZE + 5, j * MAP_SIZE + 5, GetColor(255, 0, 0), "6");
-            //    }
-
-            //    /* 角の周りの 3 マス */
-            //    if (board[i][j] == 7) {
-            //        // ボードのマス目を見やすくするために黒色で囲む
-            //        DrawBox(i * MAP_SIZE, j * MAP_SIZE,
-            //            (i * MAP_SIZE) + MAP_SIZE, (j * MAP_SIZE) + MAP_SIZE, BlackCr, TRUE);
-
-            //        // ボードのマスの設定
-            //        DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
-            //            (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
-            //        //DrawFormatString(i* MAP_SIZE + 5, j* MAP_SIZE + 5, GetColor(255, 0, 0), "7");
-
-            //    }
-
-            //    /* 取れるようになった角の周りの 3 マス*/
-            //    if (board[i][j] == 8) {
-            //        // ボードのマス目を見やすくするために黒色で囲む
-            //        DrawBox(i * MAP_SIZE, j * MAP_SIZE,
-            //            (i * MAP_SIZE) + MAP_SIZE, (j * MAP_SIZE) + MAP_SIZE, BlackCr, TRUE);
-
-            //        // ボードのマスの設定
-            //        DrawBox((i * MAP_SIZE) + 1, (j * MAP_SIZE) + 1,
-            //            (i * MAP_SIZE) + MAP_SIZE - 1, (j * MAP_SIZE) + MAP_SIZE - 1, GreenCr, TRUE);
-
-            //        CursorOn_OthelloBoard();    // マウスカーソルの位置がボードのマス目の上に来たマスを赤く表示する
-            //        DrawFormatString(i* MAP_SIZE + 5, j* MAP_SIZE + 5, GetColor(255, 0, 0), "8");
-
-            //    }
-            //}
         }
     }
 }

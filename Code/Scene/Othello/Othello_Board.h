@@ -10,6 +10,13 @@ private:
 	Scene* Parent;
 
 	int PutCheckImage;	// かっこの画像を入れる用の変数
+	int Pause_Button;
+	int Pause_Back;
+	int Pause_Continue;
+	int Pause_Select;
+
+	int pause_continue[2];
+	int pause_select[2];
 
 	int BGM;		// BGM用の変数
 	int PutSE;		// 石を置くときのSE用の変数
@@ -32,6 +39,11 @@ private:
 	int RandomNum;	// 
 	int Player;		// プレイヤーかどうかを判定するための変数
 	int PutPlace_X, PutPlace_Y;		// 置いた場所を保存する変数
+	
+	int Mouse_X;		// マウスのX座標のポインタを入れる用変数
+	int Mouse_Y;		// マウスのY座標のポインタを入れる用変数
+	int OldKey;
+	int nowKey;
 
 	bool DrawFlag;		// カーソルがマスの上に来た時に赤く描画していいか判定
 	bool CheckFlag;		// 
@@ -39,10 +51,9 @@ private:
 	bool EndFlag;		// 終了条件を満たしているかどうかを判定
 	bool RandomFlag;	// 
 	bool CornerFlag;	// 角が取れるかどうかを判定
+	bool PauseFlg;
 
 public:
-	int Mouse_X;		// マウスのX座標のポインタを入れる用変数
-	int Mouse_Y;		// マウスのY座標のポインタを入れる用変数
 	int Square_X;		// マウスから読みとったX座標を、MAP_SIZEで割った値を入れた変数
 	int Square_Y;		// マウスから読み取ったY座標を、MAP_SIZEで割った値を入れた変数
 	int Board[PB][PB];	// ボードのマップチップ情報を入れる用変数
