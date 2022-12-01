@@ -64,6 +64,10 @@ void Karu_Game::Karu_Game_Initialize(Scene* scene) {
 	Karu_CPU3_Text = LoadGraph("Resource/image/Karu_Image/CPU_3.png");	//ƒeƒLƒXƒg‰æ‘œ‚ğKaru_CPU3_Text‚ÉŠi”[
 	PauseIcon = LoadGraph("Resource/image/Karu_Image/Karu_PauseIcon.png");//ƒ|[ƒYƒ{ƒ^ƒ“‰æ‘œ‚ğPauseIcon‚ÉŠi”[
 	PauseBackImg = LoadGraph("Resource/image/Karu_Image/Karu_PauseBack.png");//ƒ|[ƒYƒ{ƒ^ƒ“‰æ‘œ‚ğPauseIcon‚ÉŠi”[
+	ResultBackImg = LoadGraph("Resource/image/Karu_Image/Karu_ResultBack.png");//ƒŠƒUƒ‹ƒg”wŒi‰æ‘œ‚ğResultBackImg‚ÉŠi”[
+	ResultRank1 = LoadGraph("Resource/image/Karu_Image/Karu_Rank_1.png");//‡ˆÊ‰æ‘œ‚ğResultRank1‚ÉŠi”[
+	ResultRank2 = LoadGraph("Resource/image/Karu_Image/Karu_Rank_2.png");//‡ˆÊ‰æ‘œ‚ğResultRank2‚ÉŠi”[
+	ResultRank3 = LoadGraph("Resource/image/Karu_Image/Karu_Rank_3.png");//‡ˆÊ‰æ‘œ‚ğResultRank3‚ÉŠi”[
 
 	LoadDivGraph("Resource/image/Karu_Image/number.png", 10, 10, 1, 30, 50, Karu_numImg, TRUE);	//”š‰æ‘œ‚ğKaru_numImg‚ÉŠi”[
 	LoadDivGraph("Resource/image/Karu_Image/HandIcon.png", 2, 2, 1, 150, 150, Player_HandIcon, TRUE);	//ƒ}ƒEƒXƒJ[ƒ\ƒ‹‰æ‘œ‚ğHandIcon‚ÉŠi”[
@@ -106,6 +110,11 @@ void Karu_Game::Karu_Game_Initialize(Scene* scene) {
 	//BGMŠi”[
 	Karu_Bgm = LoadSoundMem("Resource/bgm/Karu_BGM/Karuta_Bgm.wav");
 	ChangeVolumeSoundMem(255 * 50 / 100, Karu_Bgm);
+
+	//‡ˆÊ‰Šú‰»
+	for (int i = 0;i < 4;i++) {
+		End_Rank[i] = 0;
+	}
 }
 
 /*************************
@@ -144,6 +153,10 @@ void Karu_Game::Karu_Game_Update() {
 		once_bgm = true;
 	}
 
+	if (CheckHitKey(KEY_INPUT_0)) {
+		end = true;
+	}
+
 	//ƒQ[ƒ€ƒI[ƒo[‚É‚È‚é‚Ü‚Å
 	if (!end) {
 		if (!now_pause) {
@@ -165,7 +178,7 @@ void Karu_Game::Karu_Game_Update() {
 			if (!Yomiset && AllSet && (Karu_player.myFuda + cpu_1.myFuda + cpu_2.myFuda + cpu_3.myFuda) < 44) {
 				Yomifuda_Storage();
 			}
-			else if ((Karu_player.myFuda + cpu_1.myFuda + cpu_2.myFuda + cpu_3.myFuda) > 44) {
+			else if ((Karu_player.myFuda + cpu_1.myFuda + cpu_2.myFuda + cpu_3.myFuda) > 43) {
 				end = true;		//I—¹
 			}
 
@@ -179,10 +192,15 @@ void Karu_Game::Karu_Game_Update() {
 				Pause();
 			}
 		}
+		else {
+			Pause_Controller();
+		}
+	}
+	else {
+		Rank();
 	}
 	Click_Anim();
 	Otetuki_Anim();
-	Pause_Controller();
 
 	if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH) { // ‰EƒNƒŠƒbƒN‚µ‚½‚ç
 		//ŠGD‘“ü‚ê‘Ö‚¦
@@ -281,6 +299,13 @@ void Karu_Game::Karu_Game_Draw() {
 
 	if (end) {
 		DrawFormatString(800, 400, 0xFF0000, "END");
+		DrawRotaGraph(640, 360, 1.0, 0, ResultBackImg, TRUE);
+		DrawRotaGraph(640, 280, 1.0, 0, ResultRank1, TRUE);
+		DrawRotaGraph(640, 280, 2.0, 0, End_Rank[0], TRUE);
+		DrawRotaGraph(640, 360, 1.0, 0, ResultRank2, TRUE);
+		DrawRotaGraph(640, 360, 2.0, 0, End_Rank[1], TRUE);
+		DrawRotaGraph(640, 440, 1.0, 0, ResultRank3, TRUE);
+		DrawRotaGraph(640, 440, 2.0, 0, End_Rank[2], TRUE);
 	}
 
 	if (now_pause) {
@@ -650,6 +675,40 @@ void Karu_Game::Pause_Controller() {
 			PlaySoundMem(Karu_Bgm, DX_PLAYTYPE_LOOP, FALSE);
 			PlaySoundMem(voice, DX_PLAYTYPE_BACK, FALSE);
 		}
+	}
+}
+
+/*******************
+** ‡ˆÊŒvZ **
+* ˆø”  :‚È‚µ
+* –ß‚è’l:‚È‚µ
+********************/
+void Karu_Game::Rank() {
+	if (End_Rank[0] == 0) {
+		End_Rank[0] = Karu_PlayerText;
+	}
+
+	if (Karu_player.myFuda <= cpu_1.myFuda) {
+		End_Rank[1] = End_Rank[0];
+		End_Rank[0] = Karu_CPU1_Text;
+	}
+	else {
+		End_Rank[1] = Karu_CPU1_Text;
+	}
+
+	if ((End_Rank[0] == Karu_PlayerText && Karu_player.myFuda <= cpu_2.myFuda) ||
+		(End_Rank[0] == Karu_CPU1_Text && cpu_1.myFuda <= cpu_2.myFuda)) {
+		End_Rank[2] = End_Rank[1];
+		End_Rank[1] = End_Rank[0];
+		End_Rank[0] = Karu_CPU2_Text;
+	}
+	else if((End_Rank[1] == Karu_PlayerText && Karu_player.myFuda <= cpu_2.myFuda) ||
+			(End_Rank[1] == Karu_CPU1_Text && cpu_1.myFuda <= cpu_2.myFuda)){
+		End_Rank[2] = End_Rank[1];
+		End_Rank[1] = Karu_CPU2_Text;
+	}
+	else {
+		End_Rank[2] = Karu_CPU2_Text;
 	}
 }
 
