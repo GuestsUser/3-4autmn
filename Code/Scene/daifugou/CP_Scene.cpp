@@ -1,6 +1,6 @@
 #include"CP_Scene.h"
 #include"CP_Player.h"
-
+#include"daifugou.h"
 CP_Scene::CP_Scene(){
 	Player = new CareerPoker();
 	Player->CP_Player_Initialize();
