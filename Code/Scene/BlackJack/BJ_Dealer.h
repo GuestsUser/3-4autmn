@@ -33,7 +33,7 @@ protected:
   const float rate_ps = 1.0f;
   const float rate_wn = 2.0f;
   const float rate_bj = 2.5f;
-  const float rate_db = 4.0f;
+  const float rate_db = 5.0f;
   const float rate_is = 3.0f;
 
   const float img_size = 0.45f;
@@ -41,6 +41,7 @@ protected:
   bool D_BlackJakc;
   bool split;
   bool D_dbl = false;
+  bool D_spt_dbl = false;
 
 public:
   int card_hdl[54];
