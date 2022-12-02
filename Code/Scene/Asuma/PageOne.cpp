@@ -1,32 +1,51 @@
 #include"PageOne.h"
 #include"DxLib.h"
 #include"./../Code/GetKey.h"
+#include "./../Title/Scene_Select.h"
 
-void PageOne::PageOne_Initialize() {
 
-	LoadDivGraph("Resource/image/toranpu_all.png", 54, 13, 5, 200, 300, card_type);
+void PageOne::PageOne_Initialize(Scene* scene) {
+
+	//背景
 	background = LoadGraph("Resource/image/CareerPoker.png");
 
+	//カード画像
+	LoadDivGraph("Resource/image/toranpu_all.png", 54, 13, 5, 200, 300, card_type);
+
+	//リザルト画像
 	PlayerCrown = LoadGraph("Resource/image/PageOne_Image/Player_Crown.png");
 	NPC1_Icon = LoadGraph("Resource/image/PageOne_Image/NPC1_Crown.png");
 	NPC2_Icon = LoadGraph("Resource/image/PageOne_Image/NPC2_Crown.png");
 	NPC3_Icon = LoadGraph("Resource/image/PageOne_Image/NPC3_Crown.png");
 	
+	//パス画像
 	Player_Pass_Icon = LoadGraph("Resource/image/PageOne_Image/Pass.png");
 	NPC1_Pass_Icon = LoadGraph("Resource/image/PageOne_Image/NPC1_Pass.png");
 	NPC2_Pass_Icon = LoadGraph("Resource/image/PageOne_Image/NPC2_Pass.png");
 	NPC3_Pass_Icon = LoadGraph("Resource/image/PageOne_Image/NPC3_Pass.png");
 	
+	//ページワン宣言画像
 	Player_PageOne_Icon = LoadGraph("Resource/image/PageOne_Image/Page_One.png");
 	NPC1_PageOne_Icon = LoadGraph("Resource/image/PageOne_Image/Page_One_N1.png");
 	NPC2_PageOne_Icon = LoadGraph("Resource/image/PageOne_Image/Page_One_N2.png");
 	NPC3_PageOne_Icon = LoadGraph("Resource/image/PageOne_Image/Page_One_N3.png");
 
+	//スートUI
 	Spade = LoadGraph("Resource/image/PageOne_Image/Spade.png");
 	Heart = LoadGraph("Resource/image/PageOne_Image/Heart.png");
 	Diamond = LoadGraph("Resource/image/PageOne_Image/Diamond.png");
 	Club = LoadGraph("Resource/image/PageOne_Image/Club.png");
 	free = LoadGraph("Resource/image/PageOne_Image/Free.png");
+
+	//ポーズUI
+	Pause_Button = LoadGraph("Resource/image/PauseButton.png");
+	Pause_Back = LoadGraph("Resource/image/PauseBack.png");
+	Pause_Continue = LoadDivGraph("Resource/image/ContinueButton.png", 2, 2, 1, 400, 120, pause_continue);
+	Pause_Select = LoadDivGraph("Resource/image/MenuButton.png", 2, 2, 1, 400, 120, pause_select);
+
+	Pause_Flg = false;
+	Old_key = KEY_FREE;
+	select = scene;
 
 	Deck_X = 130;
 	Deck_Y = 550;
@@ -64,6 +83,7 @@ void PageOne::PageOne_Initialize() {
 	PageOne_npc2 = false;
 	PageOne_npc3 = false;
 
+	Player_Pass_Flg = false;
 	NPC1_Pass_Flg = false;
 	NPC2_Pass_Flg = false;
 	NPC3_Pass_Flg = false;
@@ -92,15 +112,28 @@ void PageOne::PageOne_Finalize() {
 }
 
 void PageOne::PageOne_Update() {
+
 	GetMousePoint(&Mouse_X, &Mouse_Y);
-	DrawRotaGraph(640, 360, 1.0, 0, background, TRUE);
+
+	Now_key = key->GetKeyState(REQUEST_MOUSE_LEFT); //現在のマウス左ボタンの入力状態の取得
+
+	//ポーズボタンを押したらポーズ画面を開くフラグをtrueにする
+	if ((20 <= Mouse_X && Mouse_X <= 175 && 5 <= Mouse_Y && Mouse_Y <= 70) || ((450 <= Mouse_X && Mouse_X <= 850 && 320 <= Mouse_Y && Mouse_Y <= 440) && Pause_Flg)) {
+		if (Old_key != KEY_FREE && Now_key == KEY_PULL) {
+			Pause_Flg = !Pause_Flg;
+		}
+	}
+	if (Pause_Flg) {
+		if (450 <= Mouse_X && Mouse_X <= 850 && 470 <= Mouse_Y && Mouse_Y <= 590) {
+			if (Old_key != KEY_FREE && Now_key == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
+				select->SetNext(new Scene_Select());
+			}
+		}
+	}
 
 	n++;	//山札からカード引くときのクールタイム（早すぎると違和感があるから）
 
-	//デバッグ用
-	//color = GetColor(255, 255, 255);
-
-	if (finish == false) {
+	if (finish == false && Pause_Flg == false) {
 		switch (priority) {
 		case 0:	// player
 			if (Player_setup == false) {
@@ -122,7 +155,6 @@ void PageOne::PageOne_Update() {
 			else {
 				if (flg_p == false) {
 					reset = false;
-					DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：プレイヤー");
 
 					if (Field_card.empty()) {
 						draw = false;
@@ -136,9 +168,6 @@ void PageOne::PageOne_Update() {
 								draw = false;
 							}
 						}
-					}
-					if (draw != false) {
-						DrawFormatString(50, 400, GetColor(100, 100, 255), "カードを引いてください");
 					}
 
 					//プレイヤーがカード引く用
@@ -160,14 +189,6 @@ void PageOne::PageOne_Update() {
 						}
 					}
 
-					//手札が残り二枚だとページワン宣言できる
-					if (Player_card.size() == 2 && PageOne_flg == false) {
-						PageOne_player = true;
-					}
-					else {
-						PageOne_player = false;
-					}
-
 					if (Field_card.empty() == false && Field_card[0].suit == 5) {
 						lead = 1;
 					}
@@ -180,20 +201,28 @@ void PageOne::PageOne_Update() {
 
 						//山札0枚＆手札に出せるカードがない場合パスをする
 						if (Card_obj.empty() == true && Field_card.empty() == false && Field_card[lead].suit != Player_card[i].suit && Player_card[i].suit != 5) {
-							DrawGraph(890, 440, Player_Pass_Icon, true);
+							Player_Pass_Flg = true;
 							if ((Mouse_X > 890) && (Mouse_X < 1040) && (Mouse_Y > 440) && (Mouse_Y < 515)) {
 								if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
 									flg_p = true;
 									priority++;
 									n = 0;
+									Player_Pass_Flg = false;
 								}
 							}
 						}
 						else {
 							if (Field_card.empty() || Field_card[0].suit == 5 || Field_card[lead].suit == Player_card[i].suit || Player_card[i].suit == 5) {
+								//手札が残り二枚だとページワン宣言できる
+								if (Player_card.size() == 2 && PageOne_flg == false) {
+									PageOne_player = true;
+								}
+								else {
+									PageOne_player = false;
+								}
+
 								//ページワン宣言ボタン
 								if (PageOne_player == true) {
-									DrawGraph(500, 400, Player_PageOne_Icon, true);
 									if ((Mouse_X > 500) && (Mouse_X < 800) && (Mouse_Y > 400) && (Mouse_Y < 500)) {
 										if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
 											PageOne_player = false;
@@ -273,7 +302,6 @@ void PageOne::PageOne_Update() {
 			else {
 				if (flg_1 == false) {
 					reset = false;
-					DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：NPC１号");
 
 					if (Field_card.empty()) {
 						draw = false;
@@ -408,7 +436,6 @@ void PageOne::PageOne_Update() {
 
 				if (flg_2 == false) {
 					reset = false;
-					DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：NPC２号");
 
 					if (Field_card.empty()) {
 						draw = false;
@@ -541,7 +568,6 @@ void PageOne::PageOne_Update() {
 			else {
 				if (flg_3 == false) {
 					reset = false;
-					DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：NPC３号");
 
 					if (Field_card.empty()) {
 						draw = false;
@@ -711,6 +737,7 @@ void PageOne::PageOne_Update() {
 			break;
 		}
 	}
+	Old_key = Now_key;
 }
 
 void PageOne::PageOne_Draw() {
@@ -720,7 +747,28 @@ void PageOne::PageOne_Draw() {
 	npc_2 = 0;
 	npc_3 = 0;
 
+	DrawRotaGraph(640, 360, 1.0, 0, background, TRUE);
+
 	if (reset == false && Player_setup == true && NPC1_setup == true && NPC2_setup == true && NPC3_setup == true) {
+
+		switch (priority) {
+		case 0:
+			DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：プレイヤー");
+			if (draw == true) {
+				DrawFormatString(50, 400, GetColor(100, 100, 255), "カードを引いてください");
+			}
+			break;
+		case 1:
+			DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：NPC１号");
+			break;
+		case 2:
+			DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：NPC２号");
+			break;
+		case 3:
+			DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：NPC３号");
+			break;
+		}
+
 		DrawFormatString(1000, 375, GetColor(255, 255, 255), "現在のスート");
 		if (Field_card.empty() == false) {
 			switch (Field_card[0].suit) {
@@ -746,6 +794,7 @@ void PageOne::PageOne_Draw() {
 		}
 	}
 
+
 	//山札の描画
 	if (Card_obj.empty() == false) {
 		DrawRotaGraph(Deck_X, Deck_Y, 0.7, 0, Card_back, TRUE);
@@ -762,6 +811,15 @@ void PageOne::PageOne_Draw() {
 		DrawRotaGraph(Player_card[i].card_x + (player % 10) * (card_w * 0.5), Player_card[i].card_y + (player / 10) * (card_h * pow(0.5, 2)), 0.5, 0, Player_card[i].img, TRUE);
 		player++;
 	}
+	//
+	if (Player_Pass_Flg == true) {
+		DrawGraph(890, 440, Player_Pass_Icon, true);
+	}
+
+	//ページワンボタン
+	if (PageOne_player == true) {
+		DrawGraph(500, 400, Player_PageOne_Icon, true);
+	}
 	//勝利時のUI
 	if (Player_setup == true && Player_card.size() == 0) {
 		DrawRotaGraph(600, 400, 1.0, 0, PlayerCrown, TRUE);
@@ -771,8 +829,8 @@ void PageOne::PageOne_Draw() {
 
 	//NPC１号の手札描画
 	for (i = 0; i < NPC_card_1.size(); i++) {
-		//DrawRotaGraph(NPC1_X + (npc_1 % 5) * (card_w * 0.3), NPC1_Y + (npc_1 / 5) * (card_h * 0.3), 0.3, 0, Card_back, TRUE);
-		DrawRotaGraph(NPC1_X + (npc_1 % 5) * (card_w * 0.3), NPC1_Y + (npc_1 / 5) * (card_h * pow(0.3, 2)), 0.3, 0, NPC_card_1[i].img, TRUE);
+		DrawRotaGraph(NPC1_X + (npc_1 % 5) * (card_w * 0.3), NPC1_Y + (npc_1 / 5) * (card_h * 0.3), 0.3, 0, Card_back, TRUE);
+		//DrawRotaGraph(NPC1_X + (npc_1 % 5) * (card_w * 0.3), NPC1_Y + (npc_1 / 5) * (card_h * pow(0.3, 2)), 0.3, 0, NPC_card_1[i].img, TRUE);
 		npc_1++;
 	}
 	//パスのUI
@@ -791,8 +849,8 @@ void PageOne::PageOne_Draw() {
 
 	//NPC２号の手札描画
 	for (i = 0; i < NPC_card_2.size(); i++) {
-		//DrawRotaGraph(NPC2_X + (npc_2 % 5) * (card_w * 0.3), NPC2_Y + (npc_2 / 5) * (card_h * 0.3), 0.3, 0, Card_back, TRUE);
-		DrawRotaGraph(NPC2_X + (npc_2 % 5) * (card_w * 0.3), NPC2_Y + (npc_2 / 5) * (card_h * pow(0.3, 2)), 0.3, 0, NPC_card_2[i].img, TRUE);
+		DrawRotaGraph(NPC2_X + (npc_2 % 5) * (card_w * 0.3), NPC2_Y + (npc_2 / 5) * (card_h * 0.3), 0.3, 0, Card_back, TRUE);
+		//DrawRotaGraph(NPC2_X + (npc_2 % 5) * (card_w * 0.3), NPC2_Y + (npc_2 / 5) * (card_h * pow(0.3, 2)), 0.3, 0, NPC_card_2[i].img, TRUE);
 		npc_2++;
 	}
 	//パスのUI
@@ -811,8 +869,8 @@ void PageOne::PageOne_Draw() {
 
 	//NPC３号の手札描画
 	for (i = 0; i < NPC_card_3.size(); i++) {
-		//DrawRotaGraph(NPC3_X + (npc_3 % 5) * (card_w * 0.3), NPC3_Y + (npc_3 / 5) * (card_h * 0.3), 0.3, 0, Card_back, TRUE);
-		DrawRotaGraph(NPC3_X + (npc_3 % 5) * (card_w * 0.3), NPC3_Y + (npc_3 / 5) * (card_h * pow(0.3, 2)), 0.3, 0, NPC_card_3[i].img, TRUE);
+		DrawRotaGraph(NPC3_X + (npc_3 % 5) * (card_w * 0.3), NPC3_Y + (npc_3 / 5) * (card_h * 0.3), 0.3, 0, Card_back, TRUE);
+		//DrawRotaGraph(NPC3_X + (npc_3 % 5) * (card_w * 0.3), NPC3_Y + (npc_3 / 5) * (card_h * pow(0.3, 2)), 0.3, 0, NPC_card_3[i].img, TRUE);
 		npc_3++;
 	}
 	//パスのUI
@@ -839,6 +897,34 @@ void PageOne::PageOne_Draw() {
 	DrawFormatString(875, 125, GetColor(255, 255, 255), "３号");
 
 	DrawFormatString(0, 665, GetColor(255, 255, 255), "山札:残り%d枚", Card_obj.size());
+
+	//ポーズボタン
+	DrawRotaGraph(100, 40, 0.8, 0, Pause_Button, TRUE);
+	if (Pause_Flg == true) {
+		DrawRotaGraph(650, 380, 1.15, 0, Pause_Back, TRUE);
+		if (450 <= Mouse_X && Mouse_X <= 850 && 320 <= Mouse_Y && Mouse_Y <= 440) {
+			if (Now_key == KEY_HOLD) {
+				DrawRotaGraph(650, 380, 0.9, 0, pause_continue[1], TRUE);
+			}
+			else {
+				DrawRotaGraph(650, 380, 1.0, 0, pause_continue[1], TRUE);
+			}
+		}
+		else {
+			DrawRotaGraph(650, 380, 1.0, 0, pause_continue[0], TRUE);
+		}
+		if (450 <= Mouse_X && Mouse_X <= 850 && 470 <= Mouse_Y && Mouse_Y <= 590) {
+			if (Now_key == KEY_HOLD) {
+				DrawRotaGraph(650, 530, 0.9, 0, pause_select[1], TRUE);
+			}
+			else {
+				DrawRotaGraph(650, 530, 1.0, 0, pause_select[1], TRUE);
+			}
+		}
+		else {
+			DrawRotaGraph(650, 530, 1.0, 0, pause_select[0], TRUE);
+		}
+	}
 
 	//デバッグ用
 	//DrawBox(890, 440,980, 500, color, TRUE);
