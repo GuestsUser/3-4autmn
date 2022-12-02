@@ -39,6 +39,7 @@ private:
 	int RandomNum;	// 
 	int Player;		// プレイヤーかどうかを判定するための変数
 	int PutPlace_X, PutPlace_Y;		// 置いた場所を保存する変数
+	int BoardShift_X, BoardShift_Y;
 	
 	int Mouse_X;		// マウスのX座標のポインタを入れる用変数
 	int Mouse_Y;		// マウスのY座標のポインタを入れる用変数
