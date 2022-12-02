@@ -35,6 +35,7 @@
     <ClCompile Include="Code\Scene\Asuma\PO_Player.cpp" />
     <ClCompile Include="Code\Scene\Asuma\Scene_PageOne.cpp" />
     <ClCompile Include="Code\Scene\BlackJack\BJ_Slider.cpp" />
+    <ClCompile Include="Code\Scene\BlackJack\Pose.cpp" />
     <ClCompile Include="Code\Scene\ConnectFour\CF_Player.cpp" />
     <ClCompile Include="Code\Scene\ConnectFour\Scene_ConnectFour.cpp" />
     <ClCompile Include="Code\Scene\daifugou\CP_Player.cpp" />
@@ -77,6 +78,7 @@
     <ClInclude Include="Code\Scene\Asuma\PO_Player.h" />
     <ClInclude Include="Code\Scene\Asuma\Scene_PageOne.h" />
     <ClInclude Include="Code\Scene\BlackJack\BJ_Slider.h" />
+    <ClInclude Include="Code\Scene\BlackJack\Pose.h" />
     <ClInclude Include="Code\Scene\ConnectFour\CF_Player.h" />
     <ClInclude Include="Code\Scene\ConnectFour\Scene_ConnectFour.h" />
     <ClInclude Include="Code\Scene\daifugou\CP_Player.h" />

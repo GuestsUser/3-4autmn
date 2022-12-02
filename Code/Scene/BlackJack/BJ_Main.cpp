@@ -42,6 +42,7 @@ BlackJack::BlackJack() {
   shoe->Inisialize();
   dealer->Initialize();
   player->Initialize();
+  Pose_Initialize();
 }
 
 BlackJack::~BlackJack() {
@@ -57,6 +58,7 @@ BlackJack::~BlackJack() {
 
 void BlackJack::Initialize() {
 
+  Pose_Initialize();
   shoe->Inisialize();
   dealer->Initialize();
   player->Initialize();
@@ -71,29 +73,33 @@ void BlackJack::Initialize() {
 }
 
 void BlackJack::Update() {
-
+  Pose_Update();
   GetMousePoint(&mousePosX, &mousePosY);
   isClick = GetMouseInput() == MOUSE_INPUT_LEFT;
   slider->Update(mousePosX, mousePosY, isClick);
-  ptn = player->ButtonHit(pose_x, pose_y, pose_w, pose_h);
-  scn = player->ButtonHit(select_x[0], select_y[0], select_w, select_h);
-  ctn = player->ButtonHit(select_x[1], select_y[1], select_w, select_h);
-  if (ptn) {
-    pose_flg = !pose_flg;
-  }
-  if (ctn && pose_flg) {
-    pose_flg = false;
-  }
+  pose_flg = pose;
+
+  /*旧ポーズボタン*/
+  //ptn = player->ButtonHit(pose_x, pose_y, pose_w, pose_h);
+  //scn = player->ButtonHit(select_x[0], select_y[0], select_w, select_h);
+  //ctn = player->ButtonHit(select_x[1], select_y[1], select_w, select_h);
+  //if (ptn) {
+  //  pose_flg = !pose_flg;
+  //}
+  //if (ctn && pose_flg) {
+  //  pose_flg = false;
+  //}
+  /*旧ポーズボタン*/
+
   /*苦し紛れのベット*/
   if (player->ButtonHit(bet_x, bet_y, bet_w, bet_h)) {
-    //bet_flg = !bet_flg;
     bet_flg = true;
     player->Bet_Flg(bet_flg);
     player->Set_Bet(slider->GetValue());
   }
   /*苦し紛れのベット*/
 
-  if (player->P_MaxCoin() < 0 || (scn && pose_flg)) {
+  if (player->P_MaxCoin() < 0 || end) {
 
     game_endflg = true;
     next_flg = false;
@@ -105,10 +111,6 @@ void BlackJack::Update() {
 
     if (next_flg) {
 
-      //if (bet_flg) {
-      //  player->Set_Bet(slider->GetValue());
-      //}
-      //player->Set_Bet(slider->GetValue());
       BlackJack::Initialize();
       next_flg = false;
       bet_flg = false;
@@ -142,8 +144,6 @@ void BlackJack::Update() {
       if (player->ButtonHit(760, 340, 60, 40)) {
 
         game_endflg = true;
-        //SetNext(nullptr);
-        SetNext(new Scene_Select());
 
       }
 
@@ -151,23 +151,27 @@ void BlackJack::Update() {
   }
 }
 void BlackJack::Draw() {
-
   DrawGraph(0, 0, game_img, true);
-  if (pose_flg) {
-    DrawGraph(200, 150, pose_img, true);
-    DrawGraph(220, 480, select_img[0], true);
-    DrawGraph(630, 480, continue_img[0], true);
-  }
-  DrawGraph(0,0,pose_button_img,true);
+
+  /*旧ポーズ画面*/
+  //if (pose_flg) {
+  //  //DrawGraph(200, 150, pose_img, true);
+  //  //DrawGraph(220, 480, select_img[0], true);
+  //  //DrawGraph(630, 480, continue_img[0], true);
+  //}
+  //DrawGraph(0,0,pose_button_img,true);
+  /*旧ポーズ画面*/
+
+  Pose_Draw();
   SetFontSize(24);
-  if (game_endflg) {
+  if (game_endflg || end) {
     if (BlackJack::Wait_Time(0.5f)) {
       //exit(0);
       SetNext(new Scene_Select());
     }
     else {
 
-      DrawFormatString(450, 340, 0xffffff, "セレクト画面に戻ります\n");
+      if(!pose_flg)DrawFormatString(450, 340, 0xffffff, "セレクト画面に戻ります\n");
 
     }
   }
@@ -195,9 +199,11 @@ void BlackJack::Draw() {
     }
     
     SetFontSize(32);
-    //DrawFormatString(500, 630, 0xffffff, "掛金：%d", (int)slider->GetValue());
+
   }
+
   SetFontSize(DEFAULT_FONT_SIZE);
+  DrawFormatString(80, 280, 0xffffff, "pose %d", pose);
 
 }
 
@@ -224,7 +230,5 @@ bool BlackJack::Wait_Time(float time) {
       break;
     }
   }
-
-  //return this;
 
 }

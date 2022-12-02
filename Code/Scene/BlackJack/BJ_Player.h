@@ -42,6 +42,7 @@ public:
   void Initialize();           /*変数初期化*/
   void Update();
   void Draw();
+  void Debug_Draw(bool);
 
   int P_MaxCoin();
 

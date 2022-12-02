@@ -37,6 +37,8 @@
     <ClCompile Include="Code\Scene\Sugoroku\SR_Map.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\SR_Result.cpp" />
     <ClCompile Include="Code\Scene\BlackJack\BJ_Slider.cpp" />
+    <ClCompile Include="Code\Scene\daifugou\daigugou.cpp" />
+    <ClCompile Include="Code\Scene\BlackJack\Pose.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Component\Button.h" />
@@ -79,6 +81,8 @@
     <ClInclude Include="Code\Scene\Sugoroku\SR_Map.h" />
     <ClInclude Include="Code\Scene\Sugoroku\SR_Result.h" />
     <ClInclude Include="Code\Scene\BlackJack\BJ_Slider.h" />
+    <ClInclude Include="Code\Scene\daifugou\daifugou.h" />
+    <ClInclude Include="Code\Scene\BlackJack\Pose.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Scene\Title\SelectScene.cd" />
