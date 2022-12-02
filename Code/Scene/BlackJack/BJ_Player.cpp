@@ -80,7 +80,7 @@ void Player::Initialize() {
   /*bool*/
   split = false;
   spt_flg = false;
-
+  D_spt_dbl = false;
   D_dbl = false;
 
   hit = std = dbl = spt = bet = false;
@@ -116,8 +116,8 @@ void Player::Draw() {
   /*所持金表示*/
   if (!split) {
 
-    if (D_dbl)DrawFormatString(500, 630, 0xffffff, "掛金：%d", bet_coin * 2);
-    else DrawFormatString(500, 630, 0xffffff, "掛金：%d", bet_coin);
+    //if (D_dbl)DrawFormatString(500, 630, 0xffffff, "掛金：%d", bet_coin * 2);
+    /*else*/ DrawFormatString(500, 630, 0xffffff, "掛金：%d", bet_coin);
 
   }
   else {
@@ -136,29 +136,42 @@ void Player::Draw() {
   Player::Show_Play();
 
   /*デバッグ用*/
-  //DrawFormatString(spt_x, spt_y/100+40, color, "%d",hit+c);
-  //DrawFormatString(spt_x, spt_y / 100 +60, color2, "%d",std+c2);
-  //DrawFormatString(spt_x, spt_y / 100 +80, color3, "%d",dbl+c3);
-  //DrawFormatString(spt_x, spt_y / 100 +100, color4, "%d",spt+c4);
-  //DrawFormatString(spt_x+40, spt_y / 100 +40, color4, "p_coin：%d",p_coin);
-  //DrawFormatString(spt_x+40, spt_y / 100 +80, color4, "spt_num：%d",spt_hand_num);
-  //DrawFormatString(spt_x+40, spt_y / 100 +60, color4, "spt_a：%d",spt_a);
-
-  //DrawFormatString(spt_x+40, spt_y / 100 +100, color4, "%d",dealer_calc);
-
-  //DrawFormatString(spt_x-80, spt_y / 100 +40, 0xffffff, "%Win %d",win);
-  //DrawFormatString(spt_x-80, spt_y / 100 +60, 0xffffff, "Los %d",los);
-  //DrawFormatString(spt_x-80, spt_y / 100 +80, 0xffffff, "psh %d",psh);
-  //DrawFormatString(spt_x-80, spt_y / 100 +100, 0xffffff, "BlJ %d",BlackJack);
-  //DrawFormatString(spt_x-80, spt_y / 100 +120, 0xffffff, "bst %d",bst);
-  //DrawFormatString(spt_x-80, spt_y / 100 +140, 0xffffff, "spt_win %d",spt_win);
-  //DrawFormatString(spt_x-80, spt_y / 100 +160, 0xffffff, "spt_bst %d",spt_bst);
-  //DrawFormatString(spt_x-80, spt_y / 100 +180, 0xffffff, "spt_los %d",spt_los);
-  //DrawFormatString(spt_x-80, spt_y / 100 +200, 0xffffff, "spt_psh %d",spt_psh);
+  Player::Debug_Draw(true);
   /*デバッグ用*/
 
 
 
+
+}
+void Player::Debug_Draw(bool debug) {
+
+  if (debug) {
+
+    //DrawFormatString(spt_x, spt_y/100+40, color, "%d",hit+c);
+    //DrawFormatString(spt_x, spt_y / 100 +60, color2, "%d",std+c2);
+    //DrawFormatString(spt_x, spt_y / 100 +80, color3, "%d",dbl+c3);
+    //DrawFormatString(spt_x, spt_y / 100 +100, color4, "%d",spt+c4);
+    //DrawFormatString(spt_x+40, spt_y / 100 +40, color4, "p_coin：%d",p_coin);
+    //DrawFormatString(spt_x+40, spt_y / 100 +80, color4, "spt_num：%d",spt_hand_num);
+    //DrawFormatString(spt_x+40, spt_y / 100 +60, color4, "spt_a：%d",spt_a);
+
+    //DrawFormatString(spt_x+40, spt_y / 100 +100, color4, "%d",dealer_calc);
+
+    DrawFormatString(spt_x - 80, spt_y / 100 + 40, 0xffffff, "%Win %d", win);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 60, 0xffffff, "Los %d", los);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 80, 0xffffff, "psh %d", psh);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 100, 0xffffff, "BlJ %d", BlackJack);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 120, 0xffffff, "bst %d", bst);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 140, 0xffffff, "spt_win %d", spt_win);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 160, 0xffffff, "spt_bst %d", spt_bst);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 180, 0xffffff, "spt_los %d", spt_los);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 200, 0xffffff, "spt_psh %d", spt_psh);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 220, 0xffffff, "D_dbl %d", D_dbl);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 240, 0xffffff, "D_spt_dbl %d", D_spt_dbl);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 260, 0xffffff, "hit_num %d", hit_num);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 280, 0xffffff, "pose %d", pose);
+
+  }
 
 }
 /*カードの追加*/
@@ -532,15 +545,16 @@ bool Player::Play(Shoe* shoe) {
         }
         /*doubleが入力された場合*/
         else if (dbl && (hand_num <= 2 || spt_hand_num <= 2)) {
-
+          
           /*カードを引いて勝負開始*/
-          if (hand_num == 2) {
+          if (hand_num <= 2 && hit_num < 1) {
             Set_Bet(bet_coin);
             bet_coin *= 2;
+            D_dbl = true;
           }
-          if (spt_hand_num == 2 && hand_num > 2) {
+          if (spt_hand_num <= 2 && hit_num >= 1) {
             Set_Bet(spt_bet_coin);
-            bet_coin *= 2;
+            if(D_dbl)bet_coin *= 2;
             spt_bet_coin *= 2;
             D_spt_dbl = true;
           }
