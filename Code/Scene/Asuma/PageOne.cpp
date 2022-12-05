@@ -43,6 +43,8 @@ void PageOne::PageOne_Initialize(Scene* scene) {
 	Pause_Continue = LoadDivGraph("Resource/image/ContinueButton.png", 2, 2, 1, 400, 120, pause_continue);
 	Pause_Select = LoadDivGraph("Resource/image/MenuButton.png", 2, 2, 1, 400, 120, pause_select);
 
+	Result = LoadGraph("Resource/image/PageOne_Image/ResultBack.png");
+
 	Pause_Flg = false;
 	Old_key = KEY_FREE;
 	select = scene;
@@ -822,7 +824,8 @@ void PageOne::PageOne_Draw() {
 	}
 	//èüóòéûÇÃUI
 	if (Player_setup == true && Player_card.size() == 0) {
-		DrawRotaGraph(600, 400, 1.0, 0, PlayerCrown, TRUE);
+		DrawRotaGraph(600, 300, 1.0, 0, Result, TRUE);
+		DrawRotaGraph(600, 400, 1.3, 0, PlayerCrown, TRUE);
 		finish = true;
 	}
 
@@ -843,7 +846,8 @@ void PageOne::PageOne_Draw() {
 	}
 	//èüóòéûÇÃUI
 	if (NPC1_setup == true && NPC_card_1.size() == 0) {
-		DrawRotaGraph(600, 400, 1.0, 0, NPC1_Icon, TRUE);
+		DrawRotaGraph(600, 300, 1.0, 0, Result, TRUE);
+		DrawRotaGraph(600, 400, 1.3, 0, NPC1_Icon, TRUE);
 		finish = true;
 	}
 
@@ -863,7 +867,8 @@ void PageOne::PageOne_Draw() {
 	}
 	//èüóòéûÇÃUI
 	if (NPC2_setup == true && NPC_card_2.size() == 0) {
-		DrawRotaGraph(600, 400, 1.0, 0, NPC2_Icon, TRUE);
+		DrawRotaGraph(600, 300, 1.0, 0, Result, TRUE);
+		DrawRotaGraph(600, 400, 1.3, 0, NPC2_Icon, TRUE);
 		finish = true;
 	}
 
@@ -883,7 +888,8 @@ void PageOne::PageOne_Draw() {
 	}
 	//èüóòéûÇÃUI
 	if (NPC3_setup == true && NPC_card_3.size() == 0) {
-		DrawRotaGraph(600, 400, 1.0, 0, NPC3_Icon, TRUE);
+		DrawRotaGraph(600, 300, 1.0, 0, Result, TRUE);
+		DrawRotaGraph(600, 400, 1.3, 0, NPC3_Icon, TRUE);
 		finish = true;
 	}
 
