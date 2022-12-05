@@ -63,6 +63,9 @@ private:
 	int Now_key;
 	int Old_key;
 
+	//リザルト背景
+	int Result;
+
 	Scene* select;
 
 	int Card_back;		//カードの裏面の情報
