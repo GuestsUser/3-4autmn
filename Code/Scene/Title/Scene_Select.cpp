@@ -78,6 +78,8 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			*img = LoadGraph("Resource/image/Othello_Image/OthelloAicon2.png");
 			gameScene = new Scene_Othello(); //�ʃV�[����΂����Ascm�ɓ���Ă����̂�gameScene�ɂȂ������x�̈Ⴂ
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Othello_Image/RuleImagePage1.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Othello_Image/RuleImagePage2.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Othello_Image/RuleImagePage3.png")), 1));
 			break;
 		}
 		explain.push_back(new Scene_Explain(*explainImage, gameScene)); //ボタンを押した際の説明シーン作成
