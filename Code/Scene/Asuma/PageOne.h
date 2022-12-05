@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "./../Scene.h"
 
 #define MAX (4U)
 
@@ -50,6 +51,20 @@ private:
 	int Club;	//クラブ
 	int free;	//何でもよい
 
+	//ポーズUI
+	int Pause_Button;
+	int Pause_Back;
+	int Pause_Continue;
+	int Pause_Select;
+	int pause_continue[2];
+	int pause_select[2];
+
+	bool Pause_Flg;
+	int Now_key;
+	int Old_key;
+
+	Scene* select;
+
 	int Card_back;		//カードの裏面の情報
 	Card Card_joker;	//ジョーカーの情報
 
@@ -79,6 +94,7 @@ private:
 	int NPC2_PageOne_Icon;	//ページワン宣言のアイコン画像
 	int NPC3_PageOne_Icon;	//ページワン宣言のアイコン画像
 
+	bool Player_Pass_Flg;		//プレイヤーパスフラグ
 	bool NPC1_Pass_Flg;		//NPC1パスフラグ
 	bool NPC2_Pass_Flg;		//NPC2パスフラグ
 	bool NPC3_Pass_Flg;		//NPC3パスフラグ
@@ -158,7 +174,7 @@ private:
 public:
 	PageOne() {}
 
-	void PageOne_Initialize();
+	void PageOne_Initialize(Scene* scene);
 	void PageOne_Finalize();
 	void PageOne_Update();
 	void PageOne_Draw();

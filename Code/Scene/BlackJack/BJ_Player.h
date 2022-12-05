@@ -11,7 +11,9 @@ private:
   int std_x, std_y, std_w, std_h;
   int spt_x, spt_y, spt_w, spt_h;
   int dbl_x, dbl_y, dbl_w, dbl_h;
-  //int bet_x, bet_y, bet_w, bet_h;
+
+  int hit_img, std_img, spt_img, dbl_img;
+  
 
   int spt_type;
   int hit_num;

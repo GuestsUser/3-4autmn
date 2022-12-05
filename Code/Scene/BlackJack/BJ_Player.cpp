@@ -91,6 +91,11 @@ void Player::Initialize() {
   now_game_flg = true;
   /*bool*/
 
+  hit_img = LoadGraph("Resource/image/BJ_Image/Hit.png");
+  std_img = LoadGraph("Resource/image/BJ_Image/Stand.png");
+  dbl_img = LoadGraph("Resource/image/BJ_Image/Double.png");
+  spt_img = LoadGraph("Resource/image/BJ_Image/Split.png");
+
 }
 
 void Player::Update() {
@@ -105,6 +110,14 @@ void Player::Draw() {
   /*ボタン表示*/
   DrawFormatString(hit_x, hit_y, 0xffffff, "Hit");
   DrawFormatString(std_x, std_y, 0xffffff, "Stand");
+  DrawGraph(hit_x-130,hit_y,hit_img,true);
+  DrawGraph(std_x-60,std_y,hit_img,true);
+  DrawGraph(dbl_x-30,dbl_y,hit_img,true);
+  DrawGraph(spt_x,spt_y,hit_img,true);
+  DrawRotaGraph(hit_x-40 + 100,spt_y+20,0.7,0,hit_img,true);
+  DrawRotaGraph(std_x-0+100,spt_y + 20,0.7,0,hit_img,true);
+  DrawRotaGraph(dbl_x-0 + 100,spt_y + 20,0.7,0,hit_img,true);
+  DrawRotaGraph(spt_x-0 + 100,spt_y + 20,0.7,0,hit_img,true);
   if (hand_num == 2 || spt_hand_num == 2)DrawFormatString(dbl_x, dbl_y, 0xffffff, "Double");
 
   if (spt_flg) {
