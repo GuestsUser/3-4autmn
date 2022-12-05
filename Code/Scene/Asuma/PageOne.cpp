@@ -1,7 +1,9 @@
 #include"PageOne.h"
+#include"Scene_PageOne.h"
 #include"DxLib.h"
 #include"./../Code/GetKey.h"
 #include "./../Title/Scene_Select.h"
+#include "./../Title/Cmp_SelectSelector.h"
 
 
 void PageOne::PageOne_Initialize(Scene* scene) {
@@ -42,12 +44,9 @@ void PageOne::PageOne_Initialize(Scene* scene) {
 	Pause_Back = LoadGraph("Resource/image/PauseBack.png");
 	Pause_Continue = LoadDivGraph("Resource/image/ContinueButton.png", 2, 2, 1, 400, 120, pause_continue);
 	Pause_Select = LoadDivGraph("Resource/image/MenuButton.png", 2, 2, 1, 400, 120, pause_select);
+	Pause_Flg = false;
 
 	Result = LoadGraph("Resource/image/PageOne_Image/ResultBack.png");
-
-	Pause_Flg = false;
-	Old_key = KEY_FREE;
-	select = scene;
 
 	Deck_X = 130;
 	Deck_Y = 550;
@@ -105,6 +104,9 @@ void PageOne::PageOne_Initialize(Scene* scene) {
 	Card_obj.push_back(Card(card_type[53], 99, 5, Deck_X, Deck_Y));	//ジョーカー
 
 	Card_back = card_type[52];	//カードの裏面
+
+	Old_key = KEY_FREE;
+	select = scene;
 }
 
 void PageOne::PageOne_Finalize() {
@@ -120,12 +122,30 @@ void PageOne::PageOne_Update() {
 	Now_key = key->GetKeyState(REQUEST_MOUSE_LEFT); //現在のマウス左ボタンの入力状態の取得
 
 	//ポーズボタンを押したらポーズ画面を開くフラグをtrueにする
-	if ((20 <= Mouse_X && Mouse_X <= 175 && 5 <= Mouse_Y && Mouse_Y <= 70) || ((450 <= Mouse_X && Mouse_X <= 850 && 320 <= Mouse_Y && Mouse_Y <= 440) && Pause_Flg)) {
+	if ((20 <= Mouse_X && Mouse_X <= 175 && 5 <= Mouse_Y && Mouse_Y <= 70) || ((450 <= Mouse_X && Mouse_X <= 850 && 320 <= Mouse_Y && Mouse_Y <= 440) && Pause_Flg == true)) {
 		if (Old_key != KEY_FREE && Now_key == KEY_PULL) {
 			Pause_Flg = !Pause_Flg;
 		}
 	}
-	if (Pause_Flg) {
+
+	//セレクト画面へ移動
+	if (Pause_Flg == true) {
+		if (450 <= Mouse_X && Mouse_X <= 850 && 470 <= Mouse_Y && Mouse_Y <= 590) {
+			if (Old_key != KEY_FREE && Now_key == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
+				select->SetNext(new Scene_Select());
+			}
+		}
+	}
+
+	if (finish == true) {
+		//最初からプレイ
+		if (450 <= Mouse_X && Mouse_X <= 850 && 470 <= Mouse_Y && Mouse_Y <= 590) {
+			if (Old_key != KEY_FREE && Now_key == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
+				select->SetNext(new Scene_PageOne());
+			}
+		}
+
+		//セレクト画面へ移動
 		if (450 <= Mouse_X && Mouse_X <= 850 && 470 <= Mouse_Y && Mouse_Y <= 590) {
 			if (Old_key != KEY_FREE && Now_key == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
 				select->SetNext(new Scene_Select());

@@ -65,6 +65,8 @@ private:
 
 	//ƒŠƒUƒ‹ƒg”wŒi
 	int Result;
+	int Result_Continue;
+	int Result_Select;
 
 	Scene* select;
 
