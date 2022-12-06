@@ -102,10 +102,10 @@ void Player::Update() {
     hit = false;
   }
   else hit_r = 1;
-  if (spt) {
-    spt_r = 1.2;
-  }
-  else spt_r = 1;
+  //if (spt) {
+  //  spt_r = 1.2;
+  //}
+  //else spt_r = 1;
 
   if (!std)std_r = 1;
   if (!dbl)dbl_r = 1;
@@ -119,7 +119,20 @@ bool Player::Play(Shoe* shoe) {
   if (game_flg) {
     /*ボタン処理（hit,stand,double,splite）*/
     hit = Player::ButtonHit(hit_x, hit_y, hit_w, hit_h);
-    spt = Player::ButtonHit(spt_x, spt_y, spt_w, spt_h);
+    //spt = Player::ButtonHit(spt_x, spt_y, spt_w, spt_h);
+    if (Player::ButtonHit(spt_x, spt_y, spt_w, spt_h) && !spt) {
+      spt = true;
+      spt_r = 1.2;
+    }
+    else spt_r = 1;
+    if (spt && spt_flg) {
+      //spt_r = 1;
+      if (BJ.Wait_Time(0.5)) {
+        
+        spt_flg = false;
+      } 
+
+    }
     if (Player::ButtonHit(std_x, std_y, std_w, std_h) || dbl) {
       std = true;
     }
@@ -136,9 +149,9 @@ bool Player::Play(Shoe* shoe) {
     /*ボタン処理（hit,stand,double,splite）*/
   }
 
-  if (spt_flg) {
-    if (BJ.Wait_Time(0.7))spt_flg = false;
-  }
+  //if (spt_flg) {
+  //  if (BJ.Wait_Time(0.7))spt_flg = false;
+  //}
 
   /*バーストするまでループ処理*/
   if (game_flg) {
@@ -287,7 +300,7 @@ bool Player::Play(Shoe* shoe) {
 
           }
           else {
-
+            hit_num = 2;
             /*勝負開始して返り値をtrueとして終了*/
             game_flg = false;
             now_game_flg = false;
@@ -380,7 +393,12 @@ void Player::Draw() {
 
   }
   else {
-
+    //if (hit_num >=1) {
+    //  DrawGraph(440, 530, std_img, true);
+    //}
+    //if (hit_num >= 2) {
+    //  DrawGraph(640, 530, std_img, true);
+    //}
     DrawFormatString(440, 630, 0xffffff, "%d", bet_coin);
     DrawFormatString(640, 630, 0xffffff, "%d", spt_bet_coin);
   }
@@ -513,7 +531,12 @@ void Player::Spt_Show_Hand() {
 
     /*アニメーション予定地_Player_spt*/
     DrawRotaGraph(img_x + 80 + i * 30, img_y, img_size, 0, card_type[spt_type][spt_hand[i] % 13], 1);
-
+    if (hit_num >= 1) {
+      DrawGraph(440, 530, std_img, true);
+    }
+    if (hit_num >= 2) {
+      DrawGraph(640, 530, std_img, true);
+    }
   }
 
   SetFontSize(60);
@@ -572,49 +595,47 @@ void Player::Show_Play() {
       DrawRotaGraph(620, 300, 1, 0, btn_hdl[2], 1);
     }
     if (BlackJack) {
-      DrawRotaGraph(620, 400, 1, 0, btn_hdl[4], 1);
+      DrawRotaGraph(620, 410, 1, 0, btn_hdl[4], 1);
     }
     if (spt_BJ) {
       //DrawFormatString(0, 620, 0xffffff, "BlackJack\n");
-      DrawRotaGraph(620, 400, 1, 0, btn_hdl[4], 1);
+      DrawRotaGraph(620, 410, 1, 0, btn_hdl[4], 1);
     }
     if (win) {
       //DrawFormatString(100, 640, 0xffffff, "手札1の勝ち\n");
-      DrawRotaGraph(490, 400, 1, 0, btn_hdl[0], 1);
+      DrawRotaGraph(490, 410, 1, 0, btn_hdl[0], 1);
     }
     if (spt_win) {
       //DrawFormatString(100, 620, 0xffffff, "手札2の勝ち\n");
-      DrawRotaGraph(700, 400, 1, 0, btn_hdl[0], 1);
+      DrawRotaGraph(700, 410, 1, 0, btn_hdl[0], 1);
     }
     if (los && !bst) {
       //DrawFormatString(100, 600, 0xffffff, "手札1の負け\n");
-      DrawRotaGraph(490, 400, 1, 0, btn_hdl[1], 1);
+      DrawRotaGraph(490, 410, 1, 0, btn_hdl[1], 1);
     }
     else if (bst) {
       //DrawFormatString(100, 580, 0xffffff, "手札1のバスト\n");
-      DrawRotaGraph(490, 400, 1, 0, btn_hdl[2], 1);
+      DrawRotaGraph(490, 410, 1, 0, btn_hdl[2], 1);
     }
     if (spt_los && !spt_bst) {
       //DrawFormatString(100, 560, 0xffffff, "手札2の負け\n");
-      DrawRotaGraph(700, 400, 1, 0, btn_hdl[1], 1);
+      DrawRotaGraph(700, 410, 1, 0, btn_hdl[1], 1);
     }
     else if (spt_bst) {
       //DrawFormatString(100, 540, 0xffffff, "手札2のバスト\n");
-      DrawRotaGraph(700, 400, 1, 0, btn_hdl[2], 1);
+      DrawRotaGraph(700, 410, 1, 0, btn_hdl[2], 1);
     }
     if (psh) {
       //DrawFormatString(100, 520, 0xffffff, "手札1の引き分け\n");
-      DrawRotaGraph(490, 400, 1, 0, btn_hdl[3], 1);
+      DrawRotaGraph(490, 410, 1, 0, btn_hdl[3], 1);
     }
     if (spt_psh) {
       //DrawFormatString(100, 500, 0xffffff, "手札2の引き分け\n");
-      DrawRotaGraph(700, 400, 1, 0, btn_hdl[3], 1);
+      DrawRotaGraph(700, 410, 1, 0, btn_hdl[3], 1);
     }
 
   }
 
-  //DrawRotaGraph(490, 400, 1, 0, btn_hdl[0], 1);
-  //DrawRotaGraph(700, 400, 1, 0, btn_hdl[0], 1);
 }
 
 

@@ -87,6 +87,7 @@ void BlackJack::Initialize() {
   time_count = 0;
   bet = false;
   hit_flg = 0;
+  st = false;
 
 }
 
@@ -136,7 +137,6 @@ void BlackJack::Update() {
     /*ゲームを開始 or 続けるか判定*/
   if (!pose_flg) {
 
-
     if (next_flg) {
 
       BlackJack::Initialize();
@@ -172,19 +172,24 @@ void BlackJack::Update() {
       }
       else ctn_rate = 1;
       if (nx_flg) {
-        if (BlackJack::Wait_Time(0.1))next_flg = true;
+        if (BlackJack::Wait_Time(1))next_flg = true;
       }
-      if (player->ButtonHit(860, 320, sct_w, sct_h)) {
+      if (player->ButtonHit(860, 320, sct_w, sct_h) && !st) {
 
         sct_rate = 1.2;
-        sct_flg = true;
+        st = true;
 
       }
       else sct_rate = 1;
-      if (sct_flg) {
-        if (BlackJack::Wait_Time(0.1f)) {
-          game_endflg = true;
+      if (st) {
+        if (BlackJack::Wait_Time(1)) {
+
+          sct_flg = true;
         }
+      }
+      if (sct_flg) {
+
+          game_endflg = true;
       }
 
     }

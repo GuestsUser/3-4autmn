@@ -31,6 +31,7 @@ private:
   bool next_flg;
   bool now_game_flg;
   bool pose_flg, ptn,ctn,scn;
+  bool st;
 
   std::string next;
 
