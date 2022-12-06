@@ -25,6 +25,7 @@ bool Touch_once = false;
 
 bool Cpu_Set = false;
 bool now_voice = false;
+bool old_voice = false;
 int voice = 0;
 
 int Rank_All = 0;
@@ -34,7 +35,13 @@ bool now_push = false;
 bool on_ContinueButton = false;
 bool on_MenuButton = false;
 
+float Go_Angle1 = 0.0f;
+float Go_Angle2 = 0.0f;
+float Go_Angle3 = 0.0f;
+
 bool once_bgm = false;
+bool once_SelectContinueSE = false;
+bool once_SelectMenuSE = false;
 
 /*************************
 ** 構造体 **
@@ -68,6 +75,8 @@ void Karu_Game::Karu_Game_Initialize(Scene* scene) {
 	ResultRank1 = LoadGraph("Resource/image/Karu_Image/Karu_Rank_1.png");//順位画像をResultRank1に格納
 	ResultRank2 = LoadGraph("Resource/image/Karu_Image/Karu_Rank_2.png");//順位画像をResultRank2に格納
 	ResultRank3 = LoadGraph("Resource/image/Karu_Image/Karu_Rank_3.png");//順位画像をResultRank3に格納
+	GameOverBackImg = LoadGraph("Resource/image/Karu_Image/Karu_GameOverBack.png");//ゲームオーバー画像をGameOverBackImgに格納
+	GameOverImg = LoadGraph("Resource/image/Karu_Image/Karu_Guruguru.png");//ゲームオーバー画像をGameOverImgに格納
 
 	LoadDivGraph("Resource/image/Karu_Image/number.png", 10, 10, 1, 30, 50, Karu_numImg, TRUE);	//数字画像をKaru_numImgに格納
 	LoadDivGraph("Resource/image/Karu_Image/HandIcon.png", 2, 2, 1, 150, 150, Player_HandIcon, TRUE);	//マウスカーソル画像をHandIconに格納
@@ -78,6 +87,10 @@ void Karu_Game::Karu_Game_Initialize(Scene* scene) {
 	LoadDivGraph("Resource/image/Karu_Image/Karu_Fuda.png", 100, 10, 10, Karu_imgX, Karu_imgY, *Karu_fuda, TRUE);//絵札画像を分割してKaru_fudaに格納
 	LoadDivGraph("Resource/image/Karu_Image/Karu_ContinueButton.png", 2, 2, 1, 400, 120, PauseContinueButton, TRUE);//ボタン画像を分割してPauseContinueButtonに格納
 	LoadDivGraph("Resource/image/Karu_Image/Karu_MenuButton.png", 2, 2, 1, 400, 120, PauseMenuButton, TRUE);//ボタン画像を分割してPauseMenuButtonに格納
+	LoadDivGraph("Resource/image/Karu_Image/Karu_EndContinue.png", 2, 2, 1, 400, 120, EndContinueButton, TRUE);//ボタン画像を分割してEndContinueButtonに格納
+	LoadDivGraph("Resource/image/Karu_Image/Karu_EndMenu.png", 2, 2, 1, 400, 120, EndMenuButton, TRUE);//ボタン画像を分割してEndMenuButtonに格納
+	LoadDivGraph("Resource/image/Karu_Image/Karu_ContinueButton.png", 2, 2, 1, 400, 120, GO_ContinueButton, TRUE);//ボタン画像を分割してGO_ContinueButtonに格納
+	LoadDivGraph("Resource/image/Karu_Image/Karu_MenuButton.png", 2, 2, 1, 400, 120, GO_MenuButton, TRUE);//ボタン画像を分割してGO_MenuButtonに格納
 
 	//EfudaとYomifudaの構造体を初期化
 	for (int i = 0; i < KARU_MAX_Y; i++) {
@@ -91,6 +104,27 @@ void Karu_Game::Karu_Game_Initialize(Scene* scene) {
 	for (int z = 0; z < 100; z++) {
 		Fuda[z].get = false;
 	}
+
+	Yomifuda[0][0].kara = true;
+	Yomiset = false;
+	reset = 0;
+	end = false;
+	Gameover = false;
+
+	Click_check = 0;
+	Click_AnimTime = 0;
+	Touch_once = false;
+	Cpu_Set = false;
+	now_voice = false;
+	old_voice = false;
+	voice = 0;
+	Rank_All = 0;
+	once_bgm = false;
+	now_pause = false;
+	now_push = false;
+	on_ContinueButton = false;
+	on_MenuButton = false;
+
 
 	//Karu_playerとcpu_1の初期化
 	Karu_player = {0,0,0};
@@ -106,6 +140,8 @@ void Karu_Game::Karu_Game_Initialize(Scene* scene) {
 	ChangeVolumeSoundMem(255 * 80 / 100, Touch_Sound);
 	Otetuki_Sound = LoadSoundMem("Resource/se/Karu_SE/Buzzer.wav");
 	ChangeVolumeSoundMem(255 * 80 / 100, Otetuki_Sound);
+	Se_Cursor = LoadSoundMem("Resource/se/Karu_SE/Karu_Cursor.wav");
+	Se_Select = LoadSoundMem("Resource/se/Karu_SE/Karu_Select.wav");
 
 	//BGM格納
 	Karu_Bgm = LoadSoundMem("Resource/bgm/Karu_BGM/Karuta_Bgm.wav");
@@ -158,7 +194,7 @@ void Karu_Game::Karu_Game_Update() {
 	}
 
 	//ゲームオーバーになるまで
-	if (!end) {
+	if (!end && !Gameover) {
 		if (!now_pause) {
 			if (!now_voice) {
 				if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
@@ -196,8 +232,31 @@ void Karu_Game::Karu_Game_Update() {
 			Pause_Controller();
 		}
 	}
+	else if (Gameover) {
+		Karu_GameOver();
+		if (Go_Angle1 <= PI * 2) {
+			Go_Angle1 += PI * 0.05f;
+		}
+		else {
+			Go_Angle1 = 0.0f;
+		}
+		if (Go_Angle2 <= PI * 2) {
+			Go_Angle2 += PI * 0.1f;
+		}
+		else {
+			Go_Angle2 = 0.0f;
+		}
+		if (Go_Angle3 <= PI * 2) {
+			Go_Angle3 += PI * 0.03f;
+		}
+		else {
+			Go_Angle3 = 0.0f;
+		}
+	}
 	else {
 		Rank();
+
+		Karu_End();
 	}
 	Click_Anim();
 	Otetuki_Anim();
@@ -306,6 +365,18 @@ void Karu_Game::Karu_Game_Draw() {
 		DrawRotaGraph(640, 360, 2.0, 0, End_Rank[1], TRUE);
 		DrawRotaGraph(640, 440, 1.0, 0, ResultRank3, TRUE);
 		DrawRotaGraph(640, 440, 2.0, 0, End_Rank[2], TRUE);
+
+		DrawRotaGraph(340, 640, 1.0, 0, EndContinueButton[on_ContinueButton], TRUE);
+		DrawRotaGraph(940, 640, 1.0, 0, EndMenuButton[on_MenuButton], TRUE);
+	}
+
+	if (Gameover) {
+		DrawRotaGraph(640, 360, 1.0, 0, GameOverBackImg, TRUE);
+		DrawRotaGraph(320, 150, 1.0, Go_Angle1, GameOverImg, TRUE);
+		DrawRotaGraph(1020, 220, 0.7, Go_Angle2, GameOverImg, TRUE);
+		DrawRotaGraph(970, 200, 1.0, Go_Angle3, GameOverImg, TRUE);
+		DrawRotaGraph(640, 310, 1.0, 0, GO_ContinueButton[on_ContinueButton], TRUE);
+		DrawRotaGraph(640, 460, 1.0, 0, GO_MenuButton[on_MenuButton], TRUE);
 	}
 
 	if (now_pause) {
@@ -628,6 +699,7 @@ void Karu_Game::Player_Reset() {
 ***************/
 void Karu_Game::Pause() {
 	if (Mouse_X > 0 && Mouse_X < 80 && Mouse_Y > 0 && Mouse_Y < 40) {
+		old_voice = now_voice;
 		now_pause = true;
 		now_push = true;
 		StopSoundMem(Touch_Sound);
@@ -647,33 +719,52 @@ void Karu_Game::Pause() {
 ***************/
 void Karu_Game::Pause_Controller() {
 	if (Mouse_X > 440 && Mouse_X < 840 && Mouse_Y > 300 && Mouse_Y < 420) {
+		if (!once_SelectContinueSE) {
+			PlaySoundMem(Se_Cursor, DX_PLAYTYPE_BACK);
+			once_SelectContinueSE = true;
+		}
 		on_ContinueButton = true;
 		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+			PlaySoundMem(Se_Select, DX_PLAYTYPE_BACK);
 			now_pause = false;
 			//PlaySoundMem(Otetuki_Sound,DX_PLAYTYPE_BACK,FALSE);	//お手付きじゃなくてもなる
 			PlaySoundMem(Karu_Bgm, DX_PLAYTYPE_LOOP, FALSE);
-			PlaySoundMem(voice,DX_PLAYTYPE_BACK,FALSE);
+			if (old_voice) {
+				PlaySoundMem(voice, DX_PLAYTYPE_BACK, FALSE);
+			}
+			old_voice = false;
 		}
 	}
 	else {
 		on_ContinueButton = false;
+		once_SelectContinueSE = false;
 	}
 
 	if (Mouse_X > 440 && Mouse_X < 840 && Mouse_Y > 450 && Mouse_Y < 570) {
+		if (!once_SelectMenuSE) {
+			PlaySoundMem(Se_Cursor, DX_PLAYTYPE_BACK);
+			once_SelectMenuSE = true;
+		}
 		on_MenuButton = true;
 		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+			PlaySoundMem(Se_Select, DX_PLAYTYPE_BACK);
 			parent->SetNext(new Scene_Select());
 		}	
 	}
 	else {
 		on_MenuButton = false;
+		once_SelectMenuSE = false;
 	}
 	if (Mouse_X > 0 && Mouse_X < 80 && Mouse_Y > 0 && Mouse_Y < 40) {
 		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH && !now_push) { // 左クリックしたら
+			PlaySoundMem(Se_Select, DX_PLAYTYPE_BACK);
 			now_pause = false;
 			//PlaySoundMem(Otetuki_Sound,DX_PLAYTYPE_BACK,FALSE);	//お手付きじゃなくてもなる
 			PlaySoundMem(Karu_Bgm, DX_PLAYTYPE_LOOP, FALSE);
-			PlaySoundMem(voice, DX_PLAYTYPE_BACK, FALSE);
+			if (old_voice) {
+				PlaySoundMem(voice, DX_PLAYTYPE_BACK, FALSE);
+			}
+			old_voice = false;
 		}
 	}
 }
@@ -684,31 +775,53 @@ void Karu_Game::Pause_Controller() {
 * 戻り値:なし
 ********************/
 void Karu_Game::Rank() {
-	if (End_Rank[0] == 0) {
+	if (Karu_player.myFuda >= cpu_1.myFuda) {
 		End_Rank[0] = Karu_PlayerText;
-	}
-
-	if (Karu_player.myFuda <= cpu_1.myFuda) {
-		End_Rank[1] = End_Rank[0];
-		End_Rank[0] = Karu_CPU1_Text;
-	}
-	else {
 		End_Rank[1] = Karu_CPU1_Text;
 	}
+	else {
+		End_Rank[0] = Karu_CPU1_Text;
+		End_Rank[1] = Karu_PlayerText;
+	}
 
-	if ((End_Rank[0] == Karu_PlayerText && Karu_player.myFuda <= cpu_2.myFuda) ||
-		(End_Rank[0] == Karu_CPU1_Text && cpu_1.myFuda <= cpu_2.myFuda)) {
+	if((End_Rank[0] == Karu_PlayerText && Karu_player.myFuda >= cpu_2.myFuda && cpu_1.myFuda <= cpu_2.myFuda) ||
+	   (End_Rank[0] == Karu_CPU1_Text && cpu_1.myFuda >= cpu_2.myFuda && Karu_player.myFuda <= cpu_2.myFuda)){
+		End_Rank[2] = End_Rank[1];
+		End_Rank[1] = Karu_CPU2_Text;
+	}
+	else if ((End_Rank[1] == Karu_PlayerText && Karu_player.myFuda >= cpu_2.myFuda) ||
+			 (End_Rank[1] == Karu_CPU1_Text && cpu_1.myFuda >= cpu_2.myFuda)) {
+		End_Rank[2] = Karu_CPU2_Text;
+	}
+	else {
 		End_Rank[2] = End_Rank[1];
 		End_Rank[1] = End_Rank[0];
 		End_Rank[0] = Karu_CPU2_Text;
 	}
-	else if((End_Rank[1] == Karu_PlayerText && Karu_player.myFuda <= cpu_2.myFuda) ||
-			(End_Rank[1] == Karu_CPU1_Text && cpu_1.myFuda <= cpu_2.myFuda)){
+
+	if ((End_Rank[0] == Karu_PlayerText && Karu_player.myFuda >= cpu_3.myFuda && (cpu_1.myFuda <= cpu_3.myFuda || cpu_2.myFuda <= cpu_3.myFuda)) ||
+		(End_Rank[0] == Karu_CPU1_Text && cpu_1.myFuda >= cpu_3.myFuda && (Karu_player.myFuda <= cpu_3.myFuda || cpu_2.myFuda <= cpu_3.myFuda)) ||
+		(End_Rank[0] == Karu_CPU2_Text && cpu_2.myFuda >= cpu_3.myFuda && (Karu_player.myFuda <= cpu_3.myFuda || cpu_1.myFuda <= cpu_3.myFuda))) {
+		End_Rank[3] = End_Rank[2];
 		End_Rank[2] = End_Rank[1];
-		End_Rank[1] = Karu_CPU2_Text;
+		End_Rank[1] = Karu_CPU3_Text;
+	}
+	else if ((End_Rank[1] == Karu_PlayerText && Karu_player.myFuda >= cpu_3.myFuda && (cpu_1.myFuda <= cpu_3.myFuda || cpu_2.myFuda <= cpu_3.myFuda)) ||
+			 (End_Rank[1] == Karu_CPU1_Text && cpu_1.myFuda >= cpu_3.myFuda && (Karu_player.myFuda <= cpu_3.myFuda || cpu_2.myFuda <= cpu_3.myFuda)) || 
+			 (End_Rank[1] == Karu_CPU2_Text && cpu_2.myFuda >= cpu_3.myFuda && (Karu_player.myFuda <= cpu_3.myFuda || cpu_1.myFuda <= cpu_3.myFuda))) {
+		End_Rank[3] = End_Rank[2];
+		End_Rank[2] = Karu_CPU3_Text;
+	}
+	else if ((End_Rank[2] == Karu_PlayerText && Karu_player.myFuda >= cpu_3.myFuda) ||
+			 (End_Rank[2] == Karu_CPU1_Text && cpu_1.myFuda >= cpu_3.myFuda) ||
+			 (End_Rank[2] == Karu_CPU2_Text && cpu_2.myFuda >= cpu_3.myFuda)) {
+		End_Rank[3] = Karu_CPU3_Text;
 	}
 	else {
-		End_Rank[2] = Karu_CPU2_Text;
+		End_Rank[3] = End_Rank[2];
+		End_Rank[2] = End_Rank[1];
+		End_Rank[1] = End_Rank[0];
+		End_Rank[0] = Karu_CPU3_Text;
 	}
 }
 
@@ -718,5 +831,111 @@ void Karu_Game::Rank() {
 * 戻り値:なし
 ********************/
 void Karu_Game::Karu_GameOver() {
-	end = true;
+	Gameover = true;
+	if(Mouse_X > 440 && Mouse_X < 840 && Mouse_Y > 250 && Mouse_Y < 370) {
+		if (!once_SelectContinueSE) {
+			PlaySoundMem(Se_Cursor, DX_PLAYTYPE_BACK);
+			once_SelectContinueSE = true;
+		}
+		on_ContinueButton = true;
+		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+			PlaySoundMem(Se_Select, DX_PLAYTYPE_BACK);
+			//絵札総入れ替え
+			for (int i = 0; i < KARU_MAX_Y; i++) {
+				for (int j = 0; j < KARU_MAX_X; j++) {
+					Efuda[i][j] = { 0,0,0,0,0,true };
+				}
+				for (int z = 0; z < 100; z++) {
+					Fuda[z].get = false;
+				}
+			}
+			Yomifuda[0][0].kara = true;
+			Yomiset = false;
+			reset = 0;
+			end = false;
+			Gameover = false;
+			Karu_player.Otetuki = 0;
+			Karu_player.myFuda = 0;
+			cpu_1 = { 0,0,0,0 };
+			cpu_2 = { 0,0,0,0 };
+			cpu_3 = { 0,0,0,0 };
+		}
+	}
+	else {
+	on_ContinueButton = false;
+	once_SelectContinueSE = false;
+	}
+
+	if (Mouse_X > 440 && Mouse_X < 840 && Mouse_Y > 400 && Mouse_Y < 520) {
+		if (!once_SelectMenuSE) {
+			PlaySoundMem(Se_Cursor, DX_PLAYTYPE_BACK);
+			once_SelectMenuSE = true;
+		}
+		on_MenuButton = true;
+		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+			PlaySoundMem(Se_Select, DX_PLAYTYPE_BACK);
+			parent->SetNext(new Scene_Select());
+		}
+	}
+	else {
+		on_MenuButton = false;
+		once_SelectMenuSE = false;
+	}
+}
+
+/*******************
+** 終了時の画面 **
+* 引数  :なし
+* 戻り値:なし
+********************/
+void Karu_Game::Karu_End() {
+	if (Mouse_X > 140 && Mouse_X < 540 && Mouse_Y > 580 && Mouse_Y < 700) {
+		if (!once_SelectContinueSE) {
+			PlaySoundMem(Se_Cursor, DX_PLAYTYPE_BACK);
+			once_SelectContinueSE = true;
+		}
+		on_ContinueButton = true;
+		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+			PlaySoundMem(Se_Select, DX_PLAYTYPE_BACK);
+			//絵札総入れ替え
+			for (int i = 0; i < KARU_MAX_Y; i++) {
+				for (int j = 0; j < KARU_MAX_X; j++) {
+					Efuda[i][j] = { 0,0,0,0,0,true };
+				}
+				for (int z = 0; z < 100; z++) {
+					Fuda[z].get = false;
+				}
+			}
+			Yomifuda[0][0].kara = true;
+			Yomiset = false;
+			reset = 0;
+			end = false;
+			Gameover = false;
+			Karu_player.Otetuki = 0;
+			Karu_player.myFuda = 0;
+			cpu_1 = { 0,0,0,0 };
+			cpu_2 = { 0,0,0,0 };
+			cpu_3 = { 0,0,0,0 };
+		}
+	}
+	else {
+		on_ContinueButton = false;
+		once_SelectContinueSE = false;
+	}
+
+	if (Mouse_X > 740 && Mouse_X < 1140 && Mouse_Y > 580 && Mouse_Y < 700) {
+		if (!once_SelectMenuSE) {
+			PlaySoundMem(Se_Cursor, DX_PLAYTYPE_BACK);
+			once_SelectMenuSE = true;
+		}
+		on_MenuButton = true;
+		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+			PlaySoundMem(Se_Select, DX_PLAYTYPE_BACK);
+			parent->SetNext(new Scene_Select());
+		}
+	}
+	else {
+		on_MenuButton = false;
+		once_SelectMenuSE = false;
+	}
 }

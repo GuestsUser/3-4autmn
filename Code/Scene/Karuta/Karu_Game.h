@@ -73,7 +73,19 @@ private:
 
 	int End_Rank[TOTAL_PLAYER];			//最終順位
 
+	int EndContinueButton[2];	//つづけるボタン画像格納
+	int EndMenuButton[2];		//メニューボタン画像格納
+
+	int GameOverBackImg;		//ゲームオーバー画面背景画像格納
+	int GameOverImg;		//ゲームオーバー画面背景画像格納
+	int GO_ContinueButton[2];	//つづけるボタン画像格納
+	int GO_MenuButton[2];		//メニューボタン画像格納
+
+	int Se_Cursor;				//カーソルのSE
+	int Se_Select;				//決定ボタンのSE
+
 	bool end;
+	bool Gameover;
 
 
 public:
@@ -101,6 +113,8 @@ public:
 	void Rank();
 
 	void Karu_GameOver();
+
+	void Karu_End();
 
 };
 
