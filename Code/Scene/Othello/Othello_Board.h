@@ -10,6 +10,11 @@ private:
 	Scene* Parent;
 
 	int PutCheckImage;	// ‚©‚Á‚±‚Ì‰æ‘œ‚ğ“ü‚ê‚é—p‚Ì•Ï”
+	int ResultImage;
+	int WinLoseImage[3];
+	int Black;
+	int White;
+
 	int Pause_Button;
 	int Pause_Back;
 	int Pause_Continue;

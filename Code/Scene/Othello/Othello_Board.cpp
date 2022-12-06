@@ -19,6 +19,11 @@ void Othello_Board::Othello_Board_Initialize(Scene* scene) {
     Parent = scene;
 
     PutCheckImage = LoadGraph("Resource/image/Othello_Image/OthelloPutCheck2.png");   // 置ける場所のカッコの画像の読み込み
+    ResultImage = LoadGraph("Resource/image/Othello_Image/Othello_Result2.png");
+    Black = LoadGraph("Resource/image/Othello_Image/Black.png");
+    White = LoadGraph("Resource/image/Othello_Image/White.png");
+
+    LoadDivGraph("Resource/image/Othello_Image/winlosedraw.png", 3, 3, 1, 400, 120, WinLoseImage);
 
     Pause_Button = LoadGraph("Resource/image/PauseButton.png");
     Pause_Back = LoadGraph("Resource/image/PauseBack.png");
@@ -69,6 +74,9 @@ void Othello_Board::Othello_Board_Initialize(Scene* scene) {
 // -------------終了処理---------------------------
 void Othello_Board::Othello_Board_Finalize() {
 	DeleteGraph(PutCheckImage);
+    DeleteGraph(ResultImage);
+    DeleteGraph(Black);
+    DeleteGraph(White);
     DeleteGraph(Pause_Button);
     DeleteGraph(Pause_Back);
 
@@ -76,6 +84,10 @@ void Othello_Board::Othello_Board_Finalize() {
         DeleteGraph(pause_continue[i]);
         DeleteGraph(pause_select[i]);
     }
+    for (int i = 0; i < 3; i++) {
+        DeleteGraph(WinLoseImage[i]);
+    }
+
     DeleteGraph(Pause_Continue);
     DeleteGraph(Pause_Select);
     DeleteSoundMem(PutSE);
@@ -262,6 +274,11 @@ void Othello_Board::Othello_Board_Update() {
     }
     OldKey = nowKey; //前に入力していたキーを今入力していたキーに上書きする
 
+    // リザルト画面の表示
+    if (EndFlag == true) {
+
+    }
+
 }
 // -----------------------------------------------
 
@@ -278,8 +295,14 @@ void Othello_Board::Othello_Board_Draw() {
 
     Print_OthelloBoard(Board);      // オセロボードの描画
 
-    DrawCircle(800, 187, 27, BlackCr, TRUE);    // 黒石をカウントしている数字の前に黒石を表示
-    DrawCircle(800, 307, 27, WhiteCr, TRUE);    // 白石をカウントしている数字の前に白石を表示
+    DrawRotaGraph(800, 184, 0.35, 0, Black, TRUE);    
+    DrawRotaGraph(800, 304, 0.35, 0, White, TRUE);
+
+    // デバッグ用
+
+
+
+    //DrawCircle(800, 307, 27, WhiteCr, TRUE);    // 白石をカウントしている数字の前に白石を表示
     DrawFormatString(800 + MAP_SIZE / 2, 167, BlackCr, "黒石:%d", BlackNum);      // 黒石の現在の数を表示
     DrawFormatString(800 + MAP_SIZE / 2, 287, BlackCr, "白石:%d", WhiteNum);      // 白石の現在の数を表示
 
@@ -291,9 +314,37 @@ void Othello_Board::Othello_Board_Draw() {
 
         if (WhiteNum < BlackNum) {  // 黒石の数の方が多かったら、黒の勝利
             switch (Player) {
-            case 0:
-                DrawFormatString(800, 450, BlackCr, "あなたの勝ち！");
-                DrawFormatString(800, 90, BlackCr, "(*^^)v < 勝利！");
+            case 0: // プレイヤーが黒で黒の方が多かったら
+                DrawRotaGraph(650, 380, 1, 0, ResultImage, TRUE);
+                DrawRotaGraph(650, 220, 1.2, 0, WinLoseImage[0], TRUE);
+                DrawRotaGraph(600, 350, 0.5, 0, Black, TRUE);
+                DrawRotaGraph(600, 450, 0.5, 0, White, TRUE);
+                DrawFormatString(660, 340, BlackCr, "%d　←　あなた", BlackNum);      // 黒石の現在の数を表示
+                DrawFormatString(660, 445, BlackCr, "%d", WhiteNum);      // 白石の現在の数を表示
+
+                if (250 <= Mouse_X && Mouse_X <= 650 && 470 <= Mouse_Y && Mouse_Y <= 590) {
+                    if (nowKey == KEY_HOLD) {
+                        DrawRotaGraph(450, 530, 0.4, 0, pause_continue[1], TRUE);
+                    }
+                    else {
+                        DrawRotaGraph(450, 530, 0.5, 0, pause_continue[1], TRUE);
+                    }
+                }
+                else {
+                    DrawRotaGraph(450, 530, 0.5, 0, pause_continue[0], TRUE);
+                }
+                if (650 <= Mouse_X && Mouse_X <= 1050 && 470 <= Mouse_Y && Mouse_Y <= 590) {
+                    if (nowKey == KEY_HOLD) {
+                        DrawRotaGraph(850, 530, 0.4, 0, pause_select[1], TRUE);
+                    }
+                    else {
+                        DrawRotaGraph(850, 530, 0.5, 0, pause_select[1], TRUE);
+                    }
+                }
+                else {
+                    DrawRotaGraph(850, 530, 0.5, 0, pause_select[0], TRUE);
+                }
+
                 if (TimeCount++ >= 180) {   // 3秒経ったら
                     TimeCount = 0;      // TimeCount を初期化
                     BlackNum = 0;       // 黒石の数を初期化
@@ -301,14 +352,42 @@ void Othello_Board::Othello_Board_Draw() {
                     OrderNum = 0;       // 黒の手番にする
                     EndFlag = false;    // 終了条件を初期化
                     RandomFlag = false;
-                    Parent->SetNext(new Scene_Select());
+                    //Parent->SetNext(new Scene_Select());
                     Init_OthelloBoard(Board);   // オセロボードを初期化
                 }
                 break;
 
-            case 1:
-                DrawFormatString(800, 450, BlackCr, "CPUの勝ち！");
-                DrawFormatString(800, 90, BlackCr, "(;´･ω･) < 残念…");
+            case 1: // プレイヤーが白で黒の方が多かったら
+                DrawRotaGraph(650, 380, 1, 0, ResultImage, TRUE);
+                DrawRotaGraph(650, 220, 1.2, 0, WinLoseImage[1], TRUE);
+                DrawRotaGraph(600, 350, 0.5, 0, Black, TRUE);
+                DrawRotaGraph(600, 450, 0.5, 0, White, TRUE);
+                DrawFormatString(660, 340, BlackCr, "%d", BlackNum);      // 黒石の現在の数を表示
+                DrawFormatString(660, 445, BlackCr, "%d　←　あなた", WhiteNum);      // 白石の現在の数を表示
+
+                if (250 <= Mouse_X && Mouse_X <= 650 && 470 <= Mouse_Y && Mouse_Y <= 590) {
+                    if (nowKey == KEY_HOLD) {
+                        DrawRotaGraph(450, 530, 0.4, 0, pause_continue[1], TRUE);
+                    }
+                    else {
+                        DrawRotaGraph(450, 530, 0.5, 0, pause_continue[1], TRUE);
+                    }
+                }
+                else {
+                    DrawRotaGraph(450, 530, 0.5, 0, pause_continue[0], TRUE);
+                }
+                if (650 <= Mouse_X && Mouse_X <= 1050 && 470 <= Mouse_Y && Mouse_Y <= 590) {
+                    if (nowKey == KEY_HOLD) {
+                        DrawRotaGraph(850, 530, 0.4, 0, pause_select[1], TRUE);
+                    }
+                    else {
+                        DrawRotaGraph(850, 530, 0.5, 0, pause_select[1], TRUE);
+                    }
+                }
+                else {
+                    DrawRotaGraph(850, 530, 0.5, 0, pause_select[0], TRUE);
+                }
+
                 if (TimeCount++ >= 180) {   // 3秒経ったら
                     TimeCount = 0;      // TimeCount を初期化
                     BlackNum = 0;       // 黒石の数を初期化
@@ -316,7 +395,7 @@ void Othello_Board::Othello_Board_Draw() {
                     OrderNum = 0;       // 黒の手番にする
                     EndFlag = false;    // 終了条件を初期化
                     RandomFlag = false;
-                    Parent->SetNext(new Scene_Select());
+                    //Parent->SetNext(new Scene_Select());
                     Init_OthelloBoard(Board);   // オセロボードを初期化
                 }
                 break;
@@ -324,9 +403,16 @@ void Othello_Board::Othello_Board_Draw() {
         }
         else if (BlackNum < WhiteNum) { // 白石の数の方が多かったら、白の勝利
             switch (Player) {
-            case 0:
-                DrawFormatString(800, 450, BlackCr, "CPUの勝ち！");
-                DrawFormatString(800, 90, BlackCr, "(;´･ω･) < 残念…");
+            case 0: // プレイヤーが黒で白の方が多かったら
+                DrawRotaGraph(650, 380, 1, 0, ResultImage, TRUE);
+                DrawRotaGraph(650, 220, 1.2, 0, WinLoseImage[1], TRUE);
+                DrawRotaGraph(600, 350, 0.5, 0, Black, TRUE);
+                DrawRotaGraph(600, 450, 0.5, 0, White, TRUE);
+                DrawFormatString(660, 340, BlackCr, "%d　←　あなた", BlackNum);      // 黒石の現在の数を表示
+                DrawFormatString(660, 445, BlackCr, "%d", WhiteNum);      // 白石の現在の数を表示
+
+                //DrawFormatString(800, 450, BlackCr, "CPUの勝ち！");
+                //DrawFormatString(800, 90, BlackCr, "(;´･ω･) < 残念…");
                 if (TimeCount++ >= 180) {   // 3秒経ったら
                     TimeCount = 0;      // TimeCount を初期化
                     BlackNum = 0;       // 黒石の数を初期化
@@ -339,7 +425,14 @@ void Othello_Board::Othello_Board_Draw() {
                 }
                 break;
 
-            case 1:
+            case 1: // プレイヤーが白で白の方が多かったら
+                DrawRotaGraph(650, 380, 1, 0, ResultImage, TRUE);
+                DrawRotaGraph(650, 220, 1.2, 0, WinLoseImage[1], TRUE);
+                DrawRotaGraph(600, 350, 0.5, 0, Black, TRUE);
+                DrawRotaGraph(600, 450, 0.5, 0, White, TRUE);
+                DrawFormatString(660, 340, BlackCr, "%d", BlackNum);      // 黒石の現在の数を表示
+                DrawFormatString(660, 445, BlackCr, "%d　←　あなた", WhiteNum);      // 白石の現在の数を表示
+
                 DrawFormatString(800, 450, BlackCr, "あなたの勝ち！");
                 DrawFormatString(800, 90, BlackCr, "(*^^)v < 勝利！");
                 if (TimeCount++ >= 180) {   // 3秒経ったら
@@ -356,20 +449,94 @@ void Othello_Board::Othello_Board_Draw() {
             }
         }
         else {
-            DrawFormatString(800, 450, BlackCr, "引き分け！");
-            DrawFormatString(800, 90, BlackCr, "引き分け…だと…だと!?");
-            if (TimeCount++ >= 180) {   // 3秒経ったら
-                TimeCount = 0;      // TimeCount を初期化
-                BlackNum = 0;       // 黒石の数を初期化
-                WhiteNum = 0;       // 白石の数を初期化
-                OrderNum = 0;       // 黒の手番にする
-                EndFlag = false;    // 終了条件を初期化
-                RandomFlag = false;
-                Parent->SetNext(new Scene_Select());
-                Init_OthelloBoard(Board);   // オセロボードを初期化
+            switch (Player) {
+            case 0: // プレイヤーが黒
+                DrawRotaGraph(650, 380, 1, 0, ResultImage, TRUE);
+                DrawRotaGraph(650, 220, 1.2, 0, WinLoseImage[2], TRUE);
+                DrawRotaGraph(600, 350, 0.5, 0, Black, TRUE);
+                DrawRotaGraph(600, 450, 0.5, 0, White, TRUE);
+                DrawFormatString(660, 340, BlackCr, "%d　←　あなた", BlackNum);      // 黒石の現在の数を表示
+                DrawFormatString(660, 445, BlackCr, "%d", WhiteNum);      // 白石の現在の数を表示
+
+                if (250 <= Mouse_X && Mouse_X <= 650 && 470 <= Mouse_Y && Mouse_Y <= 590) {
+                    if (nowKey == KEY_HOLD) {
+                        DrawRotaGraph(450, 530, 0.4, 0, pause_continue[1], TRUE);
+                    }
+                    else {
+                        DrawRotaGraph(450, 530, 0.5, 0, pause_continue[1], TRUE);
+                    }
+                }
+                else {
+                    DrawRotaGraph(450, 530, 0.5, 0, pause_continue[0], TRUE);
+                }
+                if (650 <= Mouse_X && Mouse_X <= 1050 && 470 <= Mouse_Y && Mouse_Y <= 590) {
+                    if (nowKey == KEY_HOLD) {
+                        DrawRotaGraph(850, 530, 0.4, 0, pause_select[1], TRUE);
+                    }
+                    else {
+                        DrawRotaGraph(850, 530, 0.5, 0, pause_select[1], TRUE);
+                    }
+                }
+                else {
+                    DrawRotaGraph(850, 530, 0.5, 0, pause_select[0], TRUE);
+                }
+
+                if (TimeCount++ >= 180) {   // 3秒経ったら
+                    TimeCount = 0;      // TimeCount を初期化
+                    BlackNum = 0;       // 黒石の数を初期化
+                    WhiteNum = 0;       // 白石の数を初期化
+                    OrderNum = 0;       // 黒の手番にする
+                    EndFlag = false;    // 終了条件を初期化
+                    RandomFlag = false;
+                    //Parent->SetNext(new Scene_Select());
+                    Init_OthelloBoard(Board);   // オセロボードを初期化
+                }
+                break;
+
+            case 1: // プレイヤーが白
+                DrawRotaGraph(650, 380, 1, 0, ResultImage, TRUE);
+                DrawRotaGraph(650, 220, 1.2, 0, WinLoseImage[2], TRUE);
+                DrawRotaGraph(600, 350, 0.5, 0, Black, TRUE);
+                DrawRotaGraph(600, 450, 0.5, 0, White, TRUE);
+                DrawFormatString(660, 340, BlackCr, "%d", BlackNum);      // 黒石の現在の数を表示
+                DrawFormatString(660, 445, BlackCr, "%d　←　あなた", WhiteNum);      // 白石の現在の数を表示
+
+                if (250 <= Mouse_X && Mouse_X <= 650 && 470 <= Mouse_Y && Mouse_Y <= 590) {
+                    if (nowKey == KEY_HOLD) {
+                        DrawRotaGraph(450, 530, 0.4, 0, pause_continue[1], TRUE);
+                    }
+                    else {
+                        DrawRotaGraph(450, 530, 0.5, 0, pause_continue[1], TRUE);
+                    }
+                }
+                else {
+                    DrawRotaGraph(450, 530, 0.5, 0, pause_continue[0], TRUE);
+                }
+                if (650 <= Mouse_X && Mouse_X <= 1050 && 470 <= Mouse_Y && Mouse_Y <= 590) {
+                    if (nowKey == KEY_HOLD) {
+                        DrawRotaGraph(850, 530, 0.4, 0, pause_select[1], TRUE);
+                    }
+                    else {
+                        DrawRotaGraph(850, 530, 0.5, 0, pause_select[1], TRUE);
+                    }
+                }
+                else {
+                    DrawRotaGraph(850, 530, 0.5, 0, pause_select[0], TRUE);
+                }
+
+                if (TimeCount++ >= 180) {   // 3秒経ったら
+                    TimeCount = 0;      // TimeCount を初期化
+                    BlackNum = 0;       // 黒石の数を初期化
+                    WhiteNum = 0;       // 白石の数を初期化
+                    OrderNum = 0;       // 黒の手番にする
+                    EndFlag = false;    // 終了条件を初期化
+                    RandomFlag = false;
+                    //Parent->SetNext(new Scene_Select());
+                    Init_OthelloBoard(Board);   // オセロボードを初期化
+                }
+                break;
             }
         }
-
     }
     // ----- ゲームの最中なら -----
     else {
@@ -419,45 +586,45 @@ void Othello_Board::Othello_Board_Draw() {
                 PassFlag = false;   // パスフラグを false にする
             }
         }
-    }
 
 
-    // ----- 置いた場所を示す十字の線を描画 -----
-    DrawLine((PutPlace_X * MAP_SIZE - 10) + (MAP_SIZE / 2) + BoardShift_X, PutPlace_Y * MAP_SIZE + (MAP_SIZE / 2) + BoardShift_Y,
-        (PutPlace_X * MAP_SIZE + 10) + (MAP_SIZE / 2) + BoardShift_X, PutPlace_Y * MAP_SIZE + (MAP_SIZE / 2) + BoardShift_Y, RedCr, 3);
+        // ----- 置いた場所を示す十字の線を描画 -----
+        DrawLine((PutPlace_X * MAP_SIZE - 10) + (MAP_SIZE / 2) + BoardShift_X, PutPlace_Y * MAP_SIZE + (MAP_SIZE / 2) + BoardShift_Y,
+            (PutPlace_X * MAP_SIZE + 10) + (MAP_SIZE / 2) + BoardShift_X, PutPlace_Y * MAP_SIZE + (MAP_SIZE / 2) + BoardShift_Y, RedCr, 3);
 
-    DrawLine(PutPlace_X * MAP_SIZE + (MAP_SIZE / 2) + BoardShift_X, (PutPlace_Y * MAP_SIZE - 10) + (MAP_SIZE / 2) + BoardShift_Y,
-        PutPlace_X * MAP_SIZE + (MAP_SIZE / 2) + BoardShift_X, (PutPlace_Y * MAP_SIZE + 10) + (MAP_SIZE / 2) + BoardShift_Y, RedCr, 3);
-    // ------------------------------------------
+        DrawLine(PutPlace_X * MAP_SIZE + (MAP_SIZE / 2) + BoardShift_X, (PutPlace_Y * MAP_SIZE - 10) + (MAP_SIZE / 2) + BoardShift_Y,
+            PutPlace_X * MAP_SIZE + (MAP_SIZE / 2) + BoardShift_X, (PutPlace_Y * MAP_SIZE + 10) + (MAP_SIZE / 2) + BoardShift_Y, RedCr, 3);
+        // ------------------------------------------
 
 
-    // ----- ポーズ画面を表示 -------------------------------------------------------
-    DrawRotaGraph(90, 40, 0.9, 0, Pause_Button, TRUE);
-    if (PauseFlg == true) {
-        DrawRotaGraph(650, 380, 1.15, 0, Pause_Back, TRUE);
-        if (450 <= Mouse_X && Mouse_X <= 850 && 320 <= Mouse_Y && Mouse_Y <= 440) {
-            if (nowKey == KEY_HOLD) {
-                DrawRotaGraph(650, 380, 0.9, 0, pause_continue[1], TRUE);
+        // ----- ポーズ画面を表示 -------------------------------------------------------
+        if (PauseFlg == true) {
+            DrawRotaGraph(650, 380, 1.15, 0, Pause_Back, TRUE);
+            if (450 <= Mouse_X && Mouse_X <= 850 && 320 <= Mouse_Y && Mouse_Y <= 440) {
+                if (nowKey == KEY_HOLD) {
+                    DrawRotaGraph(650, 380, 0.9, 0, pause_continue[1], TRUE);
+                }
+                else {
+                    DrawRotaGraph(650, 380, 1.0, 0, pause_continue[1], TRUE);
+                }
             }
             else {
-                DrawRotaGraph(650, 380, 1.0, 0, pause_continue[1], TRUE);
+                DrawRotaGraph(650, 380, 1.0, 0, pause_continue[0], TRUE);
             }
-        }
-        else {
-            DrawRotaGraph(650, 380, 1.0, 0, pause_continue[0], TRUE);
-        }
-        if (450 <= Mouse_X && Mouse_X <= 850 && 470 <= Mouse_Y && Mouse_Y <= 590) {
-            if (nowKey == KEY_HOLD) {
-                DrawRotaGraph(650, 530, 0.9, 0, pause_select[1], TRUE);
+            if (450 <= Mouse_X && Mouse_X <= 850 && 470 <= Mouse_Y && Mouse_Y <= 590) {
+                if (nowKey == KEY_HOLD) {
+                    DrawRotaGraph(650, 530, 0.9, 0, pause_select[1], TRUE);
+                }
+                else {
+                    DrawRotaGraph(650, 530, 1.0, 0, pause_select[1], TRUE);
+                }
             }
             else {
-                DrawRotaGraph(650, 530, 1.0, 0, pause_select[1], TRUE);
+                DrawRotaGraph(650, 530, 1.0, 0, pause_select[0], TRUE);
             }
         }
-        else {
-            DrawRotaGraph(650, 530, 1.0, 0, pause_select[0], TRUE);
-        }
     }
+    DrawRotaGraph(90, 40, 0.9, 0, Pause_Button, TRUE);      // ポーズボタンの表示
     //DrawFormatString(800, 600, BlackCr, "%d", PauseFlg);
     //DrawFormatString(800, 650, BlackCr, "%d", Mouse_X);
     //DrawFormatString(800, 700, BlackCr, "%d", Mouse_Y);
