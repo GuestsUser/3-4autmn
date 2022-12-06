@@ -65,8 +65,12 @@ private:
 
 	//リザルト背景
 	int Result;
-	int Result_Continue;
-	int Result_Select;
+
+	//各種SE
+	int pass_SE;
+	int pageone_SE;
+	int card_SE_1;	//カードを引く
+	int card_SE_2;	//カードを出す
 
 	Scene* select;
 
@@ -113,6 +117,7 @@ private:
 
 	int priority;	//手番を決める優先度
 	int field;		//場に出ているカードの枚数
+	int cemetery;	//使ったカードの枚数
 
 	int pri;		//親を決めるための変数
 	bool draw;		//カードが引けるかどうかを決めるためのフラグ

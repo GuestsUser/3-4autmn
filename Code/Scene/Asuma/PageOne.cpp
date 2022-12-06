@@ -39,7 +39,7 @@ void PageOne::PageOne_Initialize(Scene* scene) {
 	Club = LoadGraph("Resource/image/PageOne_Image/Club.png");
 	free = LoadGraph("Resource/image/PageOne_Image/Free.png");
 
-	//ポーズUI
+	//ポーズ&リザルトUI
 	Pause_Button = LoadGraph("Resource/image/PauseButton.png");
 	Pause_Back = LoadGraph("Resource/image/PauseBack.png");
 	Pause_Continue = LoadDivGraph("Resource/image/ContinueButton.png", 2, 2, 1, 400, 120, pause_continue);
@@ -47,6 +47,17 @@ void PageOne::PageOne_Initialize(Scene* scene) {
 	Pause_Flg = false;
 
 	Result = LoadGraph("Resource/image/PageOne_Image/ResultBack.png");
+
+	//SE
+	pass_SE = LoadSoundMem("Resource/se/pageOne_SE/pass.wav");
+	pageone_SE = LoadSoundMem("Resource/se/pageOne_SE/pageone.wav");
+	card_SE_1 = LoadSoundMem("Resource/se/pageOne_SE/トランプ・引く02.wav");
+	card_SE_2 = LoadSoundMem("Resource/se/pageOne_SE/カードを台の上に出す.wav");
+	
+	ChangeVolumeSoundMem(200, pass_SE);
+	ChangeVolumeSoundMem(200, pageone_SE);
+	ChangeVolumeSoundMem(200, card_SE_1);
+	ChangeVolumeSoundMem(200, card_SE_2);
 
 	Deck_X = 130;
 	Deck_Y = 550;
@@ -94,6 +105,8 @@ void PageOne::PageOne_Initialize(Scene* scene) {
 	draw = false;
 	finish = false;
 	reset = false;
+	
+	cemetery = 0;
 
 	priority = GetRand(MAX - 1);
 
@@ -139,14 +152,14 @@ void PageOne::PageOne_Update() {
 
 	if (finish == true) {
 		//最初からプレイ
-		if (450 <= Mouse_X && Mouse_X <= 850 && 470 <= Mouse_Y && Mouse_Y <= 590) {
+		if (175 <= Mouse_X && Mouse_X <= 575 && 565 <= Mouse_Y && Mouse_Y <= 685) {
 			if (Old_key != KEY_FREE && Now_key == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
 				select->SetNext(new Scene_PageOne());
 			}
 		}
 
 		//セレクト画面へ移動
-		if (450 <= Mouse_X && Mouse_X <= 850 && 470 <= Mouse_Y && Mouse_Y <= 590) {
+		if (625 <= Mouse_X && Mouse_X <= 1025 && 565 <= Mouse_Y && Mouse_Y <= 685) {
 			if (Old_key != KEY_FREE && Now_key == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
 				select->SetNext(new Scene_Select());
 			}
@@ -163,6 +176,7 @@ void PageOne::PageOne_Update() {
 					r = GetRand(sizeof(Card_obj));
 					Card_obj[r].card_x = Player_X;
 					Card_obj[r].card_y = Player_Y;
+					PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
 					Player_card.push_back(Card_obj[r]);
 					Cemetery_card.push_back(Card_obj[r]);
 					Card_obj.erase(Card_obj.begin() + r);
@@ -182,7 +196,8 @@ void PageOne::PageOne_Update() {
 						draw = false;
 					}
 					else {
-						for (i = 0; i < Player_card.size(); i++) {
+						player = Player_card.size();
+						for (i = 0; i < player; i++) {
 							if (Player_card[i].suit == 5) {
 								draw = false;
 							}
@@ -197,6 +212,7 @@ void PageOne::PageOne_Update() {
 						if (n > 30) {
 							if ((Mouse_X > Deck_X - (card_w * 0.7) / 2) && (Mouse_X < Deck_X + (card_w * 0.7) / 2) && (Mouse_Y > Deck_Y - (card_h * 0.7) / 2) && (Mouse_Y < Deck_Y + (card_h * 0.7) / 2)) {
 								if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
+									PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
 									r = GetRand(sizeof(Card_obj));
 									Card_obj[r].card_x = Player_X;
 									Card_obj[r].card_y = Player_Y;
@@ -226,10 +242,11 @@ void PageOne::PageOne_Update() {
 							Player_Pass_Flg = true;
 							if ((Mouse_X > 890) && (Mouse_X < 1040) && (Mouse_Y > 440) && (Mouse_Y < 515)) {
 								if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
+									PlaySoundMem(pass_SE, DX_PLAYTYPE_BACK, TRUE);
 									flg_p = true;
 									priority++;
 									n = 0;
-									Player_Pass_Flg = false;
+									break;
 								}
 							}
 						}
@@ -247,6 +264,7 @@ void PageOne::PageOne_Update() {
 								if (PageOne_player == true) {
 									if ((Mouse_X > 500) && (Mouse_X < 800) && (Mouse_Y > 400) && (Mouse_Y < 500)) {
 										if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
+											PlaySoundMem(pageone_SE, DX_PLAYTYPE_BACK, TRUE);
 											PageOne_player = false;
 											PageOne_flg = true;
 										}
@@ -256,6 +274,7 @@ void PageOne::PageOne_Update() {
 									if (Card::Hit(Mouse_X, Mouse_Y, Player_X + (card_w * 0.5) * (i % 10), Player_Y + (card_h * pow(0.5, 2)) * (i / 10), card_w, card_h, 0.5)) {
 										Player_card[i].card_y = Player_Y - 50;
 										if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
+											PlaySoundMem(card_SE_2, DX_PLAYTYPE_BACK, TRUE);
 											Field_card.push_back(Player_card[i]);
 
 											if (Player_card[i].num == 99) {
@@ -281,6 +300,7 @@ void PageOne::PageOne_Update() {
 											flg_p = true;
 											n = 0;
 											PageOne_flg = false;
+											break;
 										}
 									}
 									else {
@@ -289,10 +309,11 @@ void PageOne::PageOne_Update() {
 								}
 							}
 						}
-						if (flg_p == true) {
-							Player_card.erase(Player_card.begin() + p);
-						}
 					}
+					if (flg_p == true && Player_Pass_Flg != true) {
+						Player_card.erase(Player_card.begin() + p);
+					}
+					Player_Pass_Flg = false;
 				}
 				else {
 					priority++;
@@ -310,6 +331,7 @@ void PageOne::PageOne_Update() {
 					r = GetRand(sizeof(Card_obj));
 					Card_obj[r].card_x = NPC1_X;
 					Card_obj[r].card_y = NPC1_Y;
+					PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
 					NPC_card_1.push_back(Card_obj[r]);
 					Cemetery_card.push_back(Card_obj[r]);
 					Card_obj.erase(Card_obj.begin() + r);
@@ -329,7 +351,8 @@ void PageOne::PageOne_Update() {
 						draw = false;
 					}
 					else {
-						for (i = 0; i < NPC_card_1.size(); i++) {
+						npc_1 = NPC_card_1.size();
+						for (i = 0; i < npc_1; i++) {
 							if (NPC_card_1[i].suit == 5) {
 								draw = false;
 							}
@@ -343,6 +366,7 @@ void PageOne::PageOne_Update() {
 					if (draw == true && Card_obj.empty() == false) {
 						if (n > 30) {
 							r = GetRand(sizeof(Card_obj));
+							PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
 							NPC_card_1.push_back(Card_obj[r]);
 							Card_obj.erase(Card_obj.begin() + r);
 							n = 0;
@@ -355,6 +379,7 @@ void PageOne::PageOne_Update() {
 							PageOne_npc1 = true;
 						}
 						if (n > 90) {
+							PlaySoundMem(pageone_SE, DX_PLAYTYPE_NORMAL, TRUE);
 							n = 0;
 							PageOne_npc1 = false;
 							PageOne_flg = true;
@@ -376,11 +401,13 @@ void PageOne::PageOne_Update() {
 
 						//山札0枚＆手札に出せるカードがない場合パスをする（手動）
 						if (Card_obj.empty() == true && Field_card.empty() == false && Field_card[lead].suit != NPC_card_1[i].suit && NPC_card_1[i].suit != 5) {
+
 							if (50 < n && n <= 90) {
 								NPC1_Pass_Flg = true;
 							}
 
 							if (n > 90) {
+								PlaySoundMem(pass_SE, DX_PLAYTYPE_NORMAL, TRUE);
 								flg_1 = true;
 								priority++;
 								n = 0;
@@ -443,6 +470,7 @@ void PageOne::PageOne_Update() {
 					r = GetRand(sizeof(Card_obj));
 					Card_obj[r].card_x = NPC2_X;
 					Card_obj[r].card_y = NPC2_Y;
+					PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
 					NPC_card_2.push_back(Card_obj[r]);
 					Cemetery_card.push_back(Card_obj[r]);
 					Card_obj.erase(Card_obj.begin() + r);
@@ -463,7 +491,8 @@ void PageOne::PageOne_Update() {
 						draw = false;
 					}
 					else {
-						for (i = 0; i < NPC_card_2.size(); i++) {
+						npc_2 = NPC_card_2.size();
+						for (i = 0; i < npc_2; i++) {
 							if (NPC_card_2[i].suit == 5) {
 								draw = false;
 							}
@@ -477,6 +506,7 @@ void PageOne::PageOne_Update() {
 					if (draw == true && Card_obj.empty() == false) {
 						if (n > 30) {
 							r = GetRand(sizeof(Card_obj));
+							PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
 							NPC_card_2.push_back(Card_obj[r]);
 							Card_obj.erase(Card_obj.begin() + r);
 							n = 0;
@@ -490,6 +520,7 @@ void PageOne::PageOne_Update() {
 						}
 
 						if (n > 90) {
+							PlaySoundMem(pageone_SE, DX_PLAYTYPE_NORMAL, TRUE);
 							n = 0;
 							PageOne_npc2 = false;
 							PageOne_flg = true;
@@ -516,6 +547,7 @@ void PageOne::PageOne_Update() {
 							}
 
 							if (n > 90) {
+								PlaySoundMem(pass_SE, DX_PLAYTYPE_NORMAL, TRUE);
 								flg_2 = true;
 								priority++;
 								n = 0;
@@ -576,6 +608,7 @@ void PageOne::PageOne_Update() {
 					r = GetRand(sizeof(Card_obj));
 					Card_obj[r].card_x = NPC3_X;
 					Card_obj[r].card_y = NPC3_Y;
+					PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
 					NPC_card_3.push_back(Card_obj[r]);
 					Cemetery_card.push_back(Card_obj[r]);
 					Card_obj.erase(Card_obj.begin() + r);
@@ -595,7 +628,8 @@ void PageOne::PageOne_Update() {
 						draw = false;
 					}
 					else {
-						for (i = 0; i < NPC_card_3.size(); i++) {
+						npc_3 = NPC_card_3.size();
+						for (i = 0; i < npc_3; i++) {
 							if (NPC_card_3[i].suit == 5) {
 								draw = false;
 							}
@@ -609,6 +643,7 @@ void PageOne::PageOne_Update() {
 					if (draw == true && Card_obj.empty() == false) {
 						if (n > 30) {
 							r = GetRand(sizeof(Card_obj));
+							PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
 							NPC_card_3.push_back(Card_obj[r]);
 							Card_obj.erase(Card_obj.begin() + r);
 							n = 0;
@@ -622,6 +657,7 @@ void PageOne::PageOne_Update() {
 						}
 
 						if (n > 90) {
+							PlaySoundMem(pageone_SE, DX_PLAYTYPE_NORMAL, TRUE);
 							n = 0;
 							PageOne_npc3 = false;
 							PageOne_flg = true;
@@ -648,6 +684,7 @@ void PageOne::PageOne_Update() {
 							}
 
 							if (n > 90) {
+								PlaySoundMem(pass_SE, DX_PLAYTYPE_NORMAL, TRUE);
 								flg_3 = true;
 								priority++;
 								n = 0;
@@ -743,7 +780,9 @@ void PageOne::PageOne_Update() {
 					flg_2 = false;
 					flg_3 = false;
 
-					for (i = 0; i < 4; i++) {
+					cemetery = Field_card.size();
+					
+					for (i = 0; i < cemetery; i++) {
 						Cemetery_card.push_back(Field_card[i]);
 					}
 
@@ -763,13 +802,14 @@ void PageOne::PageOne_Update() {
 }
 
 void PageOne::PageOne_Draw() {
-	field = 0;
-	player = 0;
-	npc_1 = 0;
-	npc_2 = 0;
-	npc_3 = 0;
+	field = Field_card.size();
+	player = Player_card.size();
+	npc_1 = NPC_card_1.size();
+	npc_2 = NPC_card_2.size();
+	npc_3 = NPC_card_3.size();
 
 	DrawRotaGraph(640, 360, 1.0, 0, background, TRUE);
+
 
 	if (reset == false && Player_setup == true && NPC1_setup == true && NPC2_setup == true && NPC3_setup == true) {
 
@@ -777,7 +817,7 @@ void PageOne::PageOne_Draw() {
 		case 0:
 			DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：プレイヤー");
 			if (draw == true) {
-				DrawFormatString(50, 400, GetColor(100, 100, 255), "カードを引いてください");
+				DrawFormatString(250, 450, GetColor(100, 100, 255), "カードを引いてください");
 			}
 			break;
 		case 1:
@@ -823,17 +863,16 @@ void PageOne::PageOne_Draw() {
 	}
 
 	//場に出ているカードの描画
-	for (i = 0; i < Field_card.size(); i++) {
-		DrawRotaGraph(Field_X + field * 100, Field_Y, 0.5, 0, Field_card[i].img, TRUE);
-		field++;
+	for (i = 0; i < field; i++) {
+		DrawRotaGraph(Field_X + i * 100, Field_Y, 0.5, 0, Field_card[i].img, TRUE);
 	}
 
 	//プレイヤーの手札描画
-	for (i = 0; i < Player_card.size(); i++) {
-		DrawRotaGraph(Player_card[i].card_x + (player % 10) * (card_w * 0.5), Player_card[i].card_y + (player / 10) * (card_h * pow(0.5, 2)), 0.5, 0, Player_card[i].img, TRUE);
-		player++;
+	for (i = 0; i < player; i++) {
+		DrawRotaGraph(Player_card[i].card_x + (i % 10) * (card_w * 0.5), Player_card[i].card_y + (i / 10) * (card_h * pow(0.5, 2)), 0.5, 0, Player_card[i].img, TRUE);
 	}
-	//
+
+	//パスのUI
 	if (Player_Pass_Flg == true) {
 		DrawGraph(890, 440, Player_Pass_Icon, true);
 	}
@@ -843,18 +882,17 @@ void PageOne::PageOne_Draw() {
 		DrawGraph(500, 400, Player_PageOne_Icon, true);
 	}
 	//勝利時のUI
-	if (Player_setup == true && Player_card.size() == 0) {
+	if (Player_setup == true && Player_card.size() == 0 && n <= 30) {
 		DrawRotaGraph(600, 300, 1.0, 0, Result, TRUE);
-		DrawRotaGraph(600, 400, 1.3, 0, PlayerCrown, TRUE);
+		DrawRotaGraph(600, 300, 1.3, 0, PlayerCrown, TRUE);
 		finish = true;
 	}
 
 
 	//NPC１号の手札描画
-	for (i = 0; i < NPC_card_1.size(); i++) {
-		DrawRotaGraph(NPC1_X + (npc_1 % 5) * (card_w * 0.3), NPC1_Y + (npc_1 / 5) * (card_h * 0.3), 0.3, 0, Card_back, TRUE);
+	for (i = 0; i < npc_1; i++) {
+		DrawRotaGraph(NPC1_X + (i % 5) * (card_w * 0.3), NPC1_Y + (i / 5) * (card_h * pow(0.3, 2)), 0.3, 0, Card_back, TRUE);
 		//DrawRotaGraph(NPC1_X + (npc_1 % 5) * (card_w * 0.3), NPC1_Y + (npc_1 / 5) * (card_h * pow(0.3, 2)), 0.3, 0, NPC_card_1[i].img, TRUE);
-		npc_1++;
 	}
 	//パスのUI
 	if (NPC1_Pass_Flg == true) {
@@ -865,17 +903,16 @@ void PageOne::PageOne_Draw() {
 		DrawGraph(0, 175, NPC1_PageOne_Icon, true);
 	}
 	//勝利時のUI
-	if (NPC1_setup == true && NPC_card_1.size() == 0) {
+	if (NPC1_setup == true && NPC_card_1.size() == 0 && n <= 30) {
 		DrawRotaGraph(600, 300, 1.0, 0, Result, TRUE);
-		DrawRotaGraph(600, 400, 1.3, 0, NPC1_Icon, TRUE);
+		DrawRotaGraph(600, 300, 1.3, 0, NPC1_Icon, TRUE);
 		finish = true;
 	}
 
 	//NPC２号の手札描画
-	for (i = 0; i < NPC_card_2.size(); i++) {
-		DrawRotaGraph(NPC2_X + (npc_2 % 5) * (card_w * 0.3), NPC2_Y + (npc_2 / 5) * (card_h * 0.3), 0.3, 0, Card_back, TRUE);
+	for (i = 0; i < npc_2; i++) {
+		DrawRotaGraph(NPC2_X + (i % 5) * (card_w * 0.3), NPC2_Y + (i / 5) * (card_h * pow(0.3, 2)), 0.3, 0, Card_back, TRUE);
 		//DrawRotaGraph(NPC2_X + (npc_2 % 5) * (card_w * 0.3), NPC2_Y + (npc_2 / 5) * (card_h * pow(0.3, 2)), 0.3, 0, NPC_card_2[i].img, TRUE);
-		npc_2++;
 	}
 	//パスのUI
 	if (NPC2_Pass_Flg == true) {
@@ -886,17 +923,16 @@ void PageOne::PageOne_Draw() {
 		DrawGraph(400, 105, NPC2_PageOne_Icon, true);
 	}
 	//勝利時のUI
-	if (NPC2_setup == true && NPC_card_2.size() == 0) {
+	if (NPC2_setup == true && NPC_card_2.size() == 0 && n <= 30) {
 		DrawRotaGraph(600, 300, 1.0, 0, Result, TRUE);
-		DrawRotaGraph(600, 400, 1.3, 0, NPC2_Icon, TRUE);
+		DrawRotaGraph(600, 300, 1.3, 0, NPC2_Icon, TRUE);
 		finish = true;
 	}
 
 	//NPC３号の手札描画
-	for (i = 0; i < NPC_card_3.size(); i++) {
-		DrawRotaGraph(NPC3_X + (npc_3 % 5) * (card_w * 0.3), NPC3_Y + (npc_3 / 5) * (card_h * 0.3), 0.3, 0, Card_back, TRUE);
+	for (i = 0; i < npc_3; i++) {
+		DrawRotaGraph(NPC3_X + (i % 5) * (card_w * 0.3), NPC3_Y + (i / 5) * (card_h * pow(0.3, 2)), 0.3, 0, Card_back, TRUE);
 		//DrawRotaGraph(NPC3_X + (npc_3 % 5) * (card_w * 0.3), NPC3_Y + (npc_3 / 5) * (card_h * pow(0.3, 2)), 0.3, 0, NPC_card_3[i].img, TRUE);
-		npc_3++;
 	}
 	//パスのUI
 	if (NPC3_Pass_Flg == true) {
@@ -907,22 +943,24 @@ void PageOne::PageOne_Draw() {
 		DrawGraph(800, 175, NPC3_PageOne_Icon, true);
 	}
 	//勝利時のUI
-	if (NPC3_setup == true && NPC_card_3.size() == 0) {
+	if (NPC3_setup == true && NPC_card_3.size() == 0 && n <= 30) {
 		DrawRotaGraph(600, 300, 1.0, 0, Result, TRUE);
-		DrawRotaGraph(600, 400, 1.3, 0, NPC3_Icon, TRUE);
+		DrawRotaGraph(600, 300, 1.3, 0, NPC3_Icon, TRUE);
 		finish = true;
 	}
 
-	DrawFormatString(25, 100, GetColor(255, 255, 255), "NPC");
-	DrawFormatString(25, 125, GetColor(255, 255, 255), "１号");
+	if (finish == false) {
+		DrawFormatString(25, 100, GetColor(255, 255, 255), "NPC");
+		DrawFormatString(25, 125, GetColor(255, 255, 255), "１号");
 
-	DrawFormatString(450, 50, GetColor(255, 255, 255), "NPC");
-	DrawFormatString(450, 75, GetColor(255, 255, 255), "２号");
+		DrawFormatString(450, 50, GetColor(255, 255, 255), "NPC");
+		DrawFormatString(450, 75, GetColor(255, 255, 255), "２号");
 
-	DrawFormatString(875, 100, GetColor(255, 255, 255), "NPC");
-	DrawFormatString(875, 125, GetColor(255, 255, 255), "３号");
+		DrawFormatString(875, 100, GetColor(255, 255, 255), "NPC");
+		DrawFormatString(875, 125, GetColor(255, 255, 255), "３号");
 
-	DrawFormatString(0, 665, GetColor(255, 255, 255), "山札:残り%d枚", Card_obj.size());
+		DrawFormatString(0, 665, GetColor(255, 255, 255), "山札:残り%d枚", Card_obj.size());
+	}
 
 	//ポーズボタン
 	DrawRotaGraph(100, 40, 0.8, 0, Pause_Button, TRUE);
@@ -950,6 +988,32 @@ void PageOne::PageOne_Draw() {
 		else {
 			DrawRotaGraph(650, 530, 1.0, 0, pause_select[0], TRUE);
 		}
+	}
+
+	if (finish == true) {
+		if (175 <= Mouse_X && Mouse_X <= 575 && 565 <= Mouse_Y && Mouse_Y <= 685) {
+			if (Now_key == KEY_HOLD) {
+				DrawRotaGraph(375, 625, 0.9, 0, pause_continue[1], TRUE);
+			}
+			else {
+				DrawRotaGraph(375, 625, 1.0, 0, pause_continue[1], TRUE);
+			}
+		}
+		else {
+			DrawRotaGraph(375, 625, 1.0, 0, pause_continue[0], TRUE);
+		}
+		if (625 <= Mouse_X && Mouse_X <= 1025 && 565 <= Mouse_Y && Mouse_Y <= 685) {
+			if (Now_key == KEY_HOLD) {
+				DrawRotaGraph(825, 625, 0.9, 0, pause_select[1], TRUE);
+			}
+			else {
+				DrawRotaGraph(825, 625, 1.0, 0, pause_select[1], TRUE);
+			}
+		}
+		else {
+			DrawRotaGraph(825, 625, 1.0, 0, pause_select[0], TRUE);
+		}
+
 	}
 
 	//デバッグ用
