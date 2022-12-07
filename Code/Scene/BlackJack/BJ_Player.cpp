@@ -104,11 +104,6 @@ void Player::Initialize() {
 
 }
 
-void Player::Update() {
-
-
-
-}
 
 /*ゲーム実行*/
 bool Player::Play(Shoe* shoe) {
@@ -153,7 +148,6 @@ bool Player::Play(Shoe* shoe) {
     /*ボタン処理（hit,stand,double,splite）*/
   }
 
-  //Player::P_BJ();
 
   /*バーストするまでループ処理*/
   if (game_flg) {
@@ -227,6 +221,7 @@ bool Player::Play(Shoe* shoe) {
               spt_bet_coin = bet_coin;
               Player::Set_Bet(spt_bet_coin);
               split = true;
+              spt_hit = false;
               Player::Hit(shoe);
             }
 
@@ -269,7 +264,7 @@ bool Player::Play(Shoe* shoe) {
 
           }
 
-          if (Player::Calc() == 21 && !BlackJack && now_game_flg) {
+          if (Player::Calc() == 21 && !BlackJack && now_game_flg && spt_hit) {
             BlackJack = true;
             std = true;
           }
@@ -407,7 +402,7 @@ void Player::Draw() {
   Player::Show_Play();
 
   /*デバッグ用*/
-  Player::Debug_Draw(true);
+  //Player::Debug_Draw(true);
   /*デバッグ用*/
 
 }
@@ -464,12 +459,14 @@ void Player::Hit(Shoe* shoe) {    /*shoeオブジェクトポインタ*/
         /*配列の最後にカードを追加*/
         hand.push_back(shoe->Take_Card());
         hand_num++;   /*手札枚数を増やす*/
+        spt_hit = false;
 
       }
       else {
         /*配列の最後にカードを追加*/
         spt_hand.push_back(shoe->Take_Card());
         spt_hand_num++;   /*手札枚数を増やす*/
+        spt_hit = true;
       }
 
 

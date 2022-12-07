@@ -98,7 +98,6 @@ void BlackJack::Update() {
   slider->Update(mousePosX, mousePosY, isClick);
   pose_flg = pose;
 
-  player->Update();
 
   if (player->ButtonHit(bet_x, bet_y, bet_w, bet_h) && !bet) {
 
@@ -201,7 +200,6 @@ void BlackJack::Draw() {
     }
   }
   else if(!pose_flg) {
-    dealer->Update();
     SetFontSize(32);
     DrawFormatString(500, 680, 0xffffff, "所持金：%d", player->P_MaxCoin());
     SetFontSize(DEFAULT_FONT_SIZE);

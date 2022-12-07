@@ -67,17 +67,12 @@ void Dealer::Initialize() {
 
 }
 
-void Dealer::Update() {
+void Dealer::Draw() {
 
   DrawRotaGraph(yama_x, yama_y, img_size, 0, card_hdl[52], 1);
   SetFontSize(24);
   DrawFormatString(10, 650, 0xffffff, "アクションを選択してください");
   SetFontSize(DEFAULT_FONT_SIZE);
-
-}
-
-void Dealer::Draw() {
-
   Dealer::Show_Hand();
 
   DrawRotaGraph(yama_x, yama_y, img_size, 0, card_hdl[52], 1);
@@ -246,14 +241,3 @@ int Dealer::Set_Magnification(float setrate, int getcoin) {
   return setrate*getcoin;
 }
 
-bool Dealer::Anim_Flg(int max, int x, int y) {
-
-  if (max <= x + y) {
-    Anim = true;
-  }
-  else {
-    Anim = false;
-  }
-
-  return Anim;
-}
