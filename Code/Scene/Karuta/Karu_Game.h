@@ -83,6 +83,8 @@ private:
 
 	int Se_Cursor;				//カーソルのSE
 	int Se_Select;				//決定ボタンのSE
+	int Se_GameOver;			//ゲームオーバー時のSE
+	int Se_Result;				//リザルト時のSE
 
 	bool end;
 	bool Gameover;
