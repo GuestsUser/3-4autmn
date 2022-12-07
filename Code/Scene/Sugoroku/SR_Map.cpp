@@ -218,16 +218,20 @@ void SR_Map::Update() {
 
 
 void SR_Map::Draw() {	
-	// if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH) {
-	if(CheckHitKey(KEY_INPUT_SPACE)){
+	if(key->GetKeyState(REQUEST_MOUSE_CENTER) == KEY_PUSH) {
+	//if(CheckHitKey(KEY_INPUT_SPACE)){
 		/*Player1sum+=1;
 		Player2sum+=1;
 		Player3sum+=1;
 		Player4sum+=1;*/
-		Player1sum == 19;
+		
+		Player1sum += 1;
+		Player2sum += 2;
+		/*
+						
 		Player2sum == 19;
 		Player3sum == 19;
-		Player4sum == 19;
+		Player4sum == 19;*/
 	}
 	DrawGraph(MassX[Player1sum], MassY[Player1sum], Player1, true);
 	DrawGraph(MassX2[Player2sum], MassY2[Player2sum], Player2, true);
