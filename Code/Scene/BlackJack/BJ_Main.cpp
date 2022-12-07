@@ -41,8 +41,7 @@ BlackJack::BlackJack() {
   ctn_pos_x = 780;
   sct_rate = ctn_rate = 1;
   sct_flg = false;
-  //DrawRotaGraph(780, 350, 1, 0, continue_img[2], true);
-  //DrawRotaGraph(940, 350, 1.2, 0, select_img[2], true);
+
 
   game_img = LoadGraph("Resource/image/BJ_Image/BJ_Game.png");
   pose_img = LoadGraph("Resource/image/BJ_Image/BJ_PauseBack.png");
@@ -64,12 +63,13 @@ BlackJack::BlackJack() {
 
 BlackJack::~BlackJack() {
 
+  BlackJack::Finalize();
+
   delete shoe;
   delete dealer;
   delete player;
   delete slider;
 
-  BlackJack::Finalize();
 
 }
 
@@ -122,9 +122,9 @@ void BlackJack::Update() {
   }
   if (bet && !bet_flg) {
     if (BlackJack::Wait_Time(0.5)) {
+      bet_flg = true;
       player->Bet_Flg(bet_flg);
       player->Set_Bet(slider->GetValue());
-      bet_flg = true;
     }
   }
 
