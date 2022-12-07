@@ -18,10 +18,11 @@ private:
   double sct_rate, ctn_rate;
   bool sct_flg,nx_flg;
 
-  /*苦し紛れのベット*/
+  int bet_img;
   int bet_x, bet_y, bet_w, bet_h;
+  float bet_r;
+  bool bet;
   bool bet_flg;
-  /*苦し紛れのベット*/
 
   float wait_time;
   float time_count;
@@ -30,6 +31,7 @@ private:
   bool next_flg;
   bool now_game_flg;
   bool pose_flg, ptn,ctn,scn;
+  bool st;
 
   std::string next;
 

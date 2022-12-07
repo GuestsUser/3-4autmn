@@ -4,6 +4,8 @@
 class Dealer {
 
 protected:
+
+
   /*手札関連はprivateとする*/
   std::vector<int> hand;    /*手札配列*/
   std::vector<int> spt_hand;    /*手札配列*/

@@ -10,6 +10,11 @@ private:
 	Scene* Parent;
 
 	int PutCheckImage;	// かっこの画像を入れる用の変数
+	int ResultImage;
+	int WinLoseImage[3];
+	int Black;
+	int White;
+
 	int Pause_Button;
 	int Pause_Back;
 	int Pause_Continue;
@@ -50,9 +55,9 @@ private:
 	bool CheckFlag;		// 
 	bool PassFlag;		// パスされたかどうかを判定
 	bool EndFlag;		// 終了条件を満たしているかどうかを判定
-	bool RandomFlag;	// 
+	bool RandomFlag;	// ランダムに値を振ったかどうか
 	bool CornerFlag;	// 角が取れるかどうかを判定
-	bool PauseFlg;
+	bool PauseFlg;		// ポーズ画面を開いているかどうか
 
 public:
 	int Square_X;		// マウスから読みとったX座標を、MAP_SIZEで割った値を入れた変数

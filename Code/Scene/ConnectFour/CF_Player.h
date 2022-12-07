@@ -57,6 +57,11 @@ private:
 	bool CF_ClearText; //勝利者を出すテキストを出すフラグ
 	bool PauseFlg;
 
+	bool DCPUcheck;
+	bool DPlayercheck;
+	bool TCPUcheck;
+	bool TPlayercheck;
+
 public:
 	void CF_Player_Initialize(Scene* scene);
 	void CF_Player_Finalize();
