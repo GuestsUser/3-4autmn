@@ -26,6 +26,8 @@ private:
 	int BGM;		// BGM用の変数
 	int PutSE;		// 石を置くときのSE用の変数
 	int PassSE;		// パスされたときのSE用の変数
+	int PauseClickSE;
+	int PauseSelectSE;
 
 	int BlackCr;	// 黒色をセットしておく用の変数
 	int WhiteCr;	// 白色をセットしておく用の変数
@@ -98,10 +100,9 @@ public:
 
 	int EndGame(int board[PB][PB]);				// ゲームの終了条件を満たしたら終了する
 
-	int RandomOrder();							// 先手・後手を決める関数
+	void RandomOrder();							// 先手・後手を決める関数
 
 	void BoardScore(int board[PB][PB]);			//　静的評価を合計する関数
-	//void ScoreCompare(int board[PB][PB]);
 };
 
 extern Othello_Board* OB;
