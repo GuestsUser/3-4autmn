@@ -44,6 +44,11 @@ void CF_Player::CF_Player_Initialize(Scene* scene){
 	CPU_j = rand() % 7;
 	OldKey = KEY_FREE;
 
+	DCPUcheck = false;
+	DPlayercheck = false;
+	TCPUcheck = false;
+	TPlayercheck = false;
+
 	Circle_Exp = 0.5f;
 	Circle_Radius = 32.0f;
 }
@@ -108,12 +113,13 @@ void CF_Player::CF_Player_Update() {
 							Coin_Fall();
 						}
 						else {
-							CPU_RandomFall();
-							if (CPU_j != j) {
-								Coin_Fall();
-							}
-							else {
+							while (CPU_j == j)
+							{
 								CPU_RandomFall();
+								if (CPU_j != j) {
+									Coin_Fall();
+									break;
+								}
 							}
 						}
 					}
@@ -220,7 +226,7 @@ void CF_Player::CF_Player_Draw() {
 	else{
 		SetFontSize(24);
 		if (CF_Clear == false) {
-			//ポーズ画面
+			//ポーズボタン
 			DrawRotaGraph(110, 65, 0.9, 0, Pause_Button, TRUE);
 			if (PlayUser == Coin_Player) {
 				DrawFormatString(1080, 50, 0x000000, "あなたの番です");
@@ -230,7 +236,10 @@ void CF_Player::CF_Player_Draw() {
 				DrawFormatString(1080, 50, 0x000000, "ＣＰＵの番です");
 				DrawRotaGraph(CPU_X, Player_Y, 0.17, 0, CF_CCoin, TRUE);
 			}
-			
+			DrawFormatString(1080, 150, 0xffffff, "DC = %d", DCPUcheck);
+			DrawFormatString(1080, 250, 0xffffff, "DP = %d", DPlayercheck);
+			DrawFormatString(1080, 350, 0xffffff, "TC = %d", TCPUcheck);
+			DrawFormatString(1080, 450, 0xffffff, "TP = %d", TPlayercheck);
 		}
 		SetFontSize(16);
 		for (i = 0; i < Board_Ysize; i++) {
@@ -244,6 +253,7 @@ void CF_Player::CF_Player_Draw() {
 				else if (CF_Board[j][i] == Coin_CPU) {
 					DrawRotaGraph(j * 114 + 306, i * 79 + 209, Coin_Exp[j][i], 0, CF_CCoin, TRUE);
 				}
+				DrawFormatString(j * 114 + 306, i * 79 + 209, 0x000000, "%d", CF_Board[j][i]);
 			}
 		}
 		DrawRotaGraph(640, 420, 0.8, 0, CF_Panel, TRUE); 
@@ -348,6 +358,12 @@ void CF_Player:: Coin_Fall() { //コインを配置する処理
 				}
 				Mouse_Push = false;
 				FallSEflg = false;
+
+				DCPUcheck = false;
+				DPlayercheck = false;
+				TCPUcheck = false;
+				TPlayercheck = false;
+
 				Player_Y = 50;
 				DlayCount = 0;
 				ChangeTurn(&PlayUser);
@@ -420,7 +436,7 @@ void CF_Player::CPU_CoinCheck(int board[Board_Xsize][Board_Ysize], int x, int y)
 	int dy[] = { 1,0,1 ,1 };
 	for (a = 0; a < 4; a++) { //0の時は上、1の時は右、2の時は右上,3の時は左上の盤面を見る
 		for (b = 1, CoinCheck = 1,DoubleCheck = 1; b <= 2; b++) { //指定した座標から3マス見る
-			if (board[x][y] != board[x + b * dx[a]][y - b * dy[a]] || ((0 > (x + b * dx[a]) || (x + b * dx[a]) >= Board_Xsize) || (0 > (y - b * dy[a]) || (y - b * dy[a]) >= Board_Ysize)) || board[x + b * dx[a]][y - b * dy[a]] == Coin_Space || board[x + b * dx[a]][y - b * dy[a]] == 99) {
+			if (board[x][y] != board[x + b * dx[a]][y - b * dy[a]] || ((0 > (x + b * dx[a]) || (x + b * dx[a]) >= Board_Xsize) || (0 > (y - b * dy[a]) || (y - b * dy[a]) >= Board_Ysize)) || board[x][y] == Coin_Space || board[x][y] == 99) {
 				if (b == 1) {
 					DoubleCheck = 0;
 					CoinCheck = 0;
@@ -432,90 +448,126 @@ void CF_Player::CPU_CoinCheck(int board[Board_Xsize][Board_Ysize], int x, int y)
 			}
 			SpaceCheck(board, x, y);
 		}
-		if (DoubleCheck == 1 && CoinCheck == 0) { //2個続いていて、3個続いているものがない時
+		if (CoinCheck == 1) { //3マスとも同じものがあったら
+			DoubleCheck = 0;
 			if (board[x][y] == Coin_CPU) {
-				//横2つ続いていて右端の一つ右に何もない時か、右斜めに2つ続いていてその右上に何もない時
-				if (((a == 1 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space) && board[x + b * dx[a]][y - b * dy[a] + 1] != Coin_Space) || ((a == 2 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space) && board[x + b * dx[a]][y - b * dy[a] + 1] != Coin_Space)) {
-					CPU_j = x + 2;
+				if (a == 0 && board[x + b * dx[a]][(y - b * dy[a])] == Coin_Space && 0 <= (y - (b * dy[a]))) { //上に3つ続いていて、その上に何もないなら
+					CPU_j = x;
+					TCPUcheck = true;
 				}
-				//横に2つ続いていてその左に何もない時か、右斜めに2つ続いていてその左下に何もない時
-				else if (((a == 1 && board[x - 1][y] == Coin_Space) && board[x - 1][y + 1] != Coin_Space && 0 <= (x - 1)) || ((a == 2 && board[x - 1][y + 1] == Coin_Space) && board[x - 1][y + 2] != Coin_Space && 0 <= (x - 1) && (y + 1) < Board_Ysize)) {
-					CPU_j = x - 1;
-				}
-				//左斜めに2つ続いていて、その左上に何もない時
-				else if (a == 3 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space && board[x + b * dx[a]][y - b * dy[a] + 1] != Coin_Space) {
-					CPU_j = x - 2;
-				}
-				//左斜めに2つ続いていて、その右下に何もない時
-				else if (a == 3 && board[x + 1][y + 1] == Coin_Space && board[x + 1][y + 2] != Coin_Space && x + 1 < Board_Xsize && y + 1 < Board_Ysize) {
-					CPU_j = x + 1;
-				}
-			}
-			else if (board[x][y] == Coin_Player) {
-				//横2つ続いていて右端の一つ右に何もない時か、右斜めに3つ続いていてその右上に何もない時
-				if (((a == 1 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space) && board[x + b * dx[a]][y - b * dy[a] + 1] != Coin_Space) || ((a == 2 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space) && board[x + b * dx[a]][y - b * dy[a] + 1] != Coin_Space)) {
-					CPU_j = x + 2;
+				//横3つ続いていて右端の一つ右に何もない時か、右斜めに3つ続いていてその右上に何もない時
+				else if (((a == 1 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space) && board[x + b * dx[a]][y - b * dy[a] + 1] != Coin_Space) || ((a == 2 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space) && board[x + b * dx[a]][y - b * dy[a] + 1] != Coin_Space)) {
+					CPU_j = x + (b * dx[a]);
+					TCPUcheck = true;
 				}
 				//横に3つ続いていてその左に何もない時か、右斜めに3つ続いていてその左下に何もない時
-				else if (((a == 1 && board[x - 1][y] == Coin_Space) && board[x - 1][y + 1] != Coin_Space && 0 <= (x - 1)) || ((a == 2 && board[x - 1][y + 1] == Coin_Space) && board[x - 1][y + 2] != Coin_Space && 0 <= (x - 1) && (y + 1) < Board_Ysize)) {
+				else if (((a == 1 && board[x - 1][y] == Coin_Space) && board[x - 1][y + 1] != Coin_Space && 0 <= (x - 1)) || ((a == 2 && board[x - 1][y + 1] == Coin_Space) && board[x - 1][y + 2] != Coin_Space && 0 <= (x - 1) && (y + 2) < Board_Ysize)) {
 					CPU_j = x - 1;
+					TCPUcheck = true;
 				}
 				//左斜めに3つ続いていて、その左上に何もない時
 				else if (a == 3 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space && board[x + b * dx[a]][y - b * dy[a] + 1] != Coin_Space) {
-					CPU_j = x - 2;
+					CPU_j = x + (b * dx[a]);
+					TCPUcheck = true;
 				}
 				//左斜めに3つ続いていて、その右下に何もない時
-				else if (a == 3 && board[x + 1][y + 1] == Coin_Space && board[x + 1][y + 2] != Coin_Space && x + 1 < Board_Xsize && y + 1 < Board_Ysize) {
+				else if (a == 3 && board[x + 1][y + 1] == Coin_Space && board[x + 1][y + 2] != Coin_Space && x + 1 < Board_Xsize && y + 2 < Board_Ysize) {
 					CPU_j = x + 1;
+					TCPUcheck = true;
+				}
+				else {
+					CPU_RandomFall();
+				}
+			}
+			else if (board[x][y] == Coin_Player) {
+				if (a == 0 && board[x + b * dx[a]][(y - b * dy[a])] == Coin_Space && 0 <= (y - (b * dy[a]))) { //上に3つ続いていて、その上に何もないなら
+					CPU_j = x;
+					TPlayercheck = true;
+				}
+				//横3つ続いていて右端の一つ右に何もない時か、右斜めに3つ続いていてその右上に何もない時
+				else if (((a == 1 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space) && board[x + b * dx[a]][y - b * dy[a] + 1] != Coin_Space) || ((a == 2 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space) && board[x + b * dx[a]][y - b * dy[a] + 1] != Coin_Space)) {
+					CPU_j = x + (b * dx[a]);
+					TPlayercheck = true;
+				}
+				//横に3つ続いていてその左に何もない時か、右斜めに3つ続いていてその左下に何もない時
+				else if (((a == 1 && board[x - 1][y] == Coin_Space) && board[x - 1][y + 1] != Coin_Space && 0 <= (x - 1)) || ((a == 2 && board[x - 1][y + 1] == Coin_Space) && board[x - 1][y + 2] != Coin_Space && 0 <= (x - 1) && (y + 2) < Board_Ysize)) {
+					CPU_j = x - 1;
+					TPlayercheck = true;
+				}
+				//左斜めに3つ続いていて、その左上に何もない時
+				else if (a == 3 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space && board[x + b * dx[a]][y - b * dy[a] + 1] != Coin_Space) {
+					CPU_j = x + (b * dx[a]);
+					TPlayercheck = true;
+				}
+				//左斜めに3つ続いていて、その右下に何もない時
+				else if (a == 3 && board[x + 1][y + 1] == Coin_Space && board[x + 1][y + 2] != Coin_Space && x + 1 < Board_Xsize && y + 2 < Board_Ysize) {
+					CPU_j = x + 1;
+					TPlayercheck = true;
+				}
+				else {
+					CPU_RandomFall();
 				}
 			}
 		}
-		else if (CoinCheck == 1) { //3マスとも同じものがあったら
+		else if (DoubleCheck == 1 && CoinCheck == 0) { //2個続いていて、3個続いているものがない時
 			if (board[x][y] == Coin_CPU) {
-				if (a == 0 && board[x + b * dx[a]][(y - b * dy[a])] == Coin_Space && 0 <= (y - b * dy[a])) { //上に3つ続いていて、その上に何もないなら
+				//上に3つ続いていて、その上に何もないなら
+				if (a == 0 && board[x + b * dx[a]][(y - (b * dy[a]) + 1)] == Coin_Space && 0 <= (y - (b * dy[a]) + 1)) {
 					CPU_j = x;
+					DCPUcheck = true;
 				}
-				//横3つ続いていて右端の一つ右に何もない時か、右斜めに3つ続いていてその右上に何もない時
-				else if (((a == 1 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space) && board[x + b * dx[a]][y - b * dy[a] + 1] != Coin_Space) || ((a == 2 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space) && board[x + b * dx[a]][y - b * dy[a] + 1] != Coin_Space)) {
-					CPU_j = x + 3;
+				//横2つ続いていて右端の一つ右に何もない時か、右斜めに2つ続いていてその右上に何もない時
+				else if (((a == 1 && board[x + (b * dx[a]) - 1][y - b * dy[a]] == Coin_Space) && board[x + b * dx[a] - 1][y - b * dy[a] + 1] != Coin_Space) || ((a == 2 && board[x + b * dx[a] - 1][y - b * dy[a] + 1] == Coin_Space) && board[x + b * dx[a] - 1][y - b * dy[a] + 2] != Coin_Space)) {
+					CPU_j = x + (b * dx[a]) - 1;
+					DCPUcheck = true;
 				}
-				//横に3つ続いていてその左に何もない時か、右斜めに3つ続いていてその左下に何もない時
-				else if (((a == 1 && board[x - 1][y] == Coin_Space) && board[x - 1][y + 1] != Coin_Space && 0 <= (x - 1)) || ((a == 2 && board[x - 1][y + 1] == Coin_Space) && board[x - 1][y + 2] != Coin_Space && 0 <= (x - 1) && (y + 1) < Board_Ysize)) {
+				//横に2つ続いていてその左に何もない時か、右斜めに2つ続いていてその左下に何もない時
+				else if (((a == 1 && board[x - 1][y] == Coin_Space) && board[x - 1][y + 1] != Coin_Space && 0 <= (x - 1)) || ((a == 2 && board[x - 1][y + 1] == Coin_Space) && board[x - 1][y + 2] != Coin_Space && 0 <= (x - 1) && (y + 2) < Board_Ysize)) {
 					CPU_j = x - 1;
+					DCPUcheck = true;
 				}
-				//左斜めに3つ続いていて、その左上に何もない時
-				else if (a == 3 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space && board[x + b * dx[a]][y - b * dy[a] + 1] != Coin_Space) {
-					CPU_j = x - 3;
+				//左斜めに2つ続いていて、その左上に何もない時
+				else if (a == 3 && board[x + b * dx[a] + 1][y - b * dy[a] + 1] == Coin_Space && board[x + b * dx[a] + 1][y - b * dy[a] + 2] != Coin_Space) {
+					CPU_j = x + (b * dx[a]) + 1;
+					DCPUcheck = true;
 				}
-				//左斜めに3つ続いていて、その右下に何もない時
-				else if (a == 3 && board[x + 1][y + 1] == Coin_Space && board[x + 1][y + 2] != Coin_Space && x + 1 < Board_Xsize && y + 1 < Board_Ysize) {
+				//左斜めに2つ続いていて、その右下に何もない時
+				else if (a == 3 && board[x + 1][y + 1] == Coin_Space && board[x + 1][y + 2] != Coin_Space && x + 1 < Board_Xsize && y + 2 < Board_Ysize) {
 					CPU_j = x + 1;
+					DCPUcheck = true;
+				}
+				else {
+					CPU_RandomFall();
 				}
 			}
 			else if (board[x][y] == Coin_Player) {
-				if (a == 0 && board[x + b * dx[a]][(y - b * dy[a])] == Coin_Space && 0 <= (y - b * dy[a])) { //上に3つ続いていて、その上に何もないなら
-					CPU_j = x;
+				//横2つ続いていて右端の一つ右に何もない時か、右斜めに2つ続いていてその右上に何もない時
+				if (((a == 1 && board[x + (b * dx[a]) - 1][y - b * dy[a]] == Coin_Space) && board[x + b * dx[a] - 1][y - b * dy[a] + 1] != Coin_Space) || ((a == 2 && board[x + b * dx[a] - 1][y - b * dy[a] + 1] == Coin_Space) && board[x + b * dx[a] - 1][y - b * dy[a] + 2] != Coin_Space)) {
+					CPU_j = x + (b * dx[a]) - 1;
+					DPlayercheck = true;
 				}
-				//横3つ続いていて右端の一つ右に何もない時か、右斜めに3つ続いていてその右上に何もない時
-				else if (((a == 1 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space) && board[x + b * dx[a]][y - b * dy[a] + 1] != Coin_Space) || ((a == 2 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space) && board[x + b * dx[a]][y - b * dy[a] + 1] != Coin_Space)) {
-					CPU_j = x + 3;
-				}
-				//横に3つ続いていてその左に何もない時か、右斜めに3つ続いていてその左下に何もない時
-				else if (((a == 1 && board[x - 1][y] == Coin_Space) && board[x - 1][y + 1] != Coin_Space && 0 <= (x - 1)) || ((a == 2 && board[x - 1][y + 1] == Coin_Space) && board[x - 1][y + 2] != Coin_Space && 0 <= (x - 1) && (y + 1) < Board_Ysize)) {
+				//横に2つ続いていてその左に何もない時か、右斜めに2つ続いていてその左下に何もない時
+				else if (((a == 1 && board[x - 1][y] == Coin_Space) && board[x - 1][y + 1] != Coin_Space && 0 <= (x - 1)) || ((a == 2 && board[x - 1][y + 1] == Coin_Space) && board[x - 1][y + 2] != Coin_Space && 0 <= (x - 1) && (y + 2) < Board_Ysize)) {
 					CPU_j = x - 1;
+					DPlayercheck = true;
 				}
-				//左斜めに3つ続いていて、その左上に何もない時
-				else if (a == 3 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space && board[x + b * dx[a]][y - b * dy[a] + 1] != Coin_Space) {
-					CPU_j = x - 3;
+				//左斜めに2つ続いていて、その左上に何もない時
+				else if (a == 3 && board[x + b * dx[a] + 1][y - b * dy[a] + 1] == Coin_Space && board[x + b * dx[a] + 1][y - b * dy[a] + 2] != Coin_Space) {
+					CPU_j = x + (b * dx[a]) + 1;
+					DPlayercheck = true;
 				}
-				//左斜めに3つ続いていて、その右下に何もない時
-				else if (a == 3 && board[x + 1][y + 1] == Coin_Space && board[x + 1][y + 2] != Coin_Space && x + 1 < Board_Xsize && y + 1 < Board_Ysize) {
+				//左斜めに2つ続いていて、その右下に何もない時
+				else if (a == 3 && board[x + 1][y + 1] == Coin_Space && board[x + 1][y + 2] != Coin_Space && x + 1 < Board_Xsize && y + 2 < Board_Ysize) {
 					CPU_j = x + 1;
+					DPlayercheck = true;
+				}
+				else {
+					CPU_RandomFall();
 				}
 			}
 		}
 		else {
-			CPU_RandomFall();
+		CPU_RandomFall();
 		}
 	}
 }
@@ -535,38 +587,43 @@ void CF_Player::SpaceCheck(int board[Board_Xsize][Board_Ysize], int x, int y) {
 								//1個右が空いているか2個右が空いているとき
 								if (b == 1 && board[x][y] == board[x + b * dx[a] + 1][y - b * dy[a]] || (b == 2 && board[x][y] == board[x + b * dx[a] + 1][y - b * dy[a]])) {
 									CPU_j = x + b * dx[a]; 
+									break;
 								}
 							}
 							else if (a == 1) { //右上を見ているとき
 								//1個右上が空いているか2個右上が空いているとき
 								if (b == 1 && board[x][y] == board[x + b * dx[a] + 1][y - b * dy[a] - 1]|| (b == 2 && board[x][y] == board[x + b * dx[a] + 1][y - b * dy[a] - 1])) {
 									CPU_j = x + b * dx[a];
+									break;
 								}
 							}
 							else if (a == 2) { //左上を見ているとき
 								//1個左上が空いているか2個左上が空いているとき
 								if (b == 1 && board[x][y] == board[x + b * dx[a] - 1][y - b * dy[a] - 1] || (b == 2 && board[x][y] == board[x + b * dx[a] - 1][y - b * dy[a] - 1])) {
 									CPU_j = x + b * dx[a];
+									break;
 								}
 							}
-						}
-						else if (board[x][y] == Coin_Player) {
+						}else if (board[x][y] == Coin_Player) {
 							if (a == 0) { //右を見ているとき
 								//1個右が空いているか2個右が空いているとき
 								if (b == 1 && board[x][y] == board[x + b * dx[a] + 1][y - b * dy[a]] || (b == 2 && board[x][y] == board[x + b * dx[a] + 1][y - b * dy[a]])) {
 									CPU_j = x + b * dx[a];
+									break;
 								}
 							}
 							else if (a == 1) { //右上を見ているとき
 								//1個右上が空いているか2個右上が空いているとき
 								if (b == 1 && board[x][y] == board[x + b * dx[a] + 1][y - b * dy[a] - 1] || (b == 2 && board[x][y] == board[x + b * dx[a] + 1][y - b * dy[a] - 1])) {
 									CPU_j = x + b * dx[a];
+									break;
 								}
 							}
 							else if (a == 2) {//左上を見ているとき
 								//1個左上が空いているか2個左上が空いているとき
 								if (b == 1 && board[x][y] == board[x + b * dx[a] - 1][y - b * dy[a] - 1] || (b == 2 && board[x][y] == board[x + b * dx[a] - 1][y - b * dy[a] - 1])) {
 									CPU_j = x + b * dx[a];
+									break;
 								}
 							}
 						}

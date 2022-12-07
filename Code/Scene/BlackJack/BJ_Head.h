@@ -18,5 +18,7 @@
 #include"BJ_Main.h"
 #include"BJ_Slider.h"
 
+#include"Pose.h"
+
 #include"./../Code/GetKey.h"
 #include"./../../ConstVal.h"

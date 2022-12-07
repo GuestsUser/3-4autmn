@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+
 /*プレイヤークラス*/
 class Player : public Dealer {
 
@@ -11,7 +12,10 @@ private:
   int std_x, std_y, std_w, std_h;
   int spt_x, spt_y, spt_w, spt_h;
   int dbl_x, dbl_y, dbl_w, dbl_h;
-  //int bet_x, bet_y, bet_w, bet_h;
+  float hit_r, std_r, spt_r, dbl_r;
+
+  int hit_img, std_img, spt_img, dbl_img;
+  
 
   int spt_type;
   int hit_num;
@@ -42,6 +46,7 @@ public:
   void Initialize();           /*変数初期化*/
   void Update();
   void Draw();
+  void Debug_Draw(bool);
 
   int P_MaxCoin();
 

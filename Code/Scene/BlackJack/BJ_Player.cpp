@@ -1,4 +1,5 @@
 ﻿#include"BJ_Head.h"
+BlackJack BJ;
 
   /*コンストラクタ*/
 Player::Player() {
@@ -33,21 +34,16 @@ Player::Player() {
   img_x = 600;
   img_y = 560;
 
-  hit_x = 800;
+  hit_x = 755;
   hit_y = std_y = dbl_y = spt_y = 650;
-  //bet_y = 650;
 
-  std_x = hit_x + 80;
-  dbl_x = hit_x + 200;
-  spt_x = hit_x + 320;
-  //bet_x = 420;  bet_y = 650;
+  std_x = hit_x + 125;
+  dbl_x = hit_x + 245;
+  spt_x = hit_x + 365;
 
-  hit_w = 60;
-  std_w = 95;
-  dbl_w = spt_w = 110;
-  //bet_w = 60;
-  //bet_h = 60;  bet_x = 420;  bet_y = 650;
-  hit_h = std_h = dbl_h = spt_h = 60;
+  hit_w = std_w = dbl_w = spt_w = 105;
+  hit_h = std_h = dbl_h = spt_h = 42;
+  hit_r = std_r = spt_r = dbl_r = 1;
 
   for (int i = 0; i < 5; i++) {
 
@@ -80,7 +76,7 @@ void Player::Initialize() {
   /*bool*/
   split = false;
   spt_flg = false;
-
+  D_spt_dbl = false;
   D_dbl = false;
 
   hit = std = dbl = spt = bet = false;
@@ -91,271 +87,52 @@ void Player::Initialize() {
   now_game_flg = true;
   /*bool*/
 
+
+  hit_img = LoadGraph("Resource/image/BJ_Image/Hit_105.png");
+  std_img = LoadGraph("Resource/image/BJ_Image/Stand_105.png");
+  dbl_img = LoadGraph("Resource/image/BJ_Image/Double_105.png");
+  spt_img = LoadGraph("Resource/image/BJ_Image/Split_105.png");
+
 }
 
 void Player::Update() {
 
-  DrawFormatString(0, 0, 0xffffff, "%d", game_flg);
-
-}
-
-void Player::Draw() {
-
-  SetFontSize(32);
-  /*ボタン表示*/
-  DrawFormatString(hit_x, hit_y, 0xffffff, "Hit");
-  DrawFormatString(std_x, std_y, 0xffffff, "Stand");
-  if (hand_num == 2 || spt_hand_num == 2)DrawFormatString(dbl_x, dbl_y, 0xffffff, "Double");
-
-  if (spt_flg) {
-
-    DrawFormatString(spt_x, spt_y, 0xffffff, "Split");
-
+  if (hit) {
+    hit_r = 1.2;
+    hit = false;
   }
-  /*ボタン表示*/
-  /*所持金表示*/
-  if (!split) {
+  else hit_r = 1;
+  //if (spt) {
+  //  spt_r = 1.2;
+  //}
+  //else spt_r = 1;
 
-    if (D_dbl)DrawFormatString(500, 630, 0xffffff, "掛金：%d", bet_coin * 2);
-    else DrawFormatString(500, 630, 0xffffff, "掛金：%d", bet_coin);
+  if (!std)std_r = 1;
+  if (!dbl)dbl_r = 1;
 
-  }
-  else {
-
-    DrawFormatString(440, 630, 0xffffff, "%d", bet_coin);
-    DrawFormatString(640, 630, 0xffffff, "%d", spt_bet_coin);
-  }
-  DrawFormatString(500, 680, 0xffffff, "所持金：%d", p_coin);
-  /*所持金表示*/
-  SetFontSize(DEFAULT_FONT_SIZE);
-
-  Player::Show_Hand();
-  if (split) {
-    Player::Spt_Show_Hand();
-  }
-  Player::Show_Play();
-
-  /*デバッグ用*/
-  //DrawFormatString(spt_x, spt_y/100+40, color, "%d",hit+c);
-  //DrawFormatString(spt_x, spt_y / 100 +60, color2, "%d",std+c2);
-  //DrawFormatString(spt_x, spt_y / 100 +80, color3, "%d",dbl+c3);
-  //DrawFormatString(spt_x, spt_y / 100 +100, color4, "%d",spt+c4);
-  //DrawFormatString(spt_x+40, spt_y / 100 +40, color4, "p_coin：%d",p_coin);
-  //DrawFormatString(spt_x+40, spt_y / 100 +80, color4, "spt_num：%d",spt_hand_num);
-  //DrawFormatString(spt_x+40, spt_y / 100 +60, color4, "spt_a：%d",spt_a);
-
-  //DrawFormatString(spt_x+40, spt_y / 100 +100, color4, "%d",dealer_calc);
-
-  //DrawFormatString(spt_x-80, spt_y / 100 +40, 0xffffff, "%Win %d",win);
-  //DrawFormatString(spt_x-80, spt_y / 100 +60, 0xffffff, "Los %d",los);
-  //DrawFormatString(spt_x-80, spt_y / 100 +80, 0xffffff, "psh %d",psh);
-  //DrawFormatString(spt_x-80, spt_y / 100 +100, 0xffffff, "BlJ %d",BlackJack);
-  //DrawFormatString(spt_x-80, spt_y / 100 +120, 0xffffff, "bst %d",bst);
-  //DrawFormatString(spt_x-80, spt_y / 100 +140, 0xffffff, "spt_win %d",spt_win);
-  //DrawFormatString(spt_x-80, spt_y / 100 +160, 0xffffff, "spt_bst %d",spt_bst);
-  //DrawFormatString(spt_x-80, spt_y / 100 +180, 0xffffff, "spt_los %d",spt_los);
-  //DrawFormatString(spt_x-80, spt_y / 100 +200, 0xffffff, "spt_psh %d",spt_psh);
-  /*デバッグ用*/
-
-
-
-
-}
-/*カードの追加*/
-void Player::Hit(Shoe* shoe) {    /*shoeオブジェクトポインタ*/
-
-  if (split) {
-
-    if (spt_hand_num < 2) {
-
-      if (hand_num >= 2) {
-        spt_hand.push_back(hand[1]);
-        hand.pop_back();
-        hand_num--;
-      }
-      spt_hand.push_back(shoe->Take_Card());
-      spt_hand_num++;
-
-    }
-    else {
-
-      if (hit_num < 1) {
-        /*配列の最後にカードを追加*/
-        hand.push_back(shoe->Take_Card());
-        hand_num++;   /*手札枚数を増やす*/
-
-      }
-      else {
-        /*配列の最後にカードを追加*/
-        spt_hand.push_back(shoe->Take_Card());
-        spt_hand_num++;   /*手札枚数を増やす*/
-      }
-
-
-    }
-
-  }
-  else {
-
-    /*配列の最後にカードを追加*/
-    hand.push_back(shoe->Take_Card());
-    hand_num++;   /*手札枚数を増やす*/
-
-  }
-
-}
-
-/*手札を表示*/
-void Player::Show_Hand() {
-  /*標準出力*/
-
-  /*配列の最初から最後までを順に表示*/
-  for (int i = 0; i < hand_num; i++) {
-    /*カードの種類（スペード、ハート、ダイヤ、クラブ）を探索*/
-    type = (hand[i] % 52) / 13;   /*デッキごとに分けた後、13で割った数（0-3）で4種類を分割*/
-
-    if (!split) {
-      DrawRotaGraph(img_x + i * 30, img_y, img_size, 0, card_type[type][hand[i] % 13], 1);
-    }
-    else {
-      DrawRotaGraph(img_x - 120 + i * 30, img_y, img_size, 0, card_type[type][hand[i] % 13], 1);
-    }
-
-  }
-
-  SetFontSize(60);
-  if (!split) {
-    DrawFormatString(570, 440, 0, "%d\n", Player::Calc());
-  }
-  else {
-    DrawFormatString(460, 440, 0, "%d\n", Player::Calc());
-  }
-  SetFontSize(DEFAULT_FONT_SIZE);
-
-}
-/*手札を表示*/
-void Player::Spt_Show_Hand() {
-  /*標準出力*/
-
-  /*配列の最初から最後までを順に表示*/
-  for (int i = 0; i < spt_hand_num; i++) {
-    /*カードの種類（スペード、ハート、ダイヤ、クラブ）を探索*/
-    spt_type = (spt_hand[i] % 52) / 13;   /*デッキごとに分けた後、13で割った数（0-3）で4種類を分割*/
-
-    /*アニメーション予定地_Player_spt*/
-    DrawRotaGraph(img_x + 80 + i * 30, img_y, img_size, 0, card_type[spt_type][spt_hand[i] % 13], 1);
-
-  }
-
-  SetFontSize(60);
-  DrawFormatString(650, 440, 0, "%d\n", Player::Spt_Calc());
-  SetFontSize(DEFAULT_FONT_SIZE);
-
-}
-
-void Player::Show_Play() {
-
-  if (!split) {
-
-    if (win) {
-
-      if (D_bst) {
-
-        DrawRotaGraph(620, 300, 1, 0, btn_hdl[2], 1);
-        if (BlackJack)DrawRotaGraph(620, 400, 1, 0, btn_hdl[4], 1);
-        else DrawRotaGraph(620, 400, 1, 0, btn_hdl[0], 1);
-
-      }
-      else if (BlackJack) {
-
-        DrawRotaGraph(620, 400, 1, 0, btn_hdl[4], 1);
-
-      }
-      else {
-        if (!BlackJack)DrawRotaGraph(620, 400, 1, 0, btn_hdl[0], 1);
-      }
-
-    }
-    else if (los) {
-
-      if (bst) {
-
-        DrawRotaGraph(620, 400, 1, 0, btn_hdl[2], 1);
-
-      }
-      else {
-
-        DrawRotaGraph(620, 400, 1, 0, btn_hdl[1], 1);
-
-      }
-
-    }
-    else if (psh) {
-
-      DrawRotaGraph(620, 400, 1, 0, btn_hdl[3], 1);
-
-    }
-
-  }
-  else if (split) {
-
-    if (D_bst) {
-      DrawRotaGraph(620, 300, 1, 0, btn_hdl[2], 1);
-    }
-    if (BlackJack) {
-      DrawRotaGraph(620, 400, 1, 0, btn_hdl[4], 1);
-    }
-    if (spt_BJ) {
-      //DrawFormatString(0, 620, 0xffffff, "BlackJack\n");
-      DrawRotaGraph(620, 400, 1, 0, btn_hdl[4], 1);
-    }
-    if (win) {
-      //DrawFormatString(100, 640, 0xffffff, "手札1の勝ち\n");
-      DrawRotaGraph(490, 400, 1, 0, btn_hdl[0], 1);
-    }
-    if (spt_win) {
-      //DrawFormatString(100, 620, 0xffffff, "手札2の勝ち\n");
-      DrawRotaGraph(700, 400, 1, 0, btn_hdl[0], 1);
-    }
-    if (los && !bst) {
-      //DrawFormatString(100, 600, 0xffffff, "手札1の負け\n");
-      DrawRotaGraph(490, 400, 1, 0, btn_hdl[1], 1);
-    }
-    else if (bst) {
-      //DrawFormatString(100, 580, 0xffffff, "手札1のバスト\n");
-      DrawRotaGraph(490, 400, 1, 0, btn_hdl[2], 1);
-    }
-    if (spt_los && !spt_bst) {
-      //DrawFormatString(100, 560, 0xffffff, "手札2の負け\n");
-      DrawRotaGraph(700, 400, 1, 0, btn_hdl[1], 1);
-    }
-    else if (spt_bst) {
-      //DrawFormatString(100, 540, 0xffffff, "手札2のバスト\n");
-      DrawRotaGraph(700, 400, 1, 0, btn_hdl[2], 1);
-    }
-    if (psh) {
-      //DrawFormatString(100, 520, 0xffffff, "手札1の引き分け\n");
-      DrawRotaGraph(490, 400, 1, 0, btn_hdl[3], 1);
-    }
-    if (spt_psh) {
-      //DrawFormatString(100, 500, 0xffffff, "手札2の引き分け\n");
-      DrawRotaGraph(700, 400, 1, 0, btn_hdl[3], 1);
-    }
-
-  }
-
-  //DrawRotaGraph(490, 400, 1, 0, btn_hdl[0], 1);
-  //DrawRotaGraph(700, 400, 1, 0, btn_hdl[0], 1);
 }
 
 /*ゲーム実行*/
 bool Player::Play(Shoe* shoe) {
 
+
   if (game_flg) {
     /*ボタン処理（hit,stand,double,splite）*/
     hit = Player::ButtonHit(hit_x, hit_y, hit_w, hit_h);
-    spt = Player::ButtonHit(spt_x, spt_y, spt_w, spt_h);
+    //spt = Player::ButtonHit(spt_x, spt_y, spt_w, spt_h);
+    if (Player::ButtonHit(spt_x, spt_y, spt_w, spt_h) && !spt) {
+      spt = true;
+      spt_r = 1.2;
+    }
+    else spt_r = 1;
+    if (spt && spt_flg) {
+      //spt_r = 1;
+      if (BJ.Wait_Time(0.5)) {
+        
+        spt_flg = false;
+      } 
 
+    }
     if (Player::ButtonHit(std_x, std_y, std_w, std_h) || dbl) {
       std = true;
     }
@@ -371,6 +148,10 @@ bool Player::Play(Shoe* shoe) {
 
     /*ボタン処理（hit,stand,double,splite）*/
   }
+
+  //if (spt_flg) {
+  //  if (BJ.Wait_Time(0.7))spt_flg = false;
+  //}
 
   /*バーストするまでループ処理*/
   if (game_flg) {
@@ -412,18 +193,17 @@ bool Player::Play(Shoe* shoe) {
         }
         /*standが入力された場合*/
         else if (std) {
-
+          std_r = 1.2;
           /*勝負開始して返り値をtrueとして終了*/
           game_flg = false;
           std = false;
-          //bet_flg = true;
           now_game_flg = false;
           return true;
 
         }
         /*doubleが入力された場合*/
         else if (dbl && hand_num <= 2) {
-
+          dbl_r = 1.2;
           /*カードを引いて勝負開始*/
           Player::Hit(shoe);
           Player::Set_Bet(bet_coin);
@@ -513,13 +293,14 @@ bool Player::Play(Shoe* shoe) {
         }
         /*standが入力された場合*/
         else if (std) {
+          std_r = 1.2;
           if (hit_num < 1) {
 
             hit_num++;
 
           }
           else {
-
+            hit_num = 2;
             /*勝負開始して返り値をtrueとして終了*/
             game_flg = false;
             now_game_flg = false;
@@ -532,15 +313,16 @@ bool Player::Play(Shoe* shoe) {
         }
         /*doubleが入力された場合*/
         else if (dbl && (hand_num <= 2 || spt_hand_num <= 2)) {
-
+          dbl_r = 1.2;
           /*カードを引いて勝負開始*/
-          if (hand_num == 2) {
+          if (hand_num <= 2 && hit_num < 1) {
             Set_Bet(bet_coin);
             bet_coin *= 2;
+            D_dbl = true;
           }
-          if (spt_hand_num == 2 && hand_num > 2) {
+          if (spt_hand_num <= 2 && hit_num >= 1) {
             Set_Bet(spt_bet_coin);
-            bet_coin *= 2;
+            if (D_dbl)bet_coin *= 2;
             spt_bet_coin *= 2;
             D_spt_dbl = true;
           }
@@ -574,12 +356,288 @@ bool Player::Play(Shoe* shoe) {
 
     }
   }
-  else { now_game_flg = false; }
+  else {
+  now_game_flg = false;
+  std_r = 1;
+ }
 
   /*バーストしているのでfalseを返して終了*/
   return false;
 
 }
+void Player::Draw() {
+
+  SetFontSize(32);
+  /*ボタン表示*/
+  //DrawFormatString(hit_x, hit_y, 0xffffff, "Hit");
+  //DrawFormatString(std_x, std_y, 0xffffff, "Stand");
+  DrawRotaGraph(hit_x + hit_w / 2, hit_y + hit_h / 2, hit_r, 0, hit_img, true);
+  DrawRotaGraph(std_x + std_w / 2, std_y + std_h / 2, std_r, 0, std_img, true);
+  //DrawRotaGraph(dbl_x + dbl_w / 2, dbl_y + dbl_h / 2, dbl_r, 0, dbl_img, true);
+  if (hand_num == 2 || spt_hand_num == 2) {
+    //DrawFormatString(dbl_x, dbl_y, 0xffffff, "Double");
+    DrawRotaGraph(dbl_x + dbl_w / 2, dbl_y + dbl_h / 2, dbl_r, 0, dbl_img, true);
+  }
+
+  if (spt_flg) {
+
+    //DrawFormatString(spt_x, spt_y, 0xffffff, "Split");
+    DrawRotaGraph(spt_x + spt_w / 2, spt_y + spt_h / 2, spt_r, 0, spt_img, true);
+
+  }
+  /*ボタン表示*/
+  /*所持金表示*/
+  if (!split) {
+
+    DrawFormatString(500, 630, 0xffffff, "掛金：%d", bet_coin);
+
+  }
+  else {
+    //if (hit_num >=1) {
+    //  DrawGraph(440, 530, std_img, true);
+    //}
+    //if (hit_num >= 2) {
+    //  DrawGraph(640, 530, std_img, true);
+    //}
+    DrawFormatString(440, 630, 0xffffff, "%d", bet_coin);
+    DrawFormatString(640, 630, 0xffffff, "%d", spt_bet_coin);
+  }
+  DrawFormatString(500, 680, 0xffffff, "所持金：%d", p_coin);
+  /*所持金表示*/
+  SetFontSize(DEFAULT_FONT_SIZE);
+
+  Player::Show_Hand();
+  if (split) {
+    Player::Spt_Show_Hand();
+  }
+  Player::Show_Play();
+
+  /*デバッグ用*/
+  Player::Debug_Draw(true);
+  /*デバッグ用*/
+
+}
+void Player::Debug_Draw(bool debug) {
+
+  if (debug) {
+
+    //DrawFormatString(spt_x, spt_y/100+40, color, "%d",hit+c);
+    //DrawFormatString(spt_x, spt_y / 100 +60, color2, "%d",std+c2);
+    //DrawFormatString(spt_x, spt_y / 100 +80, color3, "%d",dbl+c3);
+    //DrawFormatString(spt_x, spt_y / 100 +100, color4, "%d",spt+c4);
+    //DrawFormatString(spt_x+40, spt_y / 100 +40, color4, "p_coin：%d",p_coin);
+    //DrawFormatString(spt_x+40, spt_y / 100 +80, color4, "spt_num：%d",spt_hand_num);
+    //DrawFormatString(spt_x+40, spt_y / 100 +60, color4, "spt_a：%d",spt_a);
+
+    //DrawFormatString(spt_x+40, spt_y / 100 +100, color4, "%d",dealer_calc);
+
+    DrawFormatString(spt_x - 80, spt_y / 100 + 40, 0xffffff, "%Win %d", win);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 60, 0xffffff, "Los %d", los);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 80, 0xffffff, "psh %d", psh);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 100, 0xffffff, "BlJ %d", BlackJack);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 120, 0xffffff, "bst %d", bst);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 140, 0xffffff, "spt_win %d", spt_win);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 160, 0xffffff, "spt_bst %d", spt_bst);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 180, 0xffffff, "spt_los %d", spt_los);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 200, 0xffffff, "spt_psh %d", spt_psh);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 220, 0xffffff, "D_dbl %d", D_dbl);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 240, 0xffffff, "D_spt_dbl %d", D_spt_dbl);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 260, 0xffffff, "hit_num %d", hit_num);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 280, 0xffffff, "pose %d", pose);
+
+  }
+
+}
+/*カードの追加*/
+void Player::Hit(Shoe* shoe) {    /*shoeオブジェクトポインタ*/
+
+  if (split) {
+
+    if (spt_hand_num < 2) {
+
+      if (hand_num >= 2) {
+        spt_hand.push_back(hand[1]);
+        hand.pop_back();
+        hand_num--;
+      }
+      spt_hand.push_back(shoe->Take_Card());
+      spt_hand_num++;
+
+    }
+    else {
+
+      if (hit_num < 1) {
+        /*配列の最後にカードを追加*/
+        hand.push_back(shoe->Take_Card());
+        hand_num++;   /*手札枚数を増やす*/
+
+      }
+      else {
+        /*配列の最後にカードを追加*/
+        spt_hand.push_back(shoe->Take_Card());
+        spt_hand_num++;   /*手札枚数を増やす*/
+      }
+
+
+    }
+
+  }
+  else {
+
+    /*配列の最後にカードを追加*/
+    hand.push_back(shoe->Take_Card());
+    hand_num++;   /*手札枚数を増やす*/
+
+  }
+
+}
+
+/*手札を表示*/
+void Player::Show_Hand() {
+  /*標準出力*/
+
+  /*配列の最初から最後までを順に表示*/
+  for (int i = 0; i < hand_num; i++) {
+    /*カードの種類（スペード、ハート、ダイヤ、クラブ）を探索*/
+    type = (hand[i] % 52) / 13;   /*デッキごとに分けた後、13で割った数（0-3）で4種類を分割*/
+
+    if (!split) {
+      DrawRotaGraph(img_x + i * 30, img_y, img_size, 0, card_type[type][hand[i] % 13], 1);
+    }
+    else {
+      DrawRotaGraph(img_x - 120 + i * 30, img_y, img_size, 0, card_type[type][hand[i] % 13], 1);
+    }
+
+  }
+
+  SetFontSize(60);
+  if (!split) {
+    DrawFormatString(570, 440, 0, "%d\n", Player::Calc());
+  }
+  else {
+    DrawFormatString(460, 440, 0, "%d\n", Player::Calc());
+  }
+  SetFontSize(DEFAULT_FONT_SIZE);
+
+}
+/*手札を表示*/
+void Player::Spt_Show_Hand() {
+  /*標準出力*/
+
+  /*配列の最初から最後までを順に表示*/
+  for (int i = 0; i < spt_hand_num; i++) {
+    /*カードの種類（スペード、ハート、ダイヤ、クラブ）を探索*/
+    spt_type = (spt_hand[i] % 52) / 13;   /*デッキごとに分けた後、13で割った数（0-3）で4種類を分割*/
+
+    /*アニメーション予定地_Player_spt*/
+    DrawRotaGraph(img_x + 80 + i * 30, img_y, img_size, 0, card_type[spt_type][spt_hand[i] % 13], 1);
+    if (hit_num >= 1) {
+      DrawGraph(440, 530, std_img, true);
+    }
+    if (hit_num >= 2) {
+      DrawGraph(640, 530, std_img, true);
+    }
+  }
+
+  SetFontSize(60);
+  DrawFormatString(650, 440, 0, "%d\n", Player::Spt_Calc());
+  SetFontSize(DEFAULT_FONT_SIZE);
+
+}
+
+void Player::Show_Play() {
+
+  if (!split) {
+
+    if (win) {
+
+      if (D_bst) {
+
+        DrawRotaGraph(620, 300, 1, 0, btn_hdl[2], 1);
+        if (BlackJack)DrawRotaGraph(620, 400, 1, 0, btn_hdl[4], 1);
+        else DrawRotaGraph(620, 400, 1, 0, btn_hdl[0], 1);
+
+      }
+      else if (BlackJack) {
+
+        DrawRotaGraph(620, 400, 1, 0, btn_hdl[4], 1);
+
+      }
+      else {
+        if (!BlackJack)DrawRotaGraph(620, 400, 1, 0, btn_hdl[0], 1);
+      }
+
+    }
+    else if (los) {
+
+      if (bst) {
+
+        DrawRotaGraph(620, 400, 1, 0, btn_hdl[2], 1);
+
+      }
+      else {
+
+        DrawRotaGraph(620, 400, 1, 0, btn_hdl[1], 1);
+
+      }
+
+    }
+    else if (psh) {
+
+      DrawRotaGraph(620, 400, 1, 0, btn_hdl[3], 1);
+
+    }
+
+  }
+  else if (split) {
+
+    if (D_bst) {
+      DrawRotaGraph(620, 300, 1, 0, btn_hdl[2], 1);
+    }
+    if (BlackJack) {
+      DrawRotaGraph(620, 410, 1, 0, btn_hdl[4], 1);
+    }
+    if (spt_BJ) {
+      //DrawFormatString(0, 620, 0xffffff, "BlackJack\n");
+      DrawRotaGraph(620, 410, 1, 0, btn_hdl[4], 1);
+    }
+    if (win) {
+      //DrawFormatString(100, 640, 0xffffff, "手札1の勝ち\n");
+      DrawRotaGraph(490, 410, 1, 0, btn_hdl[0], 1);
+    }
+    if (spt_win) {
+      //DrawFormatString(100, 620, 0xffffff, "手札2の勝ち\n");
+      DrawRotaGraph(700, 410, 1, 0, btn_hdl[0], 1);
+    }
+    if (los && !bst) {
+      //DrawFormatString(100, 600, 0xffffff, "手札1の負け\n");
+      DrawRotaGraph(490, 410, 1, 0, btn_hdl[1], 1);
+    }
+    else if (bst) {
+      //DrawFormatString(100, 580, 0xffffff, "手札1のバスト\n");
+      DrawRotaGraph(490, 410, 1, 0, btn_hdl[2], 1);
+    }
+    if (spt_los && !spt_bst) {
+      //DrawFormatString(100, 560, 0xffffff, "手札2の負け\n");
+      DrawRotaGraph(700, 410, 1, 0, btn_hdl[1], 1);
+    }
+    else if (spt_bst) {
+      //DrawFormatString(100, 540, 0xffffff, "手札2のバスト\n");
+      DrawRotaGraph(700, 410, 1, 0, btn_hdl[2], 1);
+    }
+    if (psh) {
+      //DrawFormatString(100, 520, 0xffffff, "手札1の引き分け\n");
+      DrawRotaGraph(490, 410, 1, 0, btn_hdl[3], 1);
+    }
+    if (spt_psh) {
+      //DrawFormatString(100, 500, 0xffffff, "手札2の引き分け\n");
+      DrawRotaGraph(700, 410, 1, 0, btn_hdl[3], 1);
+    }
+
+  }
+
+}
+
 
 
 void Player::Score(Player player, Dealer dealer) {   /*プレイヤーとディーラーのスコア勝負*/
@@ -778,3 +836,21 @@ bool Player::ButtonHit(int x,int y,int w,int h) {
   }
 
 }
+
+//bool BlackJack::Wait_Time(float time) {
+//  wait_time = time * FPS;
+//
+//  while (1) {
+//    if (time_count < wait_time) {
+//
+//      time_count++;
+//      return false;
+//    }
+//    else
+//    {
+//      return true;
+//      break;
+//    }
+//  }
+//
+//}
