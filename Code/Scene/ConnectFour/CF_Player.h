@@ -22,6 +22,8 @@ private:
 	int CF_StartSE; //先攻後攻を表示する時のSE
 	int CF_ClickSE;
 	int CF_CoinFallSE;
+	int Pause_Cursol;
+	int Pause_Click;
 	int Pause_Button;
 	int Pause_Back;
 	int Pause_Continue;
@@ -57,10 +59,8 @@ private:
 	bool CF_ClearText; //勝利者を出すテキストを出すフラグ
 	bool PauseFlg;
 
-	bool DCPUcheck;
-	bool DPlayercheck;
-	bool TCPUcheck;
-	bool TPlayercheck;
+	bool Pause_OneClick;
+	bool Pause_OneCursol;
 
 public:
 	void CF_Player_Initialize(Scene* scene);
@@ -71,6 +71,7 @@ public:
 	void Coin_Fall();
 	void Board_Init();
 	void ChangeTurn(int *PlayUser);
+	void SpaceDoubleCheck(int board[Board_Xsize][Board_Ysize], int x, int y);
 	void SpaceCheck(int board[Board_Xsize][Board_Ysize], int x, int y);
 	void CPU_CoinCheck(int board[Board_Xsize][Board_Ysize], int x, int y);
 	void CPU_RandomFall();
