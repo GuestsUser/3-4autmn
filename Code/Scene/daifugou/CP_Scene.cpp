@@ -6,6 +6,9 @@ CP_Scene::CP_Scene(){
 	//Player->CP_Player_Initialize();
 	Player = new CP();
 	Player->Player_Initialize();
+	
+	
+	
 }
 CP_Scene::~CP_Scene() {
 	//delete Player;
@@ -19,13 +22,12 @@ void CP_Scene::Update() {
 	Player->elevenback();//11バック
 	Player->datareset();//データをセット
 	Player->d3start();//ダイヤ3を持っている人からスタート
-	Player->title();//タイトル※こいつは消す
-	Player->main();
 	Player->dealcards();
 	Player->revolution();
-	Player->elevenback();
 }
 
 void CP_Scene::Draw() {
-	Player->CP_Player_Draw();
+	//Player->title();//タイトル※こいつは消す
+	Player->Player_Draw();
+	/*Player->main();*/
 }

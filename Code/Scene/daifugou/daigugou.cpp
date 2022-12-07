@@ -28,6 +28,7 @@ struct player data[4] = {
 int stage;
 int card_type[54];
 int cards[54]; /* 山札 */
+int hand[15];
 int order[4]; /* 誰から始めるか */
 int trash[15] = { 0 }; /* ﾄﾗｯｼｭ */
 int produce[2][15]; /* 出す手札 */
@@ -38,12 +39,12 @@ char mark[5] = { 'C','D','S','H','J' };/* トランプのマーク */
 
 void CP::Player_Initialize() {
 	stage = LoadGraph("Resource/image/CareerPoker.png");//背景画像
-	LoadDivGraph("Resource/image/toranpu_all.png", 53, 13, 5, 200, 300, card_type, TRUE);
+	LoadDivGraph("Resource/image/toranpu_all.png", 53, 13, 5, 200, 300, hand, TRUE);
 }
 void CP::Player_Finalize() {
 	DeleteGraph(stage);
 	for (int i = 0; i < 53; i++) {
-		DeleteGraph(card_type[i]);
+		DeleteGraph(hand[i]);
 	}
 }
 void CP::onesec() {
@@ -120,23 +121,12 @@ void sort(int sort_x, int* sort_y, int sort_z) {
 	}
 }
 
-void CP::title() {
-	printf("\n\n");
-	printf("　大　　富　　豪　\n");
-	onesec();
-	printf("[ルール]\n");
-	printf("・8切り,11バック　\n");
-	printf("・2枚出し～6枚出し(JK含め),革命　\n");
-	printf("・8,JK,2(革命中は3)であがると反則　\n");
-	printf("・一度パスしたらそのターンは出せない　\n");
-	onesec();
-}
-
 void CP::deckmake() {
 	/* 山札作成 */
 	int i;
 	for (i = 0; i <= 53; i++)
 		cards[i] = i + 1;
+	DrawFormatString(50, 350, GetColor(255, 255, 255), "山札を生成しました。");
 }
 
 void CP::datareset() {
@@ -336,16 +326,6 @@ void CP::sort(int sort_x, int* sort_y, int sort_z) {
 	}
 }
 
-void title() {
-	printf("\n\n");
-	printf("　大　　富　　豪　\n");
-	printf("[ルール]\n");
-	printf("・8切り,11バック　\n");
-	printf("・2枚出し～6枚出し(JK含め),革命　\n");
-	printf("・8,JK,2(革命中は3)であがると反則　\n");
-	printf("・一度パスしたらそのターンは出せない　\n");
-	//onesec();
-}
 
 
 int judg2(int n) {
@@ -499,12 +479,11 @@ void CP::pl_routine(int n) {
 	}
 }
 
-void CP::CP_Player_Draw() {
-	int i=1;
-	DrawRotaGraph(640, 360, 1.0, 0, stage, TRUE);
+void CP::Player_Draw() {
 	
-	DrawRotaGraph(200,80,1.0,0,card_type[i],TRUE);
-	i = 0;
+	DrawRotaGraph(640, 360, 1.0, 0, stage, TRUE);
+
+		DrawRotaGraph(200, 80, 0.3, 0,hand[i],TRUE);
 }
 
 void CP::cp_routine(int n) {
@@ -519,7 +498,7 @@ void CP::cp_routine(int n) {
 			for (i = 0; i < 10; i++) {
 
 				for (j = 1; j <= produce[0][0]; j++)
-					produce[0][j] = (rand() % data[n].hand[0]) + 1;
+					//produce[0][j] = (rand() % data[n].hand[0]) + 1;
 
 				if (judg(n) == 1) {
 					arrange(n);
@@ -613,8 +592,6 @@ void CP::main() {
 	int i = 0;
 	srand(time(NULL));
 
-
-	title();
 	deckmake();
 
 	while (1) {

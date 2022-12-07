@@ -2,15 +2,14 @@
 
 class CP {
 private:
-	
+	int i, j, x, y;
 
 public:
 	void Player_Initialize();//済
 	void Player_Finalize();//済
 	//void CP_Player_Update();
-	void CP_Player_Draw();
+	void Player_Draw();
 	void onesec();//済
-	void title();//済
 	void deckmake();//山札生成//済
 	void datareset();//データの設定
 	void deckshuffle();//シャッフル
