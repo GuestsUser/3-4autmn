@@ -153,6 +153,7 @@ bool Player::Play(Shoe* shoe) {
     /*ボタン処理（hit,stand,double,splite）*/
   }
 
+  //Player::P_BJ();
 
   /*バーストするまでループ処理*/
   if (game_flg) {
@@ -834,6 +835,22 @@ bool Player::ButtonHit(int x,int y,int w,int h) {
   }
   else {
     return false;
+  }
+
+}
+
+bool Player::P_BJ() {
+
+  if (split) {
+
+    if (BlackJack && spt_BJ) {
+      return BlackJack;
+    }
+
+  }
+  else {
+
+    return BlackJack;
   }
 
 }

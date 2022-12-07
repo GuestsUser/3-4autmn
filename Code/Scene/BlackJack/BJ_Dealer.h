@@ -29,6 +29,11 @@ protected:
   int img_x;
   int img_y;
 
+  int Anim_x[5];
+  int Anim_y[5];
+  int Anim_max[5];
+  bool Anim;
+
   const int yama_x = 1200;
   const int yama_y = 350;
 
@@ -60,6 +65,7 @@ public:
   int Spt_Calc();          /*スプリット時のスコアの計算*/
 
   bool BlackJack();
+  bool Anim_Flg(int max,int x,int y);
 
   virtual int Set_Magnification(float setrate,int getcoin);
   virtual void Show_Hand();        /*手札を表示*/

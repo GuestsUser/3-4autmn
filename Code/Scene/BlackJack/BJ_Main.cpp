@@ -70,7 +70,6 @@ BlackJack::~BlackJack() {
   delete player;
   delete slider;
 
-
 }
 
 void BlackJack::Initialize() {
@@ -92,6 +91,7 @@ void BlackJack::Initialize() {
 }
 
 void BlackJack::Update() {
+
   Pose_Update();
   GetMousePoint(&mousePosX, &mousePosY);
   isClick = GetMouseInput() == MOUSE_INPUT_LEFT;
@@ -99,18 +99,6 @@ void BlackJack::Update() {
   pose_flg = pose;
 
   player->Update();
-
-  /*旧ポーズボタン*/
-  //ptn = player->ButtonHit(pose_x, pose_y, pose_w, pose_h);
-  //scn = player->ButtonHit(select_x[0], select_y[0], select_w, select_h);
-  //ctn = player->ButtonHit(select_x[1], select_y[1], select_w, select_h);
-  //if (ptn) {
-  //  pose_flg = !pose_flg;
-  //}
-  //if (ctn && pose_flg) {
-  //  pose_flg = false;
-  //}
-  /*旧ポーズボタン*/
 
   if (player->ButtonHit(bet_x, bet_y, bet_w, bet_h) && !bet) {
 
@@ -151,7 +139,7 @@ void BlackJack::Update() {
         dealer->Hit(shoe);
         hit_flg++;
       }
-      if (player->Play(shoe)) {
+      if (player->Play(shoe) && !player->P_BJ()) {
 
         hit_flg = 2;
         dealer->Play(shoe);
@@ -196,22 +184,13 @@ void BlackJack::Update() {
   }
 }
 void BlackJack::Draw() {
-  DrawGraph(0, 0, game_img, true);
 
-  /*旧ポーズ画面*/
-  //if (pose_flg) {
-  //  //DrawGraph(200, 150, pose_img, true);
-  //  //DrawGraph(220, 480, select_img[0], true);
-  //  //DrawGraph(630, 480, continue_img[0], true);
-  //}
-  //DrawGraph(0,0,pose_button_img,true);
-  /*旧ポーズ画面*/
+  DrawGraph(0, 0, game_img, true);
 
   Pose_Draw();
   SetFontSize(24);
   if (game_endflg || end) {
     if (BlackJack::Wait_Time(0.5f)) {
-      //exit(0);
       SetNext(new Scene_Select());
     }
     else {
@@ -227,19 +206,16 @@ void BlackJack::Draw() {
     DrawFormatString(500, 680, 0xffffff, "所持金：%d", player->P_MaxCoin());
     SetFontSize(DEFAULT_FONT_SIZE);
     if (!player->Now_Game()) {
-      //SetFontSize(24);
-      //DrawFormatString(450, 340, 0xffffff, "ゲームを続けますか？ yes or no\n");
-      //SetFontSize(DEFAULT_FONT_SIZE);
-      DrawGraph(240, 320, continue_img[4], true);
 
+      DrawGraph(240, 320, continue_img[4], true);
       DrawRotaGraph(ctn_pos_x, sct_pos_y,ctn_rate,0, continue_img[2], true);
       DrawRotaGraph(sct_pos_x, sct_pos_y,sct_rate,0, select_img[2], true);
+
     }
     /*slider*/
     if (!bet_flg) {
       SetFontSize(32);
       slider->Draw();
-      //DrawFormatString(420, 650, 0xffffff, "Bet");
       DrawRotaGraph(bet_x + bet_w / 2, bet_y + bet_h / 2 , bet_r, 0, bet_img, true);
       SetFontSize(DEFAULT_FONT_SIZE);
     }
@@ -254,7 +230,6 @@ void BlackJack::Draw() {
   }
 
   SetFontSize(DEFAULT_FONT_SIZE);
-  //DrawFormatString(80, 280, 0xffffff, "pose %d", pose);
 
 }
 
@@ -273,6 +248,7 @@ bool BlackJack::Wait_Time(float time) {
     if (time_count < wait_time) {
 
       time_count++;
+
       return false;
     }
     else

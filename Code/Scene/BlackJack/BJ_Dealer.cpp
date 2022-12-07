@@ -245,3 +245,15 @@ int Dealer::Set_Magnification(float setrate, int getcoin) {
 
   return setrate*getcoin;
 }
+
+bool Dealer::Anim_Flg(int max, int x, int y) {
+
+  if (max <= x + y) {
+    Anim = true;
+  }
+  else {
+    Anim = false;
+  }
+
+  return Anim;
+}
