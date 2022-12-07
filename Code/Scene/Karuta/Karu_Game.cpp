@@ -142,6 +142,10 @@ void Karu_Game::Karu_Game_Initialize(Scene* scene) {
 	ChangeVolumeSoundMem(255 * 80 / 100, Otetuki_Sound);
 	Se_Cursor = LoadSoundMem("Resource/se/Karu_SE/Karu_Cursor.wav");
 	Se_Select = LoadSoundMem("Resource/se/Karu_SE/Karu_Select.wav");
+	Se_GameOver = LoadSoundMem("Resource/se/Karu_SE/Karu_GameOver.wav");
+	ChangeVolumeSoundMem(255 * 80 / 100, Se_GameOver);
+	Se_Result = LoadSoundMem("Resource/se/Karu_SE/Karu_Result.wav");
+	ChangeVolumeSoundMem(255 * 80 / 100, Se_Result);
 
 	//BGM格納
 	Karu_Bgm = LoadSoundMem("Resource/bgm/Karu_BGM/Karuta_Bgm.wav");
@@ -190,7 +194,10 @@ void Karu_Game::Karu_Game_Update() {
 	}
 
 	if (CheckHitKey(KEY_INPUT_0)) {
-		end = true;
+		if (!end) {
+			PlaySoundMem(Se_Result, DX_PLAYTYPE_BACK);
+			end = true;		//終了
+		}
 	}
 
 	//ゲームオーバーになるまで
@@ -215,7 +222,10 @@ void Karu_Game::Karu_Game_Update() {
 				Yomifuda_Storage();
 			}
 			else if ((Karu_player.myFuda + cpu_1.myFuda + cpu_2.myFuda + cpu_3.myFuda) > 43) {
-				end = true;		//終了
+				if (!end) {
+					PlaySoundMem(Se_Result, DX_PLAYTYPE_BACK);
+					end = true;		//終了
+				}
 			}
 
 			if (CheckSoundMem(voice) == 1) {
@@ -831,7 +841,13 @@ void Karu_Game::Rank() {
 * 戻り値:なし
 ********************/
 void Karu_Game::Karu_GameOver() {
-	Gameover = true;
+	StopSoundMem(Touch_Sound);
+	StopSoundMem(Karu_Bgm);
+	StopSoundMem(voice);
+	if (!Gameover) {
+		PlaySoundMem(Se_GameOver, DX_PLAYTYPE_BACK);
+		Gameover = true;
+	}
 	if(Mouse_X > 440 && Mouse_X < 840 && Mouse_Y > 250 && Mouse_Y < 370) {
 		if (!once_SelectContinueSE) {
 			PlaySoundMem(Se_Cursor, DX_PLAYTYPE_BACK);
@@ -840,6 +856,13 @@ void Karu_Game::Karu_GameOver() {
 		on_ContinueButton = true;
 		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
 			PlaySoundMem(Se_Select, DX_PLAYTYPE_BACK);
+
+			PlaySoundMem(Karu_Bgm, DX_PLAYTYPE_LOOP, FALSE);
+			if (old_voice) {
+				PlaySoundMem(voice, DX_PLAYTYPE_BACK, FALSE);
+			}
+			old_voice = false;
+
 			//絵札総入れ替え
 			for (int i = 0; i < KARU_MAX_Y; i++) {
 				for (int j = 0; j < KARU_MAX_X; j++) {
@@ -889,6 +912,10 @@ void Karu_Game::Karu_GameOver() {
 * 戻り値:なし
 ********************/
 void Karu_Game::Karu_End() {
+
+	StopSoundMem(Karu_Bgm);
+	StopSoundMem(voice);
+
 	if (Mouse_X > 140 && Mouse_X < 540 && Mouse_Y > 580 && Mouse_Y < 700) {
 		if (!once_SelectContinueSE) {
 			PlaySoundMem(Se_Cursor, DX_PLAYTYPE_BACK);
@@ -897,6 +924,13 @@ void Karu_Game::Karu_End() {
 		on_ContinueButton = true;
 		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
 			PlaySoundMem(Se_Select, DX_PLAYTYPE_BACK);
+
+			PlaySoundMem(Karu_Bgm, DX_PLAYTYPE_LOOP, FALSE);
+			if (old_voice) {
+				PlaySoundMem(voice, DX_PLAYTYPE_BACK, FALSE);
+			}
+			old_voice = false;
+
 			//絵札総入れ替え
 			for (int i = 0; i < KARU_MAX_Y; i++) {
 				for (int j = 0; j < KARU_MAX_X; j++) {
