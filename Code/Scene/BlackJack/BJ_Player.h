@@ -52,6 +52,7 @@ public:
 
   bool ButtonHit(int, int, int, int);
   bool Now_Game();
+  bool P_BJ();
   void Bet_Flg(bool);
 
   void Show_Hand();

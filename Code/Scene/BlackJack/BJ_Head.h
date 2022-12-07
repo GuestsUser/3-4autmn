@@ -22,3 +22,5 @@
 
 #include"./../Code/GetKey.h"
 #include"./../../ConstVal.h"
+#include"./../../GlovalLoading.h"
+#include"./../../Worldval.h"

@@ -9,6 +9,10 @@
 #include <stdlib.h>
 #include <time.h>
 #include <algorithm>
+#include<iostream>
+using namespace std;
+using std::cout; using std::cin;
+using std::endl; using std::string;
 
 int Player1sum;
 int Player2sum;
@@ -31,6 +35,7 @@ SR_Saikoro::SR_Saikoro() {
 	Player2sum = 0;
 	Player3sum = 0;
 	Player4sum = 0;
+	
 }
 
 void SR_Saikoro::Update() {
@@ -42,9 +47,9 @@ void SR_Saikoro::Update() {
 		Player1sum = 64; Player2sum = 64; Player3sum = 64; Player4sum = 64;
 	}
 	/*リスタートますに乗ったら*/
-	if (Player1sum == 22 || Player2sum == 22 || Player3sum == 22 || Player4sum == 22) {
+	/*if (Player1sum == 22 || Player2sum == 22 || Player3sum == 22 || Player4sum == 22) {
 		Restart();
-	}
+	}*/
 	/*プラス4マスに止まったら 12 50*/
 	if (Player1sum == 12 || Player2sum == 12 || Player3sum == 12 || Player4sum == 12 || Player1sum == 50 || Player2sum == 50 || Player3sum == 50 || Player4sum == 50) {
 		Plus();	/*+4する*/
@@ -56,6 +61,8 @@ void SR_Saikoro::Update() {
 	/*前のプレイヤーを戻す*/
 	if (Player1sum == 24 || Player2sum == 24 || Player3sum == 24 || Player4sum == 24) {
 		Frontback();
+		//if (array[3] == 24) { DrawString(500, 550, "何も起きない", GetColor(0, 0, 0)); }
+		//DrawString(500, 550, "何も起きない", GetColor(0, 0, 0));
 	}
 	array[0] = Player1sum;array[1] = Player2sum;array[2] = Player3sum;array[3] = Player4sum;
 	switch (num) {
@@ -210,15 +217,137 @@ void SR_Saikoro::Update() {
 }
 
 void SR_Saikoro::Draw() {
+	Sort();
 	DrawGraph(1050, 600, SR_Saikoro1[y], true);
 	DrawGraph(1140, 600, SR_Saikoro2[d], true);
-	DrawFormatString(300, 600, GetColor(255, 255, 255), "%d", array[0]);
+	DrawFormatString(300, 650, GetColor(255, 255, 255), "%d", array[3]);
+	DrawFormatString(400, 650, GetColor(255, 255, 255), "%d", array[2]);
+	DrawFormatString(500, 650, GetColor(255, 255, 255), "%d", array[1]);
+	DrawFormatString(600, 650, GetColor(255, 255, 255), "%d", array[0]);
+	//switch (num) {
+	//case 1:	/*プレイヤーの時*/
+	//	if (Whoisplay == true) { DrawString(500, 600, "Playerのターン", GetColor(0, 0, 0)); }
+	//	if (Shuffle == false && Whoisplay == false) { DrawFormatString(500, 600, GetColor(0, 0, 0), "プレイヤーは%d進んだ", Sum); }
+	//	else if(Shuffle == true){ DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }
+	//	
+	//	break;
+	//case 2:
+	//	if (Whoisplay == true) { DrawString(500, 600, "Player2のターン", GetColor(0, 0, 0)); }
+	//	if (Shuffle == false && Whoisplay == false) {DrawFormatString(500,600,GetColor(0, 0, 0),"Player2は%d進んだ", Sum); }
+	//	else if (Shuffle == true) { DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }
+	//	break;
+	//case 3:
+	//	if (Whoisplay == true) { DrawString(500, 600, "Player3のターン", GetColor(0, 0, 0)); }
+	//	if (Shuffle == false && Whoisplay == false) { DrawFormatString(500, 600, GetColor(0, 0, 0), "Player3は%d進んだ", Sum); }
+	//	else if (Shuffle == true) { DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }
+	//	break;
+	//case 4:
+	//	if (Whoisplay == true) { DrawString(500, 600, "Player4のターン", GetColor(0, 0, 0)); }
+	//	if (Shuffle == false && Whoisplay == false) { DrawFormatString(500, 600, GetColor(0, 0, 0), "Player4は%d進んだ", Sum); }
+	//	else if (Shuffle == true) { DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }
+	//	break;
+	//case 5:
+	//	if (Goalflg == true) {
+	//		DrawString(500, 600, "Goal!!", GetColor(0, 0, 0));
+	//	}
+	//	break;
+	//}
+	//if (array[3] == 24) { DrawString(500, 550, "何も起きない", GetColor(0, 0, 0)); }
+	//case 1:	/*プレイヤーの時*/
+	//	if (Whoisplay == true) { DrawString(500, 600, "Playerのターン", GetColor(0, 0, 0)); }
+	//	if (Shuffle == false && Whoisplay == false) { DrawFormatString(500, 600, GetColor(0, 0, 0), "プレイヤーは%d進んだ", Sum); }
+	//	else if(Shuffle == true){ DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }
+	//	
+	//	break;
+	//case 2:
+	//	if (Whoisplay == true) { DrawString(500, 600, "Player2のターン", GetColor(0, 0, 0)); }
+	//	if (Shuffle == false && Whoisplay == false) {DrawFormatString(500,600,GetColor(0, 0, 0),"Player2は%d進んだ", Sum); }
+	//	else if (Shuffle == true) { DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }
+	//	break;
+	//case 3:
+	//	if (Whoisplay == true) { DrawString(500, 600, "Player3のターン", GetColor(0, 0, 0)); }
+	//	if (Shuffle == false && Whoisplay == false) { DrawFormatString(500, 600, GetColor(0, 0, 0), "Player3は%d進んだ", Sum); }
+	//	else if (Shuffle == true) { DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }
+	//	break;
+	//case 4:
+	//	if (Whoisplay == true) { DrawString(500, 600, "Player4のターン", GetColor(0, 0, 0)); }
+	//	if (Shuffle == false && Whoisplay == false) { DrawFormatString(500, 600, GetColor(0, 0, 0), "Player4は%d進んだ", Sum); }
+	//	else if (Shuffle == true) { DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }
+	//	break;
+	//case 5:
+	//	if (Goalflg == true) {
+	//		DrawString(500, 600, "Goal!!", GetColor(0, 0, 0));
+	//	}
+	//	break;
+	//}
+	//if (array[3] == 24) { DrawString(500, 550, "何も起きない", GetColor(0, 0, 0)); }
+	//switch (num) {
+	//case 1:	/*プレイヤーの時*/
+	//	if (Whoisplay == true) { DrawString(500, 600, "Playerのターン", GetColor(0, 0, 0)); }
+	//	if (Shuffle == false && Whoisplay == false) { DrawFormatString(500, 600, GetColor(0, 0, 0), "プレイヤーは%d進んだ", Sum); }
+	//	else if(Shuffle == true){ DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }
+	//	
+	//	break;
+	//case 2:
+	//	if (Whoisplay == true) { DrawString(500, 600, "Player2のターン", GetColor(0, 0, 0)); }
+	//	if (Shuffle == false && Whoisplay == false) {DrawFormatString(500,600,GetColor(0, 0, 0),"Player2は%d進んだ", Sum); }
+	//	else if (Shuffle == true) { DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }
+	//	break;
+	//case 3:
+	//	if (Whoisplay == true) { DrawString(500, 600, "Player3のターン", GetColor(0, 0, 0)); }
+	//	if (Shuffle == false && Whoisplay == false) { DrawFormatString(500, 600, GetColor(0, 0, 0), "Player3は%d進んだ", Sum); }
+	//	else if (Shuffle == true) { DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }
+	//	break;
+	//case 4:
+	//	if (Whoisplay == true) { DrawString(500, 600, "Player4のターン", GetColor(0, 0, 0)); }
+	//	if (Shuffle == false && Whoisplay == false) { DrawFormatString(500, 600, GetColor(0, 0, 0), "Player4は%d進んだ", Sum); }
+	//	else if (Shuffle == true) { DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }
+	//	break;
+	//case 5:
+	//	if (Goalflg == true) {
+	//		DrawString(500, 600, "Goal!!", GetColor(0, 0, 0));
+	//	}
+	//	break;
+	//}
+	//if (array[3] == 24) { DrawString(500, 550, "何も起きない", GetColor(0, 0, 0)); }
+	//case 1:	/*プレイヤーの時*/
+	//	if (Whoisplay == true) { DrawString(500, 600, "Playerのターン", GetColor(0, 0, 0)); }
+	//	if (Shuffle == false && Whoisplay == false) { DrawFormatString(500, 600, GetColor(0, 0, 0), "プレイヤーは%d進んだ", Sum); }
+	//	else if(Shuffle == true){ DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }
+	//	
+	//	break;
+	//case 2:
+	//	if (Whoisplay == true) { DrawString(500, 600, "Player2のターン", GetColor(0, 0, 0)); }
+	//	if (Shuffle == false && Whoisplay == false) {DrawFormatString(500,600,GetColor(0, 0, 0),"Player2は%d進んだ", Sum); }
+	//	else if (Shuffle == true) { DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }
+	//	break;
+	//case 3:
+	//	if (Whoisplay == true) { DrawString(500, 600, "Player3のターン", GetColor(0, 0, 0)); }
+	//	if (Shuffle == false && Whoisplay == false) { DrawFormatString(500, 600, GetColor(0, 0, 0), "Player3は%d進んだ", Sum); }
+	//	else if (Shuffle == true) { DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }
+	//	break;
+	//case 4:
+	//	if (Whoisplay == true) { DrawString(500, 600, "Player4のターン", GetColor(0, 0, 0)); }
+	//	if (Shuffle == false && Whoisplay == false) { DrawFormatString(500, 600, GetColor(0, 0, 0), "Player4は%d進んだ", Sum); }
+	//	else if (Shuffle == true) { DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }
+	//	break;
+	//case 5:
+	//	if (Goalflg == true) {
+	//		DrawString(500, 600, "Goal!!", GetColor(0, 0, 0));
+	//	}
+	//	break;
+	//}
+	//if (array[3] == 24) { DrawString(500, 550, "何も起きない", GetColor(0, 0, 0)); }
+
+
 	switch (num) {
 	case 1:	/*プレイヤーの時*/
-		if (Whoisplay == true) { DrawString(500, 600, "Playerのターン", GetColor(0, 0, 0)); }
-		if (Shuffle == false && Whoisplay == false) { DrawFormatString(500, 600, GetColor(0, 0, 0), "プレイヤーは%d進んだ", Sum); }
-		else if(Shuffle == true){ DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }
-		
+		if (Whoisplay == true && Shuffle == false) { DrawString(500, 600, "Playerのターン", GetColor(0, 0, 0)); }
+		else if (Shuffle == false && Whoisplay == false) { DrawFormatString(500, 600, GetColor(0, 0, 0), "プレイヤーは%d進んだ", Sum); }
+		else if(Shuffle == true){ DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }	
+		if (Player1sum) {
+
+		}
 		break;
 	case 2:
 		if (Whoisplay == true) { DrawString(500, 600, "Player2のターン", GetColor(0, 0, 0)); }
@@ -241,6 +370,7 @@ void SR_Saikoro::Draw() {
 		}
 		break;
 	}
+	
 }
 
 void SR_Saikoro::SR_Enemy1() {	/*AI1*/
@@ -254,6 +384,7 @@ void SR_Saikoro::SR_Enemy3() {	/*AI3*/
 }
 
 void SR_Saikoro::Plus() {
+	DrawString(500, 600,"Playerは追加で４進む", GetColor(0, 0, 0));
 	if (current == 1) { Player1sum += 4; }
 	else if (current == 2) { Player2sum += 4; }
 	else if (current == 3) { Player3sum += 4; }
@@ -280,25 +411,95 @@ void SR_Saikoro::Restart() {
 void SR_Saikoro::Goal() {
 	num = 5;
 	Goalflg = true;
-//	SetNext((new SR_Result));
+	SetNext((new SR_Result));
 }
 
 void SR_Saikoro::Frontback() {
-	if (current == 1 ) { 
-		if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH && Shuffle == true) {
+	//if (array[3] == 24) { /*何も起きない*/; }
 
-			Shuffle = false;
-			countdiff = count;
-			Whoisplay = false;
-			Replay = false;
-			Back = false;
-		}
-	}
-	else if (current == 2 ) { }
-	else if (current == 3 ) { }
-	else if (current == 4 ) { }
-	}
+	//if (array[2] == 24) {
+	//	if (current == 1) {
+	//		if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH && Shuffle == true) {	/*サイコロが出た分だけ戻るマス用（backフラグがある）*/
+	//			array[3] -= Sum;
+	//			Shuffle = false;
+	//			countdiff = count;
+	//			Whoisplay = false;
+	//			Replay = false;
+	//			Back = false;
+	//		}
+	//	}
+	//	else {
+	//		Shuffle = false;
+	//		if (Sumflg == true && p == 0) {
+	//			p += 1;
+	//			array[3] -= Sum;
+	//			Replay = false;
+	//			Back = false;
+	//		}
+	//	}
+	//}
+
+	//if (array[1] == 24) { 
+	//	if (current == 1) {
+	//		if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH && Shuffle == true) {	/*サイコロが出た分だけ戻るマス用（backフラグがある）*/
+	//			array[3] -= Sum;
+	//			Shuffle = false;
+	//			countdiff = count;
+	//			Whoisplay = false;
+	//			Replay = false;
+	//			Back = false;
+	//		}
+	//	}
+	//	else {
+	//		Shuffle = false;
+	//		if (Sumflg == true && p == 0) {
+	//			p += 1;
+	//			array[3] -= Sum;
+	//			Replay = false;
+	//			Back = false;
+	//		}
+	//	}
+	//}
+
+	//if (array[0] == 24) { 
+	//	if (current == 1) {
+	//		if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH && Shuffle == true) {	/*サイコロが出た分だけ戻るマス用（backフラグがある）*/
+	//			array[3] -= Sum;
+	//			Shuffle = false;
+	//			countdiff = count;
+	//			Whoisplay = false;
+	//			Replay = false;
+	//			Back = false;
+	//		}
+	//	}
+	//	else {
+	//		Shuffle = false;
+	//		if (Sumflg == true && p == 0) {
+	//			p += 1;
+	//			array[3] -= Sum;
+	//			Replay = false;
+	//			Back = false;
+	//		}
+	//	}
+	//}
+
+	//if (array[3] == 24) { DrawString(500, 550, "何も起きない", GetColor(0, 0, 0)); }
+
+	//if (array[2] == 24) {
+	//	array[3] -= 5;
+	//}
+
+	//if (array[1] == 24) {
+	//	array[2] -= 5;
+	//}
+
+	//if (array[0] == 24) {
+	//	array[1] -= 5;
+	//}
+
+	/*for (v = 0; v < 4; v++) {}*/
+}
 
 void SR_Saikoro::Sort() {
-	//sort(array.begin(), array.end(), greater<int>());
+	sort(array, array + 4);
 }

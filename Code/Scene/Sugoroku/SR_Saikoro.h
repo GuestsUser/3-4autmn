@@ -6,8 +6,7 @@ private:
 	int SR_Saikoro1[6];	/*サイコロ画像１*/
 	int SR_Saikoro2[6];	/*サイコロ画像２*/
 	int array[4];
-	int i, y, d,p;
-
+	int i, y, d, p, v;
 	bool Shuffle = false;	/*サイコロシャッフル可否フラグ*/
 	bool Click = true;	/*サイコロクリック可否フラグ*/
 	bool Goalflg;	/*ゴールしているかのフラグ*/
@@ -22,6 +21,7 @@ private:
 	int Dice1, Dice2;
 	int Sum;	/*サイコロの目の合計数*/
 	int num; /*switch文よう変数*/
+	int text;
 	int current;
 	/*仮仮仮仮仮仮仮*/
 	int MouseX, MouseY;	/*Mouse座標取得（全体でのが出来るまで）*/

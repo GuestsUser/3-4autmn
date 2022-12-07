@@ -3,6 +3,7 @@
 /*コンストラクタ*/
 Dealer::Dealer() {
 
+  /*変数初期化*/
   hand_num = 0;   /*手札枚数を0で初期化*/
   score = 0;      /*スコアを0で初期化*/
   type = 0;       /*トランプのマーク*/
@@ -12,17 +13,22 @@ Dealer::Dealer() {
 
   data = 0;
   spt_data = 0;
+  /*変数初期化*/
 
+  /*bool*/
   split = false;
 
   D_BlackJakc = false;
+  /*bool*/
 
-
+  /*初期位置*/
   cd_x = cd_y = cd_w = cd_h = 0;
 
   img_x = 600;
   img_y = 180;
+  /*初期位置*/
 
+  /*画像ハンドル*/
   LoadDivGraph("Resource/image/toranpu_all.png",54,13,5,200,300,card_hdl);
 
   btn_hdl[0] = LoadGraph("Resource/image/BJ_Image/Win.png");
@@ -40,12 +46,15 @@ Dealer::Dealer() {
     }
 
   }
+  /*画像ハンドル*/
 
 }
+
 Dealer::~Dealer() {
 
 
 }
+
 /*変数初期化*/
 void Dealer::Initialize() {
 
@@ -233,8 +242,18 @@ bool Dealer::BlackJack(){
 }
 
 int Dealer::Set_Magnification(float setrate, int getcoin) {
-  //float setcoin = 0;
-  //setcoin = setrate * getcoin;
 
   return setrate*getcoin;
+}
+
+bool Dealer::Anim_Flg(int max, int x, int y) {
+
+  if (max <= x + y) {
+    Anim = true;
+  }
+  else {
+    Anim = false;
+  }
+
+  return Anim;
 }
