@@ -10,6 +10,7 @@
 #include <time.h>
 #include <algorithm>
 #include<iostream>
+
 using namespace std;
 using std::cout; using std::cin;
 using std::endl; using std::string;
@@ -43,8 +44,11 @@ void SR_Saikoro::Update() {
 	GetMousePoint(&MouseX, &MouseY);/*マウス座標取得（仮）*/
 	/*ゴールしたら*/
 	if (Player1sum >= 64|| Player2sum >= 64 || Player3sum >= 64 || Player4sum >= 64) {
+		if (Player1sum >= 64) { Player1sum = 64; }
+		else if (Player2sum >= 64) { Player2sum = 64; }
+		else if (Player3sum >= 64) { Player3sum = 64; }
+		else if (Player4sum >= 64) { Player4sum = 64; }
 		Goal();	/*まだ中身はない*/
-		Player1sum = 64; Player2sum = 64; Player3sum = 64; Player4sum = 64;
 	}
 	/*リスタートますに乗ったら*/
 	/*if (Player1sum == 22 || Player2sum == 22 || Player3sum == 22 || Player4sum == 22) {
@@ -74,7 +78,7 @@ void SR_Saikoro::Update() {
 					if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {	/*もし左クリックしたら*/
 						Shuffle = true;	/*シャッフルフラグをONに*/
 					}
-					else if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH && Shuffle == true && Back == true) {	/*サイコロが出た分だけ戻るマス用（backフラグがある）*/
+					else if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH && Shuffle == true && Back == true && move == false) {	/*サイコロが出た分だけ戻るマス用（backフラグがある）*/
 						Player1sum -= Sum;
 						Shuffle = false;
 						countdiff = count;
@@ -82,22 +86,28 @@ void SR_Saikoro::Update() {
 						Replay = false;
 						Back = false;
 					}
-					else if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH && Shuffle == true) {
+					else if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH && Shuffle == true && move == false) {
 						Player1sum += Sum;
+						move = true;
 						Shuffle = false;
 						countdiff = count;
 						Whoisplay = false;
 						Replay = false;
 					}
 				}
-				if (Player1sum == 8 || Player1sum == 30) {
-					Replay = true;
-				}
+				/*if (move == true) {
+					if (o < Sum) {
+						if ((count / 4) % 2 == 0) {
+							Player1sum += 1;
+							o += 1;
+						}
+					}
+				}*/
+				if (Player1sum == 8 || Player1sum == 30) {Replay = true;}
 				if (Player1sum == 19) { Replay = true; Back = true; }
-				//if (Player1sum == 24){ Replay = true;}
 			}
-			if (Replay == true && count - countdiff == 100 && countdiff != 0) { num = 6; countdiff = count; Whoisplay = true;}
-			else if (Replay == false && count - countdiff == 100 && countdiff != 0) { countdiff = count;  num = 2;  Whoisplay = true;}	/*countが100進めば次のターン*/
+			if (Replay == true && count - countdiff == 100 && countdiff != 0) { num = 6; countdiff = count; Whoisplay = true;  move = false; o = 0; }
+			else if (Replay == false && count - countdiff == 100 && countdiff != 0) { countdiff = count;  num = 2;  Whoisplay = true; move = false; o = 0; }	/*countが100進めば次のターン*/
 			break;
 		case 2:
 			current = 2;
@@ -193,6 +203,7 @@ void SR_Saikoro::Update() {
 			else if (Replay == false && count - countdiff == 400 && countdiff != 0) { countdiff = 0;  num = 1; p = 0; Sumflg = false; Whoisplay = true;  }	/*countが100進めば次のターン*/
 			break;
 		case 5:
+
 			break;
 		case 6:
 			if (current == 1) { num = 1; }
@@ -213,6 +224,21 @@ void SR_Saikoro::Update() {
 	//	//d = GetRand(1);
 	//}
 	/********************デバッグ用**************************/
+
+	/*if ((count / 4) % 2 == 0) {
+		if (Player1sum <= Sum) {
+			Player1sum += 1;
+		}
+		else if (Player2sum <= Sum) {
+			Player2sum += 1;
+		}
+		else if (Player3sum <= Sum) {
+			Player3sum += 1;
+		}
+		else if (Player4sum <= Sum) {
+			Player4sum += 1;
+		}
+	}*/
 	Sum = y + d + 2;	/*サイコロの合計値*/
 }
 
@@ -220,10 +246,10 @@ void SR_Saikoro::Draw() {
 	Sort();
 	DrawGraph(1050, 600, SR_Saikoro1[y], true);
 	DrawGraph(1140, 600, SR_Saikoro2[d], true);
-	DrawFormatString(300, 650, GetColor(255, 255, 255), "%d", array[3]);
-	DrawFormatString(400, 650, GetColor(255, 255, 255), "%d", array[2]);
-	DrawFormatString(500, 650, GetColor(255, 255, 255), "%d", array[1]);
-	DrawFormatString(600, 650, GetColor(255, 255, 255), "%d", array[0]);
+	//DrawFormatString(300, 650, GetColor(255, 255, 255), "%d", array[3]);
+	//DrawFormatString(400, 650, GetColor(255, 255, 255), "%d", array[2]);
+	//DrawFormatString(500, 650, GetColor(255, 255, 255), "%d", array[1]);
+	//DrawFormatString(600, 650, GetColor(255, 255, 255), "%d", array[0]);
 	//switch (num) {
 	//case 1:	/*プレイヤーの時*/
 	//	if (Whoisplay == true) { DrawString(500, 600, "Playerのターン", GetColor(0, 0, 0)); }
@@ -342,32 +368,36 @@ void SR_Saikoro::Draw() {
 
 	switch (num) {
 	case 1:	/*プレイヤーの時*/
-		if (Whoisplay == true && Shuffle == false) { DrawString(500, 600, "Playerのターン", GetColor(0, 0, 0)); }
-		else if (Shuffle == false && Whoisplay == false) { DrawFormatString(500, 600, GetColor(0, 0, 0), "プレイヤーは%d進んだ", Sum); }
-		else if(Shuffle == true){ DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }	
+		if (Whoisplay == true && Shuffle == false) { DrawString(484,620,"Playerのターン", GetColor(0, 0, 0)); }
+		else if (Shuffle == false && Whoisplay == false) { DrawFormatString(484, 620, GetColor(0, 0, 0), "プレイヤーは%d進んだ", Sum); }
+		else if(Shuffle == true){ DrawString(484, 620, "サイコロコロコロ", GetColor(0, 0, 0)); }
 		if (Player1sum) {
 
 		}
 		break;
 	case 2:
-		if (Whoisplay == true) { DrawString(500, 600, "Player2のターン", GetColor(0, 0, 0)); }
-		if (Shuffle == false && Whoisplay == false) {DrawFormatString(500,600,GetColor(0, 0, 0),"Player2は%d進んだ", Sum); }
-		else if (Shuffle == true) { DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }
+		if (Whoisplay == true) { DrawString(484, 620, "Player2のターン", GetColor(0, 0, 0)); }
+		if (Shuffle == false && Whoisplay == false) {DrawFormatString(484, 620, GetColor(0, 0, 0),"Player2は%d進んだ", Sum); }
+		else if (Shuffle == true) { DrawString(484, 620, "サイコロコロコロ", GetColor(0, 0, 0)); }
 		break;
 	case 3:
-		if (Whoisplay == true) { DrawString(500, 600, "Player3のターン", GetColor(0, 0, 0)); }
-		if (Shuffle == false && Whoisplay == false) { DrawFormatString(500, 600, GetColor(0, 0, 0), "Player3は%d進んだ", Sum); }
-		else if (Shuffle == true) { DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }
+		if (Whoisplay == true) { DrawString(484, 620, "Player3のターン", GetColor(0, 0, 0)); }
+		if (Shuffle == false && Whoisplay == false) { DrawFormatString(484, 620, GetColor(0, 0, 0), "Player3は%d進んだ", Sum); }
+		else if (Shuffle == true) { DrawString(484, 620, "サイコロコロコロ", GetColor(0, 0, 0)); }
 		break;
 	case 4:
-		if (Whoisplay == true) { DrawString(500, 600, "Player4のターン", GetColor(0, 0, 0)); }
-		if (Shuffle == false && Whoisplay == false) { DrawFormatString(500, 600, GetColor(0, 0, 0), "Player4は%d進んだ", Sum); }
-		else if (Shuffle == true) { DrawString(500, 600, "サイコロコロコロ", GetColor(0, 0, 0)); }
+		if (Whoisplay == true) { DrawString(484, 620, "Player4のターン", GetColor(0, 0, 0)); }
+		if (Shuffle == false && Whoisplay == false) { DrawFormatString(484, 620, GetColor(0, 0, 0), "Player4は%d進んだ", Sum); }
+		else if (Shuffle == true) { DrawString(484, 620, "サイコロコロコロ", GetColor(0, 0, 0)); }
 		break;
 	case 5:
 		if (Goalflg == true) {
-			DrawString(500, 600, "Goal!!", GetColor(0, 0, 0));
+			DrawString(484, 620, "Goal!!", GetColor(0, 0, 0));
 		}
+		if(Player1sum == 64){ DrawString(500, 200, "Player1の勝利！！", GetColor(0, 0, 0)); }
+		else if(Player2sum == 64){ DrawString(500, 200, "Player2の勝利！！", GetColor(0, 0, 0)); }
+		else if(Player3sum == 64){ DrawString(500, 200, "Player3の勝利！！", GetColor(0, 0, 0)); }
+		else if(Player4sum == 64){ DrawString(500, 200, "Player4の勝利！！", GetColor(0, 0, 0)); }
 		break;
 	}
 	
@@ -411,7 +441,7 @@ void SR_Saikoro::Restart() {
 void SR_Saikoro::Goal() {
 	num = 5;
 	Goalflg = true;
-	SetNext((new SR_Result));
+	//SetNext((new SR_Result));
 }
 
 void SR_Saikoro::Frontback() {
@@ -503,3 +533,27 @@ void SR_Saikoro::Frontback() {
 void SR_Saikoro::Sort() {
 	sort(array, array + 4);
 }
+//void SR_Saikoro::SR_Pose_Update() {
+//
+//	nowKey = key->GetKeyState(REQUEST_MOUSE_LEFT); //現在のマウス左ボタンの入力状態の取得
+//	// ポーズボタンを押したらポーズ画面を開くフラグをtrueにする /
+//	if ((20 <= MouseX && MouseX <= 200 && 25 <= MouseY && MouseY <= 105) || ((450 <= MouseX && MouseX <= 850 && 320 <= MouseY && MouseY <= 440) && PauseFlg)) {
+//		//PauseFlg = true;
+//		if (OldKey != KEY_FREE && nowKey == KEY_PULL) {
+//			//PauseFlg = true;
+//			PauseFlg = !PauseFlg;
+//			//pose = true;
+//			//pose = PauseFlg;
+//		}
+//	}
+//	if (PauseFlg) {
+//
+//		if (450 <= MouseX && MouseX <= 850 && 470 <= MouseY && MouseY <= 590) {
+//			if (OldKey != KEY_FREE && nowKey == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
+//				//StopSoundMem(CF_GameBGM);
+//				//parent->SetNext(new Scene_Select());
+//			}
+//		}
+//	}
+//	OldKey = nowKey; //前に入力していたキーを今入力していたキーに上書きする
+//}

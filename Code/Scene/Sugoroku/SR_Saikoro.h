@@ -6,7 +6,7 @@ private:
 	int SR_Saikoro1[6];	/*サイコロ画像１*/
 	int SR_Saikoro2[6];	/*サイコロ画像２*/
 	int array[4];
-	int i, y, d, p, v;
+	int i, y, d, p, v,o;
 	bool Shuffle = false;	/*サイコロシャッフル可否フラグ*/
 	bool Click = true;	/*サイコロクリック可否フラグ*/
 	bool Goalflg;	/*ゴールしているかのフラグ*/
@@ -14,6 +14,8 @@ private:
 	bool Whoisplay = true;	/*テキストが被らないようにするフラグ*/
 	bool Replay = false;	/*サイコロを振りなおすフラグ*/
 	bool Back = false;	/*サイコロを振った分だけ戻るフラグ*/
+	bool PauseFlg;
+	bool move;
 
 	int count;
 	int countdiff;
@@ -23,6 +25,8 @@ private:
 	int num; /*switch文よう変数*/
 	int text;
 	int current;
+	int OldKey;
+	int nowKey;
 	/*仮仮仮仮仮仮仮*/
 	int MouseX, MouseY;	/*Mouse座標取得（全体でのが出来るまで）*/
 	/*仮仮仮仮仮仮仮*/
@@ -43,5 +47,6 @@ public:
 	void SR_Enemy2();
 	void SR_Enemy3();
 	void Countdiff();
+	void SR_Pose_Update();
 };
 
