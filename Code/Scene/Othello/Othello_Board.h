@@ -60,6 +60,7 @@ private:
 	bool RandomFlag;	// ランダムに値を振ったかどうか
 	bool CornerFlag;	// 角が取れるかどうかを判定
 	bool PauseFlg;		// ポーズ画面を開いているかどうか
+	bool SEFlag[4];
 
 public:
 	int Square_X;		// マウスから読みとったX座標を、MAP_SIZEで割った値を入れた変数

@@ -1,5 +1,6 @@
 #pragma once
 class Quaternion;
+class Cmp_Transform;
 
 class Vector3 { //À•Wî•ñ‚ğ3‚Â“Z‚ß‚Äˆµ‚¦‚é‚æ‚¤‚É‚µ‚½•¨
 private:
@@ -81,6 +82,9 @@ class OriginMath { //‰‰Z‚É•Ö—˜‚È‹@”\“Z‚ßA‚±‚ÌƒNƒ‰ƒX‚Ì•Ï”‚È‚Ç‚ªg—p‚µ‚½‚¢ê‡ƒ
 	OriginMath() {} //À‘Ì¸»‹Ö~
 
 public:
+	enum class HorizonPivot { left = -1, center, right }; //’†S“_İ’è—p—ñ‹“Œ^A‚±‚ê‚Í…•½•ûŒü
+	enum class VerticalPivot { top = -1, center, down }; //ã‹L‚Ì‚’¼•ûŒü
+
 	static double MPI; //‰~ü—¦
 	static double Deg2Rad; //ƒfƒOƒŠ[Šp(45‚Æ‚©90‚Æ‚©)‚©‚çƒ‰ƒWƒAƒ“Šp(1.27‚Æ‚©3.14)‚Ö•ÏX‚µ‚½‚¢”’l‚É‚±‚Ì’l‚ğŠ|‚¯‚é‚Æ‚µ‚Ä‚­‚ê‚é
 	static double Rad2Deg; //ƒ‰ƒWƒAƒ“Šp‚©‚çƒfƒOƒŠ[Šp‚Ö•ÏX‚µ‚½‚¢”’l‚É‚±‚Ì’l‚ğŠ|‚¯‚é‚Æ‚µ‚Ä‚­‚ê‚é
@@ -88,4 +92,21 @@ public:
 	static Quaternion QuaternionMul(const Quaternion& ql, const Quaternion& qr); //ƒNƒH[ƒ^ƒjƒIƒ“ÏAql‚É¶•ÓAqr‚É‰E•Ó
 	static Quaternion Rad2Quaternion(const Vector3& angle); //ƒ‰ƒWƒAƒ“Šp‚ğƒNƒH[ƒ^ƒjƒIƒ“‰»
 	static Vector3 PointRotationQuaternion(const Vector3& xyz, const Quaternion& q); //‰EèŒnA“Á’è’†“_‚©‚ç‚Ì‹——£‚ğxyz‚ÉAq‚É‰ñ“]‚ğ“ü‚ê‚é‚ÆAxyz‚ğ3ŸŒ³‰ñ“]‚µ‚Ä‚­‚ê‚éAxyz‚Ì’l‚Í‰ñ“]‚Å•ÏŒ`‚³‚¹‚Ä‚È‚¢•¨‚ğg—p‚·‚é–
+
+	static void VertexModification(Vector3 pos[4], const Vector3& size, const Cmp_Transform& ts, HorizonPivot hp = HorizonPivot::center, VerticalPivot vp = VerticalPivot::center); //Šg‘åA‰ñ“]‚ğ“K—p‚µ‚½‰æ‘œƒTƒCƒY‚ğo‚·ˆ—Apos‚É¶ãA‰EãA‰E‰ºA¶‰º‚Ì’¸“_À•W‚ğŠi”[‚·‚é
+
+};
+
+class LinerFunction { //y=ax+b‚ÌŒ`‚Å•\‚³‚ê‚éˆêŸ’¼ü‚ğ•\Œ»‚Å‚«‚éƒNƒ‰ƒX
+	float slope; //ŒX‚«
+	float yIntercept; //yØ•Ğ
+
+public:
+	LinerFunction(const Vector3& pos1, const Vector3& pos2) { //2“_‚ÅŒX‚«AØ•Ğ‚ğ‹‚ß‚é‰Šú‰»•û®(‘¼Œ`®‚Í•K—v‚É‰‚¶‚Ä’Ç‰Á‚·‚é)
+		slope = (pos1.GetY() - pos2.GetY()) / (pos1.GetX() - pos2.GetX()); //ŒX‚«o‚µ
+		yIntercept = -slope * pos1.GetX() + pos1.GetY(); //Ø•Ğo‚µ
+	}
+
+	int GetX(int y) { return (yIntercept - y) / slope; } //ˆêŸŠÖ”ã‚ÌyÀ•W‚©‚ç‘Î‰‚·‚éx‚ğæ“¾
+	int GetY(int x) { return slope * x + yIntercept; } //ã‹L‚Ìyæ“¾”Å
 };

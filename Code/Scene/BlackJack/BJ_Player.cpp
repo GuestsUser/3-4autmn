@@ -13,7 +13,7 @@ Player::Player() {
   score = 0;
   type = 0;
   data = 0;
-  p_coin = 1000;
+  p_coin = 100000;
 
   spt_hand_num = 0;
   spt_score = 0;
@@ -67,6 +67,18 @@ Player::Player() {
   spt_img = LoadGraph("Resource/image/BJ_Image/Split_105.png");
   /*画像ハンドル*/
 
+    //SE
+  //pass_SE = LoadSoundMem("Resource/se/pageOne_SE/pass.wav");
+  //pageone_SE = LoadSoundMem("Resource/se/pageOne_SE/pageone.wav");
+  Bottun_SE_ = LoadSoundMem("Resource/se/pageOne_SE/トランプ・引く02.wav");
+  //card_SE_2 = LoadSoundMem("Resource/se/pageOne_SE/カードを台の上に出す.wav");
+  //card_SE_3 = LoadSoundMem("Resource/se/pageOne_SE/カードをめくる.wav");
+
+  //ChangeVolumeSoundMem(150, pass_SE);
+  //ChangeVolumeSoundMem(150, pageone_SE);
+  ChangeVolumeSoundMem(150, Bottun_SE_);
+  //ChangeVolumeSoundMem(150, card_SE_2);
+  //ChangeVolumeSoundMem(150, card_SE_3);
 }
 
 Player::~Player() {};
@@ -107,9 +119,11 @@ void Player::Initialize() {
 
 /*ゲーム実行*/
 bool Player::Play(Shoe* shoe) {
+
   if (hit) {
     hit_r = 1.2;
     hit = false;
+    PlaySoundMem(Bottun_SE_, DX_PLAYTYPE_BACK, TRUE);
   }
   else hit_r = 1;
 
@@ -124,6 +138,7 @@ bool Player::Play(Shoe* shoe) {
     if (Player::ButtonHit(spt_x, spt_y, spt_w, spt_h) && !spt) {
       spt = true;
       spt_r = 1.2;
+      PlaySoundMem(Bottun_SE_, DX_PLAYTYPE_BACK, TRUE);
     }
     else spt_r = 1;
     if (spt && spt_flg) {
@@ -134,9 +149,11 @@ bool Player::Play(Shoe* shoe) {
     }
     if (Player::ButtonHit(std_x, std_y, std_w, std_h) || dbl) {
       std = true;
+      PlaySoundMem(Bottun_SE_, DX_PLAYTYPE_BACK, TRUE);
     }
-    if (Player::ButtonHit(dbl_x, dbl_y, dbl_w, dbl_h) && (hand_num == 2 || spt_hand_num == 2)) {
+    if (Player::ButtonHit(dbl_x, dbl_y, dbl_w, dbl_h) && (hand_num == 2 || spt_hand_num == 2)&&(p_coin > bet_coin || p_coin > spt_bet_coin)) {
 
+      PlaySoundMem(Bottun_SE_, DX_PLAYTYPE_BACK, TRUE);
       if (p_coin < bet_coin || p_coin < spt_bet_coin) {
         std = true;
       }
@@ -269,7 +286,7 @@ bool Player::Play(Shoe* shoe) {
             std = true;
           }
 
-          if (Player::Spt_Calc() == 21 && !spt_BJ && now_game_flg) {
+          if (Player::Spt_Calc() == 21 && !spt_BJ && now_game_flg && spt_hit) {
             spt_BJ = true;
             std = true;
           }
@@ -369,11 +386,11 @@ void Player::Draw() {
 
   DrawRotaGraph(hit_x + hit_w / 2, hit_y + hit_h / 2, hit_r, 0, hit_img, true);
   DrawRotaGraph(std_x + std_w / 2, std_y + std_h / 2, std_r, 0, std_img, true);
-  if (hand_num == 2 || spt_hand_num == 2) {
-    DrawRotaGraph(dbl_x + dbl_w / 2, dbl_y + dbl_h / 2, dbl_r, 0, dbl_img, true);
+  if ((hand_num == 2 || spt_hand_num == 2)&&game_flg) {
+    if (p_coin < bet_coin || p_coin < spt_bet_coin); else DrawRotaGraph(dbl_x + dbl_w / 2, dbl_y + dbl_h / 2, dbl_r, 0, dbl_img, true);
   }
 
-  if (spt_flg) {
+  if (spt_flg && game_flg) {
 
     DrawRotaGraph(spt_x + spt_w / 2, spt_y + spt_h / 2, spt_r, 0, spt_img, true);
 

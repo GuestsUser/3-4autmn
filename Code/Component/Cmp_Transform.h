@@ -27,4 +27,13 @@ public:
 	Vector3& EditPos() { return *xyz; } //位置の情報を編集可能な状態で返す
 	Vector3& EditScale() { return *scale; } //拡大率の情報を編集可能な状態で返す
 	Vector3& EditRotate() { return *rotate; } //回転の情報を編集可能な状態で返す
+
+
+	Cmp_Transform operator=(const Cmp_Transform& r) { //constを返り値に付けるとa=b=cの型の時、b=cの返り値がconstとなり、a=const dで、const指定のない本関数が呼べなくなってしまう都合上非const実装
+		*xyz = r.ReadPos();
+		*scale = r.ReadScale();
+		*rotate = r.ReadRotate();
+
+		return *this;
+	}
 };
