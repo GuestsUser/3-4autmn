@@ -45,7 +45,7 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 		case 1: //ブラックジャック
 			*img = LoadGraph("Resource/image/BJ_Image/Select_Blackjack.png");
 			gameScene = new BlackJack();
-			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/BJ_Image/Explain_Blackjack1.png")), 1));
+			 explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/BJ_Image/Explain_Blackjack1.png")), 1));
 			break;
 		case 2: //大富豪
 			*img = LoadGraph("Resource/image/Select_CareerPoker.png");
@@ -65,11 +65,14 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 		case 5: //ページワン
 			*img = LoadGraph("Resource/image/Select_PageOne.png");
 			gameScene = new Scene_PageOne();
-			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_PageOne1.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/PageOne_Image/Explain_PageOne1.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/PageOne_Image/Explain_PageOne2.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/PageOne_Image/Explain_PageOne3.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/PageOne_Image/Explain_PageOne4.png")), 1));
 			break;
 		case 6: //ポーカー
 			*img = LoadGraph("Resource/image/Select_Poker.png");
-			gameScene = new Poker(); //ポーカーシーン作成
+			gameScene = new Poker();
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker1.png")), 1));
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker2.png")), 1)); //複数の説明画面導入作例
 			break;

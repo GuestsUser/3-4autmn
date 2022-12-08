@@ -54,6 +54,7 @@
     <ClCompile Include="Code\Scene\BlackJack\BJ_Slider.cpp" />
     <ClCompile Include="Code\Scene\daifugou\daigugou.cpp" />
     <ClCompile Include="Code\Scene\BlackJack\Pose.cpp" />
+    <ClCompile Include="Code\Scene\Sugoroku\SR_Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Component\Button.h" />
@@ -116,6 +117,7 @@
     <ClInclude Include="Code\Scene\BlackJack\BJ_Slider.h" />
     <ClInclude Include="Code\Scene\daifugou\daifugou.h" />
     <ClInclude Include="Code\Scene\BlackJack\Pose.h" />
+    <ClInclude Include="Code\Scene\Sugoroku\SR_Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Scene\Title\SelectScene.cd" />

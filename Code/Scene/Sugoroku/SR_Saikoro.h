@@ -3,8 +3,16 @@
 	//extern int Player1sum;
 class SR_Saikoro : public Scene {
 private:
+	Scene* parent;
 	int SR_Saikoro1[6];	/*サイコロ画像１*/
 	int SR_Saikoro2[6];	/*サイコロ画像２*/
+	int pause_select[2];
+	int pause_continue[2];
+	int SR_GOAL;
+	int Pause_Button;
+	int Pause_Back;
+	int Pause_Continue;
+	int Pause_Select;
 	int array[4];
 	int i, y, d, p, v,o;
 	bool Shuffle = false;	/*サイコロシャッフル可否フラグ*/
@@ -31,7 +39,7 @@ private:
 	int MouseX, MouseY;	/*Mouse座標取得（全体でのが出来るまで）*/
 	/*仮仮仮仮仮仮仮*/
 public:
-	SR_Saikoro();
+	SR_Saikoro(Scene*scene);
 	void Update();
 	void Draw();
 	void Saikoro();

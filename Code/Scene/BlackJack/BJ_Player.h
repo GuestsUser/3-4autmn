@@ -23,6 +23,8 @@ private:
 
   int p_coin = 1000;
 
+  int Bottun_SE_;
+
   /*bool*/
   bool now_game_flg;
 
