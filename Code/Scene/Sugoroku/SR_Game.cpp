@@ -5,10 +5,11 @@
 #include "SR_Game.h"
 #include "SR_Saikoro.h"
 
-SR_Game::SR_Game() {
+SR_Game::SR_Game(){
 	SR_MAP = LoadGraph("Resource/image/SR_MAP.png");
-	saikoro = new SR_Saikoro();
+	saikoro = new SR_Saikoro(this);
 	map = new SR_Map();
+
 }
 
 void SR_Game::Update() {

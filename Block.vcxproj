@@ -49,6 +49,7 @@
     <ClCompile Include="Code\Scene\Sample\Title.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\SR_Map.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\SR_Result.cpp" />
+    <ClCompile Include="Code\Scene\Sugoroku\SR_Scene.cpp" />
     <ClCompile Include="Code\Scene\Title\Cmp_SelectSelector.cpp" />
     <ClCompile Include="Code\Scene\Title\Scene_Explain.cpp" />
     <ClCompile Include="Code\Scene\Title\Scene_GameTitle.cpp" />
@@ -93,6 +94,7 @@
     <ClInclude Include="Code\Scene\Scene.h" />
     <ClInclude Include="Code\Scene\Sugoroku\SR_Map.h" />
     <ClInclude Include="Code\Scene\Sugoroku\SR_Result.h" />
+    <ClInclude Include="Code\Scene\Sugoroku\SR_Scene.h" />
     <ClInclude Include="Code\Scene\Title\Cmp_SelectSelector.h" />
     <ClInclude Include="Code\Scene\Title\Scene_Explain.h" />
     <ClInclude Include="Code\Scene\Title\Scene_GameTitle.h" />
