@@ -11,6 +11,9 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() {}
 
+	virtual void FullReset() {} //コンポーネントを初期化せずゲームを再スタートする際に使用するリセット
+	virtual void Reset() {} //ゲームの1ピリオドが終了した時、次に移行する為実行するリセット
+
 	bool GetRunUpdate() { return isUpdate; }
 	bool GetRunDraw() { return isDraw; }
 

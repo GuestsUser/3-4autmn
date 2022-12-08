@@ -4,7 +4,7 @@
 #include "../Code/OriginMath.h"
 
 #include <deque>
-
+#include <typeinfo>
 
 
 class Button : public Component { //Componentを継承しているが追加機能というより単体生存するタイプなので命名にCmpを付けなかった
@@ -66,4 +66,21 @@ public:
 	Cmp_Transform* EditTransform() { return &pos; } //座標系情報を編集可能な状態で取得
 	const Vector3* ReadArea() const { return &(area.ReadPos()); } //クリック範囲を読み取り専用形式で取得
 	Vector3* EditArea() { return &(area.EditPos()); } //クリック範囲を編集可能な状態で取得
+
+
+
+	template<class T> T* EditAlwaysCmp() const { //alwaysコンポーネント取得
+		const type_info& master = typeid(T); //取得するコンポーネントの型を入れておく
+		for (Component* get : always) {
+			if (typeid(*get) == master) { return dynamic_cast<T*>(get); }
+		}
+		return nullptr;
+	}
+	template<class T> T* EditClickCmp() const { //clickコンポーネント取得
+		const type_info& master = typeid(T); //取得するコンポーネントの型を入れておく
+		for (Component* get : click) {
+			if (typeid(*get) == master) { return dynamic_cast<T*>(get); }
+		}
+		return nullptr;
+	}
 };

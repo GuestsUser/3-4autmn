@@ -16,6 +16,7 @@
 #include"../Code/Scene/Asuma/Scene_PageOne.h"
 #include"../Code/Scene/Othello/Scene_Othello.h"
 #include"../Code/Scene/Sugoroku/SR_Game.h"
+#include "../Code/Scene/Poker/Poker.h"
 #include <deque>
 
 
@@ -41,8 +42,8 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			break;
 		case 1: //ブラックジャック
 			*img = LoadGraph("Resource/image/BJ_Image/Select_Blackjack.png");
-      gameScene = new BlackJack();
-      explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/BJ_Image/Explain_Blackjack1.png")), 1));
+			gameScene = new BlackJack();
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/BJ_Image/Explain_Blackjack1.png")), 1));
 			break;
 		case 2: //大富豪
 			*img = LoadGraph("Resource/image/Select_CareerPoker.png");
@@ -64,13 +65,14 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			break;
 		case 6: //ポーカー
 			*img = LoadGraph("Resource/image/Select_Poker.png");
+			gameScene = new Poker(); //ポーカーシーン作成
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker1.png")), 1));
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker2.png")), 1)); //複数の説明画面導入作例
 			break;
 		case 7: //すごろく
 			*img = LoadGraph("Resource/image/Select_Sugoroku.png");
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Sugoroku1.png")), 1));
-			gameScene = new SR_Game(); //�ʃV�[����΂����Ascm�ɓ���Ă����̂�gameScene�ɂȂ������x�̈Ⴂ
+			gameScene = new SR_Game(); //個別シーン飛ばし作例、scmに入れていたのがgameSceneになった程度の違い
 			break;
 		case 8: //オセロ
 			*img = LoadGraph("Resource/image/Select_Othello.png");

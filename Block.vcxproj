@@ -21,7 +21,10 @@
   <ItemGroup>
     <ClCompile Include="Code\Component\Button.cpp" />
     <ClCompile Include="Code\Component\Cmp_ButtonGroup.cpp" />
+    <ClCompile Include="Code\Component\Cmp_Gage_Border.cpp" />
+    <ClCompile Include="Code\Component\Cmp_Gage_MouseControl.cpp" />
     <ClCompile Include="Code\Component\Cmp_Image.cpp" />
+    <ClCompile Include="Code\Component\Gage.cpp" />
     <ClCompile Include="Code\GetKey.cpp" />
     <ClCompile Include="Code\GlovalLoading.cpp" />
     <ClCompile Include="Code\main.cpp" />
@@ -43,6 +46,19 @@
     <ClCompile Include="Code\Scene\Othello\Othello_Player.cpp" />
     <ClCompile Include="Code\Scene\Othello\Scene_Othello.cpp" />
     <ClCompile Include="Code\Scene\daifugou\CP_Scene.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Btn.cpp" />
+    <ClCompile Include="Code\Scene\Poker\PK_Card.cpp" />
+    <ClCompile Include="Code\Scene\Poker\CardDealer.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Chara.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Cmp_CPUBetLogic.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Cmp_PlayerRaiseDraw.cpp" />
+    <ClCompile Include="Code\Scene\Poker\PokerFontData.cpp" />
+    <ClCompile Include="Code\Scene\Poker\CPU.cpp" />
+    <ClCompile Include="Code\Scene\Poker\PK_Dealer.cpp" />
+    <ClCompile Include="Code\Scene\Poker\PK_Player.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Poker.cpp" />
+    <ClCompile Include="Code\Scene\Poker\PokerSections.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Pot.cpp" />
     <ClCompile Include="Code\Scene\Sample\Title.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\SR_Map.cpp" />
     <ClCompile Include="Code\Scene\Title\Cmp_SelectSelector.cpp" />
@@ -57,9 +73,13 @@
   <ItemGroup>
     <ClInclude Include="Code\Component\Button.h" />
     <ClInclude Include="Code\Component\Cmp_ButtonGroup.h" />
+    <ClInclude Include="Code\Component\Cmp_Button_ClickCheck.h" />
+    <ClInclude Include="Code\Component\Cmp_Gage_Border.h" />
+    <ClInclude Include="Code\Component\Cmp_Gage_MouseControl.h" />
     <ClInclude Include="Code\Component\Component.h" />
     <ClInclude Include="Code\Component\Cmp_Image.h" />
     <ClInclude Include="Code\Component\Cmp_Transform.h" />
+    <ClInclude Include="Code\Component\Gage.h" />
     <ClInclude Include="Code\ConstVal.h" />
     <ClInclude Include="Code\GetKey.h" />
     <ClInclude Include="Code\GlovalLoading.h" />
@@ -82,6 +102,21 @@
     <ClInclude Include="Code\Scene\Othello\Othello_Player.h" />
     <ClInclude Include="Code\Scene\Othello\Scene_Othello.h" />
     <ClInclude Include="Code\Scene\daifugou\CP_Scene.h" />
+    <ClInclude Include="Code\Scene\Poker\BetLogicInitializeData.h" />
+    <ClInclude Include="Code\Scene\Poker\Btn.h" />
+    <ClInclude Include="Code\Scene\Poker\PK_Card.h" />
+    <ClInclude Include="Code\Scene\Poker\CardDealer.h" />
+    <ClInclude Include="Code\Scene\Poker\Chara.h" />
+    <ClInclude Include="Code\Scene\Poker\Cmp_BetActionRecord.h" />
+    <ClInclude Include="Code\Scene\Poker\Cmp_CPUBetLogic.h" />
+    <ClInclude Include="Code\Scene\Poker\Cmp_PlayerRaiseDraw.h" />
+    <ClInclude Include="Code\Scene\Poker\PokerFontData.h" />
+    <ClInclude Include="Code\Scene\Poker\CPU.h" />
+    <ClInclude Include="Code\Scene\Poker\PK_Dealer.h" />
+    <ClInclude Include="Code\Scene\Poker\PK_Player.h" />
+    <ClInclude Include="Code\Scene\Poker\Poker.h" />
+    <ClInclude Include="Code\Scene\Poker\PokerSections.h" />
+    <ClInclude Include="Code\Scene\Poker\Pot.h" />
     <ClInclude Include="Code\Scene\Sample\Title.h" />
     <ClInclude Include="Code\Scene\Scene.h" />
     <ClInclude Include="Code\Scene\Sugoroku\SR_Map.h" />
