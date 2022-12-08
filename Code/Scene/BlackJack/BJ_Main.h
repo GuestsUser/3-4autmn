@@ -50,6 +50,7 @@ private:
   /*slider*/
   int Bottun_SE_;
 
+  int BGM;	//BGM保存用変数
 public:
 
   BlackJack();

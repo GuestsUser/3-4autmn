@@ -56,7 +56,9 @@ BlackJack::BlackJack() {
   bet_img = LoadGraph("Resource/image/BJ_Image/Bet_105.png");
   Bottun_SE_ = LoadSoundMem("Resource/se/pageOne_SE/トランプ・引く02.wav");
   ChangeVolumeSoundMem(150, Bottun_SE_);
+  BGM = LoadSoundMem("Resource/se/pageOne_SE/フルハウス_2.wav");
 
+  ChangeVolumeSoundMem(255 * 80 / 100, BGM);
   shoe->Inisialize();
   dealer->Initialize();
   player->Initialize();
@@ -93,7 +95,9 @@ void BlackJack::Initialize() {
 }
 
 void BlackJack::Update() {
-
+  if (CheckSoundMem(BGM) == false) {
+    PlaySoundMem(BGM, DX_PLAYTYPE_BACK, TRUE);
+  }
   Pose_Update();
   GetMousePoint(&mousePosX, &mousePosY);
   isClick = GetMouseInput() == MOUSE_INPUT_LEFT;
