@@ -72,6 +72,12 @@ private:
 	int card_SE_1;	//カードを引く
 	int card_SE_2;	//カードを出す
 	int card_SE_3;	//カードを移動する
+	int win_SE;	//勝利時のSE
+
+	int Cursor_SE;	//カーソルのSE
+	int Select_SE;	//決定ボタンのSE
+
+	int BGM;	//BGM保存用変数
 
 	bool OneShot;	//鳴ったかどうか（一回だけ鳴らすのに使う）
 
@@ -79,6 +85,7 @@ private:
 
 	int Card_back;		//カードの裏面の情報
 	Card Card_joker;	//ジョーカーの情報
+	int card;
 
 	//Card Card_obj[4][13];		//全カードの情報
 	std::vector<Card> Card_obj;		//全カードの情報(山札)
@@ -123,7 +130,7 @@ private:
 	int cemetery;	//使ったカードの枚数
 
 	int pri;		//親を決めるための変数
-	bool draw;		//カードが引けるかどうかを決めるためのフラグ
+	bool draw;		//カードが引けるかどうかを決めるためのフラグ(false:引けない　true:引ける)
 
 	bool Player_setup;		//プレイヤー準備フラグ
 	bool NPC1_setup;		//NPC1準備フラグ
