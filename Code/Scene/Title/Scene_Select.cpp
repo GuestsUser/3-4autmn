@@ -7,6 +7,7 @@
 #include "Cmp_SelectSelector.h"
 #include "Scene_Select.h"
 #include "Scene_Explain.h"
+#include "Scene_GameTitle.h"
 
 //プレイするゲームシーンをインクルード
 #include"../Code/Scene/Karuta/Scene_Karuta.h"
@@ -20,6 +21,7 @@
 
 
 Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std::deque<Button*>()), run(nullptr) {
+	BGM = LoadSoundMem("Resource/bgm/Select.wav");
 	SetFontSize(36); //描写文字サイズ指定
 
 	int place = 9; //ボタン配置数
@@ -103,6 +105,10 @@ Scene_Select::~Scene_Select() {
 }
 
 void Scene_Select::Update() {
+	if (CheckSoundMem(BGM) == 0) {
+		ChangeVolumeSoundMem(110, BGM);
+		PlaySoundMem(BGM, DX_PLAYTYPE_LOOP);
+	}
 	if (run != nullptr) { //runに何か入っていた場合そちらを優先実行
 		run->Update(); //run実行
 
@@ -111,6 +117,7 @@ void Scene_Select::Update() {
 		for (auto itr : explain) {
 			if (run == itr) { return; } //explainと同じ物があった場合抜け、次回もrunを実行する
 		}
+		StopSoundMem(BGM);
 		SetNext(run); //ここまで来たら設定されたシーンはゲーム実行シーンになるのでセレクト画面を終了しそちらに移行する
 		return;
 	}
