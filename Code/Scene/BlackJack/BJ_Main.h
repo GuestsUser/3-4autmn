@@ -48,6 +48,7 @@ private:
   int mousePosX;
   int mousePosY;
   /*slider*/
+  int Bottun_SE_;
 
 public:
 

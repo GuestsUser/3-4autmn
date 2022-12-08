@@ -54,6 +54,8 @@ BlackJack::BlackJack() {
   continue_img[3] = LoadGraph("Resource/image/BJ_Image/Continue_Button_2.png");
   continue_img[4] = LoadGraph("Resource/image/BJ_Image/Continue.png");
   bet_img = LoadGraph("Resource/image/BJ_Image/Bet_105.png");
+  Bottun_SE_ = LoadSoundMem("Resource/se/pageOne_SE/トランプ・引く02.wav");
+  ChangeVolumeSoundMem(150, Bottun_SE_);
 
   shoe->Inisialize();
   dealer->Initialize();
@@ -101,6 +103,7 @@ void BlackJack::Update() {
 
   if (player->ButtonHit(bet_x, bet_y, bet_w, bet_h) && !bet) {
 
+    PlaySoundMem(Bottun_SE_, DX_PLAYTYPE_BACK, TRUE);
     bet = true;
     bet_r = 1.2;
   }
