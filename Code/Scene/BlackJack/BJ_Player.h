@@ -33,6 +33,7 @@ private:
 
   bool spt_flg;
   bool hit, std, bet, spt, dbl;
+  bool spt_hit;
   bool win, los, bst, psh, BlackJack, game_flg;
   bool spt_win, spt_los, spt_bst, spt_psh, spt_BJ;
   bool spt_a;
@@ -44,7 +45,6 @@ public:
   ~Player();                   /*デストラクタ*/
 
   void Initialize();           /*変数初期化*/
-  void Update();
   void Draw();
   void Debug_Draw(bool);
 
@@ -52,6 +52,7 @@ public:
 
   bool ButtonHit(int, int, int, int);
   bool Now_Game();
+  bool P_BJ();
   void Bet_Flg(bool);
 
   void Show_Hand();
