@@ -1,4 +1,5 @@
 #include "OriginMath.h"
+#include "Component/Cmp_Transform.h"
 #include <cmath>
 
 double OriginMath::MPI = 3.14159265359; //static変数の数値設定
@@ -57,5 +58,23 @@ Quaternion OriginMath::Rad2Quaternion(const Vector3& angle) {
 	return QuaternionMul(xy, z);
 }
 
+void OriginMath::VertexModification(Vector3 pos[4], const Vector3& size, const Cmp_Transform& ts, HorizonPivot hp, VerticalPivot vp) {
+	float sizeX = size.GetX() * ts.ReadScale().GetX();
+	float sizeY = size.GetY() * ts.ReadScale().GetY();
 
+	//頂点作成
+	float x[] = { -sizeX / 2 - (sizeX / 2 * (int)vp), sizeX / 2 - (sizeX / 2 * (int)vp) }; //pivotに合わせて画像サイズを変形
+	float y[] = { -sizeY / 2 - (sizeY / 2 * (int)hp), sizeY / 2 - (sizeY / 2 * (int)hp) };
+	float point[] = { x[0],y[0],x[1],y[0],x[1],y[1],x[0],y[1] }; //左上、右上、右下、左下頂点
+	Quaternion modify = OriginMath::Rad2Quaternion(ts.ReadRotate()); //回転のクォータニオン化
+
+	Vector3 local = ts.ReadPos();
+	local.SetXYZ(local.GetX() + sizeX / 2 * (int)vp, local.GetY() + sizeY / 2 * (int)hp, 0);//pivotに合わせて現在座標が表示の中心に来るようxyを調整
+
+	for (int i = 0; i < 4; i++) {
+		pos[i].SetXYZ(point[i * 2], point[i * 2 + 1], 0);
+		pos[i] = OriginMath::PointRotationQuaternion(pos[i], modify); //距離情報をクォータニオンに基づき変形
+		pos[i] += local; //現在位置を加算して指定位置に持ってくる
+	}
+}
 
