@@ -1,9 +1,10 @@
 #include"Scene_PageOne.h"
 #include"PageOne.h"
 
+
 Scene_PageOne::Scene_PageOne() {
 	po_player = new PageOne();
-	po_player->PageOne_Initialize();
+	po_player->PageOne_Initialize(this);
 }
 
 Scene_PageOne::	~Scene_PageOne() {

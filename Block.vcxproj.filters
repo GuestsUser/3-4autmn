@@ -22,7 +22,6 @@
     <ClCompile Include="Code\Scene\Karuta\Karu_Game.cpp" />
     <ClCompile Include="Code\Scene\Karuta\Scene_Karuta.cpp" />
     <ClCompile Include="Code\Scene\Othello\Othello_Board.cpp" />
-    <ClCompile Include="Code\Scene\Othello\Othello_Player.cpp" />
     <ClCompile Include="Code\Scene\Othello\Scene_Othello.cpp" />
     <ClCompile Include="Code\Scene\daifugou\CP_Scene.cpp" />
     <ClCompile Include="Code\Scene\Sample\Title.cpp" />
@@ -51,6 +50,10 @@
     <ClCompile Include="Code\Scene\Poker\PokerFontData.cpp" />
     <ClCompile Include="Code\Scene\Poker\PK_Card.cpp" />
     <ClCompile Include="Code\Scene\Poker\Cmp_PlayerRaiseDraw.cpp" />
+    <ClCompile Include="Code\Scene\Sugoroku\SR_Result.cpp" />
+    <ClCompile Include="Code\Scene\BlackJack\BJ_Slider.cpp" />
+    <ClCompile Include="Code\Scene\daifugou\daigugou.cpp" />
+    <ClCompile Include="Code\Scene\BlackJack\Pose.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Component\Button.h" />
@@ -77,7 +80,6 @@
     <ClInclude Include="Code\Scene\Karuta\Karu_Game.h" />
     <ClInclude Include="Code\Scene\Karuta\Scene_Karuta.h" />
     <ClInclude Include="Code\Scene\Othello\Othello_Board.h" />
-    <ClInclude Include="Code\Scene\Othello\Othello_Player.h" />
     <ClInclude Include="Code\Scene\Othello\Scene_Othello.h" />
     <ClInclude Include="Code\Scene\daifugou\CP_Scene.h" />
     <ClInclude Include="Code\Scene\Sample\Title.h" />
@@ -110,6 +112,10 @@
     <ClInclude Include="Code\Scene\Poker\PokerFontData.h" />
     <ClInclude Include="Code\Scene\Poker\PK_Card.h" />
     <ClInclude Include="Code\Scene\Poker\Cmp_PlayerRaiseDraw.h" />
+    <ClInclude Include="Code\Scene\Sugoroku\SR_Result.h" />
+    <ClInclude Include="Code\Scene\BlackJack\BJ_Slider.h" />
+    <ClInclude Include="Code\Scene\daifugou\daifugou.h" />
+    <ClInclude Include="Code\Scene\BlackJack\Pose.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Scene\Title\SelectScene.cd" />

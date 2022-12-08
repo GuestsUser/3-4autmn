@@ -3,116 +3,268 @@
 BlackJack::BlackJack() {
 
   shoe = new Shoe();
-  player = new Player();
   dealer = new Dealer();
+  player = new Player();
+  slider = new Slider();
 
   game_endflg = false;
   next_flg = true;
+  now_game_flg = false;
+  pose_flg = ptn = scn = ctn = false;
+
+  bet_r = 1;
+  bet_w = 105;
+  bet_h = 42;
+  bet_x = 380;
+  bet_y = 650;
+  bet_flg = false;
+
 
   hit_flg = 0;
+  time_count = 0.0f;
 
-  end_img = LoadGraph("Resource/image/BJ_Image/BJ_Help.png");
+  pose_x = 0;
+  pose_y = 0;
+  pose_w = 180;
+  pose_h = 80;
+  select_x[0] = 220;
+  select_y[0] = 480;
+  select_x[1] = 630;
+  select_y[1] = 480;
+  select_w = 400;
+  select_h = 120;
+
+  sct_pos_x = 940;
+  sct_pos_y = 350;
+  sct_w = 150;
+  sct_h = 60;
+  ctn_pos_x = 780;
+  sct_rate = ctn_rate = 1;
+  sct_flg = false;
+
+
   game_img = LoadGraph("Resource/image/BJ_Image/BJ_Game.png");
-  title_img = LoadGraph("Resource/image/BJ_Image/BJ_Title.png");
+  pose_img = LoadGraph("Resource/image/BJ_Image/BJ_PauseBack.png");
+  pose_button_img = LoadGraph("Resource/image/BJ_Image/BJ_PauseButton.png");
+  LoadDivGraph("Resource/image/BJ_Image/BJ_MenuButton.png",2,2,1,400,120,select_img);
+  LoadDivGraph("Resource/image/BJ_Image/BJ_Continue_Button.png",2,2,1,400,120,continue_img);
+  select_img[2] = LoadGraph("Resource/image/BJ_Image/End_Button.png");
+  continue_img[2] = LoadGraph("Resource/image/BJ_Image/Continue_Button.png");
+  select_img[3] = LoadGraph("Resource/image/BJ_Image/End_Button_2.png");
+  continue_img[3] = LoadGraph("Resource/image/BJ_Image/Continue_Button_2.png");
+  continue_img[4] = LoadGraph("Resource/image/BJ_Image/Continue.png");
+  bet_img = LoadGraph("Resource/image/BJ_Image/Bet_105.png");
 
   shoe->Inisialize();
-  player->Initialize();
   dealer->Initialize();
+  player->Initialize();
+  Pose_Initialize();
 }
 
 BlackJack::~BlackJack() {
 
-  delete shoe;
-  delete player;
-  delete dealer;
-
   BlackJack::Finalize();
+
+  delete shoe;
+  delete dealer;
+  delete player;
+  delete slider;
 
 }
 
 void BlackJack::Initialize() {
 
+  Pose_Initialize();
   shoe->Inisialize();
-  player->Initialize();
   dealer->Initialize();
+  player->Initialize();
+  slider->Inisialize();
+  slider->SetMaxValue(player->P_MaxCoin());
   next_flg = true;
-
+  nx_flg = false;
+  now_game_flg = true;
+  time_count = 0;
+  bet = false;
   hit_flg = 0;
+  st = false;
 
 }
 
 void BlackJack::Update() {
 
-  //player->Update();
-    /*ゲームを開始 or 続けるか判定*/
+  Pose_Update();
+  GetMousePoint(&mousePosX, &mousePosY);
+  isClick = GetMouseInput() == MOUSE_INPUT_LEFT;
+  slider->Update(mousePosX, mousePosY, isClick);
+  pose_flg = pose;
 
-  if (next_flg) {
 
-    BlackJack::Initialize();
+  if (player->ButtonHit(bet_x, bet_y, bet_w, bet_h) && !bet) {
+
+    bet = true;
+    bet_r = 1.2;
+  }
+  else {
+    bet_r = 1;
+  }
+  if (bet && !bet_flg) {
+    if (BlackJack::Wait_Time(0.5)) {
+      bet_flg = true;
+      player->Bet_Flg(bet_flg);
+      player->Set_Bet(slider->GetValue());
+    }
+  }
+
+  if ((player->P_MaxCoin() <= 0 && !player->Now_Game() && next_flg) || end) {
+
+    game_endflg = true;
     next_flg = false;
 
   }
-  if (hit_flg < 1) {
-    dealer->Hit(shoe);
-    hit_flg++;
-  }
-  if (player->Play(shoe)) {
+  if (player->P_MaxCoin() < slider->GetValue()) {
 
-    dealer->Play(shoe);
-    player->Score(*player, *dealer);
+    slider->SetValue(player->P_MaxCoin());
 
   }
-  if (!game_endflg) {
+    /*ゲームを開始 or 続けるか判定*/
+  if (!pose_flg) {
 
-    if (player->ButtonHit(280,480,20,40)) {
+    if (next_flg) {
 
-      next_flg = true;
+      BlackJack::Initialize();
+      next_flg = false;
+      bet_flg = false;
 
     }
-    if (player->ButtonHit(340,480,20,40)) {
+    if (!game_endflg && bet_flg) {
 
-      game_endflg = true;
+      if (hit_flg < 1) {
+        player->Hit(shoe);
+        dealer->Hit(shoe);
+        hit_flg++;
+      }
+      if (player->Play(shoe) && !player->P_BJ()) {
+
+        hit_flg = 2;
+        dealer->Play(shoe);
+        player->Score(*player, *dealer);
+      }
+      else {
+        player->Score(*player, *dealer);
+        if (hit_flg == 1 && !player->Now_Game()) {
+          hit_flg++;
+          dealer->Hit(shoe);
+        }
+      }
+
+      if (player->ButtonHit(700, 320, sct_w, sct_h) && !nx_flg) {
+        ctn_rate = 1.2;
+        nx_flg = true;
+
+      }
+      else ctn_rate = 1;
+      if (nx_flg) {
+        if (BlackJack::Wait_Time(1))next_flg = true;
+      }
+      if (player->ButtonHit(860, 320, sct_w, sct_h) && !st) {
+
+        sct_rate = 1.2;
+        st = true;
+
+      }
+      else sct_rate = 1;
+      if (st) {
+        if (BlackJack::Wait_Time(1)) {
+
+          sct_flg = true;
+        }
+      }
+      if (sct_flg) {
+
+          game_endflg = true;
+      }
 
     }
-
   }
-
 }
 void BlackJack::Draw() {
 
-  //DrawGraph(0,0,title_img,true);
-  DrawGraph(0,0,game_img,true);
-  //DrawGraph(0,0,end_img,true);
+  DrawGraph(0, 0, game_img, true);
 
-  player->Draw();
-  dealer->Draw();
+  Pose_Draw();
+  SetFontSize(24);
+  if (game_endflg || end) {
+    if (BlackJack::Wait_Time(3.0f)) {
+      SetNext(new Scene_Select());
+    }
+    else {
 
-  DrawFormatString(550, 100, 0xffffff, "ゲーム画面");
+        SetFontSize(100);
+      if(!pose_flg)DrawFormatString(60, 250, 0xff00ff, "所持金がなくなりました\nセレクト画面に戻ります\n");
+        sct_rate = 1.2;
+        SetFontSize(DEFAULT_FONT_SIZE);
 
-  DrawFormatString(100, 80, 0xffffff, "ゲームを開始しますか？\n");
-  DrawFormatString(100, 100, 0xffffff, "==============\n");
-  DrawFormatString(100, 120, 0xffffff, "BLACK JACK\n");
-  DrawFormatString(100, 140, 0xffffff, "==============\n");
-  DrawFormatString(100, 160, 0xffffff, "player\n");
-  DrawFormatString(100, 180, 0xffffff, "==============\n");
-  DrawFormatString(100, 200, 0xffffff, "==============\n");
-  DrawFormatString(100, 220, 0xffffff, "dealer\n");
-  DrawFormatString(100, 240, 0xffffff, "==============\n");
-  DrawFormatString(100, 260, 0xffffff, "==============\n");
-  if (!next_flg) {
-    DrawFormatString(100, 480, 0xffffff, "ゲームを続けますか？ yes or no\n");
+    }
   }
-  if (game_endflg) {
-    DrawFormatString(100, 500, 0xffffff, "ゲームを終了します\n");
+  else if(!pose_flg) {
+    SetFontSize(32);
+    DrawFormatString(500, 680, 0xffffff, "所持金：%d", player->P_MaxCoin());
+    SetFontSize(DEFAULT_FONT_SIZE);
+    if (!player->Now_Game()) {
+      if (player->P_MaxCoin() <= 0) {
+        if (BlackJack::Wait_Time(1))game_endflg = true;
+      }
+      else {
+        DrawGraph(240, 320, continue_img[4], true);
+        DrawRotaGraph(ctn_pos_x, sct_pos_y, ctn_rate, 0, continue_img[2], true);
+        DrawRotaGraph(sct_pos_x, sct_pos_y, sct_rate, 0, select_img[2], true);
+      }
+
+    }
+    /*slider*/
+    if (!bet_flg) {
+      SetFontSize(32);
+      slider->Draw();
+      DrawRotaGraph(bet_x + bet_w / 2, bet_y + bet_h / 2 , bet_r, 0, bet_img, true);
+      SetFontSize(DEFAULT_FONT_SIZE);
+    }
+    else {
+      /*slider*/
+      player->Draw();
+      dealer->Draw();
+    }
+    
+    SetFontSize(32);
+
   }
 
+  SetFontSize(DEFAULT_FONT_SIZE);
 
 }
 
 void BlackJack::Finalize() {
 
-  DeleteGraph(title_img);
+  DeleteGraph(pose_img);
   DeleteGraph(game_img);
-  DeleteGraph(end_img);
+  DeleteGraph(pose_button_img);
+
+}
+
+bool BlackJack::Wait_Time(float time) {
+  wait_time = time * FPS;
+
+  while (1) {
+    if (time_count < wait_time) {
+
+      time_count++;
+
+      return false;
+    }
+    else
+    {
+      return true;
+      break;
+    }
+  }
 
 }

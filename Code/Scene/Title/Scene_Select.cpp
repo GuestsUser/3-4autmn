@@ -7,6 +7,7 @@
 #include "Cmp_SelectSelector.h"
 #include "Scene_Select.h"
 #include "Scene_Explain.h"
+#include "Scene_GameTitle.h"
 
 //プレイするゲームシーンをインクルード
 #include"../Code/Scene/Karuta/Scene_Karuta.h"
@@ -21,6 +22,7 @@
 
 
 Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std::deque<Button*>()), run(nullptr) {
+	BGM = LoadSoundMem("Resource/bgm/Select.wav");
 	SetFontSize(36); //描写文字サイズ指定
 
 	int place = 9; //ボタン配置数
@@ -52,6 +54,7 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			break;
 		case 3: //コネクトフォー
 			*img = LoadGraph("Resource/image/Select_ConnectFour.png");
+			gameScene = new Scene_ConnectFour();
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_ConnectFour1.png")), 1));
 			break;
 		case 4: //かるた
@@ -61,6 +64,7 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			break;
 		case 5: //ページワン
 			*img = LoadGraph("Resource/image/Select_PageOne.png");
+			gameScene = new Scene_PageOne();
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_PageOne1.png")), 1));
 			break;
 		case 6: //ポーカー
@@ -75,8 +79,11 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			gameScene = new SR_Game(); //個別シーン飛ばし作例、scmに入れていたのがgameSceneになった程度の違い
 			break;
 		case 8: //オセロ
-			*img = LoadGraph("Resource/image/Select_Othello.png");
-			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Othello1.png")), 1));
+			*img = LoadGraph("Resource/image/Othello_Image/OthelloAicon2.png");
+			gameScene = new Scene_Othello(); //�ʃV�[����΂����Ascm�ɓ���Ă����̂�gameScene�ɂȂ������x�̈Ⴂ
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Othello_Image/RuleImagePage1.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Othello_Image/RuleImagePage2.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Othello_Image/RuleImagePage3.png")), 1));
 			break;
 		}
 		explain.push_back(new Scene_Explain(*explainImage, gameScene)); //ボタンを押した際の説明シーン作成
@@ -100,6 +107,10 @@ Scene_Select::~Scene_Select() {
 }
 
 void Scene_Select::Update() {
+	if (CheckSoundMem(BGM) == 0) {
+		ChangeVolumeSoundMem(110, BGM);
+		PlaySoundMem(BGM, DX_PLAYTYPE_LOOP);
+	}
 	if (run != nullptr) { //runに何か入っていた場合そちらを優先実行
 		run->Update(); //run実行
 
@@ -108,6 +119,7 @@ void Scene_Select::Update() {
 		for (auto itr : explain) {
 			if (run == itr) { return; } //explainと同じ物があった場合抜け、次回もrunを実行する
 		}
+		StopSoundMem(BGM);
 		SetNext(run); //ここまで来たら設定されたシーンはゲーム実行シーンになるのでセレクト画面を終了しそちらに移行する
 		return;
 	}

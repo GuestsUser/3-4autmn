@@ -51,9 +51,11 @@ int Pot::PayOut(const Chara& user) {
 int Pot::Inquiry(const Chara& user) {
 	int payOut = 0; //支払合計額
 
-	for (auto itr = pot.find(charaPayment[&user]); true; --itr) { //mapは昇順なので自身以下のポットを得る為前に進める
-		payOut += itr->second; //今回のポットを支払額に加える
+	auto itr = pot.find(charaPayment[&user]);
+
+	for (itr; true; --itr) { //mapは昇順なので自身以下のポットを得る為前に進める
 		if (itr == pot.begin()) { break; } //前方だとend()のような物がないので終了条件をこっちに持ってくる
+		payOut += itr->second; //今回のポットを支払額に加える
 	}
 
 	return payOut; //支払額を返す
