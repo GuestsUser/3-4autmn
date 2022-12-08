@@ -68,7 +68,7 @@ BlackJack::BlackJack() {
 BlackJack::~BlackJack() {
 
   BlackJack::Finalize();
-
+  StopSoundMem(BGM);
   delete shoe;
   delete dealer;
   delete player;
