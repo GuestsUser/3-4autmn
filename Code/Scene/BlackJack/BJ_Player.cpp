@@ -13,7 +13,7 @@ Player::Player() {
   score = 0;
   type = 0;
   data = 0;
-  p_coin = 1000;
+  p_coin = 100000;
 
   spt_hand_num = 0;
   spt_score = 0;
@@ -107,6 +107,7 @@ void Player::Initialize() {
 
 /*ゲーム実行*/
 bool Player::Play(Shoe* shoe) {
+
   if (hit) {
     hit_r = 1.2;
     hit = false;
@@ -135,7 +136,7 @@ bool Player::Play(Shoe* shoe) {
     if (Player::ButtonHit(std_x, std_y, std_w, std_h) || dbl) {
       std = true;
     }
-    if (Player::ButtonHit(dbl_x, dbl_y, dbl_w, dbl_h) && (hand_num == 2 || spt_hand_num == 2)) {
+    if (Player::ButtonHit(dbl_x, dbl_y, dbl_w, dbl_h) && (hand_num == 2 || spt_hand_num == 2)&&(p_coin > bet_coin || p_coin > spt_bet_coin)) {
 
       if (p_coin < bet_coin || p_coin < spt_bet_coin) {
         std = true;
@@ -369,8 +370,8 @@ void Player::Draw() {
 
   DrawRotaGraph(hit_x + hit_w / 2, hit_y + hit_h / 2, hit_r, 0, hit_img, true);
   DrawRotaGraph(std_x + std_w / 2, std_y + std_h / 2, std_r, 0, std_img, true);
-  if (hand_num == 2 || spt_hand_num == 2) {
-    DrawRotaGraph(dbl_x + dbl_w / 2, dbl_y + dbl_h / 2, dbl_r, 0, dbl_img, true);
+  if ((hand_num == 2 || spt_hand_num == 2)&&game_flg) {
+    if (p_coin < bet_coin || p_coin < spt_bet_coin); else DrawRotaGraph(dbl_x + dbl_w / 2, dbl_y + dbl_h / 2, dbl_r, 0, dbl_img, true);
   }
 
   if (spt_flg) {
