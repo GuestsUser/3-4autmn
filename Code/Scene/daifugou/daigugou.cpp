@@ -26,7 +26,6 @@ struct player data[4] = {
 };
 
 int stage;
-int card_type[54];
 int cards[54]; /* 山札 */
 int hand[15];
 int order[4]; /* 誰から始めるか */
@@ -46,6 +45,8 @@ void CP::Player_Finalize() {
 	for (int i = 0; i < 53; i++) {
 		DeleteGraph(hand[i]);
 	}
+}
+void Player_Update(){
 }
 void CP::onesec() {
 	time_t t1;
@@ -226,16 +227,14 @@ void CP::status(int n) {
 			if (mar(*trash) != 'J')
 				DrawFormatString(50, 350, GetColor(255, 255, 255), " %c%2d ",mar(*trash), num(*trash));
 			else
-				printf(" %c ", mar(*trash));
+				DrawFormatString(50, 350, GetColor(255, 255, 255), " % c ",mar(*trash));
 		}
-		printf("\n");
 	}
 
 	/* 手札を表示 */
 	for (i = 1; i <= data[n].hand[0]; i++)
-		printf("[%3d]", i);
-	printf("\n");
-
+		DrawFormatString(200, 360, GetColor(255, 255, 255), "[%3d]", i); 
+	
 	for (i = 1; i <= data[n].hand[0]; i++) {
 
 		/* ジョーカーだった場合 数字を非表示 */
@@ -405,26 +404,26 @@ void CP::print(int n) {
 	int i;
 
 	/* ジョーカーだった場合 数字を非表示 */
-	printf("→%sは", data[n].name);
+	DrawFormatString(50, 350, GetColor(255, 255, 255), "→%sは", data[n].name);
 	for (i = 1; i <= trash[0]; i++) {
 		if (mar(trash[i]) == 'J')
-			printf(" %c ", mar(trash[i]));
+			DrawFormatString(50, 350, GetColor(255, 255, 255), "%c", mar(trash[i]));
 		else
-			printf("%c%2d", mar(trash[i]), num(trash[i]));
+			 DrawFormatString(50, 350, GetColor(255, 255, 255), "%c%2d", mar(trash[i]), num(trash[i]));
 		if (i != trash[0])
-			printf("と");
+			 DrawFormatString(50, 350, GetColor(255, 255, 255), "と");
 	}
-	printf("を出しました 残り%d枚です\n", data[n].hand[0]);
+	 DrawFormatString(50, 350, GetColor(255, 255, 255), "を出しました 残り%d枚です", data[n].hand[0]);
 }
 void CP::revolution() {
 	/* 革命 */
 
 	if (trash[0] >= 4 && rev == 0) {
-		printf("革命が起こりました\n");
+		DrawFormatString(50, 350, GetColor(255, 255, 255), "革命が起こりました\n");
 		rev = 1;
 	}
 	else if (trash[0] >= 4 && rev == 1) {
-		printf("革命が返されました\n");
+		DrawFormatString(50, 350, GetColor(255, 255, 255), "革命が返されました\n");
 		rev = 0;
 	}
 }
@@ -435,7 +434,7 @@ void CP::elevenback() {
 	for (i = 1; i <= trash[0]; i++) {
 		if (num(trash[i]) == 11) {
 			eback = 1;
-			printf("イレブンバックしました\n");
+			DrawFormatString(50, 350, GetColor(255, 255, 255), "イレブンバックしました\n");
 			break;
 		}
 	}
@@ -453,7 +452,7 @@ void CP::pl_routine(int n) {
 		produce[0][0] = 0;
 		i = 1;
 		while (1) {
-			printf("%2d枚目のカード : ", i);
+		DrawFormatString(50, 350, GetColor(255, 255, 255), "%2d枚目のカード",i);
 			scanf_s("%d", &produce[0][i]);
 			if (produce[0][i] == 0)
 				break;
@@ -462,7 +461,7 @@ void CP::pl_routine(int n) {
 		}
 		/* 初めから0が入力されたら */
 		if (produce[0][0] == 0) {
-			printf("→%sはパスしました\n", data[n].name);
+			DrawFormatString(50, 350, GetColor(255, 255, 255), "→%sはパスしました\n", data[n].name);
 			data[n].pass++;
 			break;
 		}
@@ -475,7 +474,7 @@ void CP::pl_routine(int n) {
 			elevenback();
 			break;
 		}
-		printf("カードが不正でした。もう一度選んでください。\n");
+		DrawFormatString(50, 350, GetColor(255, 255, 255), "カードが不正でした。もう一度選んでください。");
 	}
 }
 
@@ -513,7 +512,7 @@ void CP::cp_routine(int n) {
 				break;
 
 			if (produce[0][0] == 1) {
-				printf("→%sはパスしました\n", data[n].name);
+				DrawFormatString(50, 350, GetColor(255, 255, 255), "→%sはパスしました",data[n].name);
 				data[n].pass++;
 				break;
 			}
@@ -537,7 +536,7 @@ void CP::cp_routine(int n) {
 			}
 		}
 		if (pc != n) {
-			printf("→%sはパスしました\n", data[n].name);
+			DrawFormatString(50, 350, GetColor(255, 255, 255), "→%sはパスしました", data[n].name);
 			data[n].pass++;
 		}
 	}
@@ -551,11 +550,11 @@ void CP::expend(int n) {
 		data[n].fin = 1;
 		for (i = 1; i <= trash[0]; i++) {
 			if (num(trash[i]) == 8 || eback == 0 && str(trash[i]) == 12 || mar(trash[i]) == 'J') {
-				printf("%sは反則あがりました\n", data[n].name);
+				DrawFormatString(50, 350, GetColor(255, 255, 255), "%sは反則あがりました\n", data[n].name);
 				break;
 			}
 			if (i == trash[0])
-				printf("%sはあがりました\n", data[n].name);
+				DrawFormatString(50, 350, GetColor(255, 255, 255), "%sはあがりました\n", data[n].name);
 		}
 	}
 }
@@ -627,7 +626,7 @@ void CP::main() {
 				break;
 
 		}
-		printf("\n\n\n==========第%d回戦終了！==========\n", i);
+		DrawFormatString(50, 350, GetColor(255, 255, 255), "==========第%d回戦終了！==========",i);
 
 
 	}

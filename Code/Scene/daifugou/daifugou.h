@@ -7,7 +7,7 @@ private:
 public:
 	void Player_Initialize();//çœ
 	void Player_Finalize();//çœ
-	//void CP_Player_Update();
+	//void Player_Update();
 	void Player_Draw();
 	void onesec();//çœ
 	void deckmake();//éRéDê∂ê¨//çœ
