@@ -220,6 +220,8 @@ void PageOne::PageOne_Update() {
 		if (450 <= Mouse_X && Mouse_X <= 850 && 470 <= Mouse_Y && Mouse_Y <= 590) {
 			if (Old_key != KEY_FREE && Now_key == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
 				PlaySoundMem(Select_SE, DX_PLAYTYPE_BACK);
+				StopSoundMem(BGM);
+				PageOne_Finalize();
 				select->SetNext(new Scene_Select());
 			}
 		}
