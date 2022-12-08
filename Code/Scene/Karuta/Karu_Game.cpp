@@ -34,6 +34,7 @@ bool now_pause = false;
 bool now_push = false;
 bool on_ContinueButton = false;
 bool on_MenuButton = false;
+bool now_GoSe = false;
 
 float Go_Angle1 = 0.0f;
 float Go_Angle2 = 0.0f;
@@ -138,10 +139,16 @@ void Karu_Game::Karu_Game_Initialize(Scene* scene) {
 	//SE格納
 	Touch_Sound = LoadSoundMem("Resource/se/Karu_SE/Touch.wav");
 	ChangeVolumeSoundMem(255 * 80 / 100, Touch_Sound);
+	Suka_Sound = LoadSoundMem("Resource/se/Karu_SE/suka.wav");
+	ChangeVolumeSoundMem(255 * 80 / 100, Suka_Sound);
 	Otetuki_Sound = LoadSoundMem("Resource/se/Karu_SE/Buzzer.wav");
 	ChangeVolumeSoundMem(255 * 80 / 100, Otetuki_Sound);
 	Se_Cursor = LoadSoundMem("Resource/se/Karu_SE/Karu_Cursor.wav");
 	Se_Select = LoadSoundMem("Resource/se/Karu_SE/Karu_Select.wav");
+	Se_GameOver = LoadSoundMem("Resource/se/Karu_SE/Karu_GameOver.wav");
+	ChangeVolumeSoundMem(255 * 80 / 100, Se_GameOver);
+	Se_Result = LoadSoundMem("Resource/se/Karu_SE/Karu_Result.wav");
+	ChangeVolumeSoundMem(255 * 80 / 100, Se_Result);
 
 	//BGM格納
 	Karu_Bgm = LoadSoundMem("Resource/bgm/Karu_BGM/Karuta_Bgm.wav");
@@ -189,9 +196,13 @@ void Karu_Game::Karu_Game_Update() {
 		once_bgm = true;
 	}
 
-	if (CheckHitKey(KEY_INPUT_0)) {
-		end = true;
-	}
+	//デバッグ用
+	//if (CheckHitKey(KEY_INPUT_0)) {
+	//	if (!end) {
+	//		PlaySoundMem(Se_Result, DX_PLAYTYPE_BACK);
+	//		end = true;		//終了
+	//	}
+	//}
 
 	//ゲームオーバーになるまで
 	if (!end && !Gameover) {
@@ -200,7 +211,6 @@ void Karu_Game::Karu_Game_Update() {
 				if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
 					Click_check = 1;	//クリックしたことにする
 					Mouse_HitBox();		//かるたに触れているか確認
-					PlaySoundMem(Touch_Sound, DX_PLAYTYPE_BACK);
 				}
 
 				Cpu_config();
@@ -215,7 +225,10 @@ void Karu_Game::Karu_Game_Update() {
 				Yomifuda_Storage();
 			}
 			else if ((Karu_player.myFuda + cpu_1.myFuda + cpu_2.myFuda + cpu_3.myFuda) > 43) {
-				end = true;		//終了
+				if (!end) {
+					PlaySoundMem(Se_Result, DX_PLAYTYPE_BACK);
+					end = true;		//終了
+				}
 			}
 
 			if (CheckSoundMem(voice) == 1) {
@@ -233,6 +246,9 @@ void Karu_Game::Karu_Game_Update() {
 		}
 	}
 	else if (Gameover) {
+		if (CheckSoundMem(Se_GameOver) == 0) {
+			now_GoSe = true;
+		}
 		Karu_GameOver();
 		if (Go_Angle1 <= PI * 2) {
 			Go_Angle1 += PI * 0.05f;
@@ -258,29 +274,32 @@ void Karu_Game::Karu_Game_Update() {
 
 		Karu_End();
 	}
-	Click_Anim();
+	if (!Touch_once) {
+		Click_Anim();
+	}
 	Otetuki_Anim();
 
-	if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH) { // 右クリックしたら
-		//絵札総入れ替え
-		for (int i = 0; i < KARU_MAX_Y; i++) {
-			for (int j = 0; j < KARU_MAX_X; j++) {
-				Efuda[i][j] = { 0,0,0,0,0,true };
-			}
-			for (int z = 0; z < 100; z++) {
-				Fuda[z].get = false;
-			}
-		}
-		Yomifuda[0][0].kara = true;
-		Yomiset = false;
-		reset = 0;
-		end = false;
-		Karu_player.Otetuki = 0;
-		Karu_player.myFuda = 0;
-		cpu_1 = { 0,0,0,0 };
-		cpu_2 = { 0,0,0,0 };
-		cpu_3 = { 0,0,0,0 };
-	}
+	////デバッグ用
+	//if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH) { // 右クリックしたら
+	//	//絵札総入れ替え
+	//	for (int i = 0; i < KARU_MAX_Y; i++) {
+	//		for (int j = 0; j < KARU_MAX_X; j++) {
+	//			Efuda[i][j] = { 0,0,0,0,0,true };
+	//		}
+	//		for (int z = 0; z < 100; z++) {
+	//			Fuda[z].get = false;
+	//		}
+	//	}
+	//	Yomifuda[0][0].kara = true;
+	//	Yomiset = false;
+	//	reset = 0;
+	//	end = false;
+	//	Karu_player.Otetuki = 0;
+	//	Karu_player.myFuda = 0;
+	//	cpu_1 = { 0,0,0,0 };
+	//	cpu_2 = { 0,0,0,0 };
+	//	cpu_3 = { 0,0,0,0 };
+	//}
 }
 
 /*************************
@@ -289,7 +308,9 @@ void Karu_Game::Karu_Game_Update() {
 void Karu_Game::Karu_Game_Draw() {
 	DrawRotaGraph(640, 360, 1.0, 0, Karu_Bg, TRUE);
 	DrawRotaGraph(1100, 360, 1.0, 0, Karu_SideBg, TRUE);
-	DrawRotaGraph(1080, 520, 1.7, 0, Yomifuda[0][0].img, TRUE);
+	if (!now_voice) {
+		DrawRotaGraph(1080, 520, 1.7, 0, Yomifuda[0][0].img, TRUE);
+	}
 	for (int o = 0; o < 3;o++) {
 		if (Karu_player.Otetuki > o ) {
 			DrawRotaGraph(1000 + (100 * o), 290, 1.0, 0, Karu_Otetuki_img[1], TRUE);
@@ -332,13 +353,6 @@ void Karu_Game::Karu_Game_Draw() {
 	}
 	AllSet = true;
 
-	/*DrawFormatString(800, 0, 0xFF0000, "X: %d  Y: %d", ix, iy);
-	DrawFormatString(800, 100, 0xFF0000, "Reset_score: %d", reset);
-	DrawFormatString(800, 300, 0xFF0000, "PLAYER 1: %d", Karu_player.myFuda);*/
-	//DrawFormatString(800, 200, 0xFF0000, "Rank_All: %d", Rank_All);
-	//DrawFormatString(800, 100, 0xFF0000, "Player_Rank: %d", Karu_player.Rank);
-	DrawFormatString(800, 300, 0xFF0000, "now_voice: %d", now_voice);
-
 	if (cpu_1.onClick) {
 		DrawRotaGraph(cpu_1.x, cpu_1.y, 1.0, 0, Enemy1_HandIcon[1], TRUE);
 	}
@@ -348,7 +362,7 @@ void Karu_Game::Karu_Game_Draw() {
 	if (cpu_3.onClick) {
 		DrawRotaGraph(cpu_3.x, cpu_3.y, 1.0, 0, Enemy3_HandIcon[1], TRUE);
 	}
-	if (!now_pause) {
+	if (!now_pause && !end && !Gameover) {
 		DrawRotaGraph(Mouse_X, Mouse_Y, 1.0, 0, Player_HandIcon[Click_check], TRUE);
 	}
 
@@ -375,8 +389,10 @@ void Karu_Game::Karu_Game_Draw() {
 		DrawRotaGraph(320, 150, 1.0, Go_Angle1, GameOverImg, TRUE);
 		DrawRotaGraph(1020, 220, 0.7, Go_Angle2, GameOverImg, TRUE);
 		DrawRotaGraph(970, 200, 1.0, Go_Angle3, GameOverImg, TRUE);
-		DrawRotaGraph(640, 310, 1.0, 0, GO_ContinueButton[on_ContinueButton], TRUE);
-		DrawRotaGraph(640, 460, 1.0, 0, GO_MenuButton[on_MenuButton], TRUE);
+		if (now_GoSe) {
+			DrawRotaGraph(640, 310, 1.0, 0, GO_ContinueButton[on_ContinueButton], TRUE);
+			DrawRotaGraph(640, 460, 1.0, 0, GO_MenuButton[on_MenuButton], TRUE);
+		}
 	}
 
 	if (now_pause) {
@@ -501,6 +517,7 @@ void Karu_Game::Mouse_HitBox() {
 				ix = j;
 				iy = i;
 				if (Yomifuda[0][0].img == Karu_fuda[Efuda[i][j].numY][(Efuda[i][j].numX) + 1]) {
+					PlaySoundMem(Touch_Sound, DX_PLAYTYPE_BACK);
 					if (!Touch_once) {
 						Rank_All++;
 						Karu_player.Rank = Rank_All;
@@ -513,7 +530,7 @@ void Karu_Game::Mouse_HitBox() {
 						Player_Reset();
 					}
 				}
-				else if(!Efuda[i][j].kara){
+				else if(!Efuda[i][j].kara && !Touch_once){
 					Otetuki = true;
 					PlaySoundMem(Otetuki_Sound, DX_PLAYTYPE_BACK);
 					if (Karu_player.Otetuki < KARU_OTETUKI_MAX) {
@@ -831,55 +848,72 @@ void Karu_Game::Rank() {
 * 戻り値:なし
 ********************/
 void Karu_Game::Karu_GameOver() {
-	Gameover = true;
-	if(Mouse_X > 440 && Mouse_X < 840 && Mouse_Y > 250 && Mouse_Y < 370) {
-		if (!once_SelectContinueSE) {
-			PlaySoundMem(Se_Cursor, DX_PLAYTYPE_BACK);
-			once_SelectContinueSE = true;
-		}
-		on_ContinueButton = true;
-		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
-			PlaySoundMem(Se_Select, DX_PLAYTYPE_BACK);
-			//絵札総入れ替え
-			for (int i = 0; i < KARU_MAX_Y; i++) {
-				for (int j = 0; j < KARU_MAX_X; j++) {
-					Efuda[i][j] = { 0,0,0,0,0,true };
-				}
-				for (int z = 0; z < 100; z++) {
-					Fuda[z].get = false;
-				}
+	StopSoundMem(Touch_Sound);
+	StopSoundMem(Karu_Bgm);
+	StopSoundMem(voice);
+	if (!Gameover) {
+		PlaySoundMem(Se_GameOver, DX_PLAYTYPE_BACK);
+		Gameover = true;
+	}
+	if (now_GoSe) {
+		if (Mouse_X > 440 && Mouse_X < 840 && Mouse_Y > 250 && Mouse_Y < 370) {
+			if (!once_SelectContinueSE) {
+				PlaySoundMem(Se_Cursor, DX_PLAYTYPE_BACK);
+				once_SelectContinueSE = true;
 			}
-			Yomifuda[0][0].kara = true;
-			Yomiset = false;
-			reset = 0;
-			end = false;
-			Gameover = false;
-			Karu_player.Otetuki = 0;
-			Karu_player.myFuda = 0;
-			cpu_1 = { 0,0,0,0 };
-			cpu_2 = { 0,0,0,0 };
-			cpu_3 = { 0,0,0,0 };
-		}
-	}
-	else {
-	on_ContinueButton = false;
-	once_SelectContinueSE = false;
-	}
+			on_ContinueButton = true;
+			if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+				now_GoSe = false;
+				PlaySoundMem(Se_Select, DX_PLAYTYPE_BACK);
 
-	if (Mouse_X > 440 && Mouse_X < 840 && Mouse_Y > 400 && Mouse_Y < 520) {
-		if (!once_SelectMenuSE) {
-			PlaySoundMem(Se_Cursor, DX_PLAYTYPE_BACK);
-			once_SelectMenuSE = true;
+				PlaySoundMem(Karu_Bgm, DX_PLAYTYPE_LOOP, FALSE);
+				if (old_voice) {
+					PlaySoundMem(voice, DX_PLAYTYPE_BACK, FALSE);
+				}
+				old_voice = false;
+
+				//絵札総入れ替え
+				for (int i = 0; i < KARU_MAX_Y; i++) {
+					for (int j = 0; j < KARU_MAX_X; j++) {
+						Efuda[i][j] = { 0,0,0,0,0,true };
+					}
+					for (int z = 0; z < 100; z++) {
+						Fuda[z].get = false;
+					}
+				}
+				Yomifuda[0][0].kara = true;
+				Yomiset = false;
+				reset = 0;
+				end = false;
+				Gameover = false;
+				Karu_player.Otetuki = 0;
+				Karu_player.myFuda = 0;
+				cpu_1 = { 0,0,0,0 };
+				cpu_2 = { 0,0,0,0 };
+				cpu_3 = { 0,0,0,0 };
+			}
 		}
-		on_MenuButton = true;
-		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
-			PlaySoundMem(Se_Select, DX_PLAYTYPE_BACK);
-			parent->SetNext(new Scene_Select());
+		else {
+			on_ContinueButton = false;
+			once_SelectContinueSE = false;
 		}
-	}
-	else {
-		on_MenuButton = false;
-		once_SelectMenuSE = false;
+
+		if (Mouse_X > 440 && Mouse_X < 840 && Mouse_Y > 400 && Mouse_Y < 520) {
+			if (!once_SelectMenuSE) {
+				PlaySoundMem(Se_Cursor, DX_PLAYTYPE_BACK);
+				once_SelectMenuSE = true;
+			}
+			on_MenuButton = true;
+			if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
+				now_GoSe = false;
+				PlaySoundMem(Se_Select, DX_PLAYTYPE_BACK);
+				parent->SetNext(new Scene_Select());
+			}
+		}
+		else {
+			on_MenuButton = false;
+			once_SelectMenuSE = false;
+		}
 	}
 }
 
@@ -889,6 +923,10 @@ void Karu_Game::Karu_GameOver() {
 * 戻り値:なし
 ********************/
 void Karu_Game::Karu_End() {
+
+	StopSoundMem(Karu_Bgm);
+	StopSoundMem(voice);
+
 	if (Mouse_X > 140 && Mouse_X < 540 && Mouse_Y > 580 && Mouse_Y < 700) {
 		if (!once_SelectContinueSE) {
 			PlaySoundMem(Se_Cursor, DX_PLAYTYPE_BACK);
@@ -897,6 +935,13 @@ void Karu_Game::Karu_End() {
 		on_ContinueButton = true;
 		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
 			PlaySoundMem(Se_Select, DX_PLAYTYPE_BACK);
+
+			PlaySoundMem(Karu_Bgm, DX_PLAYTYPE_LOOP, FALSE);
+			if (old_voice) {
+				PlaySoundMem(voice, DX_PLAYTYPE_BACK, FALSE);
+			}
+			old_voice = false;
+
 			//絵札総入れ替え
 			for (int i = 0; i < KARU_MAX_Y; i++) {
 				for (int j = 0; j < KARU_MAX_X; j++) {

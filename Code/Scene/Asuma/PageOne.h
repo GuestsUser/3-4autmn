@@ -71,6 +71,9 @@ private:
 	int pageone_SE;
 	int card_SE_1;	//カードを引く
 	int card_SE_2;	//カードを出す
+	int card_SE_3;	//カードを移動する
+
+	bool OneShot;	//鳴ったかどうか（一回だけ鳴らすのに使う）
 
 	Scene* select;
 

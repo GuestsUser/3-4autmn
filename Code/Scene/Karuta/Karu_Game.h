@@ -56,6 +56,7 @@ private:
 	int Enemy2_HandIcon[HAND_ICON];	//マウスカーソルアイコン格納用
 	int Enemy3_HandIcon[HAND_ICON];	//マウスカーソルアイコン格納用
 
+	int Suka_Sound;		//スカした時の音格納用
 	int Touch_Sound;	//クリック音格納用
 	int Otetuki_Sound;	//お手付き音格納用
 
@@ -83,6 +84,8 @@ private:
 
 	int Se_Cursor;				//カーソルのSE
 	int Se_Select;				//決定ボタンのSE
+	int Se_GameOver;			//ゲームオーバー時のSE
+	int Se_Result;				//リザルト時のSE
 
 	bool end;
 	bool Gameover;
