@@ -5,7 +5,6 @@
 #include <string.h>
 #include "./../Code/GetKey.h"
 #include "./Othello_Board.h"
-#include "./Othello_Player.h"
 #include "./../Scene.h"
 #include "./../Title/Scene_Select.h"
 #include "../Title/Scene_GameTitle.h"
@@ -72,6 +71,10 @@ void Othello_Board::Othello_Board_Initialize(Scene* scene) {
     EndFlag = false;        // ゲームの終了条件を満たしたかどうかに使うフラグの初期化
     RandomFlag = false;     // ランダムな値を取得したかどうかに使うフラグの初期化
     PauseFlg = false;       // ポーズ画面を表示させるかどうかに使うフラグの初期化
+
+    for (int i = 0; i < 4; i++) {
+        SEFlag[i] = false;
+    }
 
     Init_OthelloBoard(Board);           // ボードを初期化
     BoardScore(ScoreBoard);             // ボードに評価値を入れる
@@ -269,48 +272,80 @@ void Othello_Board::Othello_Board_Update() {
                 }
             }
         }
-    }else if (PauseFlg == true) {   // ポーズボタンが押されていたら
+    }
+    else if (PauseFlg == true) {   // ポーズボタンが押されていたら
         // 「つづける」ボタンか、ポーズボタンを押すとゲームを再開する
         if ((450 <= Mouse_X && Mouse_X <= 850 && 320 <= Mouse_Y && Mouse_Y <= 440) ||
             (10 <= Mouse_X && Mouse_X <= 170 && 5 <= Mouse_Y && Mouse_Y <= 75)) {
+            if (!SEFlag[0]) {
+                PlaySoundMem(PauseSelectSE, DX_PLAYTYPE_BACK);
+                SEFlag[0] = true;
+            }
             if (OldKey != KEY_FREE && nowKey == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
                 PauseFlg = false;       // ポーズ画面を閉じる
                 PlaySoundMem(PauseClickSE, DX_PLAYTYPE_BACK, true);
             }
         }
+        else {
+            SEFlag[0] = false;
+        }
+
         // 「セレクトに戻る」を押すと、セレクト画面に戻る
-        if (450 <= Mouse_X && Mouse_X <= 850 && 470 <= Mouse_Y && Mouse_Y <= 590) {
+        if (450 <= Mouse_X && Mouse_X <= 850 && 470 <= Mouse_Y && Mouse_Y <= 590){
+            if (!SEFlag[1]) {
+                PlaySoundMem(PauseSelectSE, DX_PLAYTYPE_BACK);
+                SEFlag[1] = true;
+            }
             if (OldKey != KEY_FREE && nowKey == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
                 StopSoundMem(BGM);      // BGMを止める
                 PlaySoundMem(PauseClickSE, DX_PLAYTYPE_BACK, true);
                 Parent->SetNext(new Scene_Select());    // セレクトシーンに移動
             }
         }
+        else {
+            SEFlag[1] = false;
+        }
+        OldKey = nowKey; //前に入力していたキーを今入力していたキーに上書きする
     }
-    OldKey = nowKey; //前に入力していたキーを今入力していたキーに上書きする
 
     // リザルト画面の表示
     if (EndFlag == true) {
         // 「つづける」ボタンか、ポーズボタンを押すとゲームを再開する
-        if (350 <= Mouse_X && Mouse_X <= 550 && 500 <= Mouse_Y && Mouse_Y <= 560)
-            {
+        if (350 <= Mouse_X && Mouse_X <= 550 && 500 <= Mouse_Y && Mouse_Y <= 560) {
+            if (!SEFlag[2]) {
+                PlaySoundMem(PauseSelectSE, DX_PLAYTYPE_BACK);
+                SEFlag[2] = true;
+            }
+
             //if (OldKey != KEY_FREE && nowKey == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
             if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
+                PlaySoundMem(PauseClickSE, DX_PLAYTYPE_NORMAL);
                 Othello_Board_Finalize();
                 Othello_Board_Initialize(Parent);
             }
         }
+        else {
+            SEFlag[2] = false;
+        }
         // 「セレクトに戻る」を押すと、セレクト画面に戻る
         if (750 <= Mouse_X && Mouse_X <= 950 && 500 <= Mouse_Y && Mouse_Y <= 560) {
-           // if (OldKey != KEY_FREE && nowKey == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
+            if (!SEFlag[3]) {
+                PlaySoundMem(PauseSelectSE, DX_PLAYTYPE_BACK);
+                SEFlag[3] = true;
+            }
+
+            // if (OldKey != KEY_FREE && nowKey == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
             if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
-                StopSoundMem(BGM);
+                PlaySoundMem(PauseClickSE, DX_PLAYTYPE_BACK, true);
+                StopSoundMem(BGM);                      // BGMを止める
                 Parent->SetNext(new Scene_Select());    // セレクトシーンに移動
             }
         }
+        else {
+            SEFlag[3] = false;
+        }
+        OldKey = nowKey; //前に入力していたキーを今入力していたキーに上書きする
     }
-    OldKey = nowKey; //前に入力していたキーを今入力していたキーに上書きする
-
 }
 // -----------------------------------------------
 
@@ -632,10 +667,6 @@ void Othello_Board::Othello_Board_Draw() {
     }
     DrawRotaGraph(90, 40, 0.9, 0, Pause_Button, TRUE);      // ポーズボタンの表示
     // ------------------------------------------------------------------------
-
-    DrawFormatString(800 + MAP_SIZE / 2, 500, BlackCr, "X:%d", Mouse_X);      // 黒石の現在の数を表示
-    DrawFormatString(800 + MAP_SIZE / 2, 600, BlackCr, "Y:%d", Mouse_Y);      // 白石の現在の数を表示
-
 }
 // ---------------------------------------------------------------------
 
