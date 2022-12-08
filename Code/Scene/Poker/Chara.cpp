@@ -61,7 +61,9 @@ void Chara::Draw() {
 	for (auto itr : coinBack) { itr->Draw(); } //ƒRƒCƒ“•`ŽÊ—p”wŒi•`ŽÊ
 	DrawStringToHandle(coinBack[0]->EditTranform()->ReadPos().GetX(), coinBack[0]->EditTranform()->ReadPos().GetY(), std::to_string(coin).c_str(), *PokerFontData::GetColor(PokerFontData::color::normal), *PokerFontData::GetHandle(PokerFontData::type::normal));
 
-	for (auto itr : cmp) { if (itr->GetRunDraw()) { itr->Draw(); } }
+	for (auto itr : cmp) { 
+		if (itr->GetRunDraw()) { itr->Draw(); } 
+	}
 }
 
 

@@ -63,7 +63,7 @@ void Cmp_CPUBetLogic::RaiseVolDecision(const Chara& chara, bool isCheckReach) {
 	}
 	if (rank >= border.size()) { rank = border.size() - 1; } //手の強さがボーダーの上限を超えていた場合圏内に納める
 
-	raiseActive = handRank[0] >= GetRand(borderBase[rank * 2 + 1] - borderBase[rank * 2]) + borderBase[rank * 2] + GetRand(raiseBorder[rank * 2 + 1] - raiseBorder[rank * 2]) + raiseBorder[rank * 2]; //内部ランク内のボーダーベースとレイズベースからランダム数値を取り出して2つを加算した値以上の手の強さなら自主レイズを行う
+	raiseActive = handRank[0] >= GetRand(borderBase[rank * 2 + 1] - borderBase[rank * 2]) + borderBase[rank * 2] + raiseBorder[rank]; //内部ランク内のボーダーベースとレイズベースからランダム数値を取り出して2つを加算した値以上の手の強さなら自主レイズを行う
 
 	if (isCheckReach && CardDealer::ReachCheck(chara) != 1) { //リーチチェック
 		vol = GetRand(payLimit[payLimit.size() - 1] - payLimit[payLimit.size() - 2]) + payLimit[payLimit.size() - 2]; //リーチが掛かっていればそちらにレイズ基準を合わせる

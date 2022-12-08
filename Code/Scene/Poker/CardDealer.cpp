@@ -27,14 +27,15 @@ int CardDealer::DeckDraw() {
 
 
 
-void HandComboCheck(std::deque<int> hand, CardDealer::deque_map& get) { //handに現在手札を渡すとその手札で同じ強さのカードの個数をgetに入れてくれる
+void HandComboCheck(std::deque<int>& hand, CardDealer::deque_map& get) { //handに現在手札を渡すとその手札で同じ強さのカードの個数をgetに入れてくれる
 	for (int i = 0; i < hand.size(); ++i) {
-		if (hand[i] = -1) { continue; } //チェック済みの-1札の場合飛ばす
-		++get[hand[i] % 13].second; //非チェックのカードなら個数加算しておく
+		if (hand[i] == -1) { continue; } //チェック済みの-1札の場合飛ばす
+		get.push_back(std::pair<int, int>(hand[i] % 13, 1)); //非チェックのカードなら追加しておく
 
+		int sub = get.size() - 1; //今回の添え字
 		for (int j = i; j < hand.size(); ++j) {
 			if (hand[i] % (int)CardDealer::CardPower::max != hand[j] % (int)CardDealer::CardPower::max) { continue; } //札が違う場合やり直し
-			++get[hand[j] % 13].second; //その札の枚数カウントを増やす
+			++get[sub].second; //その札の枚数カウントを増やす
 			hand[j] = -1; //同じ札をチェックしないよう調べた札に-1入れる
 		}
 	}
