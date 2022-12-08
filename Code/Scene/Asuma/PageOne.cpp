@@ -12,7 +12,7 @@ void PageOne::PageOne_Initialize(Scene* scene) {
 	background = LoadGraph("Resource/image/CareerPoker.png");
 
 	//カード画像
-	LoadDivGraph("Resource/image/toranpu_all.png", 54, 13, 5, 200, 300, card_type);
+	card = LoadDivGraph("Resource/image/toranpu_all.png", 54, 13, 5, 200, 300, card_type);
 
 	//リザルト画像
 	PlayerCrown = LoadGraph("Resource/image/PageOne_Image/Player_Crown.png");
@@ -48,18 +48,28 @@ void PageOne::PageOne_Initialize(Scene* scene) {
 
 	Result = LoadGraph("Resource/image/PageOne_Image/ResultBack.png");
 
-	//SE
+	//SE&BGM
 	pass_SE = LoadSoundMem("Resource/se/pageOne_SE/pass.wav");
 	pageone_SE = LoadSoundMem("Resource/se/pageOne_SE/pageone.wav");
 	card_SE_1 = LoadSoundMem("Resource/se/pageOne_SE/トランプ・引く02.wav");
 	card_SE_2 = LoadSoundMem("Resource/se/pageOne_SE/カードを台の上に出す.wav");
 	card_SE_3 = LoadSoundMem("Resource/se/pageOne_SE/カードをめくる.wav");
+	win_SE = LoadSoundMem("Resource/se/pageOne_SE/Morning_Maze.wav");
 
-	ChangeVolumeSoundMem(150, pass_SE);
-	ChangeVolumeSoundMem(150, pageone_SE);
-	ChangeVolumeSoundMem(150, card_SE_1);
-	ChangeVolumeSoundMem(150, card_SE_2);
-	ChangeVolumeSoundMem(150, card_SE_3);
+	Select_SE = LoadSoundMem("Resource/se/Karu_SE/Karu_Select.wav");
+
+	BGM = LoadSoundMem("Resource/se/pageOne_SE/フルハウス_2.wav");
+
+	ChangeVolumeSoundMem(255 * 80 / 100, pass_SE);
+	ChangeVolumeSoundMem(255 * 80 / 100, pageone_SE);
+	ChangeVolumeSoundMem(255 * 80 / 100, card_SE_1);
+	ChangeVolumeSoundMem(255 * 80 / 100, card_SE_2);
+	ChangeVolumeSoundMem(255 * 80 / 100, card_SE_3);
+	ChangeVolumeSoundMem(255 * 80 / 100, win_SE);
+
+	ChangeVolumeSoundMem(255 * 80 / 100, Select_SE);
+
+	ChangeVolumeSoundMem(255 * 80 / 100, BGM);
 
 	OneShot = false;
 
@@ -127,9 +137,64 @@ void PageOne::PageOne_Initialize(Scene* scene) {
 }
 
 void PageOne::PageOne_Finalize() {
-	for (i = 0; i < 54; i++) {
-		DeleteGraph(card_type[i]);
-	}
+
+	//背景
+	DeleteGraph(background);
+
+	//カード画像
+	DeleteGraph(card);
+
+	//リザルト画像
+	DeleteGraph(PlayerCrown);
+	DeleteGraph(NPC1_Icon);
+	DeleteGraph(NPC2_Icon);
+	DeleteGraph(NPC3_Icon);
+
+	//パス画像
+	DeleteGraph(Player_Pass_Icon);
+	DeleteGraph(NPC1_Pass_Icon);
+	DeleteGraph(NPC2_Pass_Icon);
+	DeleteGraph(NPC3_Pass_Icon);
+
+	//ページワン画像
+	DeleteGraph(Player_PageOne_Icon);
+	DeleteGraph(NPC1_PageOne_Icon);
+	DeleteGraph(NPC2_PageOne_Icon);
+	DeleteGraph(NPC3_PageOne_Icon);
+
+	//スート
+	DeleteGraph(Spade);
+	DeleteGraph(Heart);
+	DeleteGraph(Diamond);
+	DeleteGraph(Club);
+	DeleteGraph(free);
+
+	//ポーズ&リザルトUI
+	DeleteGraph(Pause_Button);
+	DeleteGraph(Pause_Back);
+	DeleteGraph(Pause_Continue);
+	DeleteGraph(Pause_Select);
+
+	DeleteGraph(Result);
+
+	//SE&BGM
+	DeleteSoundMem(pass_SE);
+	DeleteSoundMem(pageone_SE);
+	DeleteSoundMem(card_SE_1);
+	DeleteSoundMem(card_SE_2);
+	DeleteSoundMem(card_SE_3);
+	DeleteSoundMem(Select_SE);
+	DeleteSoundMem(win_SE);
+	DeleteSoundMem(BGM);
+
+	//Vector型配列の初期化
+	Card_obj.clear();
+	Player_card.clear();
+	NPC_card_1.clear();
+	NPC_card_2.clear();
+	NPC_card_3.clear();
+	Field_card.clear();
+	Cemetery_card.clear();
 }
 
 void PageOne::PageOne_Update() {
@@ -138,9 +203,14 @@ void PageOne::PageOne_Update() {
 
 	Now_key = key->GetKeyState(REQUEST_MOUSE_LEFT); //現在のマウス左ボタンの入力状態の取得
 
+	if (CheckSoundMem(BGM) == false) {
+		PlaySoundMem(BGM, DX_PLAYTYPE_BACK, TRUE);
+	}
+
 	//ポーズボタンを押したらポーズ画面を開くフラグをtrueにする
 	if ((20 <= Mouse_X && Mouse_X <= 175 && 5 <= Mouse_Y && Mouse_Y <= 70) || ((450 <= Mouse_X && Mouse_X <= 850 && 320 <= Mouse_Y && Mouse_Y <= 440) && Pause_Flg == true)) {
 		if (Old_key != KEY_FREE && Now_key == KEY_PULL) {
+			PlaySoundMem(Select_SE, DX_PLAYTYPE_BACK);
 			Pause_Flg = !Pause_Flg;
 		}
 	}
@@ -149,6 +219,7 @@ void PageOne::PageOne_Update() {
 	if (Pause_Flg == true) {
 		if (450 <= Mouse_X && Mouse_X <= 850 && 470 <= Mouse_Y && Mouse_Y <= 590) {
 			if (Old_key != KEY_FREE && Now_key == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
+				PlaySoundMem(Select_SE, DX_PLAYTYPE_BACK);
 				select->SetNext(new Scene_Select());
 			}
 		}
@@ -158,6 +229,9 @@ void PageOne::PageOne_Update() {
 		//最初からプレイ
 		if (175 <= Mouse_X && Mouse_X <= 575 && 565 <= Mouse_Y && Mouse_Y <= 685) {
 			if (Old_key != KEY_FREE && Now_key == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
+				PlaySoundMem(Select_SE, DX_PLAYTYPE_BACK);
+				StopSoundMem(BGM);
+				PageOne_Finalize();
 				select->SetNext(new Scene_PageOne());
 			}
 		}
@@ -165,6 +239,7 @@ void PageOne::PageOne_Update() {
 		//セレクト画面へ移動
 		if (625 <= Mouse_X && Mouse_X <= 1025 && 565 <= Mouse_Y && Mouse_Y <= 685) {
 			if (Old_key != KEY_FREE && Now_key == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
+				PlaySoundMem(Select_SE, DX_PLAYTYPE_BACK);
 				select->SetNext(new Scene_Select());
 			}
 		}
@@ -858,7 +933,7 @@ void PageOne::PageOne_Draw() {
 		switch (priority) {
 		case 0:
 			DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：プレイヤー");
-			if (Card_obj.empty() == false && draw == true) {
+			if (draw == true & Field_card.empty() == false) {
 				DrawFormatString(250, 450, GetColor(100, 100, 255), "カードを引いてください");
 			}
 			else if (Player_Pass_Flg == true) {
@@ -901,7 +976,6 @@ void PageOne::PageOne_Draw() {
 		}
 	}
 
-
 	//山札の描画
 	if (Card_obj.empty() == false) {
 		DrawRotaGraph(Deck_X, Deck_Y, 0.7, 0, Card_back, TRUE);
@@ -917,41 +991,10 @@ void PageOne::PageOne_Draw() {
 		DrawRotaGraph(Player_card[i].card_x + (i % 10) * (card_w * 0.5), Player_card[i].card_y + (i / 10) * (card_h * pow(0.5, 2)), 0.5, 0, Player_card[i].img, TRUE);
 	}
 
-	//パスのUI
-	if (Player_Pass_Flg == true) {
-		DrawGraph(890, 440, Player_Pass_Icon, true);
-	}
-
-	//ページワンボタン
-	if (PageOne_player == true) {
-		DrawGraph(500, 400, Player_PageOne_Icon, true);
-	}
-	//勝利時のUI
-	if (Player_setup == true && Player_card.size() == 0 && n >= 30) {
-		DrawRotaGraph(600, 300, 1.0, 0, Result, TRUE);
-		DrawRotaGraph(600, 300, 1.3, 0, PlayerCrown, TRUE);
-		finish = true;
-	}
-
-
 	//NPC１号の手札描画
 	for (i = 0; i < npc_1; i++) {
 		DrawRotaGraph(NPC1_X + (i % 5) * (card_w * 0.3), NPC1_Y + (i / 5) * (card_h * pow(0.3, 2)), 0.3, 0, Card_back, TRUE);
 		//DrawRotaGraph(NPC1_X + (i % 5) * (card_w * 0.3), NPC1_Y + (i / 5) * (card_h * pow(0.3, 2)), 0.3, 0, NPC_card_1[i].img, TRUE);
-	}
-	//パスのUI
-	if (NPC1_Pass_Flg == true) {
-		DrawGraph(0, 175, NPC1_Pass_Icon, true);
-	}
-	//ページワン宣言時のUI
-	if (PageOne_npc1 == true) {
-		DrawGraph(0, 175, NPC1_PageOne_Icon, true);
-	}
-	//勝利時のUI
-	if (NPC1_setup == true && NPC_card_1.size() == 0 && n >= 30) {
-		DrawRotaGraph(600, 300, 1.0, 0, Result, TRUE);
-		DrawRotaGraph(600, 300, 1.3, 0, NPC1_Icon, TRUE);
-		finish = true;
 	}
 
 	//NPC２号の手札描画
@@ -959,39 +1002,11 @@ void PageOne::PageOne_Draw() {
 		DrawRotaGraph(NPC2_X + (i % 5) * (card_w * 0.3), NPC2_Y + (i / 5) * (card_h * pow(0.3, 2)), 0.3, 0, Card_back, TRUE);
 		//DrawRotaGraph(NPC2_X + (i % 5) * (card_w * 0.3), NPC2_Y + (i / 5) * (card_h * pow(0.3, 2)), 0.3, 0, NPC_card_2[i].img, TRUE);
 	}
-	//パスのUI
-	if (NPC2_Pass_Flg == true) {
-		DrawGraph(400, 105, NPC2_Pass_Icon, true);
-	}
-	//ページワン宣言時のUI
-	if (PageOne_npc2 == true) {
-		DrawGraph(400, 105, NPC2_PageOne_Icon, true);
-	}
-	//勝利時のUI
-	if (NPC2_setup == true && NPC_card_2.size() == 0 && n >= 30) {
-		DrawRotaGraph(600, 300, 1.0, 0, Result, TRUE);
-		DrawRotaGraph(600, 300, 1.3, 0, NPC2_Icon, TRUE);
-		finish = true;
-	}
 
 	//NPC３号の手札描画
 	for (i = 0; i < npc_3; i++) {
 		DrawRotaGraph(NPC3_X + (i % 5) * (card_w * 0.3), NPC3_Y + (i / 5) * (card_h * pow(0.3, 2)), 0.3, 0, Card_back, TRUE);
 		//DrawRotaGraph(NPC3_X + (i % 5) * (card_w * 0.3), NPC3_Y + (i / 5) * (card_h * pow(0.3, 2)), 0.3, 0, NPC_card_3[i].img, TRUE);
-	}
-	//パスのUI
-	if (NPC3_Pass_Flg == true) {
-		DrawGraph(800, 175, NPC3_Pass_Icon, true);
-	}
-	//ページワン宣言時のUI
-	if (PageOne_npc3 == true) {
-		DrawGraph(800, 175, NPC3_PageOne_Icon, true);
-	}
-	//勝利時のUI
-	if (NPC3_setup == true && NPC_card_3.size() == 0 && n >= 30) {
-		DrawRotaGraph(600, 300, 1.0, 0, Result, TRUE);
-		DrawRotaGraph(600, 300, 1.3, 0, NPC3_Icon, TRUE);
-		finish = true;
 	}
 
 	if (finish == false) {
@@ -1005,6 +1020,60 @@ void PageOne::PageOne_Draw() {
 		DrawFormatString(875, 125, GetColor(255, 255, 255), "３号");
 
 		DrawFormatString(0, 665, GetColor(255, 255, 255), "山札:残り%d枚", Card_obj.size());
+	}
+
+	//パスのUI
+	if (Player_Pass_Flg == true) {
+		DrawGraph(890, 440, Player_Pass_Icon, true);
+	}
+	if (NPC1_Pass_Flg == true) {
+		DrawGraph(0, 175, NPC1_Pass_Icon, true);
+	}
+	if (NPC2_Pass_Flg == true) {
+		DrawGraph(400, 105, NPC2_Pass_Icon, true);
+	}
+	if (NPC3_Pass_Flg == true) {
+		DrawGraph(800, 175, NPC3_Pass_Icon, true);
+	}
+
+	//ページワンボタン
+	if (PageOne_player == true) {
+		DrawGraph(500, 400, Player_PageOne_Icon, true);
+	}
+	if (PageOne_npc1 == true) {
+		DrawGraph(0, 175, NPC1_PageOne_Icon, true);
+	}
+	if (PageOne_npc2 == true) {
+		DrawGraph(400, 105, NPC2_PageOne_Icon, true);
+	}
+	if (PageOne_npc3 == true) {
+		DrawGraph(800, 175, NPC3_PageOne_Icon, true);
+	}
+
+	//勝利時のUI
+	if (Player_setup == true && Player_card.size() == 0 && n >= 30) {
+		PlaySoundMem(win_SE, DX_PLAYTYPE_BACK, TRUE);
+		DrawRotaGraph(600, 300, 1.0, 0, Result, TRUE);
+		DrawRotaGraph(600, 300, 1.3, 0, PlayerCrown, TRUE);
+		finish = true;
+	}
+	if (NPC1_setup == true && NPC_card_1.size() == 0 && n >= 30) {
+		PlaySoundMem(win_SE, DX_PLAYTYPE_BACK, TRUE);
+		DrawRotaGraph(600, 300, 1.0, 0, Result, TRUE);
+		DrawRotaGraph(600, 300, 1.3, 0, NPC1_Icon, TRUE);
+		finish = true;
+	}
+	if (NPC2_setup == true && NPC_card_2.size() == 0 && n >= 30) {
+		PlaySoundMem(win_SE, DX_PLAYTYPE_BACK, TRUE);
+		DrawRotaGraph(600, 300, 1.0, 0, Result, TRUE);
+		DrawRotaGraph(600, 300, 1.3, 0, NPC2_Icon, TRUE);
+		finish = true;
+	}
+	if (NPC3_setup == true && NPC_card_3.size() == 0 && n >= 30) {
+		PlaySoundMem(win_SE, DX_PLAYTYPE_BACK, TRUE);
+		DrawRotaGraph(600, 300, 1.0, 0, Result, TRUE);
+		DrawRotaGraph(600, 300, 1.3, 0, NPC3_Icon, TRUE);
+		finish = true;
 	}
 
 	//ポーズボタン
