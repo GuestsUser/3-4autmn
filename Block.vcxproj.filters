@@ -55,6 +55,8 @@
     <ClCompile Include="Code\Scene\daifugou\daigugou.cpp" />
     <ClCompile Include="Code\Scene\BlackJack\Pose.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\SR_Scene.cpp" />
+    <ClCompile Include="Code\Scene\AirHockey\AirHockeyGameScene.cpp" />
+    <ClCompile Include="Code\Scene\AirHockey\AirHockey.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Component\Button.h" />
@@ -118,6 +120,8 @@
     <ClInclude Include="Code\Scene\daifugou\daifugou.h" />
     <ClInclude Include="Code\Scene\BlackJack\Pose.h" />
     <ClInclude Include="Code\Scene\Sugoroku\SR_Scene.h" />
+    <ClInclude Include="Code\Scene\AirHockey\AirHockey.h" />
+    <ClInclude Include="Code\Scene\AirHockey\AirHockeyGameScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Scene\Title\SelectScene.cd" />
