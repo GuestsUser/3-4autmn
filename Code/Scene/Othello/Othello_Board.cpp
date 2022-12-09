@@ -76,6 +76,7 @@ void Othello_Board::Othello_Board_Initialize(Scene* scene) {
         SEFlag[i] = false;
     }
 
+    RandomOrder();      // プレイヤーが先手・後手かをランダムに決める関数
     Init_OthelloBoard(Board);           // ボードを初期化
     BoardScore(ScoreBoard);             // ボードに評価値を入れる
 }
@@ -116,17 +117,18 @@ void Othello_Board::Othello_Board_Update() {
     Square_X = (Mouse_X - BoardShift_X) / MAP_SIZE;      // マウスカーソルの位置を MAP_SIZE + BoardShift_X で割った値を代入
     Square_Y = (Mouse_Y - BoardShift_Y) / MAP_SIZE;      // マウスカーソルの位置を MAP_SIZE + BoardShift_X で割った値を代入
 
-    RandomOrder();      // プレイヤーが先手・後手かをランダムに決める関数
 
     /* プレイヤーとCPUの操作管理 */
     if (PauseFlg == false) {
-        if (EndFlag == false) {   // ゲームが終わったかどうか
 
-            PlaySoundMem(BGM, DX_PLAYTYPE_LOOP, false);
+        if (EndFlag == false) {   // ゲームが終わったかどうか
 
             if (PassFlag == false) {    // パスフラグが false なら
 
                 if (RandomFlag == true) {
+
+                    PlaySoundMem(BGM, DX_PLAYTYPE_LOOP, false);
+
                     switch (Player) {
                     case 0:
                         if (OrderNum == 0) {    // 黒の番だったら
@@ -352,23 +354,54 @@ void Othello_Board::Othello_Board_Update() {
 
 // ------------------描画-----------------------------------------------
 void Othello_Board::Othello_Board_Draw() {
-
-    // 背景を一色に染める
-    DrawBox(0, 0, 1280, 720, Cr, TRUE);
-
-    // ボードの後ろを黒色で囲む
-    DrawBox(60 + BoardShift_X, 60 + BoardShift_Y,
-        (MAP_SIZE * 9) + BoardShift_X + 6, (MAP_SIZE * 9) + BoardShift_Y + 6, BlackCr, TRUE);
-
-    Print_OthelloBoard(Board);      // オセロボードの描画
-
-    DrawRotaGraph(800, 184, 0.35, 0, Black, TRUE);
-    DrawRotaGraph(800, 304, 0.35, 0, White, TRUE);
-
-    DrawFormatString(800 + MAP_SIZE / 2, 167, BlackCr, "黒:%d", BlackNum);      // 黒石の現在の数を表示
-    DrawFormatString(800 + MAP_SIZE / 2, 287, BlackCr, "白:%d", WhiteNum);      // 白石の現在の数を表示
+    if (RandomFlag == false) {
 
 
+        switch (Player) {
+        case 0:
+            // プレイヤーが黒
+            DrawBox(0, 0, 1280, 720, BlackCr, true);
+            DrawFormatString(100, 100, WhiteCr, "先手：黒 ← あなた");
+            DrawFormatString(100, 200, WhiteCr, "後手：白 ← CPU");
+            DrawFormatString(300, 300, WhiteCr, "%d", RandomNum % 2);
+            if (TimeCount++ >= 180) {
+                TimeCount = 0;
+                RandomFlag = true;
+            }
+            break;
+
+        case 1:
+            // プレイヤーが白
+            RandomFlag = true;
+            DrawBox(0, 0, 1280, 720, BlackCr, true);
+            DrawFormatString(100, 100, WhiteCr, "先手：黒 ← CPU");
+            DrawFormatString(100, 200, WhiteCr, "後手：白 ← あなた");
+            DrawFormatString(300, 300, WhiteCr, "%d", RandomNum % 2);
+            TimeCount++;
+            if (TimeCount > 180) {
+                TimeCount = 0;
+                RandomFlag = true;
+            }
+            break;
+        }
+    }
+    else {
+        // 背景を一色に染める
+        DrawBox(0, 0, 1280, 720, Cr, TRUE);
+
+        // ボードの後ろを黒色で囲む
+        DrawBox(60 + BoardShift_X, 60 + BoardShift_Y,
+            (MAP_SIZE * 9) + BoardShift_X + 6, (MAP_SIZE * 9) + BoardShift_Y + 6, BlackCr, TRUE);
+
+        Print_OthelloBoard(Board);      // オセロボードの描画
+
+        DrawRotaGraph(800, 184, 0.35, 0, Black, TRUE);
+        DrawRotaGraph(800, 304, 0.35, 0, White, TRUE);
+
+        DrawFormatString(800 + MAP_SIZE / 2, 167, BlackCr, "黒:%d", BlackNum);      // 黒石の現在の数を表示
+        DrawFormatString(800 + MAP_SIZE / 2, 287, BlackCr, "白:%d", WhiteNum);      // 白石の現在の数を表示
+
+    
     // ----- ゲームの終了条件を満たしたら -----
     if (EndFlag == true) {
 
@@ -667,6 +700,7 @@ void Othello_Board::Othello_Board_Draw() {
     }
     DrawRotaGraph(90, 40, 0.9, 0, Pause_Button, TRUE);      // ポーズボタンの表示
     // ------------------------------------------------------------------------
+    }
 }
 // ---------------------------------------------------------------------
 
@@ -1312,10 +1346,9 @@ int Othello_Board::CPUBlack(int board[PB][PB], int scoreboard[PB][PB]) {
 * 戻り値：なし
 */
 void Othello_Board::RandomOrder() {
-    if (RandomFlag == false) {
+
         RandomNum = rand();
-        RandomFlag = true;
-    }
+    
 
     // 50以上で黒色がプレイヤー、それ以外は白色がプレイヤー
     if (RandomNum % 2 == 0) {
