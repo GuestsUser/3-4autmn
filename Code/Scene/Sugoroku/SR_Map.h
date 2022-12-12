@@ -2,8 +2,8 @@
 #include "./../Scene.h"
 class SR_Map {
 private:
-	int MassX[65];	/*マスの総数*/
-	int MassY[65];	/*マスの総数*/
+	int MassX[63];	/*マスの総数*/
+	int MassY[63];	/*マスの総数*/
 	int MassX2[65];	/*マスの総数*/
 	int MassY2[65];	/*マスの総数*/
 	int MassX3[65];	/*マスの総数*/

@@ -52,31 +52,27 @@ void SR_Saikoro::Update() {
 	if (PauseFlg == false) {
 		count++;
 		/*ゴールしたら*/
-		if (Player1sum >= 64 || Player2sum >= 64 || Player3sum >= 64 || Player4sum >= 64) {
-			if (Player1sum >= 64) { Player1sum = 64; }
-			else if (Player2sum >= 64) { Player2sum = 64; }
-			else if (Player3sum >= 64) { Player3sum = 64; }
-			else if (Player4sum >= 64) { Player4sum = 64; }
+		if (Player1sum >= 62 || Player2sum >= 62 || Player3sum >= 62 || Player4sum >= 62) {
+			if (Player1sum >= 62) { Player1sum = 62; }
+			else if (Player2sum >= 62) { Player2sum = 62; }
+			else if (Player3sum >= 62) { Player3sum = 62; }
+			else if (Player4sum >= 62) { Player4sum = 62; }
 			Goal();	/*まだ中身はない*/
 		}
-		/*リスタートますに乗ったら*/
-		/*if (Player1sum == 22 || Player2sum == 22 || Player3sum == 22 || Player4sum == 22) {
-			Restart();
-		}*/
-		/*プラス4マスに止まったら 12 50*/
-		if (Player1sum == 12 || Player2sum == 12 || Player3sum == 12 || Player4sum == 12 || Player1sum == 50 || Player2sum == 50 || Player3sum == 50 || Player4sum == 50) {
-			Plus();	/*+4する*/
-		}
-		/*マイナス4マスに止まったら 36*/
-		if (Player1sum == 36 || Player2sum == 36 || Player3sum == 36 || Player4sum == 36) {
+		/*プラス4マスに止まったら 12 48*/
+		//if (Player1sum == 12 || Player2sum == 12 || Player3sum == 12 || Player4sum == 12 || Player1sum == 48 || Player2sum == 48 || Player3sum == 48 || Player4sum == 48) {
+		//	Plus();	/*+4する*/
+		//}
+		/*マイナス5マスに止まったら 34*/
+		if (Player1sum == 34 || Player2sum == 34 || Player3sum == 34 || Player4sum == 34) {
 			Minus();	/*-4する*/
 		}
 		/*前のプレイヤーを戻す*/
-		if (Player1sum == 24 || Player2sum == 24 || Player3sum == 24 || Player4sum == 24) {
-			Frontback();
-			//if (array[3] == 24) { DrawString(500, 550, "何も起きない", GetColor(0, 0, 0)); }
-			//DrawString(500, 550, "何も起きない", GetColor(0, 0, 0));
-		}
+		//if (Player1sum == 24 || Player2sum == 24 || Player3sum == 24 || Player4sum == 24) {
+		//	Frontback();
+		//	//if (array[3] == 24) { DrawString(500, 550, "何も起きない", GetColor(0, 0, 0)); }
+		//	//DrawString(500, 550, "何も起きない", GetColor(0, 0, 0));
+		//}
 		array[0] = Player1sum; array[1] = Player2sum; array[2] = Player3sum; array[3] = Player4sum;
 		switch (num) {
 		case 1:	/*プレイヤーのターン*/
@@ -89,31 +85,32 @@ void SR_Saikoro::Update() {
 					}
 					else if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH && Shuffle == true && Back == true && move == false) {	/*サイコロが出た分だけ戻るマス用（backフラグがある）*/
 						Player1sum -= Sum;
-						Shuffle = false;
 						countdiff = count;
-						Whoisplay = false;
-						Replay = false;
-						Back = false;
+						Shuffle = false; Whoisplay = false; Replay = false; Back = false;	/*フラグ関連*/
 					}
 					else if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH && Shuffle == true && move == false) {
-						Player1sum += Sum;
-						move = true;
-						Shuffle = false;
+						/*for (o = 0; 0 > Sum;o++) {
+							Player1sum += 1;
+						}*/
+						//Player1sum += Sum;
 						countdiff = count;
-						Whoisplay = false;
-						Replay = false;
+						move = true; Shuffle = false; Whoisplay = false; Replay = false;	/*フラグ関連*/
 					}
 				}
-				/*if (move == true) {
+				if (move == true) {
 					if (o < Sum) {
 						if ((count / 4) % 2 == 0) {
 							Player1sum += 1;
 							o += 1;
 						}
 					}
-				}*/
-				if (Player1sum == 8 || Player1sum == 30) { Replay = true; }
-				if (Player1sum == 19) { Replay = true; Back = true; }
+				}
+				if (o - Sum == 0) {
+					if (Player1sum == 22) { Restart(); }
+					if (Player1sum == 12 || Player1sum == 48) { Plus(); }
+					if (Player1sum == 8 || Player1sum == 27) { Replay = true; }
+					if (Player1sum == 19) { Replay = true; Back = true; }
+				}
 			}
 			if (Replay == true && count - countdiff == 100 && countdiff != 0) { num = 6; countdiff = count; Whoisplay = true;  move = false; o = 0; }
 			else if (Replay == false && count - countdiff == 100 && countdiff != 0) { countdiff = count;  num = 2;  Whoisplay = true; move = false; o = 0; }	/*countが100進めば次のターン*/
@@ -130,8 +127,7 @@ void SR_Saikoro::Update() {
 				if (Sumflg == true && p == 0) {
 					p += 1;
 					Player2sum -= Sum;		/*サイコロの合計値を足す*/
-					Replay = false;
-					Back = false;
+					Replay = false;Back = false;
 				}
 			}
 			else {	/*cont300を超えたら*/
@@ -142,9 +138,9 @@ void SR_Saikoro::Update() {
 					Replay = false;
 				}
 			}
-			if (Player2sum == 8 || Player2sum == 30) {	/*もしリスタートますに乗ったら*/
-				Replay = true;		/*リスタートフラグture*/
-			}
+			if (Player2sum == 8 || Player2sum == 27) { Replay = true; }	/*もしリプレイますに乗ったら*/
+			if (Player2sum == 12 || Player2sum == 48) { Plus(); }
+			if (Player2sum == 22) { Restart(); }
 			if (Player2sum == 19) { Replay = true; Back = true; }
 			if (Replay == true && count - countdiff == 400 && countdiff != 0) { num = 6; countdiff = count;  p = 0;  Sumflg = false; Whoisplay = true; }		/**/
 			else if (Replay == false && count - countdiff == 400 && countdiff != 0) { countdiff = count;  num = 3; p = 0;  Sumflg = false; Whoisplay = true; }	/*countが100進めば次のターン*/
@@ -152,17 +148,14 @@ void SR_Saikoro::Update() {
 		case 3:
 			current = 3;
 			if (count - countdiff >= 100 && count - countdiff <= 300) {
-				Whoisplay = false;
-				Shuffle = true;
-				Sumflg = true;
+				Whoisplay = false; Shuffle = true; Sumflg = true;
 			}
 			else if (Back == true) {
 				Shuffle = false;
 				if (Sumflg == true && p == 0) {
 					p += 1;
 					Player3sum -= Sum;
-					Replay = false;
-					Back = false;
+					Replay = false;Back = false;
 				}
 			}
 			else {
@@ -173,9 +166,9 @@ void SR_Saikoro::Update() {
 					Replay = false;
 				}
 			}
-			if (Player3sum == 8 || Player3sum == 30) {
-				Replay = true;
-			}
+			if (Player3sum == 8 || Player3sum == 27) {Replay = true;	}
+			if (Player3sum == 12 || Player3sum == 48) { Plus(); }
+			if (Player3sum == 22) { Restart(); }
 			if (Player3sum == 19) { Replay = true; Back = true; }
 			if (Replay == true && count - countdiff == 400 && countdiff != 0) { num = 6; countdiff = count;  p = 0;  Sumflg = false; Whoisplay = true; }
 			else if (Replay == false && count - countdiff == 400 && countdiff != 0) { countdiff = count;  num = 4; p = 0; Sumflg = false; Whoisplay = true; }	/*countが100進めば次のターン*/
@@ -183,17 +176,14 @@ void SR_Saikoro::Update() {
 		case 4:
 			current = 4;
 			if (count - countdiff >= 100 && count - countdiff <= 300) {
-				Whoisplay = false;
-				Shuffle = true;
-				Sumflg = true;
+				Whoisplay = false;Shuffle = true;Sumflg = true;
 			}
 			else if (Back == true) {
 				Shuffle = false;
 				if (Sumflg == true && p == 0) {
 					p += 1;
 					Player4sum -= Sum;
-					Replay = false;
-					Back = false;
+					Replay = false;Back = false;
 				}
 			}
 			else {
@@ -204,9 +194,9 @@ void SR_Saikoro::Update() {
 					Replay = false;
 				}
 			}
-			if (Player4sum == 8 || Player4sum == 30) {
-				Replay = true;
-			}
+			if (Player4sum == 8 || Player4sum == 27) {Replay = true;}
+			if (Player4sum == 12 || Player4sum == 48) { Plus(); }
+			if (Player4sum == 22) { Restart(); }
 			if (Player4sum == 19) { Replay = true; Back = true; }
 			if (Replay == true && count - countdiff == 400 && countdiff != 0) { num = 6; countdiff = count;  p = 0;  Sumflg = false; Whoisplay = true; }
 			else if (Replay == false && count - countdiff == 400 && countdiff != 0) { countdiff = 0;  num = 1; p = 0; Sumflg = false; Whoisplay = true; }	/*countが100進めば次のターン*/
@@ -234,7 +224,7 @@ void SR_Saikoro::Update() {
 		//	y = GetRand(0);
 		//	//d = GetRand(1);
 		//}
-		/********************デバッグ用**************************/
+		/********************************************************/
 
 		/*if ((count / 4) % 2 == 0) {
 			if (Player1sum <= Sum) {
