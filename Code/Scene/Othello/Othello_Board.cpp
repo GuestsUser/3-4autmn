@@ -372,13 +372,11 @@ void Othello_Board::Othello_Board_Draw() {
 
         case 1:
             // プレイヤーが白
-            RandomFlag = true;
             DrawBox(0, 0, 1280, 720, BlackCr, true);
             DrawFormatString(100, 100, WhiteCr, "先手：黒 ← CPU");
             DrawFormatString(100, 200, WhiteCr, "後手：白 ← あなた");
             DrawFormatString(300, 300, WhiteCr, "%d", RandomNum % 2);
-            TimeCount++;
-            if (TimeCount > 180) {
+            if (TimeCount++ >= 180) {
                 TimeCount = 0;
                 RandomFlag = true;
             }
@@ -701,6 +699,7 @@ void Othello_Board::Othello_Board_Draw() {
     DrawRotaGraph(90, 40, 0.9, 0, Pause_Button, TRUE);      // ポーズボタンの表示
     // ------------------------------------------------------------------------
     }
+    DrawFormatString(900, 600, WhiteCr, "%d", RandomNum);
 }
 // ---------------------------------------------------------------------
 
@@ -1347,8 +1346,8 @@ int Othello_Board::CPUBlack(int board[PB][PB], int scoreboard[PB][PB]) {
 */
 void Othello_Board::RandomOrder() {
 
-        RandomNum = rand();
-    
+    RandomNum = rand();
+
 
     // 50以上で黒色がプレイヤー、それ以外は白色がプレイヤー
     if (RandomNum % 2 == 0) {
