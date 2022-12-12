@@ -1,12 +1,11 @@
 #pragma once
-#include <vector>
 #include "./../Scene.h"
 
 #define MAX (4U)
+#define SIZE_OF_ARRAY(array) (sizeof(array)/sizeof(array[0]))
 
 class Card {
 public:
-	Card() {}
 
 	int card_w = 200;	//カード１枚の幅
 	int card_h = 300;	//カード１枚の高さ
@@ -15,8 +14,12 @@ public:
 	int num;	//カードの数字
 	int suit;	//カードのスート(マーク)
 
+	int flg;	//使用フラグ(0:使ってない　1:使っている)
+
 	int card_x;
 	int card_y;
+
+	Card() {}
 
 	//カードごとの当たり判定（マウスX座標、マウスY座標、カードX座標、カードY座標、カードの幅、カードの高さ、カードの画像倍率）
 	bool Hit(int mx, int my, int cx, int cy, int cw, int ch, double ExRate) {
@@ -28,14 +31,16 @@ public:
 		}
 	}
 
-	//Card(画像、数値、スート、カードごとのX座標、カードごとのY座標)
-	Card(int i, int n, int s, int x, int y) {
+	//Set_Card(画像、数値、スート、カードごとのX座標、カードごとのY座標、使用フラグ(0:使ってない　1:使っている))
+	void Set_Card(int i, int n, int s, int x, int y, int f) {
 		img = i;
 		num = n;
 		suit = s;
 
 		card_x = x;
 		card_y = y;
+
+		flg = f;
 	}
 };
 
@@ -85,18 +90,18 @@ private:
 
 	int Card_back;		//カードの裏面の情報
 	Card Card_joker;	//ジョーカーの情報
-	int card;
+	int card_img;	//カード画像
+	int card_num;	//カード枚数
 
 	//Card Card_obj[4][13];		//全カードの情報
-	std::vector<Card> Card_obj;		//全カードの情報(山札)
-	std::vector<Card> Player_card;	//プレイヤーの持っているカードの情報
+	Card Card_obj[53];		//全カードの情報(山札)
+	Card Player_card[53];	//プレイヤーの持っているカードの情報
 
-	std::vector<Card> Field_card;		//場に出ているカード
-	std::vector<Card> Cemetery_card;	//使用済みのカード
+	Card Field_card[4];		//場に出ているカード
 
-	std::vector<Card> NPC_card_1;		//NPC１号の持っているカードの情報
-	std::vector<Card> NPC_card_2;		//NPC２号の持っているカードの情報
-	std::vector<Card> NPC_card_3;		//NPC３号の持っているカードの情報
+	Card NPC_card_1[53];		//NPC１号の持っているカードの情報
+	Card NPC_card_2[53];		//NPC２号の持っているカードの情報
+	Card NPC_card_3[53];		//NPC３号の持っているカードの情報
 
 	int PlayerCrown;		//王冠のアイコン画像
 	int NPC1_Icon;		//王冠のアイコン画像
@@ -127,7 +132,6 @@ private:
 
 	int priority;	//手番を決める優先度
 	int field;		//場に出ているカードの枚数
-	int cemetery;	//使ったカードの枚数
 
 	int pri;		//親を決めるための変数
 	bool draw;		//カードが引けるかどうかを決めるためのフラグ(false:引けない　true:引ける)
@@ -191,6 +195,7 @@ private:
 	int NPC3_Y;		//NPC3の手札のY座標
 
 	int color;	//デバッグ用
+
 public:
 	PageOne() {}
 
@@ -199,4 +204,5 @@ public:
 	void PageOne_Update();
 	void PageOne_Draw();
 
+	void Card_Sort(int , Card array);
 };

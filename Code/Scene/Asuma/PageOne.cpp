@@ -1,6 +1,8 @@
 #include"PageOne.h"
 #include"Scene_PageOne.h"
 #include"DxLib.h"
+#include <algorithm>
+#include <iostream>
 #include"./../Code/GetKey.h"
 #include "./../Title/Scene_Select.h"
 #include "./../Title/Cmp_SelectSelector.h"
@@ -8,24 +10,31 @@
 
 void PageOne::PageOne_Initialize(Scene* scene) {
 
+	new Card; Card_obj[54];
+	new Card; Player_card[54];
+	new Card; Field_card[54];
+	new Card; NPC_card_1[54];
+	new Card; NPC_card_2[54];
+	new Card; NPC_card_3[54];
+
 	//背景
 	background = LoadGraph("Resource/image/CareerPoker.png");
 
 	//カード画像
-	card = LoadDivGraph("Resource/image/toranpu_all.png", 54, 13, 5, 200, 300, card_type);
+	card_img = LoadDivGraph("Resource/image/toranpu_all.png", 54, 13, 5, 200, 300, card_type);
 
 	//リザルト画像
 	PlayerCrown = LoadGraph("Resource/image/PageOne_Image/Player_Crown.png");
 	NPC1_Icon = LoadGraph("Resource/image/PageOne_Image/NPC1_Crown.png");
 	NPC2_Icon = LoadGraph("Resource/image/PageOne_Image/NPC2_Crown.png");
 	NPC3_Icon = LoadGraph("Resource/image/PageOne_Image/NPC3_Crown.png");
-	
+
 	//パス画像
 	Player_Pass_Icon = LoadGraph("Resource/image/PageOne_Image/Pass.png");
 	NPC1_Pass_Icon = LoadGraph("Resource/image/PageOne_Image/NPC1_Pass.png");
 	NPC2_Pass_Icon = LoadGraph("Resource/image/PageOne_Image/NPC2_Pass.png");
 	NPC3_Pass_Icon = LoadGraph("Resource/image/PageOne_Image/NPC3_Pass.png");
-	
+
 	//ページワン宣言画像
 	Player_PageOne_Icon = LoadGraph("Resource/image/PageOne_Image/Page_One.png");
 	NPC1_PageOne_Icon = LoadGraph("Resource/image/PageOne_Image/Page_One_N1.png");
@@ -119,16 +128,22 @@ void PageOne::PageOne_Initialize(Scene* scene) {
 	draw = false;
 	finish = false;
 	reset = false;
-	
-	cemetery = 0;
+
+	field = 0;
+	player = 0;
+	npc_1 = 0;
+	npc_2 = 0;
+	npc_3 = 0;
 
 	priority = GetRand(MAX - 1);
 
+	card_num = 0;
+
 	for (i = 0; i < 52; i++) {
-		Card_obj.push_back(Card(card_type[i], i % 13, i / 13, Deck_X, Deck_Y));
+		Card_obj[i].Set_Card(card_type[i], i % 13, i / 13, Deck_X, Deck_Y, 0);
 	}
 
-	Card_obj.push_back(Card(card_type[53], 99, 5, Deck_X, Deck_Y));	//ジョーカー
+	Card_obj[52].Set_Card(card_type[53], 99, 5, Deck_X, Deck_Y, 0);	//ジョーカー
 
 	Card_back = card_type[52];	//カードの裏面
 
@@ -142,7 +157,7 @@ void PageOne::PageOne_Finalize() {
 	DeleteGraph(background);
 
 	//カード画像
-	DeleteGraph(card);
+	DeleteGraph(card_img);
 
 	//リザルト画像
 	DeleteGraph(PlayerCrown);
@@ -187,14 +202,13 @@ void PageOne::PageOne_Finalize() {
 	DeleteSoundMem(win_SE);
 	DeleteSoundMem(BGM);
 
-	//Vector型配列の初期化
-	Card_obj.clear();
-	Player_card.clear();
-	NPC_card_1.clear();
-	NPC_card_2.clear();
-	NPC_card_3.clear();
-	Field_card.clear();
-	Cemetery_card.clear();
+	//配列の初期化
+	delete[] Card_obj;
+	delete[] Player_card;
+	delete[] Field_card;
+	delete[] NPC_card_1;
+	delete[] NPC_card_2;
+	delete[] NPC_card_3;
 }
 
 void PageOne::PageOne_Update() {
@@ -254,16 +268,18 @@ void PageOne::PageOne_Update() {
 		case 0:	// player
 			if (Player_setup == false) {
 				if (n > 15) {
-					r = GetRand(Card_obj.size());
+					r = GetRand(SIZE_OF_ARRAY(Card_obj) - card_num);
 					Card_obj[r].card_x = Player_X;
 					Card_obj[r].card_y = Player_Y;
+					Card_obj[r].flg = 1;
 					PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
-					Player_card.push_back(Card_obj[r]);
-					Cemetery_card.push_back(Card_obj[r]);
-					Card_obj.erase(Card_obj.begin() + r);
-					if (Player_card.size() >= MAX) {
+					Player_card[player] = Card_obj[r];
+					if (player >= MAX) {
 						Player_setup = true;
 					}
+					std::sort(Card_obj, Card_obj + SIZE_OF_ARRAY(Card_obj));
+					card_num++;
+					player++;
 					priority++;
 					n = 0;
 				}
@@ -281,7 +297,8 @@ void PageOne::PageOne_Update() {
 						for (i = 0; i < player; i++) {
 							if (Player_card[i].suit == 5) {
 								draw = false;
-							}else if (Field_card[lead].suit == Player_card[i].suit) {
+							}
+							else if (Field_card[lead].suit == Player_card[i].suit) {
 								draw = false;
 							}
 						}
@@ -874,7 +891,7 @@ void PageOne::PageOne_Update() {
 					Field_X += 20;
 					n++;
 				}
-				else if(180 <= n) {
+				else if (180 <= n) {
 
 					if (pri == p_pow) {
 						priority = 0;
@@ -899,7 +916,7 @@ void PageOne::PageOne_Update() {
 					flg_3 = false;
 
 					cemetery = Field_card.size();
-					
+
 					for (i = 0; i < cemetery; i++) {
 						Cemetery_card.push_back(Field_card[i]);
 					}
@@ -1137,4 +1154,10 @@ void PageOne::PageOne_Draw() {
 	//DrawFormatString(900, 450, GetColor(255, 0, 0), "パス");
 	//DrawGraph(0, 175, NPC_Pass_Icon, true);
 	//DrawGraph(500, 400, NPC_PageOne_Icon, true);
+}
+
+void PageOne::Card_Sort(int n, Card array) {
+	for (int i = n; i < SIZE_OF_ARRAY(array); i++) {
+
+	}
 }
