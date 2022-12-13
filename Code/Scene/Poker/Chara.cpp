@@ -45,10 +45,9 @@ void Chara::Place(std::deque<Cmp_Transform>& cardPos, Cmp_Transform& backPos) {
 
 	int backX = 0; int backY = 0; //背景サイズ
 	int bbX = 0; int bbY = 0; //小見出しサイズ
-	GetGraphSize(coinBack[1]->ReadImage()[0], &backX, &backY); //サイズ取得
-	GetGraphSize(coinBack[1]->ReadImage()[1], &backX, &backY);
-	coinBack[1]->EditTranform()->EditPos().SetX(coinBack[1]->EditTranform()->EditPos().GetX() - backX / 2 + bbX / 2); //左上配置になるように再配置
-	coinBack[1]->EditTranform()->EditPos().SetY(coinBack[1]->EditTranform()->EditPos().GetY() - backY / 2 - bbY / 2);
+	GetGraphSize(*coinBack[0]->ReadImage(), &backX, &backY); //サイズ取得
+	GetGraphSize(coinBack[1]->ReadImage()[1], &bbX, &bbY);
+	coinBack[1]->EditTranform()->EditPos().SetXYZ(coinBack[1]->EditTranform()->EditPos().GetX() - backX / 2 + bbX / 2, coinBack[1]->EditTranform()->EditPos().GetY() - backY / 2 - bbY / 2, 0); //左上配置になるように再配置
 }
 
 void Chara::Update() {

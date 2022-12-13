@@ -71,8 +71,9 @@ Poker::Poker() :pot(new Pot()), dealer(new PK_Dealer()), cardDealer(new CardDeal
 
 	
 	for (int i = 0; i < (int)Character::length; ++i) { //キャラクター精製
+		bool isPlayer = i == (int)Character::player; //今回の作成キャラがプレイヤーか否か、trueでプレイヤー
 		Chara* current = nullptr;
-		int useSpace = cardPlaceSpaceCpu; //カード配置に使う配置間隔
+		int useSpace = isPlayer ? cardPlaceSpace : cardPlaceSpaceCpu; //カード配置に使う配置間隔
 		cardPos[0] = cardPosFirst[i]; //カード先頭を現在キャラに応じた位置に変更
 		backPos = backPosFirst[i]; //現在キャラに応じたコイン表示位置に設定
 
@@ -81,7 +82,9 @@ Poker::Poker() :pot(new Pot()), dealer(new PK_Dealer()), cardDealer(new CardDeal
 			cardPos[j].EditPos().SetX(cardPosFirst[i].ReadPos().GetX() + useSpace * j); //配置回数に合わせて位置ずらしを行う
 		}
 
-		if (i == (int)Character::player) { //プレイヤーの精製を指定された場合
+
+
+		if (isPlayer) { //プレイヤーの精製を指定された場合
 			useSpace = cardPlaceSpace; //配置間隔をプレイヤーの物に変更
 			current = new PK_Player(); //プレイヤーの精製
 

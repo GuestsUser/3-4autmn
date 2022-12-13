@@ -26,7 +26,7 @@ void PK_Dealer::Reset() {
 void PK_Dealer::FullReset() {
 	BB = baseBB; //BBを初期値に設定
 	gameCount = 0; //ラウンド数を0に設定
-	playSub = GetRand((int)Poker::Character::length - 1); //最初にアクションを始めるキャラをランダム決定、GetRandは括弧内の数値も含むランダムなので-1する
+	playSub = 1; //最初にアクションを始めるキャラをランダム決定、GetRandは括弧内の数値も含むランダムなので-1する GetRand((int)Poker::Character::length - 1)
 	btn.Reset(); //ボタンポジションもFullReset
 }
 

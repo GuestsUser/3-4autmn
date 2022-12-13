@@ -59,6 +59,8 @@ Poker::Main::Main(Poker& set) :parent(&set), phase(0), count(0), cpuWait(30), ac
 	parent->chara[(int)Poker::Character::player]->EditCmpMulti<Button>(playerButton); //ボタン取り出し
 	PlayerButtonAnalyze(playerButton, &actionButton, &foldButton); //ボタン配列をactionとfoldに分解格納
 	actionButtonImage = actionButton->EditAlwaysCmp<Cmp_Image>(); //アクション用ボタンの画像を取り出す
+	playerGagePayDraw = parent->chara[(int)Poker::Character::player]->EditCmp<Cmp_PlayerRaiseDraw>(); //
+
 
 	playerGage = parent->chara[(int)Poker::Character::player]->EditCmp<Gage>(); //ゲージ取り出し
 	playerGageBorder = playerGage->EditCmp<Cmp_Gage_Border>(); //ゲージから各種機能を取り出す
@@ -184,7 +186,7 @@ void Poker::Main::Update() {
 	}
 	
 	//プレイヤーの場合
-	if (count == 0) { //プレイヤーに操作が移った瞬間ならば各種ボタンを有効化する
+	if (count == 1) { //プレイヤーに操作が移った瞬間ならば各種ボタンを有効化する
 		for (auto itr : playerButton) { //ボタンのクリック検知開始と表示許可を出す 
 			itr->SetRunUpdate(true);
 			itr->SetRunDraw(true);
