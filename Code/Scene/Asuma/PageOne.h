@@ -2,7 +2,6 @@
 #include "./../Scene.h"
 
 #define MAX (4U)
-#define SIZE_OF_ARRAY(array) (sizeof(array)/sizeof(array[0]))
 
 class Card {
 public:
@@ -14,7 +13,6 @@ public:
 	int num;	//カードの数字
 	int suit;	//カードのスート(マーク)
 
-	int flg;	//使用フラグ(0:使ってない　1:使っている)
 
 	int card_x;
 	int card_y;
@@ -32,7 +30,7 @@ public:
 	}
 
 	//Set_Card(画像、数値、スート、カードごとのX座標、カードごとのY座標、使用フラグ(0:使ってない　1:使っている))
-	void Set_Card(int i, int n, int s, int x, int y, int f) {
+	Card(int i, int n, int s, int x, int y) {
 		img = i;
 		num = n;
 		suit = s;
@@ -40,7 +38,6 @@ public:
 		card_x = x;
 		card_y = y;
 
-		flg = f;
 	}
 };
 
@@ -89,19 +86,9 @@ private:
 	Scene* select;
 
 	int Card_back;		//カードの裏面の情報
-	Card Card_joker;	//ジョーカーの情報
 	int card_img;	//カード画像
-	int card_num;	//カード枚数
+	//int card_num;	//カード枚数
 
-	//Card Card_obj[4][13];		//全カードの情報
-	Card Card_obj[53];		//全カードの情報(山札)
-	Card Player_card[53];	//プレイヤーの持っているカードの情報
-
-	Card Field_card[4];		//場に出ているカード
-
-	Card NPC_card_1[53];		//NPC１号の持っているカードの情報
-	Card NPC_card_2[53];		//NPC２号の持っているカードの情報
-	Card NPC_card_3[53];		//NPC３号の持っているカードの情報
 
 	int PlayerCrown;		//王冠のアイコン画像
 	int NPC1_Icon;		//王冠のアイコン画像
@@ -132,6 +119,7 @@ private:
 
 	int priority;	//手番を決める優先度
 	int field;		//場に出ているカードの枚数
+	int cemetery;	//使用したカードの枚数
 
 	int pri;		//親を決めるための変数
 	bool draw;		//カードが引けるかどうかを決めるためのフラグ(false:引けない　true:引ける)
@@ -203,6 +191,4 @@ public:
 	void PageOne_Finalize();
 	void PageOne_Update();
 	void PageOne_Draw();
-
-	void Card_Sort(int , Card array);
 };
