@@ -21,6 +21,8 @@ private:
 
 	int mouseX, mouseY;//マウスの座標を格納
 
+	int wall_L, wall_R, wall_T, wall_B, wall_xC, wall_yC;
+
 public:
 	void AirHockey_Initialize();
 	void AirHockey_Draw();
