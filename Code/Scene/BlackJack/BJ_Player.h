@@ -39,7 +39,7 @@ private:
   bool hit, std, bet, spt, dbl;
   bool spt_hit;
   bool win, los, bst, psh, BlackJack, game_flg;
-  bool spt_win, spt_los, spt_bst, spt_psh, spt_BJ;
+  bool spt_win, spt_los, spt_bst, spt_psh, spt_BJ, spt_std;
   bool spt_a;
   bool insurance, ins_flg, ins_btn;
   /*bool*/
