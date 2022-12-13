@@ -14,6 +14,8 @@ private:
 	int WinLoseImage[3];
 	int Black;
 	int White;
+	int PlayerImage[2];
+	int SenteGote;
 
 	int Pause_Button;
 	int Pause_Back;
@@ -53,6 +55,8 @@ private:
 	int OldKey;
 	int nowKey;
 
+	float SizeCount;
+
 	bool DrawFlag;		// カーソルがマスの上に来た時に赤く描画していいか判定
 	bool CheckFlag;		// 
 	bool PassFlag;		// パスされたかどうかを判定
@@ -61,6 +65,7 @@ private:
 	bool CornerFlag;	// 角が取れるかどうかを判定
 	bool PauseFlg;		// ポーズ画面を開いているかどうか
 	bool SEFlag[4];
+	bool SizeFlag;
 
 public:
 	int Square_X;		// マウスから読みとったX座標を、MAP_SIZEで割った値を入れた変数

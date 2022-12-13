@@ -108,7 +108,7 @@ void Player::Initialize() {
 
   hit = std = dbl = spt = bet = false;
   win = los = bst = psh = BlackJack = spt_a = false;
-  spt_win = spt_los = spt_bst = spt_psh = spt_BJ = false;
+  spt_win = spt_los = spt_bst = spt_psh = spt_BJ = spt_std = false;
   D_BJ = D_bst = false;
   game_flg = true;
   now_game_flg = true;
@@ -224,7 +224,7 @@ bool Player::Play(Shoe* shoe ,Dealer* Dr) {
 
         /*hitが入力された場合*/
         if (hit) {
-
+          ins_flg = false;
           /*カードの配布*/
           Player::Hit(shoe);
 
@@ -235,6 +235,7 @@ bool Player::Play(Shoe* shoe ,Dealer* Dr) {
           /*勝負開始して返り値をtrueとして終了*/
           game_flg = false;
           std = false;
+          ins_flg = false;
           now_game_flg = false;
           return true;
 
@@ -260,6 +261,7 @@ bool Player::Play(Shoe* shoe ,Dealer* Dr) {
                 spt_a = true;
 
               }
+              ins_flg = false;
               spt_bet_coin = bet_coin;
               Player::Set_Bet(spt_bet_coin);
               split = true;
@@ -306,14 +308,14 @@ bool Player::Play(Shoe* shoe ,Dealer* Dr) {
 
           }
 
-          if (Player::Calc() == 21 && !BlackJack && now_game_flg && spt_hit) {
+          if (Player::Calc() == 21 && now_game_flg) {
             BlackJack = true;
             std = true;
           }
 
-          if (Player::Spt_Calc() == 21 && !spt_BJ && now_game_flg && spt_hit) {
+          if (Player::Spt_Calc() == 21 && now_game_flg && !spt_std) {
             spt_BJ = true;
-            std = true;
+            spt_std = true;
           }
 
         }
@@ -321,6 +323,16 @@ bool Player::Play(Shoe* shoe ,Dealer* Dr) {
         if ((Player::Calc() == 21 && hit_num < 1)) {
 
           std = true;
+
+        }
+        if (Player::Spt_Calc() == 21) {
+          if (hit_num >= 1) {
+            std = true;
+            spt_std = true;
+          }
+          else {
+            spt_std = true;
+          }
 
         }
 
@@ -332,7 +344,7 @@ bool Player::Play(Shoe* shoe ,Dealer* Dr) {
 
         }
         /*standが入力された場合*/
-        else if (std) {
+        else if (std && !spt_std) {
           std_r = 1.2;
           if (hit_num < 1) {
 
@@ -350,6 +362,19 @@ bool Player::Play(Shoe* shoe ,Dealer* Dr) {
 
           std = false;
 
+        }
+        else if (spt_std && std) {
+
+          std_r = 1.2;
+          hit_num = 2;
+          /*勝負開始して返り値をtrueとして終了*/
+          game_flg = false;
+          now_game_flg = false;
+          return true;
+
+          std = false;
+
+        
         }
         /*doubleが入力された場合*/
         else if (dbl && (hand_num <= 2 || spt_hand_num <= 2)) {
@@ -479,6 +504,8 @@ void Player::Debug_Draw(bool debug) {
     DrawFormatString(spt_x - 80, spt_y / 100 + 240, 0xffffff, "D_spt_dbl %d", D_spt_dbl);
     DrawFormatString(spt_x - 80, spt_y / 100 + 260, 0xffffff, "hit_num %d", hit_num);
     DrawFormatString(spt_x - 80, spt_y / 100 + 280, 0xffffff, "bet_flg %d", bet_flg);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 300, 0xffffff, "spt_BJ %d", spt_BJ);
+    DrawFormatString(spt_x - 80, spt_y / 100 + 320, 0xffffff, "D_BJ %d", D_BJ);
 
   }
 
@@ -571,7 +598,7 @@ void Player::Spt_Show_Hand() {
     if (hit_num >= 1) {
       DrawGraph(440, 530, std_img, true);
     }
-    if (hit_num >= 2) {
+    if (hit_num >= 2 || spt_std) {
       DrawGraph(640, 530, std_img, true);
     }
   }
@@ -643,9 +670,9 @@ void Player::Show_Play() {
     if (BlackJack && !spt_BJ) {
       DrawRotaGraph(490, 410, 1, 0, btn_hdl[4], 1);
     }
-    if (spt_BJ) {
+    if (spt_BJ && !BlackJack) {
       //DrawFormatString(0, 620, 0xffffff, "BlackJack\n");
-      DrawRotaGraph(620, 410, 1, 0, btn_hdl[4], 1);
+      DrawRotaGraph(700, 410, 1, 0, btn_hdl[4], 1);
     }
     if (win && !BlackJack) {
       //DrawFormatString(100, 640, 0xffffff, "手札1の勝ち\n");
@@ -759,7 +786,7 @@ void Player::Score(Player player, Dealer dealer) {   /*プレイヤーとディ�
     if (!split && !bst) {
 
       /*プレイヤーのほうが高い場合*/
-      if (player.Calc() > dealer.Calc()) {
+      if (player.Calc() > dealer.Calc() && !D_BJ) {
         /*プレイヤーの勝利*/
         win = true;
 
@@ -772,8 +799,13 @@ void Player::Score(Player player, Dealer dealer) {   /*プレイヤーとディ�
       }
       else {    /*同点の場合*/
         /*引き分け*/
-        if (!BlackJack || (D_BJ && BlackJack)) {
+        if (D_BJ && BlackJack) {
 
+          win = false;
+          psh = true;
+
+        }
+        else if (player.Calc() == dealer.Calc() && !D_BJ && !BlackJack) {
           win = false;
           psh = true;
 
@@ -813,7 +845,13 @@ void Player::Score(Player player, Dealer dealer) {   /*プレイヤーとディ�
 
       }
       /*引き分け*/
-      if (D_BJ && BlackJack) {
+      if (D_BJ && BlackJack && spt_BJ) {
+
+        psh = true;
+        p_coin += dealer.Set_Magnification(rate_ps, bet_coin + spt_bet_coin);
+
+      }
+      if (D_BJ && BlackJack && !spt_BJ) {
 
         psh = true;
         p_coin += dealer.Set_Magnification(rate_ps, bet_coin + spt_bet_coin);
@@ -823,13 +861,13 @@ void Player::Score(Player player, Dealer dealer) {   /*プレイヤーとディ�
         spt_psh = true;
         p_coin += dealer.Set_Magnification(rate_ps, spt_bet_coin);
       }
-      if (player.Calc() == dealer.Calc()) {
+      if (player.Calc() == dealer.Calc() && !BlackJack && !D_BJ) {
 
         psh = true;
         p_coin += dealer.Set_Magnification(rate_ps, bet_coin);
 
       }
-      if (player.Spt_Calc() == dealer.Calc()) {
+      if (player.Spt_Calc() == dealer.Calc() && !spt_BJ && !D_BJ) {
 
         spt_psh = true;
         p_coin += dealer.Set_Magnification(rate_ps, spt_bet_coin);
@@ -841,21 +879,22 @@ void Player::Score(Player player, Dealer dealer) {   /*プレイヤーとディ�
 
   }
 
-  if (los && bet_flg) {
+  if (bet_flg) {
 
     if (split) {
       if (insurance && D_BJ) {
         p_coin += dealer.Set_Magnification(rate_is, ins_coin);
         insurance = false;
+        bet_flg = false;
       }
     }
     else {
       if (insurance && D_BJ) {
         p_coin += dealer.Set_Magnification(rate_is, ins_coin);
         insurance = false;
+        bet_flg = false;
       }
     }
-    bet_flg = false;
 
   }
 
