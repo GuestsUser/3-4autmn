@@ -1,20 +1,9 @@
 #include"PageOne.h"
 #include"Scene_PageOne.h"
 #include"DxLib.h"
-#include<list>
 #include"./../Code/GetKey.h"
 #include "./../Title/Scene_Select.h"
 #include "./../Title/Cmp_SelectSelector.h"
-
-std::list <Card> Card_obj;		//全カードの情報(山札)
-std::list <Card> Player_card;	//プレイヤーの持っているカードの情報
-
-std::list <Card> Field_card;		//場に出ているカード
-std::list <Card> Cemetery_card;		//場に出ているカード
-
-std::list <Card> NPC_card_1;		//NPC１号の持っているカードの情報
-std::list <Card> NPC_card_2;		//NPC２号の持っているカードの情報
-std::list <Card> NPC_card_3;		//NPC３号の持っているカードの情報
 
 
 void PageOne::PageOne_Initialize(Scene* scene) {
@@ -203,6 +192,15 @@ void PageOne::PageOne_Finalize() {
 	DeleteSoundMem(Select_SE);
 	DeleteSoundMem(win_SE);
 	DeleteSoundMem(BGM);
+
+	//配列の初期化
+	Card_obj.clear();
+	Player_card.clear();
+	Field_card.clear();
+	Cemetery_card.clear();
+	NPC_card_1.clear();
+	NPC_card_2.clear();
+	NPC_card_3.clear();
 }
 
 void PageOne::PageOne_Update() {
@@ -972,7 +970,7 @@ void PageOne::PageOne_Draw() {
 		switch (priority) {
 		case 0:
 			DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：プレイヤー");
-			if (draw == true & Field_card.empty() == false) {
+			if (draw == true && Field_card.empty() == false) {
 				DrawFormatString(250, 450, GetColor(100, 100, 255), "カードを引いてください");
 			}
 			else if (Player_Pass_Flg == true) {
