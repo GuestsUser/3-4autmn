@@ -12,10 +12,12 @@ private:
   int std_x, std_y, std_w, std_h;
   int spt_x, spt_y, spt_w, spt_h;
   int dbl_x, dbl_y, dbl_w, dbl_h;
-  float hit_r, std_r, spt_r, dbl_r;
+  int ins_x, ins_y, ins_w, ins_h;
+  float hit_r, std_r, spt_r, dbl_r, ins_r;
 
-  int hit_img, std_img, spt_img, dbl_img;
-  
+  int hit_img, std_img, spt_img, dbl_img,ins_img;
+
+  int ins_coin;
 
   int spt_type;
   int hit_num;
@@ -39,6 +41,7 @@ private:
   bool win, los, bst, psh, BlackJack, game_flg;
   bool spt_win, spt_los, spt_bst, spt_psh, spt_BJ;
   bool spt_a;
+  bool insurance, ins_flg, ins_btn;
   /*bool*/
 
 public:
@@ -63,7 +66,7 @@ public:
 
   virtual void Set_Bet(int getbet);
   virtual void Hit(Shoe* shoe);        /*カードの追加*/
-  virtual bool Play(Shoe* shoe);       /*ゲーム実行*/
+  virtual bool Play(Shoe* shoe,Dealer* Dr);       /*ゲーム実行*/
   virtual void Score(Player player, Dealer dealer);
 
 };
