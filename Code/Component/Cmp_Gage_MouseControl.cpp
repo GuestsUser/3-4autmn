@@ -55,12 +55,17 @@ void Cmp_Gage_MouseControl::Update() {
 	Vector3 pos[] = { Vector3(), Vector3() ,Vector3() ,Vector3() }; //判定領域の変形頂点、左上、右上、右下、左下の格納順
 	OriginMath::VertexModification(pos, area, *parent->ReadBaseGage()->ReadTranform(), parent->ReadFullGage()->GetDrawHorizonPivot(), parent->ReadFullGage()->GetDrawVerticalPivot()); //マウス判定をゲージ画像に合わせて変形
 
+	if (fmod(parent->ReadBaseGage()->ReadTranform()->ReadRotate().GetZ(), OriginMath::MPI / 2) == 0) { //ゲージに回転がかかってなかった場合
+		control = mouseX > pos[0].GetX() && mouseX < pos[1].GetX() && mouseY > pos[0].GetY() && mouseY < pos[2].GetY() && key->GetKeyState(monitorKey) == KEY_PUSH; //普通に範囲チェックする
+		return; //おわり
+	}
+
 	LinerFunction line[] = { LinerFunction(pos[0],pos[1]),LinerFunction(pos[1],pos[2]),LinerFunction(pos[2],pos[3]),LinerFunction(pos[3],pos[0]) }; //判定領域の境界を一次関数で保持
 
 	bool plus = false; //マウス位置からx軸へ平行に線を伸ばした際、lineに接触したx位置がマウスxより大きかった場合これをtrueとする
 	bool minus = false; //xより小さいならこっちをtrueにする
 	
-	for (int i = 0; i < 4; ++i) {
+	for (int i = 0; i < 4; ++i) { //回転に応じた範囲チェック
 		int next = (i + 1) % 4; //lineは0→1のように要素の小さい方から1つ大きい方へ引かれていったのでlineの2点を、iを始点、nextを終点として使える
 
 		int x = line[i].GetX(mouseY); //マウスyと今回のラインが接触したx地点

@@ -29,7 +29,7 @@ public:
 		vol = set * 100;
 	}
 
-	const Cmp_Image* ReadBaseGage() const { return full; } //空ゲージの画像オブジェクトを取得、読み取り専用
+	const Cmp_Image* ReadBaseGage() const { return base; } //空ゲージの画像オブジェクトを取得、読み取り専用
 	const Cmp_Image* ReadFullGage() const { return full; } //ゲージ実体の画像オブジェクトを取得、読み取り専用
 
 	float GetIniSize() { return iniSize; } //初期x拡大率を取得

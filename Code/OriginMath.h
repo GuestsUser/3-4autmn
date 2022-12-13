@@ -100,13 +100,22 @@ public:
 class LinerFunction { //y=ax+bの形で表される一次直線を表現できるクラス
 	float slope; //傾き
 	float yIntercept; //y切片
+	bool parallelY; //yに平行な場合true
 
 public:
 	LinerFunction(const Vector3& pos1, const Vector3& pos2) { //2点で傾き、切片を求める初期化方式(他形式は必要に応じて追加する)
-		slope = (pos1.GetY() - pos2.GetY()) / (pos1.GetX() - pos2.GetX()); //傾き出し
-		yIntercept = -slope * pos1.GetX() + pos1.GetY(); //切片出し
+		parallelY = pos1.GetX() - pos2.GetX() == 0; //yに平行かどうか記録
+
+		if (parallelY) { //xが使えない(y軸に平行)の場合こちらを使用
+			slope = 0; //傾きなし
+			yIntercept = pos1.GetX(); //x=bの形にする
+			return;
+		}
+
+		slope = (pos1.GetY() - pos2.GetY()) / (pos1.GetX() - pos2.GetX()); //傾き出し、ここまで来た場合xは使えるので0で割るチェックはしない
+		yIntercept = -slope * pos1.GetX() + pos1.GetY(); //切片出し、yが0でもy=bの形になる
 	}
 
-	int GetX(int y) { return (yIntercept - y) / slope; } //一次関数上のy座標から対応するxを取得
+	int GetX(int y) { return parallelY ? yIntercept : (y - yIntercept) / slope; } //一次関数上のy座標から対応するxを取得
 	int GetY(int x) { return slope * x + yIntercept; } //上記のy取得版
 };

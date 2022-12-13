@@ -22,6 +22,6 @@ Cmp_PlayerRaiseDraw::~Cmp_PlayerRaiseDraw() { delete drawPos; } //“Æ©¶¬‚µ‚½ˆÊ
 
 void Cmp_PlayerRaiseDraw::Draw() {
 	int val = gage->GetVol() * dealer->GetMaxBet() - pot->Inquiry(*parent); //Œ»İƒQ[ƒW—Ê‚©‚çx•¥ó‹µ‚ğˆø‚­–‚Å–¢•¥•ª‚¾‚¯‚ğ•\¦‚·‚é
-	DrawStringToHandle(554, 225, std::to_string(val).c_str(), *PokerFontData::GetColor(PokerFontData::color::edgeNormal), *PokerFontData::GetHandle(PokerFontData::type::edge), *PokerFontData::GetColor(PokerFontData::color::edgeColor));
+	DrawStringToHandle(442, 624, std::to_string(val).c_str(), *PokerFontData::GetColor(PokerFontData::color::edgeNormal), *PokerFontData::GetHandle(PokerFontData::type::edge), *PokerFontData::GetColor(PokerFontData::color::edgeColor));
 
 }

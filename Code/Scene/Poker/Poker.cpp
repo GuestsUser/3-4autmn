@@ -12,6 +12,7 @@
 #include "PK_Dealer.h"
 #include "PK_Player.h"
 #include "CardDealer.h"
+#include "../Code/OriginMath.h"
 
 #include "Cmp_BetActionRecord.h"
 #include "Cmp_CPUBetLogic.h"
@@ -59,7 +60,9 @@ Poker::Poker() :pot(new Pot()), dealer(new PK_Dealer()), cardDealer(new CardDeal
 	float monitorArea = 1.2; //ゲージ実体画像サイズに対しこの数値分掛けた値をクリック検知範囲とする
 	Vector3 gagePlace = Vector3(442, 633); //ゲージの配置座標
 	Vector3 actionPlace = Vector3(573, 663); //Call,Raise等各種アクションボタンの配置座標
+	Vector3 actionSize = Vector3(110, 90); //Call,Raise等各種アクションボタンの画像サイズ
 	Vector3 foldPlace = Vector3(772, 684); //foldButton配置座標
+	Vector3 foldSize = Vector3(90, 45); //foldButton画像サイズ
 
 	std::deque<Cmp_Transform> cardPos = std::deque<Cmp_Transform>(5); //カード配置受け渡し用変数
 	Cmp_Transform backPos = Cmp_Transform(); //コイン表示背景配置受け渡し用
@@ -88,21 +91,31 @@ Poker::Poker() :pot(new Pot()), dealer(new PK_Dealer()), cardDealer(new CardDeal
 			useSpace = cardPlaceSpace; //配置間隔をプレイヤーの物に変更
 			current = new PK_Player(); //プレイヤーの精製
 
+
+			Button* action = new Button(actionPlace.GetX(), actionPlace.GetY(), actionSize.GetX() / 2, actionSize.GetY() / 2, true); //アクションボタンの作成
+			Button* fold = new Button(foldPlace.GetX(), foldPlace.GetY(), foldSize.GetX() / 2, foldSize.GetY() / 2, true); //foldボタンの作成
+
 			int* handle = new int[5]; //分割読み込み画像の保存用領域確保
 			LoadDivGraph("Resource/image/poker_action_button.png", 5, 5, 1, 110, 90, handle); //各種アクション用ボタンの画像分割読み込み
 
+			Cmp_Image* foldImage = new Cmp_Image(*new int(LoadGraph("Resource/image/poker_fold.png")), 1, fold->EditTransform()); //foldボタン画像作成
+			Cmp_Image* actionImage = new Cmp_Image(*handle, 5, action->EditTransform()); //アクションボタン画像作成
+
+			action->SetAlways(actionImage); //ボタンに画像を追加
+			fold->SetAlways(foldImage);
+			action->SetClick(new Cmp_Button_ClickCheck()); //クリックにクリック検知用空コンポーネントの追加
+			fold->SetClick(new Cmp_Button_ClickCheck());
+
+			action->SetRunUpdate(false); //ボタン系は必要時以外完全に隠す
+			fold->SetRunUpdate(false);
+			action->SetRunDraw(false);
+			fold->SetRunDraw(false);
+
+
 			Cmp_Image* base = new Cmp_Image(*new int(LoadGraph("Resource/image/poker_gage_back.png")), 1); //ゲージ画像の作成
 			Cmp_Image* full = new Cmp_Image(*new int(LoadGraph("Resource/image/poker_gage_full.png")), 1);
-			Cmp_Image* foldImage = new Cmp_Image(*new int(LoadGraph("Resource/image/poker_fold.png")), 1); //foldボタン画像作成
-			Cmp_Image* actionImage = new Cmp_Image(*handle, 5); //アクションボタン画像作成
-			
-			actionImage->EditTranform()->EditPos() = actionPlace; //画像の位置設定
-			foldImage->EditTranform()->EditPos() = foldPlace;
-
 			base->EditTranform()->EditPos().SetXYZ(gagePlace.GetX(), gagePlace.GetY(), 0); //ゲージ位置設定
 			full->EditTranform()->EditPos().SetXYZ(gagePlace.GetX(), gagePlace.GetY(), 0);
-
-
 
 			Gage* gage = new Gage(*base, *full); //ゲージの作成
 			int sizeX = -1; int sizeY = -1;
@@ -113,21 +126,8 @@ Poker::Poker() :pot(new Pot()), dealer(new PK_Dealer()), cardDealer(new CardDeal
 			gage->SetCmp(control); //ゲージをマウスからコントロールする機能の追加
 			gage->SetCmp(new Cmp_Gage_Border(*gage)); //ゲージ下限設定機能の追加
 
-			GetGraphSize(*actionImage->ReadImage(), &sizeX, &sizeY); //actionImageサイズ取得
-			Button* action = new Button(actionPlace.GetX(), actionPlace.GetY(), sizeX / 2, sizeY / 2, false); //アクションボタンの作成
 
-			GetGraphSize(*foldImage->ReadImage(), &sizeX, &sizeY); //foldImageサイズ取得
-			Button* fold = new Button(foldPlace.GetX(), foldPlace.GetY(), sizeX / 2, sizeY / 2, false); //foldボタンの作成
 			
-			action->SetAlways(actionImage); //ボタンに画像を追加
-			fold->SetAlways(foldImage);
-			action->SetClick(new Cmp_Button_ClickCheck()); //クリックにクリック検知用空コンポーネントの追加
-			fold->SetClick(new Cmp_Button_ClickCheck());
-
-			action->SetRunUpdate(false); //ゲージ以外のボタン系は必要時以外完全に隠す
-			fold->SetRunUpdate(false);
-			action->SetRunDraw(false);
-			fold->SetRunDraw(false);
 
 			std::deque<PK_Card*> card = *current->EditCard();
 			for (int j = 0; j < card.size(); ++j) { //カードを取得

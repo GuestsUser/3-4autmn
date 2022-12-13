@@ -160,6 +160,7 @@ void Poker::Main::Update() {
 			record->SetIsAction(true); //アクション済みに設定
 			if (action == Cmp_BetActionRecord::Action::call || action == Cmp_BetActionRecord::Action::raise) { parent->pot->SetMainPot(pay, *parent->chara[access]); } //call、raiseの場合メインポットへ
 			if (action == Cmp_BetActionRecord::Action::allIn) { parent->pot->SetSidePot(pay, *parent->chara[access]); } //allInの場合サイドポットへ
+			parent->chara[access]->SetCoin(parent->chara[access]->GetCoint() - pay); //所持金から支払額を減算する
 
 			if (action == Cmp_BetActionRecord::Action::raise) { //レイズしていた場合全員のアクション状況の見直しを行う
 				for (auto itr : actionRecord) { if (!BetIgnore(itr)) { itr->SetIsAction(false); } } //fold,allInをしていない場合未アクション状態に更新する
@@ -198,7 +199,7 @@ void Poker::Main::Update() {
 	int pay = playerGage->GetVol() * parent->dealer->GetBB() - parent->pot->Inquiry(*parent->chara[access]); //現在ゲージと支払状況に基づいた支払額
 
 	if (pay == parent->dealer->GetBB()) { action = Cmp_BetActionRecord::Action::call; } //支払額がBBと同値だった場合アクションはcall
-	if (pay > parent->dealer->GetBB()) { action = Cmp_BetActionRecord::Action::raise; } //支払額がBBと同値だった場合アクションはcall
+	if (pay > parent->dealer->GetBB()) { action = Cmp_BetActionRecord::Action::raise; } //支払額がBBを超えていた場合アクションはraise
 	if (parent->chara[access]->GetCoint() - pay < 0) { action = Cmp_BetActionRecord::Action::allIn; } //支払額が所持金を超えていた場合AllIn
 
 
@@ -215,7 +216,8 @@ void Poker::Main::Update() {
 	if (actionButton->GetRunUpdateClick()) { //アクションボタンが押された場合の処理
 		if (action == Cmp_BetActionRecord::Action::allIn) { parent->pot->SetSidePot(pay, *parent->chara[access]); } //allInの場合サイドポットへ
 		else if (action != Cmp_BetActionRecord::Action::check) { parent->pot->SetMainPot(pay, *parent->chara[access]); } //call,raiseだった場合メインポットへ
-		
+		parent->chara[access]->SetCoin(parent->chara[access]->GetCoint() - pay); //所持金から支払額を減算する
+
 		if (endCount >= (int)Poker::Character::length) { //全キャラ終了済みの場合
 			SequenceNextReset(actionRecord); //アクション実行状況を次シーン向けにリセット
 			if (phase == 0) { parent->run = parent->list[(int)Poker::Section::change]; } //ファーストベットだった場合次実行するシーケンスはカード交換
