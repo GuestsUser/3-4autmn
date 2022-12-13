@@ -19,13 +19,16 @@ void Othello_Board::Othello_Board_Initialize(Scene* scene) {
 
     PutCheckImage = LoadGraph("Resource/image/Othello_Image/OthelloPutCheck2.png");     // 置ける場所のカッコの画像の読み込み
     ResultImage = LoadGraph("Resource/image/Othello_Image/Othello_Result2.png");        // リザルト画面の画像の読み込み
-    Black = LoadGraph("Resource/image/Othello_Image/Black.png");        // 黒石の画像の読み込み
-    White = LoadGraph("Resource/image/Othello_Image/White.png");        // 白石の画像の読み込み
-    SenteGote = LoadGraph("Resource/image/Othello_Image/SenteGote.png");
+    Black = LoadGraph("Resource/image/Othello_Image/Black.png");            // 黒石の画像の読み込み
+    White = LoadGraph("Resource/image/Othello_Image/White.png");            // 白石の画像の読み込み
+    SenteGote = LoadGraph("Resource/image/Othello_Image/SenteGote.png");    // 先手・後手の画像の読み込み 
 
     // 勝ち・負け・引き分けの画像の読み込み
     LoadDivGraph("Resource/image/Othello_Image/winlosedraw.png", 3, 3, 1, 400, 120, WinLoseImage);
+    // プレイヤーかCPUかの画像の読み込み
     LoadDivGraph("Resource/image/Othello_Image/Player.png", 2, 2, 1, 450, 150, PlayerImage);
+    // ナンバー画像の読み込み
+    LoadDivGraph("Resource/image/Othello_Image/Number.png", 10, 10, 1, 45, 70, NumberImage);
 
     Pause_Button = LoadGraph("Resource/image/PauseButton.png");     // ポーズボタンの画像の読み込み
     Pause_Back = LoadGraph("Resource/image/PauseBack.png");         // ポーズ画面の背景の画像の読み込み
