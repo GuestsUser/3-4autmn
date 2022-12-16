@@ -1172,6 +1172,7 @@ void PageOne::PageOne_Draw() {
 	//デバッグ用
 	//DrawBox(890, 440,980, 500, color, TRUE);
 	//DrawFormatString(900, 450, GetColor(255, 0, 0), "パス");
+	DrawFormatString(900, 450, GetColor(255, 0, 0), "list:%d", Field_card.size());
 	//DrawGraph(0, 175, NPC_Pass_Icon, true);
 	//DrawGraph(500, 400, NPC_PageOne_Icon, true);
 }

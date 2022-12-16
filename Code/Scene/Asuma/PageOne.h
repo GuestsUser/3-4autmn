@@ -1,6 +1,7 @@
 #pragma once
 #include "./../Scene.h"
 #include<list>
+#include<vector>
 
 #define MAX (4U)
 
@@ -47,6 +48,16 @@ private:
 	int card_type[54];	//画像用ハンドル
 	int background;	//背景
 
+	//std::vector <Card> Card_obj[53];		//全カードの情報(山札)
+	//std::vector <Card> Player_card[53];	//プレイヤーの持っているカードの情報
+
+	//std::vector <Card> Field_card[4];		//場に出ているカード
+	//std::vector <Card> Cemetery_card[53];		//場に出ているカード
+
+	//std::vector <Card> NPC_card_1[53];		//NPC１号の持っているカードの情報
+	//std::vector <Card> NPC_card_2[53];		//NPC２号の持っているカードの情報
+	//std::vector <Card> NPC_card_3[53];		//NPC３号の持っているカードの情報
+	
 	std::list <Card> Card_obj;		//全カードの情報(山札)
 	std::list <Card> Player_card;	//プレイヤーの持っているカードの情報
 
