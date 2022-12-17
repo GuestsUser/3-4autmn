@@ -12,9 +12,10 @@ private:
 	Circle t_circle1, t_circle2, t_circle3;//‰~‚Ì\‘¢‘Ì‚ğO‚ÂÀ‘Ì‰»
 
 	int White;
+	int DarkRed;
 	int Red;
+	int DarkBule;
 	int Bule;
-	//int Green = GetColor(50, 255, 50);
 	int Yellow;
 	int Purple;
 	int Black;

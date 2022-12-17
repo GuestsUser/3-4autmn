@@ -6,8 +6,9 @@ void AirHockey_Scene::AirHockey_Initialize() {
 	//色宣言
 	 White = GetColor(255, 255, 255);
 	 Red = GetColor(255, 50, 50);
-	 Bule = GetColor(50, 50, 255);
-	//int Green = GetColor(50, 255, 50);
+	 Bule = GetColor(0, 191, 255);
+	 DarkRed = GetColor(128, 50, 50);
+	 DarkBule = GetColor(0,0 ,139 );
 	 Yellow = GetColor(255, 255, 50);
 	 Purple = GetColor(218, 112, 214);
 	 Black = GetColor(0, 0, 0);
@@ -24,9 +25,9 @@ void AirHockey_Scene::AirHockey_Initialize() {
 }
 
 void AirHockey_Scene::Status_Reset() {
-	t_circle1.m_X = 230.0f, t_circle1.m_Y = 490.0f, t_circle1.m_R = 24.0f;	//プレイヤー
-	t_circle2.m_X = 1060.0f, t_circle2.m_Y = 150.0f, t_circle2.m_R = 24.0f;	//CPU
-	t_circle3.m_X = 980.0f, t_circle3.m_Y = 490.0f, t_circle3.m_R = 18.0f, t_circle3.m_boundP = 6.0f, t_circle3.X_spd = 0.0f, t_circle3.Y_spd = 0.0f, t_circle3.Maxspd = 15.0f;	//パック
+	t_circle1.m_X = wall_xC -160, t_circle1.m_Y = wall_yC + 120, t_circle1.m_R = 27.0f;	//プレイヤー
+	t_circle2.m_X = wall_xC +160, t_circle2.m_Y = wall_yC - 120, t_circle2.m_R = 27.0f;	//CPU
+	t_circle3.m_X = wall_xC, t_circle3.m_Y = wall_yC, t_circle3.m_R = 20.0f, t_circle3.m_boundP = 6.0f, t_circle3.X_spd = 0.0f, t_circle3.Y_spd = 0.0f, t_circle3.Maxspd = 15.0f;	//パック
 };
 
 ////////当たり判定関数シリーズ//////
@@ -198,30 +199,14 @@ void AirHockey_Scene::Player_Control() {
 		if (wall_xC > t_circle1.m_r + 3.0f) {
 			t_circle1.m_X += 3.0f;
 
-			/*	if (Player_Puck_Check_Hit() == true && 0.0f == t_circle3.X_spd) {
-					t_circle3.m_X += t_circle3.X_spd;
-				}*/
-
 			if (wall_xC > t_circle1.m_r + 3.0f) {
-				t_circle1.m_X += 3.0f;
-
-				/*if (Player_Puck_Check_Hit() == true && 0.0f == t_circle3.X_spd) {
-					t_circle3.m_X += t_circle3.X_spd;
-				}*/
+						t_circle1.m_X += 3.0f;
 
 				if (wall_xC > t_circle1.m_r + 3.0f) {
-					t_circle1.m_X += 3.0f;
-
-					/*		if (Player_Puck_Check_Hit() == true && 0.0f == t_circle3.X_spd) {
-								t_circle3.m_X += t_circle3.X_spd;
-							}*/
+							t_circle1.m_X += 3.0f;
 
 					if (wall_xC > t_circle1.m_r + 0.5f) {
-						t_circle1.m_X += 0.5f;
-
-						/*if (Player_Puck_Check_Hit() == true && 0.0f == t_circle3.X_spd) {
-							t_circle3.m_X += t_circle3.X_spd;
-						}*/
+								t_circle1.m_X += 0.5f;
 					}
 				}
 			}
@@ -351,18 +336,18 @@ void AirHockey_Scene::AirHockey_Draw() {
 }
 
 void AirHockey_Scene::Draw_All() {
-	DrawLine(wall_L,wall_yC, wall_R, wall_yC, Yellow);
+	//DrawLine(wall_L,wall_yC, wall_R, wall_yC, Yellow);
 	DrawLine(wall_xC,wall_T, wall_xC, wall_B, Yellow);//中心線
-	DrawOvalAA(wall_L, wall_yC, 20, 90, 25, Red, FALSE);//プレイヤーゴール線
-	DrawOvalAA(wall_R, wall_yC, 20, 90, 25, Bule, FALSE);//CPUゴール線
+	DrawOvalAA(wall_L, wall_yC, 20, 90, 30, DarkRed, TRUE);//プレイヤーゴール線
+	DrawOvalAA(wall_R, wall_yC, 20, 90, 30, DarkBule, TRUE);//CPUゴール線
 	DrawCircleAA(wall_xC, wall_yC, 100, 30, Yellow, FALSE);//中心円
 
-	DrawCircleAA(t_circle3.m_X, t_circle3.m_Y, t_circle3.m_R, 30, Purple, 1);//パック
-	DrawCircleAA(t_circle1.m_X, t_circle1.m_Y, t_circle1.m_R, 30, Red);	//プレイヤー
-	DrawCircleAA(t_circle2.m_X, t_circle2.m_Y, t_circle2.m_R, 30, Bule);	//CPU
+	DrawCircleAA(t_circle3.m_X, t_circle3.m_Y, t_circle3.m_R, 30, Purple, 1);	//パック
+	DrawCircleAA(t_circle1.m_X, t_circle1.m_Y, t_circle1.m_R, 30, Red);			//プレイヤー
+	DrawCircleAA(t_circle2.m_X, t_circle2.m_Y, t_circle2.m_R, 30, Bule);		//CPU
 
-	DrawBox(wall_L - 20, wall_yC - 100, wall_L, wall_yC + 100, Black, TRUE);	//はみ出た左側ゴール線上書き
-	DrawBox(wall_R, wall_yC - 101, wall_R + 20, wall_yC + 100, Black, TRUE);//はみ出た右側ゴール線上書き
-	DrawBox(wall_L,wall_T,wall_R,wall_B, White, FALSE);//フィールド壁
-	DrawBox(wall_L - 10,wall_T - 10, wall_R + 11, wall_B + 11, White, FALSE);//フィールド壁
+	DrawBox(wall_L - 20, wall_yC - 100, wall_L+1, wall_yC + 101, Black, TRUE);	//はみ出た左側ゴール線上書き
+	DrawBox(wall_R, wall_yC - 101, wall_R + 21, wall_yC + 101, Black, TRUE);    //はみ出た右側ゴール線上書き
+	DrawBox(wall_L,wall_T,wall_R,wall_B, White, FALSE);							//フィールド壁
+	DrawBox(wall_L - 10,wall_T - 10, wall_R + 11, wall_B + 11, White, FALSE);	//フィールド壁
 }
