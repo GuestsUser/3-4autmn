@@ -68,6 +68,10 @@ private:
 	std::list <Card> NPC_card_2;		//NPC２号の持っているカードの情報
 	std::list <Card> NPC_card_3;		//NPC３号の持っているカードの情報
 
+	std::list <Card>::iterator itr;
+	std::list <Card>::iterator p_itr;
+	std::list <Card>::iterator f_itr;
+
 	//スートUI
 	int Spade;	//スペード
 	int Heart;	//ハート

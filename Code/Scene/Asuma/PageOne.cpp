@@ -71,6 +71,8 @@ void PageOne::PageOne_Initialize(Scene* scene) {
 
 	ChangeVolumeSoundMem(255 * 80 / 100, BGM);
 
+	new std::list<Card>; Field_card;
+
 	OneShot = false;
 
 	Deck_X = 130;
@@ -260,7 +262,7 @@ void PageOne::PageOne_Update() {
 		case 0:	// player
 			if (Player_setup == false) {
 				if (n > 15) {
-					auto itr = Card_obj.begin();
+					itr = Card_obj.begin();
 					r = GetRand(Card_obj.size());
 					for (int i = 0; i < r; i++) {
 						itr++;
@@ -282,7 +284,7 @@ void PageOne::PageOne_Update() {
 			else {
 				if (flg_p == false) {
 
-					auto f_itr = Field_card.begin();
+					f_itr = Field_card.begin();
 
 					if (Field_card.empty() == false && (*f_itr).suit == 5) {
 						lead = 1;
@@ -298,7 +300,7 @@ void PageOne::PageOne_Update() {
 					}
 					else {
 						player = Player_card.size();
-						auto p_itr = Player_card.begin();
+						p_itr = Player_card.begin();
 
 						if (lead == 1) {
 							f_itr++;
@@ -320,7 +322,7 @@ void PageOne::PageOne_Update() {
 						if (n > 30) {
 							if ((Mouse_X > Deck_X - (card_w * 0.7) / 2) && (Mouse_X < Deck_X + (card_w * 0.7) / 2) && (Mouse_Y > Deck_Y - (card_h * 0.7) / 2) && (Mouse_Y < Deck_Y + (card_h * 0.7) / 2)) {
 								if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
-									auto itr = Card_obj.begin();
+									itr = Card_obj.begin();
 
 									PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
 									r = GetRand(Card_obj.size());
@@ -346,7 +348,8 @@ void PageOne::PageOne_Update() {
 					}
 
 					player = Player_card.size();
-					auto p_itr = Player_card.begin();
+					p_itr = Player_card.begin();
+					f_itr = Field_card.begin();
 
 					//プレイヤーの手札からカードだす
 					for (i = 0; i < player; i++) {
@@ -389,7 +392,12 @@ void PageOne::PageOne_Update() {
 										(*p_itr).card_y = Player_Y - 50;
 										if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
 											PlaySoundMem(card_SE_2, DX_PLAYTYPE_BACK, TRUE);
-											Field_card.push_back((*p_itr));
+											if (Field_card.empty() == true) {
+												Field_card.insert(Field_card.begin(),(*p_itr));
+											}
+											else {
+												Field_card.push_back((*p_itr));
+											}
 											Player_card.erase(p_itr);
 
 											if ((*p_itr).num == 99) {
@@ -929,7 +937,7 @@ void PageOne::PageOne_Update() {
 					flg_3 = false;
 
 					cemetery = Field_card.size();
-					auto f_itr = Field_card.begin();
+					f_itr = Field_card.begin();
 
 					for (i = 0; i < cemetery; i++) {
 						Cemetery_card.push_back((*f_itr));
@@ -960,8 +968,8 @@ void PageOne::PageOne_Draw() {
 	npc_2 = NPC_card_2.size();
 	npc_3 = NPC_card_3.size();
 
-	auto f_itr = Field_card.begin();
-	auto p_itr = Player_card.begin();
+	f_itr = Field_card.begin();
+	p_itr = Player_card.begin();
 
 	DrawRotaGraph(640, 360, 1.0, 0, background, TRUE);
 
@@ -1172,7 +1180,16 @@ void PageOne::PageOne_Draw() {
 	//デバッグ用
 	//DrawBox(890, 440,980, 500, color, TRUE);
 	//DrawFormatString(900, 450, GetColor(255, 0, 0), "パス");
-	DrawFormatString(900, 450, GetColor(255, 0, 0), "list:%d", Field_card.size());
+	//DrawFormatString(900, 450, GetColor(255, 0, 0), "list:%d", Field_card.size());
+	if (Field_card.empty() == true) {
+		DrawFormatString(900, 450, GetColor(255, 0, 0), "空っぽだよ");
+	}
+	else if (Field_card.empty() == false) {
+		DrawFormatString(900, 450, GetColor(255, 0, 0), "入ってるよ");
+	}
+	else {
+		DrawFormatString(900, 450, GetColor(255, 0, 0), "そもそもないよ");
+	}
 	//DrawGraph(0, 175, NPC_Pass_Icon, true);
 	//DrawGraph(500, 400, NPC_PageOne_Icon, true);
 }
