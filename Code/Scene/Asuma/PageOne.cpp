@@ -7,6 +7,7 @@
 
 
 void PageOne::PageOne_Initialize(Scene* scene) {
+	//new std::list <Card>; Field_card;
 
 	//”wŒi
 	background = LoadGraph("Resource/image/CareerPoker.png");
@@ -271,6 +272,7 @@ void PageOne::PageOne_Update() {
 					(*itr).card_y = Player_Y;
 					PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
 					Player_card.push_back(*itr);
+					Card_obj.erase(itr);
 					if (player >= MAX - 1) {
 						Player_setup = true;
 					}
@@ -392,12 +394,14 @@ void PageOne::PageOne_Update() {
 										(*p_itr).card_y = Player_Y - 50;
 										if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
 											PlaySoundMem(card_SE_2, DX_PLAYTYPE_BACK, TRUE);
-											if (Field_card.empty() == true) {
-												Field_card.insert(Field_card.begin(),(*p_itr));
-											}
-											else {
-												Field_card.push_back((*p_itr));
-											}
+
+											/*p_itr = Player_card.begin();
+
+											for (int j = 0; j < i; j++) {
+												p_itr++;
+											}*/
+
+											Field_card.push_back(*(p_itr));
 											Player_card.erase(p_itr);
 
 											if ((*p_itr).num == 99) {
