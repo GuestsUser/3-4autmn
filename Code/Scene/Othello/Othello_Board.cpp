@@ -753,7 +753,7 @@ void Othello_Board::Othello_Board_Draw() {
     DrawRotaGraph(90, 40, 0.9, 0, Pause_Button, TRUE);      // ポーズボタンの表示
     // ------------------------------------------------------------------------
     }
-    DrawFormatString(900, 600, WhiteCr, "%d", RandomNum);
+    //DrawFormatString(900, 600, WhiteCr, "%d", RandomNum);
 }
 // ---------------------------------------------------------------------
 
