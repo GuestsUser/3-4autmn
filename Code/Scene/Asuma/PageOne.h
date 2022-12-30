@@ -69,8 +69,12 @@ private:
 	std::list <Card> NPC_card_3;		//NPC３号の持っているカードの情報
 
 	std::list <Card>::iterator itr;
-	std::list <Card>::iterator p_itr;
 	std::list <Card>::iterator f_itr;
+
+	std::list <Card>::iterator p_itr;
+	std::list <Card>::iterator n1_itr;
+	std::list <Card>::iterator n2_itr;
+	std::list <Card>::iterator n3_itr;
 
 	//スートUI
 	int Spade;	//スペード
@@ -146,7 +150,7 @@ private:
 	int field;		//場に出ているカードの枚数
 	int cemetery;	//使用したカードの枚数
 
-	int pri;		//親を決めるための変数
+	int pri;		//親を決めるための変数(フィールドで一番強いカードが記録される)
 	bool draw;		//カードが引けるかどうかを決めるためのフラグ(false:引けない　true:引ける)
 
 	bool Player_setup;		//プレイヤー準備フラグ
@@ -175,11 +179,6 @@ private:
 	int n3_pow;		//NPC３号が出したカードの強さ
 
 	int lead;	//場のスートの基準にするカードの順番（基本は先頭（0番目））
-
-	int p;		//プレイヤーの手札から p 番目にあるカード
-	int n1;		//NPC１号の手札から n1 番目にあるカード
-	int n2;		//NPC２号の手札から n2 番目にあるカード
-	int n3;		//NPC３号の手札から n3 番目にあるカード
 
 	int i;	//ループに使っている変数
 	int r;	//ランダム用変数
