@@ -268,7 +268,12 @@ void PageOne::PageOne_Update() {
 					(*itr).card_x = Player_X;
 					(*itr).card_y = Player_Y;
 					PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
-					Player_card.push_back(*itr);
+					if (Player_card.empty() == true) {
+						Player_card.push_front(*itr);
+					}
+					else {
+						Player_card.push_back(*itr);
+					}
 					if (Player_card.size() >= MAX) {
 						Player_setup = true;
 					}
@@ -337,9 +342,6 @@ void PageOne::PageOne_Update() {
 									n = 0;
 									break;
 								}
-
-								//デバッグ用
-								//color = GetColor(255, 0, 0);
 							}
 						}
 					}
@@ -395,16 +397,13 @@ void PageOne::PageOne_Update() {
 											if ((*p_itr).num == 99) {
 												pri = 99;
 											}
-
-											if ((*p_itr).num == 0) {
+											else if ((*p_itr).num == 0) {
 												pri = 0;
 											}
-
-											if (pri != 0 && pri < (*p_itr).num) {
+											else if (pri != 0 && pri < (*p_itr).num) {
 												pri = (*p_itr).num;
 											}
-
-											if (pri == 0 && (*p_itr).num != 99) {
+											else if (pri == 0 && (*p_itr).num != 99) {
 												pri = 0;
 											}
 
@@ -445,8 +444,13 @@ void PageOne::PageOne_Update() {
 					(*itr).card_x = NPC1_X;
 					(*itr).card_y = NPC1_Y;
 					PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
-					NPC_card_1.push_back(*itr);
-					Cemetery_card.push_back(*itr);
+					if (NPC_card_1.empty() == true) {
+						NPC_card_1.push_front(*itr);
+					}
+					else {
+						NPC_card_1.push_back(*itr);
+					}
+
 					if (NPC_card_1.size() >= MAX) {
 						NPC1_setup = true;
 					}
@@ -582,16 +586,13 @@ void PageOne::PageOne_Update() {
 										if ((*n1_itr).num == 99) {
 											pri = 99;
 										}
-		
-										if ((*n1_itr).num == 0) {
+										else if ((*n1_itr).num == 0) {
 											pri = 0;
 										}
-		
-										if (pri != 0 && pri < (*n1_itr).num) {
+										else if (pri != 0 && pri < (*n1_itr).num) {
 											pri = (*n1_itr).num;
 										}
-		
-										if (pri == 0 && (*n1_itr).num != 99) {
+										else if (pri == 0 && (*n1_itr).num != 99) {
 											pri = 0;
 										}
 		
@@ -627,8 +628,13 @@ void PageOne::PageOne_Update() {
 					(*itr).card_x = NPC2_X;
 					(*itr).card_y = NPC2_Y;
 					PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
-					NPC_card_2.push_back(*itr);
-					Cemetery_card.push_back(*itr);
+					if (NPC_card_2.empty() == true) {
+						NPC_card_2.push_front(*itr);
+					}
+					else {
+						NPC_card_2.push_back(*itr);
+					}
+					
 					if (NPC_card_2.size() >= MAX) {
 						NPC2_setup = true;
 					}
@@ -764,16 +770,13 @@ void PageOne::PageOne_Update() {
 										if ((*n2_itr).num == 99) {
 											pri = 99;
 										}
-
-										if ((*n2_itr).num == 0) {
+										else if ((*n2_itr).num == 0) {
 											pri = 0;
 										}
-
-										if (pri != 0 && pri < (*n2_itr).num) {
+										else if (pri != 0 && pri < (*n2_itr).num) {
 											pri = (*n2_itr).num;
 										}
-
-										if (pri == 0 && (*n2_itr).num != 99) {
+										else if (pri == 0 && (*n2_itr).num != 99) {
 											pri = 0;
 										}
 
@@ -808,8 +811,12 @@ void PageOne::PageOne_Update() {
 					(*itr).card_x = NPC3_X;
 					(*itr).card_y = NPC3_Y;
 					PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
-					NPC_card_3.push_back(*itr);
-					Cemetery_card.push_back(*itr);
+					if (NPC_card_3.empty() == true) {
+						NPC_card_3.push_front(*itr);
+					}
+					else {
+						NPC_card_3.push_back(*itr);
+					}
 					if (NPC_card_3.size() >= MAX) {
 						NPC3_setup = true;
 					}
@@ -940,21 +947,17 @@ void PageOne::PageOne_Update() {
 
 									if (PageOne_npc1 == false) {
 										PlaySoundMem(card_SE_3, DX_PLAYTYPE_BACK, TRUE);
-										Field_card.push_back(*n3_itr);
 
 										if ((*n3_itr).num == 99) {
 											pri = 99;
 										}
-
-										if ((*n3_itr).num == 0) {
+										else if ((*n3_itr).num == 0) {
 											pri = 0;
 										}
-
-										if (pri != 0 && pri < (*n3_itr).num) {
+										else if (pri != 0 && pri < (*n3_itr).num) {
 											pri = (*n3_itr).num;
 										}
-
-										if (pri == 0 && (*n3_itr).num != 99) {
+										else if (pri == 0 && (*n3_itr).num != 99) {
 											pri = 0;
 										}
 
@@ -964,6 +967,9 @@ void PageOne::PageOne_Update() {
 										flg_3 = true;
 										n = 0;
 										PageOne_flg = false;
+
+										Field_card.push_back(*n3_itr);
+
 										NPC_card_3.erase(n3_itr);
 										break;
 									}
@@ -1061,7 +1067,7 @@ void PageOne::PageOne_Draw() {
 		switch (priority) {
 		case 0:
 			DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：プレイヤー");
-			if (draw == true && Field_card.empty() == false) {
+			if (draw != false) {
 				DrawFormatString(250, 450, GetColor(100, 100, 255), "カードを引いてください");
 			}
 			else if (Player_Pass_Flg == true) {
