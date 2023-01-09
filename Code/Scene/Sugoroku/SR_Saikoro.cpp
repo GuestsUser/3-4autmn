@@ -369,6 +369,7 @@ void SR_Saikoro::Draw() {
 		if (Goalflg == true) {
 			DrawGraph(0, 0, SR_GOAL, true);
 		}
+		StopSoundFile();
 		if (Player1sum == 62) { DrawString(500, 360, "Player1の勝利！！", GetColor(0, 0, 0)); }
 		else if (Player2sum == 62) { DrawString(500, 360, "Player2の勝利！！", GetColor(0, 0, 0)); }
 		else if (Player3sum == 62) { DrawString(500, 360, "Player3の勝利！！", GetColor(0, 0, 0)); }
