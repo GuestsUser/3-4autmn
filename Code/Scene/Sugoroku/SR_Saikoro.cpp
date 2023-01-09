@@ -52,7 +52,7 @@ SR_Saikoro::SR_Saikoro(Scene*scene) {
 
 void SR_Saikoro::Update() {
 	if (count == 1) {
-		PlaySoundMem(SR_BGM, DX_PLAYTYPE_BACK);
+		PlaySoundMem(SR_BGM, DX_PLAYTYPE_LOOP);
 
 		ChangeVolumeSoundMem(155 * 80 / 100, SR_BGM);
 	}

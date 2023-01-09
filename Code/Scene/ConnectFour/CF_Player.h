@@ -16,6 +16,8 @@ private:
 	int CF_Board[Board_Xsize][Board_Ysize]; //パネルの情報の二次元配列
 	int CF_CircleBoard[Board_Xsize][Board_Ysize]; //クリア時に表示する円の二次元配列
 	int CF_PCoin; //プレイヤーのコイン
+	int pcoin[2];
+	int ccoin[2];
 	int CF_CCoin; //CPUのコイン
 	int CF_Yajirusi; //矢印
 	int CF_GameBGM; //ゲーム中のBGM
@@ -39,6 +41,7 @@ private:
 	int Player_X; //プレイヤーのX座標
 	int CPU_X;
 	int CPU_j;
+	int CPU_Position;
 	int PlayUser; //今プレイしているコインの所持者
 	int DlayCount; //コインが落ちてからプレイヤーに変わるまでのディレイ時間
 	 
@@ -48,8 +51,7 @@ private:
 	float FallCount;
 	float Player_Y; //プレイヤーのY座標
 	float Coin_Exp[Board_Xsize][Board_Ysize]; //コインの拡大率
-	float Circle_Radius; //円の半径
-	float Circle_Exp; //円の拡大率
+	float Coin_Switch; //クリア時のコインの点滅の切り替え
 
 	bool Mouse_Push; //マウスの左クリックがされたかのフラグ
 	bool CF_Clear; //コネクトフォーをクリアしたかのフラグ
