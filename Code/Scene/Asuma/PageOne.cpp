@@ -603,7 +603,6 @@ void PageOne::PageOne_Update() {
 								}
 							}
 						}
-						++n1_itr;
 					}
 				}
 				else {
@@ -783,7 +782,6 @@ void PageOne::PageOne_Update() {
 								}
 							}
 						}
-						++n2_itr;
 					}
 				}
 				else {
@@ -963,7 +961,6 @@ void PageOne::PageOne_Update() {
 								}
 							}
 						}
-						++n3_itr;
 					}
 				}
 				else {
