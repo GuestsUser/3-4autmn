@@ -14,6 +14,7 @@ private:
 	int Player2;
 	int Player3;
 	int Player4;
+	int game;
 	int x, y;
 	int i;
 public:

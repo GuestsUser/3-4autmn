@@ -25,6 +25,12 @@ private:
 	bool PauseFlg;
 	bool move;
 
+	//SE
+	int SR_saikoro;
+	int SR_idou;
+	int SR_BGM;
+
+
 	int count;
 	int countdiff;
 	int countmi;

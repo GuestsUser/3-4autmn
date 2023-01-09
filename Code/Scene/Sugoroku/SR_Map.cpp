@@ -207,30 +207,26 @@ SR_Map::SR_Map() {
 
 	MassX4[62] = 960; MassY4[62] = 230;
 
+	game = true;
 	/*---------------------------------‰æ‘œ—p------------------------------------------*/
 	Player1 = LoadGraph("Resource/image/SR_Player1.png");
 	Player2 = LoadGraph("Resource/image/SR_Player2.png");
 	Player3 = LoadGraph("Resource/image/SR_Player3.png");
 	Player4 = LoadGraph("Resource/image/SR_Player4.png");
+
 }
 void SR_Map::Update() {
+	if (Player1sum >= 62|| Player2sum >= 62 || Player3sum >= 62 || Player4sum >= 62) {
+		game = false;
+	}
 }
 
 
 void SR_Map::Draw() {	
-	/*if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH) {
-		Player1sum += 1;
-		Player2sum += 1;
-		Player3sum += 1;
-		Player4sum += 1;
-	}*/
-	DrawGraph(MassX[Player1sum], MassY[Player1sum], Player1, true);
-	DrawGraph(MassX2[Player2sum], MassY2[Player2sum], Player2, true);
-	DrawGraph(MassX3[Player3sum], MassY3[Player3sum], Player3, true);
-	DrawGraph(MassX4[Player4sum], MassY4[Player4sum], Player4, true);
-
-	DrawFormatString(100, 600, GetColor(255, 255, 255), "p1 = %d", Player1sum);
-	DrawFormatString(300, 600, GetColor(255, 255, 255), "p2 = %d", Player2sum);
-	DrawFormatString(500, 600, GetColor(255, 255, 255), "p3 = %d", Player3sum);
-	DrawFormatString(700, 600, GetColor(255, 255, 255), "p4 = %d", Player4sum);
+	if (game == true) {
+		DrawGraph(MassX[Player1sum], MassY[Player1sum], Player1, true);
+		DrawGraph(MassX2[Player2sum], MassY2[Player2sum], Player2, true);
+		DrawGraph(MassX3[Player3sum], MassY3[Player3sum], Player3, true);
+		DrawGraph(MassX4[Player4sum], MassY4[Player4sum], Player4, true);
+	}
 }
