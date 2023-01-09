@@ -6,9 +6,11 @@
 #include "SR_Saikoro.h"
 
 SR_Game::SR_Game(){
+	SR_BGM = LoadSoundMem("Resource/bgm/SR_BGM.wav"); //ÉQÅ[ÉÄíÜÇÃBGM
 	SR_MAP = LoadGraph("Resource/image/SR_MAP.png");
 	saikoro = new SR_Saikoro(this);
 	map = new SR_Map();
+//	PlaySoundMem(SR_BGM, DX_PLAYTYPE_BACK);
 
 }
 

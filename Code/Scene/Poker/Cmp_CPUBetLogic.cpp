@@ -32,7 +32,7 @@ Cmp_CPUBetLogic::Cmp_CPUBetLogic() :changeTimingLimit(4), changeTiming(1), oldGa
 }
 
 void Cmp_CPUBetLogic::Reset(int gameCount) {
-	raiseSplit.clear(); //分割レイズ数を初期化
+	raiseSplit.resize(0); //分割レイズ数を初期化
 	raiseActive = false;
 
 	if ((gameCount - oldGameCount) % changeTiming == 0) { //更新タイミングだった場合更新処理

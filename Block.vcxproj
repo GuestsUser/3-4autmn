@@ -51,6 +51,7 @@
     <ClCompile Include="Code\Scene\Othello\Scene_Othello.cpp" />
     <ClCompile Include="Code\Scene\daifugou\CP_Scene.cpp" />
     <ClCompile Include="Code\Scene\Poker\Btn.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Cmp_ThinkingImage.cpp" />
     <ClCompile Include="Code\Scene\Poker\PK_Card.cpp" />
     <ClCompile Include="Code\Scene\Poker\CardDealer.cpp" />
     <ClCompile Include="Code\Scene\Poker\Chara.cpp" />
@@ -114,6 +115,7 @@
     <ClInclude Include="Code\Scene\daifugou\CP_Scene.h" />
     <ClInclude Include="Code\Scene\Poker\BetLogicInitializeData.h" />
     <ClInclude Include="Code\Scene\Poker\Btn.h" />
+    <ClInclude Include="Code\Scene\Poker\Cmp_ThinkingImage.h" />
     <ClInclude Include="Code\Scene\Poker\PK_Card.h" />
     <ClInclude Include="Code\Scene\Poker\CardDealer.h" />
     <ClInclude Include="Code\Scene\Poker\Chara.h" />

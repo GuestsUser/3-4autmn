@@ -40,7 +40,13 @@ void Cmp_Gage_MouseControl::Update() {
 
 		float imageRotate = parent->ReadFullGage()->ReadTranform()->ReadRotate().GetZ(); //画像の回転を取得
 
-		float mouseLine = sqrt(pow(mouseX * cos(imageRotate), 2) + pow(mouseY * sin(imageRotate), 2)); //画像回転に応じてマウスから原点までのラインから取得する数値に制限を掛ける
+		
+		double xVol = mouseX * cos(imageRotate); //マウスが原点からどれほど離れているか記録したもの、x座標用
+		double yVol = mouseY * sin(imageRotate); //上記のy座標用
+		if (xVol < 0) { xVol = 0; } //マイナス方向へ動いていた場合0に揃える
+		if (yVol < 0) { yVol = 0; }
+
+		float mouseLine = sqrt(pow(xVol, 2) + pow(yVol, 2)); //画像回転に応じてマウスから原点までのラインから取得する数値に制限を掛ける
 		float fullLine = sqrt(pow(imagePos[1].GetX(), 2) + pow(imagePos[1].GetY(), 2)); //ゲージの最大値長さ
 
 		float gage = mouseLine / fullLine; //今回のゲージ量、ステップ操作前
@@ -55,12 +61,17 @@ void Cmp_Gage_MouseControl::Update() {
 	Vector3 pos[] = { Vector3(), Vector3() ,Vector3() ,Vector3() }; //判定領域の変形頂点、左上、右上、右下、左下の格納順
 	OriginMath::VertexModification(pos, area, *parent->ReadBaseGage()->ReadTranform(), parent->ReadFullGage()->GetDrawHorizonPivot(), parent->ReadFullGage()->GetDrawVerticalPivot()); //マウス判定をゲージ画像に合わせて変形
 
+	if (fmod(parent->ReadBaseGage()->ReadTranform()->ReadRotate().GetZ(), OriginMath::MPI / 2) == 0) { //ゲージに回転がかかってなかった場合
+		control = mouseX > pos[0].GetX() && mouseX < pos[1].GetX() && mouseY > pos[0].GetY() && mouseY < pos[2].GetY() && key->GetKeyState(monitorKey) == KEY_PUSH; //普通に範囲チェックする
+		return; //おわり
+	}
+
 	LinerFunction line[] = { LinerFunction(pos[0],pos[1]),LinerFunction(pos[1],pos[2]),LinerFunction(pos[2],pos[3]),LinerFunction(pos[3],pos[0]) }; //判定領域の境界を一次関数で保持
 
 	bool plus = false; //マウス位置からx軸へ平行に線を伸ばした際、lineに接触したx位置がマウスxより大きかった場合これをtrueとする
 	bool minus = false; //xより小さいならこっちをtrueにする
 	
-	for (int i = 0; i < 4; ++i) {
+	for (int i = 0; i < 4; ++i) { //回転に応じた範囲チェック
 		int next = (i + 1) % 4; //lineは0→1のように要素の小さい方から1つ大きい方へ引かれていったのでlineの2点を、iを始点、nextを終点として使える
 
 		int x = line[i].GetX(mouseY); //マウスyと今回のラインが接触したx地点

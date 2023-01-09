@@ -13,6 +13,14 @@ Gage::Gage(Cmp_Image& baseImgae, Cmp_Image& fullImage, int iniVol) :base(&baseIm
 	iniSize = fullImage.ReadTranform()->ReadScale().GetX(); //初期拡大率取得
 }
 
+void Gage::Reset() {
+	for (auto itr : cmp) { itr->Reset(); } //コンポーネントのResetを呼び出す
+}
+void Gage::FullReset() {
+	for (auto itr : cmp) { itr->FullReset(); } //コンポーネントのFullResetを呼び出す
+}
+
+
 Gage::~Gage() {
 	delete full;
 	delete base;

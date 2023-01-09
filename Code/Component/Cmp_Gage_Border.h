@@ -11,6 +11,9 @@ public:
 	Cmp_Gage_Border(Gage& setGage) :parent(&setGage), border(0) {}
 	void Update();
 
+	void Reset() { border = 0; }
+	void FullReset() { Reset(); }
+
 	void SetBorder(int set) { 
 		if (set > 100) { set = 100; } //リミットチェック、オーバーしないよう処理
 		if (set < 0) { set = 0; }

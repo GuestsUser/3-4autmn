@@ -32,8 +32,8 @@ void Pot::Draw() {
 }
 
 void Pot::Reset() {
-	charaPayment.clear(); //各キャラの支払い情報のリセット
-	pot.clear(); //サイドポット、メインポットをリセット
+	charaPayment = std::unordered_map<const Chara*, int>(); //各キャラの支払い情報のリセット、即ち空にする
+	pot = std::map<int, int>(); //サイドポット、メインポットをリセット
 }
 
 int Pot::PayOut(const Chara& user) {
@@ -49,16 +49,14 @@ int Pot::PayOut(const Chara& user) {
 }
 
 int Pot::Inquiry(const Chara& user) {
-	int payOut = 0; //支払合計額
+	if (charaPayment.count(&user) == 0) { return 0; } //支払いがない場合0を返して終わり
+	return charaPayment[&user]; //支払額を返す
+}
 
-	auto itr = pot.find(charaPayment[&user]);
-
-	for (itr; true; --itr) { //mapは昇順なので自身以下のポットを得る為前に進める
-		if (itr == pot.begin()) { break; } //前方だとend()のような物がないので終了条件をこっちに持ってくる
-		payOut += itr->second; //今回のポットを支払額に加える
-	}
-
-	return payOut; //支払額を返す
+int Pot::TotalAmount() {
+	int sum = 0;
+	for (auto itr = pot.begin(); itr != pot.end(); ++itr) { sum += itr->second; } //各ポット内金額をsumへ合計してゆく
+	return sum;
 }
 
 void Pot::SetSidePot(int pay, const Chara& user) {
@@ -68,29 +66,30 @@ void Pot::SetSidePot(int pay, const Chara& user) {
 	for (auto itr : charaPayment) { copy.push_back(std::make_pair(itr.second, itr.first)); } //mapもunordered_mapも余計な機能のせいでソートできないからpairを使う
 	std::sort(copy.begin(), copy.end(), [](std::pair<int, const Chara*> a, std::pair<int, const Chara*> b) { return a.first < b.first; }); //支払額を昇順にソート
 
-	charaPayment.clear(); //元データの消去
-	pot.clear();
+	Reset(); //元データの消去
 
 	for (auto itr : copy) { SetMainPot(itr.first, *itr.second); } //割り込んだサイドポットを元からある物として扱う為昇順に再振り分けを行う
 }
 
 void Pot::SetMainPot(int pay, const Chara& user) {
 	auto itr = pot.begin(); //for開始位置
-	int paid = 0; //支払済み額
+	int paid = 0; //今回payからpotへ支払った分の金額
+	int old = 0; //前回までの支払額
 
 	if (charaPayment.count(&user)) { //一度支払った事がある場合
-		itr = ++pot.find(charaPayment[&user]); //前回支払位置の次に開始位置を合わせる
-		paid = (--itr)->first; //前回支払い分は免除する
+		itr = pot.find(charaPayment[&user]); //前回支払位置に設定
+		old = itr->first; //前回支払分記憶
+		itr++; //開始位置を前回支払位置の次に変更する
 	}
 
 	for (itr; itr != pot.end(); ++itr) { //開始位置から現在最大ポットまでイテレーターを回し振り分けを行う
-		int currentPay = itr->first - paid; //今回のポットへの支払要求額
-		if (pay < paid + currentPay) { break; } //支払要求額が支払額を超えたら終わり
+		int currentPay = itr->first - paid - old; //今回のポットへの支払要求額
+		if (pay < paid + currentPay) { break; } //今回支払った分が支払額を超えたら終了
 		itr->second += currentPay; //ポットに要求額を支払う
 		paid += currentPay; //今回要求額を支払済みとする
 	}
 
-	pot[pay] += pay - paid; //各ポットへ支払った額を取り除いて今回額のポットへ支払う
-	charaPayment[&user] = pay; //今回の支払額を記録
+	pot[pay + old] += pay - paid; //各ポットへ支払った額を取り除いて今回額のポットへ支払う
+	charaPayment[&user] = pay + old; //今回の支払額を記録
 
 }

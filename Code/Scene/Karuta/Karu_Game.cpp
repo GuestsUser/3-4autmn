@@ -4,6 +4,7 @@
 #include "./../Title/Scene_Select.h"
 
 #include <random>
+#include <math.h>
 
 /*************************
 ** 変数 **
@@ -20,6 +21,8 @@ int Otetuki_AnimTime = 0;
 
 int Click_check = 0;
 int Click_AnimTime = 0;
+
+bool Karuta_Anim_now = false;
 
 bool Touch_once = false;
 
@@ -50,6 +53,7 @@ bool once_SelectMenuSE = false;
 
 struct EFUDA Efuda[KARU_MAX_Y][KARU_MAX_X];
 struct YOMIFUDA Yomifuda[KARU_MAX_Y][KARU_MAX_X];
+struct CARD Anim_Card;
 struct FUDA Fuda[100];
 struct KARU_PLAYER Karu_player;
 struct KARU_CPU cpu_1;
@@ -126,6 +130,7 @@ void Karu_Game::Karu_Game_Initialize(Scene* scene) {
 	on_ContinueButton = false;
 	on_MenuButton = false;
 
+	Anim_Card = { 0,0.0f,0.0f,50.0f,1.0f };
 
 	//Karu_playerとcpu_1の初期化
 	Karu_player = {0,0,0};
@@ -279,6 +284,8 @@ void Karu_Game::Karu_Game_Update() {
 	}
 	Otetuki_Anim();
 
+	Karuta_Anim();
+
 	////デバッグ用
 	//if (key->GetKeyState(REQUEST_MOUSE_RIGHT) == KEY_PUSH) { // 右クリックしたら
 	//	//絵札総入れ替え
@@ -352,6 +359,9 @@ void Karu_Game::Karu_Game_Draw() {
 		}
 	}
 	AllSet = true;
+	if (Karuta_Anim_now) {
+		DrawRotaGraph(Anim_Card.x, Anim_Card.y, 1.0, 0, Anim_Card.img, TRUE);
+	}
 
 	if (cpu_1.onClick) {
 		DrawRotaGraph(cpu_1.x, cpu_1.y, 1.0, 0, Enemy1_HandIcon[1], TRUE);
@@ -371,7 +381,6 @@ void Karu_Game::Karu_Game_Draw() {
 	}
 
 	if (end) {
-		DrawFormatString(800, 400, 0xFF0000, "END");
 		DrawRotaGraph(640, 360, 1.0, 0, ResultBackImg, TRUE);
 		DrawRotaGraph(640, 280, 1.0, 0, ResultRank1, TRUE);
 		DrawRotaGraph(640, 280, 2.0, 0, End_Rank[0], TRUE);
@@ -443,7 +452,7 @@ void Karu_Game::Yomifuda_Storage() {
 		y = GetRand(KARU_MAX_Y - 1);
 	} while (Efuda[y][x].kara);
 
-	if (Yomifuda[0][0].kara) {
+	if (Yomifuda[0][0].kara && !Karuta_Anim_now) {
 		Yomifuda[0][0].img = Karu_fuda[Efuda[y][x].numY][(Efuda[y][x].numX) + 1];
 		Yomifuda[0][0].kara = false;
 		Yomiset = true;
@@ -525,7 +534,13 @@ void Karu_Game::Mouse_HitBox() {
 					}
 					if (Rank_All >= TOTAL_PLAYER) {
 						Cpu_reset();
-						
+
+						Anim_Card.img = Efuda[i][j].img;
+						Anim_Card.x = Efuda[i][j].x;
+						Anim_Card.y = Efuda[i][j].y;
+
+						Karuta_Anim_now = true;
+
 						Efuda[i][j].kara = true;
 						Player_Reset();
 					}
@@ -582,6 +597,32 @@ void Karu_Game::Otetuki_Anim() {
 	}
 }
 
+/***********************************
+** かるたのアニメーション **
+* 引数  :なし
+* 戻り値:なし
+************************************/
+void Karu_Game::Karuta_Anim() {
+
+	float angle = atan2(800.0f - Anim_Card.y, 540.0f - Anim_Card.x);
+	float len = (800.0f - Anim_Card.y) / 80.0f;
+	if (Karuta_Anim_now) {
+		if (Anim_Card.y <= 800) {
+			if (Anim_Card.Spd >= 1.0f && Anim_Card.Spd > Anim_Card.Ace) {
+				Anim_Card.Spd -= Anim_Card.Ace;
+			}
+			Anim_Card.x += Anim_Card.Spd * cos(angle);
+			Anim_Card.y += Anim_Card.Spd * sin(angle);
+			Anim_Card.Ace += 1.0f * len;
+		}
+		else {
+			Karuta_Anim_now = false;
+			Anim_Card.Spd = 50.0f;
+			Anim_Card.Ace = 1.0f;
+		}
+	}
+}
+
 /**************
 ** CPUの設定 **
 * 引数  :なし
@@ -611,6 +652,13 @@ void Karu_Game::Cpu_config() {
 					}
 					if (Rank_All >= TOTAL_PLAYER) {
 						Cpu_reset();
+
+						Anim_Card.img = Efuda[i][j].img;
+						Anim_Card.x = Efuda[i][j].x;
+						Anim_Card.y = Efuda[i][j].y;
+
+						Karuta_Anim_now = true;
+
 						Efuda[i][j].kara = true;
 						Player_Reset();
 					}
@@ -633,6 +681,13 @@ void Karu_Game::Cpu_config() {
 					}
 					if (Rank_All >= TOTAL_PLAYER) {
 						Cpu_reset();
+
+						Anim_Card.img = Efuda[i][j].img;
+						Anim_Card.x = Efuda[i][j].x;
+						Anim_Card.y = Efuda[i][j].y;
+
+						Karuta_Anim_now = true;
+
 						Efuda[i][j].kara = true;
 						Player_Reset();
 					}
@@ -655,6 +710,13 @@ void Karu_Game::Cpu_config() {
 					}
 					if (Rank_All >= TOTAL_PLAYER) {
 						Cpu_reset();
+
+						Anim_Card.img = Efuda[i][j].img;
+						Anim_Card.x = Efuda[i][j].x;
+						Anim_Card.y = Efuda[i][j].y;
+
+						Karuta_Anim_now = true;
+
 						Efuda[i][j].kara = true;
 						Player_Reset();
 					}
@@ -866,7 +928,6 @@ void Karu_Game::Karu_GameOver() {
 				now_GoSe = false;
 				PlaySoundMem(Se_Select, DX_PLAYTYPE_BACK);
 
-				PlaySoundMem(Karu_Bgm, DX_PLAYTYPE_LOOP, FALSE);
 				if (old_voice) {
 					PlaySoundMem(voice, DX_PLAYTYPE_BACK, FALSE);
 				}
