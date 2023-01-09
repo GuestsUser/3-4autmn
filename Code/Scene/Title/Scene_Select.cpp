@@ -18,6 +18,7 @@
 #include"../Code/Scene/Othello/Scene_Othello.h"
 #include"../Code/Scene/Sugoroku/SR_Game.h"
 #include "../Code/Scene/Poker/Poker.h"
+#include"../Code/Scene/AirHockey/AirHockeyGameScene.h"
 #include <deque>
 
 
@@ -40,6 +41,7 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 		switch (i) {
 		case 0: //エアホッケーの説明画像とかを入れる項目
 			*img = LoadGraph("Resource/image/Select_AirHockey.png"); //ボタン画像を入れる
+			gameScene = new Scene_AirHockey();
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_AirHockey1.png")), 1)); //説明画像を入れる、ページ順は最初に入れた物が1ページになる
 			break;
 		case 1: //ブラックジャック
