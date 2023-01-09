@@ -436,9 +436,9 @@ Poker::ShowDown::ShowDown(Poker& set) :parent(&set), count(0), actionRecord(std:
 	titlePos.SetXYZ(513, 189, 0); //ショーダウンである事を示すメッセージの位置設定
 
 	//手札役を表示する為の位置設定
-	handPos[0].SetXYZ(51, 479, 0);
-	handPos[1].SetXYZ(719, 127, 0);
-	handPos[2].SetXYZ(982, 479, 0);
+	handPos[0].SetXYZ(108, 382, 0);
+	handPos[1].SetXYZ(776, 31, 0);
+	handPos[2].SetXYZ(1039, 377, 0);
 	handPos[3].SetXYZ(497, 400, 0);
 
 	

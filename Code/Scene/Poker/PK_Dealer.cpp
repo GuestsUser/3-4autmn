@@ -17,10 +17,7 @@ void PK_Dealer::Draw() {
 void PK_Dealer::Reset() {
 	++gameCount; //ラウンド数を増加する
 
-	//デバッグ用
-	BB = baseBB * gameCount;
-
-	//BB = baseBB * ((int)(gameCount / (int)Poker::Character::length) + 1); //1巡したらBBをbaseBB分増加させる
+	BB = baseBB * ((int)(gameCount / (int)Poker::Character::length) + 1); //1巡したらBBをbaseBB分増加させる
 
 	btn.Reset(); //ボタンポジションもリセットする
 	SetActionChara(btn.GetBtnPos() + 1); //最初にアクションを行うキャラをボタンポジションの次のキャラに設定する
