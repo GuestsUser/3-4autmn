@@ -201,7 +201,7 @@ void CF_Player::CF_Player_Update() {
 		}
 	}
 	if (CF_ClearText == true) {
-		if (485 <= Mouse_X && Mouse_X <= 909 && 390 <= Mouse_Y && Mouse_Y <= 458) {
+		if (485 <= Mouse_X && Mouse_X <= 909 && 340 <= Mouse_Y && Mouse_Y <= 398) {
 			if (Pause_OneCursol == false) {
 				PlaySoundMem(Pause_Cursol, DX_PLAYTYPE_BACK);
 				Pause_OneCursol = true;
@@ -215,7 +215,7 @@ void CF_Player::CF_Player_Update() {
 		else {
 			Pause_OneCursol = false;
 		}
-		if (465 <= Mouse_X && Mouse_X <= 927 && 540 <= Mouse_Y && Mouse_Y <= 608) {
+		if (465 <= Mouse_X && Mouse_X <= 927 && 490 <= Mouse_Y && Mouse_Y <= 558) {
 			if (Pause_OneClick == false) {
 				PlaySoundMem(Pause_Cursol, DX_PLAYTYPE_BACK);
 				Pause_OneClick = true;
