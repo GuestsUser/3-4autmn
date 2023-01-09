@@ -40,7 +40,13 @@ void Cmp_Gage_MouseControl::Update() {
 
 		float imageRotate = parent->ReadFullGage()->ReadTranform()->ReadRotate().GetZ(); //画像の回転を取得
 
-		float mouseLine = sqrt(pow(mouseX * cos(imageRotate), 2) + pow(mouseY * sin(imageRotate), 2)); //画像回転に応じてマウスから原点までのラインから取得する数値に制限を掛ける
+		
+		double xVol = mouseX * cos(imageRotate); //マウスが原点からどれほど離れているか記録したもの、x座標用
+		double yVol = mouseY * sin(imageRotate); //上記のy座標用
+		if (xVol < 0) { xVol = 0; } //マイナス方向へ動いていた場合0に揃える
+		if (yVol < 0) { yVol = 0; }
+
+		float mouseLine = sqrt(pow(xVol, 2) + pow(yVol, 2)); //画像回転に応じてマウスから原点までのラインから取得する数値に制限を掛ける
 		float fullLine = sqrt(pow(imagePos[1].GetX(), 2) + pow(imagePos[1].GetY(), 2)); //ゲージの最大値長さ
 
 		float gage = mouseLine / fullLine; //今回のゲージ量、ステップ操作前

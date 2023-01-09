@@ -52,6 +52,7 @@ void Chara::Place(std::deque<Cmp_Transform>& cardPos, Cmp_Transform& backPos) {
 
 void Chara::Update() {
 	if (!GetRunUpdate()) { return; }
+	for (auto itr : card) { itr->Update(); } //カード追加処理実行
 	for (auto itr : cmp) { if (itr->GetRunUpdate()) { itr->Update(); } }
 }
 void Chara::Draw() {

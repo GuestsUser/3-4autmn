@@ -22,7 +22,7 @@ public:
 	}
 
 	void Reset() { //ラウンド開始時や新しいフェーズに移った際に実行、変数をfalseに戻してくれる
-		for (auto itr : actionRecord) { itr = false; } //全アクションを行ってない状態に戻す
+		for (int i = 0; i < actionRecord.size(); ++i) { actionRecord[i] = false; } //全アクションを行ってない状態に戻す
 		isAction = false;
 		raiseRunCount = 0;
 	}

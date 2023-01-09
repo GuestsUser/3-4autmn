@@ -19,6 +19,9 @@ public:
 	Gage(Cmp_Image& baseImgae, Cmp_Image& fullImage, int iniVol = 100);
 	~Gage();
 
+	void Reset();
+	void FullReset();
+
 	void Update();
 	void Draw();
 

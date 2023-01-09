@@ -21,7 +21,7 @@ Cmp_PlayerRaiseDraw::~Cmp_PlayerRaiseDraw() { delete drawPos; } //独自生成した位
 
 
 void Cmp_PlayerRaiseDraw::Draw() {
-	int val = gage->GetVol() * dealer->GetMaxBet() - pot->Inquiry(*parent); //現在ゲージ量から支払状況を引く事で未払分だけを表示する
+	int val = gage->GetVol() * dealer->GetMaxBet() * dealer->GetBB() - pot->Inquiry(*parent); //現在ゲージ量から支払状況を引く事で未払分だけを表示する
 	DrawStringToHandle(442, 624, std::to_string(val).c_str(), *PokerFontData::GetColor(PokerFontData::color::edgeNormal), *PokerFontData::GetHandle(PokerFontData::type::edge), *PokerFontData::GetColor(PokerFontData::color::edgeColor));
 
 }

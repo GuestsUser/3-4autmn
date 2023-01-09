@@ -16,6 +16,7 @@
 
 #include "Cmp_BetActionRecord.h"
 #include "Cmp_CPUBetLogic.h"
+#include "Cmp_ThinkingImage.h"
 #include "Cmp_PlayerRaiseDraw.h"
 #include "../Code/Component/Button.h"
 #include "../Code/Component/Gage.h"
@@ -57,7 +58,7 @@ Poker::Poker() :pot(new Pot()), dealer(new PK_Dealer()), cardDealer(new CardDeal
 
 	int cardPlaceSpace = 134; //カード配置間隔
 	int cardPlaceSpaceCpu = 33; //カード配置間隔、cpu用
-	float monitorArea = 1.2; //ゲージ実体画像サイズに対しこの数値分掛けた値をクリック検知範囲とする
+	Vector3 monitorArea = Vector3(1.2, 2); //ゲージ実体画像サイズに対しこの数値分掛けた値をクリック検知範囲とする
 	Vector3 gagePlace = Vector3(442, 633); //ゲージの配置座標
 	Vector3 actionPlace = Vector3(573, 663); //Call,Raise等各種アクションボタンの配置座標
 	Vector3 actionSize = Vector3(110, 90); //Call,Raise等各種アクションボタンの画像サイズ
@@ -84,7 +85,6 @@ Poker::Poker() :pot(new Pot()), dealer(new PK_Dealer()), cardDealer(new CardDeal
 			cardPos[j].EditPos() = cardPosFirst[i].ReadPos(); //現在操作対象キャラに合わせて位置の初期設定
 			cardPos[j].EditPos().SetX(cardPosFirst[i].ReadPos().GetX() + useSpace * j); //配置回数に合わせて位置ずらしを行う
 		}
-
 
 
 		if (isPlayer) { //プレイヤーの精製を指定された場合
@@ -121,7 +121,7 @@ Poker::Poker() :pot(new Pot()), dealer(new PK_Dealer()), cardDealer(new CardDeal
 			int sizeX = -1; int sizeY = -1;
 			GetGraphSize(*full->ReadImage(), &sizeX, &sizeY); //ゲージサイズ取得
 
-			Cmp_Gage_MouseControl* control = new Cmp_Gage_MouseControl(*gage, Vector3(sizeX * monitorArea, sizeY * monitorArea), dealer->GetMaxBet()); //ゲージのマウスコントロール受け付けコンポーネント作成
+			Cmp_Gage_MouseControl* control = new Cmp_Gage_MouseControl(*gage, Vector3(sizeX * monitorArea.GetX(), sizeY * monitorArea.GetY()), dealer->GetMaxBet()); //ゲージのマウスコントロール受け付けコンポーネント作成
 			control->SetRunUpdate(false); //コントロールコンポーネントは通常実行を切っておく
 			gage->SetCmp(control); //ゲージをマウスからコントロールする機能の追加
 			gage->SetCmp(new Cmp_Gage_Border(*gage)); //ゲージ下限設定機能の追加
@@ -146,11 +146,13 @@ Poker::Poker() :pot(new Pot()), dealer(new PK_Dealer()), cardDealer(new CardDeal
 		else { //cpuの精製を指定された場合
 			current = new CPU(); //cpuの精製
 			current->SetCmp(new Cmp_CPUBetLogic()); //cpuのベットに必要なデータを纏めたBetLogicを導入
-
 		}
+
 
 		current->Place(cardPos, backPos); //カードとコイン表示背景の配置
 		current->SetCmp(new Cmp_BetActionRecord()); //アクションの状態を記録するActionRecordを導入
+		current->SetCmp(new Cmp_ThinkingImage(*current, chara, *dealer, backPosFirst[i].ReadPos())); //考え用画像を表示するコンポーネントの導入
+
 		chara.push_back(current);
 	}
 	cardDealer->Reset(); //最初はIniを実行しないので山札だけは初期化しておく
@@ -158,6 +160,9 @@ Poker::Poker() :pot(new Pot()), dealer(new PK_Dealer()), cardDealer(new CardDeal
 	list.push_back(new Ini(*this));
 	list.push_back(new Pre(*this));
 	list.push_back(new Main(*this));
+	list.push_back(new Change(*this));
+	list.push_back(new ShowDown(*this));
+
 
 	run = list[1];
 }
