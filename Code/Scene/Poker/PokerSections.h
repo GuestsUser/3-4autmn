@@ -10,6 +10,7 @@
 #include "CardDealer.h"
 
 #include <deque>
+#include <string>
 
 class Cmp_Image;
 class Cmp_BetActionRecord;
@@ -21,6 +22,7 @@ class Button;
 class Gage;
 class CardDealer;
 class Card;
+class Vector3;
 
 class Poker::Ini :public Scene { //ラウンド開始時の処理を記したUpdateを持つ初期化クラス
 	Poker* parent; //このクラスの実体を持つPokerへの参照
@@ -40,11 +42,12 @@ class Poker::Main :public Scene { //メインベットフェイズ
 	std::deque<Cmp_BetActionRecord*> actionRecord; //charaから抜き出したコンポーネントを保持、配列の添え字はキャラと同様なので同じ列挙型でそのキャラのコンポーネントが取れる
 	std::deque<Cmp_CPUBetLogic*> betLogic;
 	std::deque<Button*> playerButton; //プレイヤーが保持するボタンコンポーネント
-	Cmp_PlayerRaiseDraw* playerGagePayDraw; //プレイヤーの現在ゲージ量に応じた支払額を表示するコンポーネント
 
 	Button* actionButton; //playerButtonの中でも各種アクションを行うボタンを入れる
 	Button* foldButton; //playerButtonの中でもfold専用のボタンを入れる
 	Cmp_Image* actionButtonImage; //action用ボタンの画像コンポーネントを入れる変数
+	std::deque<Cmp_Image*> thinkingImage; //考え中である事を示す為の画像を格納する配列
+
 
 	Gage* playerGage; //プレイヤー保持のゲージ
 	Cmp_Gage_Border* playerGageBorder; //プレイヤーのゲージ下限設定機能のコンポーネント
@@ -66,7 +69,9 @@ class Poker::Change :public Scene { //カードを各キャラへ配るフェイズ
 	std::deque<Cmp_BetActionRecord*> actionRecord; //charaから抜き出したコンポーネントを保持、配列の添え字はキャラと同様なので同じ列挙型でそのキャラのコンポーネントが取れる
 	Button* actionButton; //playerButtonの中でも各種アクションを行うボタンを入れる
 	std::deque<Button*> cardButton; //カードクリックを検知する為のボタン
-	
+	Cmp_Image* actionButtonImage; //action用ボタンの画像コンポーネントを入れる変数
+	std::deque<Vector3*> cardPos; //カードの位置へのアクセスショートカット
+
 
 	Poker* parent; //このクラスの実体を持つPokerへの参照
 	CardDealer::CardPower border; //役になってない中で一番強いカードがこの強以上ならそれは保持する
@@ -78,5 +83,46 @@ class Poker::Change :public Scene { //カードを各キャラへ配るフェイズ
 	int cpuWait; //cpuがアクションを行うまでの待機時間、フレーム数指定
 public:
 	Change(Poker& set);
+	void Update();
+};
+
+class Poker::ShowDown :public Scene {
+	Poker* parent; //このクラスの実体を持つPokerへの参照
+	std::deque<Cmp_BetActionRecord*> actionRecord; //charaから抜き出したコンポーネントを保持、配列の添え字はキャラと同様なので同じ列挙型でそのキャラのコンポーネントが取れる
+	
+	std::deque<std::deque<int>> hand; //各キャラのハンド評価を保持
+	std::deque<Vector3> handPos; //各キャラのハンドを表示する為の位置集め配列
+	std::deque<std::string> handString; //各キャラのハンドをstring型で保持する配列
+
+	int count;
+
+
+
+	Vector3 titlePos; //ショーダウンである事を示すメッセージの表示位置
+
+public:
+	ShowDown(Poker& set);
+	void Update();
+	void Draw();
+};
+
+class Poker::NoContest :public Scene {
+	Poker* parent; //このクラスの実体を持つPokerへの参照
+public:
+	NoContest(Poker& set) :parent(&set) {}
+	void Update();
+};
+
+class Poker::GameOver :public Scene {
+	Poker* parent; //このクラスの実体を持つPokerへの参照
+public:
+	GameOver(Poker& set) :parent(&set) {}
+	void Update();
+};
+
+class Poker::GameClear :public Scene {
+	Poker* parent; //このクラスの実体を持つPokerへの参照
+public:
+	GameClear(Poker& set) :parent(&set) {}
 	void Update();
 };

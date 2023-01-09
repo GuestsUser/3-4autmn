@@ -45,7 +45,7 @@ void Cmp_Image::Draw() {
 	Vector3 pos[4]; //拡縮回転変形頂点保持用Vector3
 	int sizeX = -1; //画像サイズ格納要
 	int sizeY = -1;
-	int sub = length > 1 ? sub = gh[use] : sub = *gh; //配列ならdraw_sub添え字の位置の画像を使用
+	int sub = length > 1 ? gh[use] : *gh; //配列ならdraw_sub添え字の位置の画像を使用
 
 	GetGraphSize(sub, &sizeX, &sizeY); //サイズ取得
 	OriginMath::VertexModification(pos, Vector3(sizeX, sizeY), *ts, drawPivotHorizon, drawPivotVertical); //回転、拡大を適用した頂点座標を格納
