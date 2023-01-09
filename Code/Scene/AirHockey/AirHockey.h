@@ -2,6 +2,9 @@
 
 class AirHockey_Scene {
 private:
+
+	//Scene* 
+
 	typedef struct {
 		float m_X, m_Y, m_R, m_boundP,
 			m_r, m_l, m_b, m_t,
@@ -12,14 +15,18 @@ private:
 	Circle t_circle1, t_circle2, t_circle3;//円の構造体を三つ実体化
 
 	int White;
+	int DarkRed;
 	int Red;
-	int Bule;
-	//int Green = GetColor(50, 255, 50);
+	int DarkBule;
+	int Blue;
 	int Yellow;
 	int Purple;
 	int Black;
 
+	int score1, score2;//得点を格納
 	int mouseX, mouseY;//マウスの座標を格納
+
+	int wall_L, wall_R, wall_T, wall_B, wall_xC, wall_yC;
 
 public:
 	void AirHockey_Initialize();
@@ -36,5 +43,7 @@ public:
 	void Player_Hit();//プレイヤーの衝突判定と動きのまとめ
 	bool Player_Wall_Check_Hit();//プレイヤーと壁の衝突判定
 	bool Puck_Wall_Check_Hit();//パックと壁の衝突
-	void Puck_Move();
+	void Puck_Move();//パックの挙動
+	void Effect();//パック衝突時のエフェクト
+	bool Resalt();
 };
