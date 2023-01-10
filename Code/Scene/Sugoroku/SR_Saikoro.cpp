@@ -556,6 +556,7 @@ void SR_Saikoro::SR_Pose_Update() {
 			if (OldKey != KEY_FREE && nowKey == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
 				//StopSoundMem(CF_GameBGM);
 				parent->SetNext(new Scene_Select());
+				StopSoundMem(SR_BGM);
 			}
 		}
 	}
