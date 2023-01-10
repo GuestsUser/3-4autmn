@@ -98,7 +98,7 @@ void BlackJack::Initialize() {
   dealer->Initialize();
   player->Initialize();
   slider->Inisialize();
-  slider->SetMaxValue(player->P_MaxCoin());
+  //slider->SetMaxValue(player->P_MaxCoin());
   next_flg = true;
   nx_flg = false;
   now_game_flg = true;
@@ -143,11 +143,11 @@ void BlackJack::Update() {
     next_flg = false;
 
   }
-  if (player->P_MaxCoin() < slider->GetValue()) {
+  //if (player->P_MaxCoin() < slider->GetValue()) {
 
-    slider->SetValue(player->P_MaxCoin());
+  //  slider->SetValue(player->P_MaxCoin());
 
-  }
+  //}
     /*ゲームを開始 or 続けるか判定*/
   if (!pose_flg) {
 

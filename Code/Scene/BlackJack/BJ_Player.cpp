@@ -215,7 +215,7 @@ bool Player::Play(Shoe* shoe ,Dealer* Dr) {
 
         }
 
-        if (Dr->Set_Ins() && !insurance) {
+        if (Dr->Set_Ins() && !insurance/* && p_coin % 2 == 0*/) {
           ins_flg = true;
         }
         if (insurance) {
@@ -473,7 +473,7 @@ void Player::Draw() {
   Player::Show_Play();
 
   /*デバッグ用*/
-  Player::Debug_Draw(true);
+  Player::Debug_Draw(false);
   /*デバッグ用*/
 
 }
