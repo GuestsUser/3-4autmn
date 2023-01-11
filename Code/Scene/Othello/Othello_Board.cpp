@@ -127,6 +127,7 @@ void Othello_Board::Othello_Board_Update() {
     Square_X = (Mouse_X - BoardShift_X) / MAP_SIZE;      // マウスカーソルの位置を MAP_SIZE + BoardShift_X で割った値を代入
     Square_Y = (Mouse_Y - BoardShift_Y) / MAP_SIZE;      // マウスカーソルの位置を MAP_SIZE + BoardShift_X で割った値を代入
 
+    BoardSearchBWNumber(Board);         // 黒石と白石の数を数える関数実行
 
     /* プレイヤーとCPUの操作管理 */
     if (PauseFlg == false) {
@@ -150,7 +151,9 @@ void Othello_Board::Othello_Board_Update() {
                                 PassFlag = true;    // パスフラグを true にする
                             }
 
-                            BoardSearchBlack(Board);
+                            //BoardSearchBlack(Board);
+
+                            //BoardSearchBWNumber(Board);         // 黒石と白石の数を数える関数実行
 
                             if (Board[Square_X][Square_Y] == 3 ||
                                 Board[Square_X][Square_Y] == 6 ||
@@ -164,7 +167,7 @@ void Othello_Board::Othello_Board_Update() {
                                     BlackPut();                         // 置いた場所から白を黒にひっくり返す
                                     PlaySoundMem(PutSE, DX_PLAYTYPE_BACK, true);
                                     OrderNum = 1;                       // 白の手番にする
-                                    BoardSearchBWNumber(Board);         // 黒石と白石の数を数える関数実行
+                                    //BoardSearchBWNumber(Board);         // 黒石と白石の数を数える関数実行
 
                                     if (EndGame(Board)) {               // ゲームが終わる条件を満たしたら
                                         EndFlag = true;   // エンドフラグを true にする
@@ -197,7 +200,7 @@ void Othello_Board::Othello_Board_Update() {
                                 OrderNum = 0;       // 黒の番にする
                             }
 
-                            BoardSearchBWNumber(Board);     // 黒石と白石の数を数える
+                            //BoardSearchBWNumber(Board);     // 黒石と白石の数を数える
 
                             // ゲームの終了条件が揃っていたら  
                             if (EndGame(Board)) {
@@ -224,7 +227,7 @@ void Othello_Board::Othello_Board_Update() {
                                 OrderNum = 1;       // 白の番にする
                             }
 
-                            BoardSearchBWNumber(Board);     // 黒石と白石の数を数える
+                            //BoardSearchBWNumber(Board);     // 黒石と白石の数を数える
 
                             // ゲームの終了条件が揃っていたら  
                             if (EndGame(Board)) {
@@ -239,6 +242,8 @@ void Othello_Board::Othello_Board_Update() {
                                 PassFlag = true;    // パスフラグを true にする
                             }
 
+                            //BoardSearchBWNumber(Board);         // 黒石と白石の数を数える関数実行
+
                             if (Board[Square_X][Square_Y] == 4 ||
                                 Board[Square_X][Square_Y] == 6 ||
                                 Board[Square_X][Square_Y] == 8) {   // 白石が置ける場所にカーソルがあっていたら
@@ -251,7 +256,6 @@ void Othello_Board::Othello_Board_Update() {
                                     WhitePut();                         // 置いた場所から黒を白にひっくり返す
                                     PlaySoundMem(PutSE, DX_PLAYTYPE_BACK, true);
                                     OrderNum = 0;                       // 黒の手番にする
-                                    BoardSearchBWNumber(Board);         // 黒石と白石の数を数える関数実行
 
                                     if (EndGame(Board)) {               // ゲームが終わる条件を満たしたら
                                         EndFlag = true;   // エンドフラグを true にする
