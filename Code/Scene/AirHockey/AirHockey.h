@@ -36,14 +36,18 @@ public:
 
 	//プロトタイプ宣言
 	void Draw_All(); //描画
-	//void Field_Out();
-	void Player_Control();//プレイヤー等速移動
 	void Status_Reset();//プレイヤー、CPU、パックの初期位置と半径
-	bool Player_Puck_Check_Hit();//プレイヤーとパックの衝突判定
-	void Player_Hit();//プレイヤーの衝突判定と動きのまとめ
-	bool Player_Wall_Check_Hit();//プレイヤーと壁の衝突判定
+	bool Resalt();//勝敗のフラグ
+
+	void Player_Control();//プレイヤー操作
+	bool Player_Puck_Check_Hit();//プレイヤーとパックの衝突判定フラグ
+	bool Player_Wall_Check_Hit();//プレイヤーと壁の衝突判定フラグ
+	void Player_Hit();//プレイヤー動きのまとめ
+
+	bool CPU_Puck_Check_Hit();//CPUとパックの衝突判定フラグ
+
 	bool Puck_Wall_Check_Hit();//パックと壁の衝突
-	void Puck_Move();//パックの挙動
+	void CPU_Movement();//CPUの動き
+	void Puck_Movement();//パックの動き
 	void Effect();//パック衝突時のエフェクト
-	bool Resalt();
 };

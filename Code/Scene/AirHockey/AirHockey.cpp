@@ -70,7 +70,9 @@ void AirHockey_Scene::Effect()
 		};
 	}
 };
-////////当たり判定関数シリーズ//////
+
+
+////////当たり判定フラグ//////
 
 //プレイヤーとパックの当たり判定
 bool AirHockey_Scene::Player_Puck_Check_Hit() {
@@ -84,6 +86,8 @@ bool AirHockey_Scene::Player_Puck_Check_Hit() {
 	}
 	return false;
 };
+
+
 
 //プレイヤーと壁の当たり判定
 bool AirHockey_Scene::Player_Wall_Check_Hit() {
@@ -101,6 +105,19 @@ bool AirHockey_Scene::Player_Wall_Check_Hit() {
 	}
 	return false;
 };
+
+//CPUとパックの衝突判定
+bool AirHockey_Scene::CPU_Puck_Check_Hit() {
+	//三平方の定理
+	float a = t_circle2.m_X - t_circle3.m_X;
+	float b = t_circle2.m_Y - t_circle3.m_Y;
+	float c = a * a + b * b;
+	float sum_radius = t_circle2.m_R + t_circle3.m_R;
+	if (c < sum_radius * sum_radius) {
+		return true;
+	}
+	return false;
+}
 
 //パックと壁の当たり判定
 bool AirHockey_Scene::Puck_Wall_Check_Hit() {
@@ -128,13 +145,12 @@ bool AirHockey_Scene::Puck_Wall_Check_Hit() {
 ////////////ここまで////////////
 
 
-///////////移動処理や移動系の条件分岐まとめ//////////
-
+///////////移動処理や衝突時の条件分岐まとめ//////////
 
 //プレイヤーが壁とパックに衝突時のそれぞれの処理
 void  AirHockey_Scene::Player_Hit() {
 
-	if (Player_Wall_Check_Hit() == true)		//プレイヤーと壁の衝突を検知した場合
+	if (Player_Wall_Check_Hit() == true)		//プレイヤーと壁が衝突した場合
 	{
 		DrawFormatString(150, 80,Red , "x:%d y:%d", mouseX, mouseY);
 		if (wall_L > t_circle1.m_l) {	//押し戻す処理　なんかガクガクする
@@ -151,7 +167,7 @@ void  AirHockey_Scene::Player_Hit() {
 		}
 	}
 	else {
-		DrawFormatString(150, 80, White, "x:%d y:%d", mouseX, mouseY);
+		DrawFormatString(150, 80, White, "x:%d y:%d", mouseX, mouseY);//デバック用 マウス座標表示
 		Player_Control();					//衝突していないなら動ける
 	}
 
@@ -189,8 +205,18 @@ void  AirHockey_Scene::Player_Hit() {
 	}
 }
 
+//CPU
+void AirHockey_Scene::CPU_Movement() {
+
+	//CPUの思考シーケンス
+	if (Resalt() == false) {//試合中の間
+
+
+	}
+}
+
 //パック
-void  AirHockey_Scene::Puck_Move() {
+void  AirHockey_Scene::Puck_Movement() {
 
 	//停止するまで減速し続ける
 	if (0.0f < t_circle3.X_spd) {
@@ -402,7 +428,8 @@ void AirHockey_Scene::Player_Control() {
 
 void AirHockey_Scene::AirHockey_Update(){
 	Player_Hit();
-	Puck_Move();
+	Puck_Movement();
+	CPU_Movement();
 }
 
 void AirHockey_Scene::AirHockey_Draw() {
