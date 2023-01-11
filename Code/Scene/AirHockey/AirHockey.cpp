@@ -23,8 +23,6 @@ void AirHockey_Scene::AirHockey_Initialize() {
 	 //メモ 画面サイズはx1280 y720  フィールドサイズ x150+980=1130 y180+480=660 1050			//シーン移行　parent->SetNext(new Scene_Select());
 	 wall_L = 150, wall_R = 1130, wall_T = 180, wall_B = 660, wall_xC = 640, wall_yC = 420;
 
-	//Circle t_circle1, t_circle2, t_circle3;//円の構造体を三つ実体化
-
 	//プレイヤー、CPUの初期位置と半径を設定    パックは加えてマレットからの運動量、X、Y軸の速度、速度上限を設定
 	Status_Reset();
 }
@@ -44,7 +42,7 @@ bool AirHockey_Scene::Resalt() {
 		return false;
 };
 
-//衝突時のエフェクト
+//衝突時のエフェクト試作
 void AirHockey_Scene::Effect()
 {
 	if (wall_R < t_circle3.m_r) {
@@ -177,7 +175,7 @@ void  AirHockey_Scene::Player_Hit() {
 
 		if (t_circle1.m_Y != mouseY) {
 
-			if (t_circle3.Maxspd > t_circle3.Y_spd + t_circle3.m_boundP) {//上記処理の?軸バージョン
+			if (t_circle3.Maxspd > t_circle3.Y_spd + t_circle3.m_boundP) {//上記処理のY軸バージョン
 				t_circle3.Y_spd += t_circle3.m_boundP;
 			}
 			else {
