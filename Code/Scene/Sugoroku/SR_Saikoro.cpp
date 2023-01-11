@@ -111,7 +111,7 @@ void SR_Saikoro::Update() {
 				if (o - Sum == 0) {
 					if (Player1sum == 22) { Restart(); }
 					if (Player1sum == 12 || Player1sum == 48) { Plus(); text = 1; }
-					if (Player1sum == 8 || Player1sum == 27) { Replay = true; }
+					if (Player1sum == 8 || Player1sum == 27 ||Player1sum == 40) { Replay = true; }
 					if (Player1sum == 19 ) { Replay = true; Back = true; }
 					if (Player1sum == 34) { Minus(); }
 				}
@@ -154,7 +154,7 @@ void SR_Saikoro::Update() {
 				}
 			}
 			if (o - Sum == 0) {
-				if (Player2sum == 8 || Player2sum == 27) { Replay = true; }	/*もしリプレイますに乗ったら*/
+				if (Player2sum == 8 || Player2sum == 27 || Player2sum == 40) { Replay = true; }	/*もしリプレイますに乗ったら*/
 				if (Player2sum == 12 || Player2sum == 48) { Plus(); }
 				if (Player2sum == 22) { Restart(); }
 				if (Player2sum == 19) { Replay = true; Back = true; }
@@ -196,7 +196,7 @@ void SR_Saikoro::Update() {
 				}
 			}
 			if (o - Sum == 0) {
-				if (Player3sum == 8 || Player3sum == 27) { Replay = true; }
+				if (Player3sum == 8 || Player3sum == 27 || Player3sum == 40) { Replay = true; }
 				if (Player3sum == 12 || Player3sum == 48) { Plus(); }
 				if (Player3sum == 22) { Restart(); }
 				if (Player3sum == 34) { Minus(); }
@@ -238,7 +238,7 @@ void SR_Saikoro::Update() {
 				}
 			}
 			if (o - Sum == 0) {
-				if (Player4sum == 8 || Player4sum == 27) { Replay = true; }
+				if (Player4sum == 8 || Player4sum == 27 || Player4sum == 40) { Replay = true; }
 				if (Player4sum == 12 || Player4sum == 48) { Plus(); }
 				if (Player4sum == 22) { Restart(); }
 				if (Player4sum == 34) { Minus(); }
@@ -249,6 +249,7 @@ void SR_Saikoro::Update() {
 			break;
 		case 5:
 			if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {	/*もし左クリックしたら*/
+				StopSoundMem(SR_BGM);
 				parent->SetNext(new Scene_Select());
 			}
 			break;
@@ -283,7 +284,7 @@ void SR_Saikoro::Draw() {
 	switch (num) {
 	case 1:	/*プレイヤーの時*/
 		if (Whoisplay == true && Shuffle == false) {
-			if (Player1sum == 8 || Player1sum == 19 ||Player1sum == 27) {
+			if (Player1sum == 8 || Player1sum == 19 ||Player1sum == 27 || Player1sum == 40) {
 				DrawString(484, 620, "もう一度サイコロを振る", GetColor(0, 0, 0));
 			}
 			else if (Player1sum == 12 || Player1sum == 48) {
@@ -304,7 +305,7 @@ void SR_Saikoro::Draw() {
 		break;
 	case 2:
 		if (Whoisplay == true && Shuffle == false) {
-			if (Player2sum == 8 || Player2sum == 19 || Player2sum == 27) {
+			if (Player2sum == 8 || Player2sum == 19 || Player2sum == 27 || Player2sum == 40) {
 				DrawString(484, 620, "もう一度サイコロを振る", GetColor(0, 0, 0));
 			}
 			else if (Player2sum == 12 || Player2sum == 48) {
@@ -325,7 +326,7 @@ void SR_Saikoro::Draw() {
 		break;
 	case 3:
 		if (Whoisplay == true && Shuffle == false) {
-			if (Player3sum == 8 || Player3sum == 19 || Player3sum == 27) {
+			if (Player3sum == 8 || Player3sum == 19 || Player3sum == 27 || Player3sum == 40) {
 				DrawString(484, 620, "もう一度サイコロを振る", GetColor(0, 0, 0));
 			}
 			else if (Player3sum == 12 || Player3sum == 48) {
@@ -346,7 +347,7 @@ void SR_Saikoro::Draw() {
 		break;
 	case 4:
 		if (Whoisplay == true && Shuffle == false) {
-			if (Player4sum == 8 || Player4sum == 19 || Player4sum == 27) {
+			if (Player4sum == 8 || Player4sum == 19 || Player4sum == 27 || Player4sum == 40) {
 				DrawString(484, 620, "もう一度サイコロを振る", GetColor(0, 0, 0));
 			}
 			else if (Player4sum == 12 || Player4sum == 48) {
@@ -555,6 +556,7 @@ void SR_Saikoro::SR_Pose_Update() {
 			if (OldKey != KEY_FREE && nowKey == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
 				//StopSoundMem(CF_GameBGM);
 				parent->SetNext(new Scene_Select());
+				StopSoundMem(SR_BGM);
 			}
 		}
 	}
