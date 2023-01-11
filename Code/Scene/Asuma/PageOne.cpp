@@ -268,12 +268,8 @@ void PageOne::PageOne_Update() {
 					(*itr).card_x = Player_X;
 					(*itr).card_y = Player_Y;
 					PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
-					if (Player_card.empty() == true) {
-						Player_card.push_front(*itr);
-					}
-					else {
-						Player_card.push_back(*itr);
-					}
+					Player_card.push_back(*itr);
+
 					if (Player_card.size() >= MAX) {
 						Player_setup = true;
 					}
@@ -399,13 +395,15 @@ void PageOne::PageOne_Update() {
 											pri = 99;
 										}
 										else if ((*p_itr).num == 0) {
-											pri = 0;
+											if (pri != 99) {
+												pri = 0;
+											}
+											else {
+												pri = 99;
+											}
 										}
 										else if (pri != 0 && pri < (*p_itr).num) {
 											pri = (*p_itr).num;
-										}
-										else if (pri == 0 && (*p_itr).num != 99) {
-											pri = 0;
 										}
 
 										p_pow = (*p_itr).num;
@@ -443,12 +441,7 @@ void PageOne::PageOne_Update() {
 					(*itr).card_x = NPC1_X;
 					(*itr).card_y = NPC1_Y;
 					PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
-					if (NPC_card_1.empty() == true) {
-						NPC_card_1.push_front(*itr);
-					}
-					else {
-						NPC_card_1.push_back(*itr);
-					}
+					NPC_card_1.push_back(*itr);
 
 					if (NPC_card_1.size() >= MAX) {
 						NPC1_setup = true;
@@ -572,7 +565,7 @@ void PageOne::PageOne_Update() {
 						else {
 							if (n > 90) {
 		
-								if (Field_card.empty() || (*Field_card.begin()).suit == 5 || (*f_itr).suit == (*n1_itr).suit || (*n1_itr).suit == 5) {
+								if (Field_card.empty() || Field_card.front().suit == 5 || (*f_itr).suit == (*n1_itr).suit || (*n1_itr).suit == 5) {
 		
 									if (PageOne_npc1 == false) {
 										PlaySoundMem(card_SE_2, DX_PLAYTYPE_BACK, TRUE);
@@ -582,15 +575,17 @@ void PageOne::PageOne_Update() {
 											pri = 99;
 										}
 										else if ((*n1_itr).num == 0) {
-											pri = 0;
+											if (pri != 99) {
+												pri = 0;
+											}
+											else {
+												pri = 99;
+											}
 										}
 										else if (pri != 0 && pri < (*n1_itr).num) {
 											pri = (*n1_itr).num;
 										}
-										else if (pri == 0 && (*n1_itr).num != 99) {
-											pri = 0;
-										}
-		
+
 										n1_pow = (*n1_itr).num;
 										priority++;
 										draw = true;
@@ -622,12 +617,7 @@ void PageOne::PageOne_Update() {
 					(*itr).card_x = NPC2_X;
 					(*itr).card_y = NPC2_Y;
 					PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
-					if (NPC_card_2.empty() == true) {
-						NPC_card_2.push_front(*itr);
-					}
-					else {
-						NPC_card_2.push_back(*itr);
-					}
+					NPC_card_2.push_back(*itr);
 					
 					if (NPC_card_2.size() >= MAX) {
 						NPC2_setup = true;
@@ -751,9 +741,9 @@ void PageOne::PageOne_Update() {
 						else {
 							if (n > 90) {
 
-								if (Field_card.empty() || (*Field_card.begin()).suit == 5 || (*f_itr).suit == (*n2_itr).suit || (*n2_itr).suit == 5) {
+								if (Field_card.empty() || Field_card.front().suit == 5 || (*f_itr).suit == (*n2_itr).suit || (*n2_itr).suit == 5) {
 
-									if (PageOne_npc1 == false) {
+									if (PageOne_npc2 == false) {
 										PlaySoundMem(card_SE_2, DX_PLAYTYPE_BACK, TRUE);
 										Field_card.push_back(*n2_itr);
 
@@ -761,13 +751,15 @@ void PageOne::PageOne_Update() {
 											pri = 99;
 										}
 										else if ((*n2_itr).num == 0) {
-											pri = 0;
+											if (pri != 99) {
+												pri = 0;
+											}
+											else {
+												pri = 99;
+											}
 										}
 										else if (pri != 0 && pri < (*n2_itr).num) {
 											pri = (*n2_itr).num;
-										}
-										else if (pri == 0 && (*n2_itr).num != 99) {
-											pri = 0;
 										}
 
 										n2_pow = (*n2_itr).num;
@@ -800,12 +792,7 @@ void PageOne::PageOne_Update() {
 					(*itr).card_x = NPC3_X;
 					(*itr).card_y = NPC3_Y;
 					PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
-					if (NPC_card_3.empty() == true) {
-						NPC_card_3.push_front(*itr);
-					}
-					else {
-						NPC_card_3.push_back(*itr);
-					}
+					NPC_card_3.push_back(*itr);
 					if (NPC_card_3.size() >= MAX) {
 						NPC3_setup = true;
 					}
@@ -928,22 +915,24 @@ void PageOne::PageOne_Update() {
 						else {
 							if (n > 90) {
 
-								if (Field_card.empty() || (*Field_card.begin()).suit == 5 || (*f_itr).suit == (*n3_itr).suit || (*n3_itr).suit == 5) {
+								if (Field_card.empty() || Field_card.front().suit == 5 || (*f_itr).suit == (*n3_itr).suit || (*n3_itr).suit == 5) {
 
-									if (PageOne_npc1 == false) {
+									if (PageOne_npc3 == false) {
 										PlaySoundMem(card_SE_3, DX_PLAYTYPE_BACK, TRUE);
 
 										if ((*n3_itr).num == 99) {
 											pri = 99;
 										}
 										else if ((*n3_itr).num == 0) {
-											pri = 0;
+											if (pri != 99) {
+												pri = 0;
+											}
+											else {
+												pri = 99;
+											}
 										}
 										else if (pri != 0 && pri < (*n3_itr).num) {
 											pri = (*n3_itr).num;
-										}
-										else if (pri == 0 && (*n3_itr).num != 99) {
-											pri = 0;
 										}
 
 										n3_pow = (*n3_itr).num;
@@ -993,20 +982,18 @@ void PageOne::PageOne_Update() {
 
 					if (pri == p_pow) {
 						priority = 0;
-						pri = 1;
 					}
 					if (pri == n1_pow) {
 						priority = 1;
-						pri = 1;
 					}
 					if (pri == n2_pow) {
 						priority = 2;
-						pri = 1;
 					}
 					if (pri == n3_pow) {
 						priority = 3;
-						pri = 1;
 					}
+
+					pri = 1;
 
 					flg_p = false;
 					flg_1 = false;
