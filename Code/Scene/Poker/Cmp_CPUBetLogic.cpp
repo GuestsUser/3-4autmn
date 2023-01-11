@@ -6,6 +6,7 @@
 #include "CardDealer.h"
 #include "PK_Card.h"
 #include "Chara.h"
+#include "PK_Dealer.h"
 
 #include <deque>
 
@@ -20,8 +21,9 @@
 */
 
 
-Cmp_CPUBetLogic::Cmp_CPUBetLogic() :changeTimingLimit(4), changeTiming(1), oldGameCount(0), raiseActive(false), borderBase(std::deque<int>()), border(std::deque<int>()), payLimit(std::deque<int>()), raiseSplit(std::deque<int>()) {
+Cmp_CPUBetLogic::Cmp_CPUBetLogic(PK_Dealer& setDealer) :changeTimingLimit(4), changeTiming(1), oldGameCount(0), raiseActive(false), dealer(&setDealer), borderBase(std::deque<int>()), border(std::deque<int>()), payLimit(std::deque<int>()), raiseSplit(std::deque<int>()) {
 	//定数データの初期化
+
 	BorderBaseIni(borderBase);
 	RaiseBorderBaseIni(raiseBorderBase);
 	PayLimitiIni(payLimit);
@@ -31,9 +33,10 @@ Cmp_CPUBetLogic::Cmp_CPUBetLogic() :changeTimingLimit(4), changeTiming(1), oldGa
 	raiseBorder.resize(size);
 }
 
-void Cmp_CPUBetLogic::Reset(int gameCount) {
+void Cmp_CPUBetLogic::Reset() {
 	raiseSplit.resize(0); //分割レイズ数を初期化
 	raiseActive = false;
+	int gameCount = dealer->GetGameCount(); //現在ゲーム回数を取得
 
 	if ((gameCount - oldGameCount) % changeTiming == 0) { //更新タイミングだった場合更新処理
 		oldGameCount = gameCount; //今回のゲームカウントを記録

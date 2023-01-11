@@ -63,16 +63,17 @@ int ActionEndCount(std::deque<Cmp_BetActionRecord*>& actionRecord, int center) {
 	return endCount;
 }
 
-void RaiseCalculation(const std::deque<int>& split, int& runCount, int& pay, int betRequest, int BB, int coin) {
-	//ラウンド中での総支払額と分割レイズを何処まで使うかを返す、splitに分割レイズデータ、runCountにsplit読み出し開始位置を(編集される、次の読み出し開始位置まで移動される)、payに支払総額、betRequestに現在最大ベットを、BBに現在BBを、coinに所持金を入れる
+int RaiseCalculation(const std::deque<int>& split, int& runCount, int oldPay, int betRequest, int BB, int coin) {
+	//ラウンド中での総支払額と分割レイズを何処まで使うかを返す、splitに分割レイズデータ、runCountにsplit読み出し開始位置を(編集される、次の読み出し開始位置まで移動される)、oldPayに前回までの支払額、betRequestに現在最大ベットを、BBに現在BBを、coinに所持金を入れる
 	for (runCount; runCount < split.size();) { //支払額が現在ベットを上回るよう分割レイズを調整使用する処理
 		int nowPayMent = split[runCount] * BB; //今回のsplit支払額
-		if (coin - (pay + nowPayMent) < 0) { break; } //レイズで所持金を0未満にしてしまう場合今回分は使わず終了
+		if (coin - (oldPay + nowPayMent) < 0) { break; } //レイズで所持金を0未満にしてしまう場合今回分は使わず終了
 
-		pay += nowPayMent; //今回分の支払額を加える
+		oldPay += nowPayMent; //今回分の支払額を加える
 		++runCount; //runCountを進める、このタイミングで実行する事に意味がある
-		if (pay > betRequest) { break; } //現在の分割数でベット最大を超えたら終了
+		if (oldPay > betRequest) { break; } //現在の分割数でベット最大を超えたら終了
 	}
+	return oldPay - betRequest; //レイズによる増加額を返す
 }
 
 void SequenceNextReset(const std::deque<Cmp_BetActionRecord*>& chara) { //次シーケンスへ移行する際実行するアクション記録リセット用関数
@@ -161,22 +162,20 @@ void Poker::Main::Update() {
 			Cmp_BetActionRecord::Action action = Cmp_BetActionRecord::Action::fold; //実行すべきアクションを格納
 			if (raise > betRequest) { action = ActionDecision(betData); } //現在最大ベットがレイズ可能額を超えていなければレイズ、コールする
 			if (record->GetRaiseRunCount() > 0 && raise * 5 > parent->pot->GetCurrentMaxBet()) { action = ActionDecision(betData); } //1度レイズしたことがある場合レイズ可能額の5倍まではレイズを受ける
-			if (parent->chara[access]->GetCoint() - betRequest < 0) { action = Cmp_BetActionRecord::Action::allIn; } //コールすらできない所持金ならオールインになる
+			if (parent->chara[access]->GetCoint() - betRequest <= 0) { action = Cmp_BetActionRecord::Action::allIn; } //コールすらできない所持金ならオールインになる
 
 			if (action == Cmp_BetActionRecord::Action::raise) { //レイズの例外を弾く処理
-				if (raise <= parent->pot->GetCurrentMaxBet()) { action = Cmp_BetActionRecord::Action::call; } //レイズ扱いの場合でも要求額がレイズ可能回数を超えていた場合コールになる
+				//if (raise <= parent->pot->GetCurrentMaxBet()) { action = Cmp_BetActionRecord::Action::call; } //レイズ扱いの場合でも要求額がレイズ可能回数を超えていた場合コールになる
 				if (record->GetRaiseRunCount() >= betData->ReadRaiseSplit()->size()) { action = Cmp_BetActionRecord::Action::call; } //レイズ可能額全てを使い切っていた場合コールになる
 			}
 			
 			if (action == Cmp_BetActionRecord::Action::raise) { //レイズ額出し処理
 				int runCount = record->GetRaiseRunCount(); //今回のsplit読み出し開始位置を入れる
-				RaiseCalculation(*betData->ReadRaiseSplit(), runCount, pay, betRequest, parent->dealer->GetBB(), parent->chara[access]->GetCoint());
+				int raiseAdd=RaiseCalculation(*betData->ReadRaiseSplit(), runCount, oldPay, betRequest, parent->dealer->GetBB(), parent->chara[access]->GetCoint()); //レイズによる増分を得る
 
 				record->SetRaiseRunCount(runCount); //使用済み分割数を記録する
-				if (pay <= betRequest) { //所持金の都合で現在ベットを超えたベットをできない場合callにする
-					action == Cmp_BetActionRecord::Action::call; //callにする
-					pay = betRequest - oldPay; //支払分をコール額に合わせる
-				} else { pay -= oldPay; } //普通にレイズできれば前回分を取り除いてレイズ額とする
+				if (raiseAdd <= 0) { action = Cmp_BetActionRecord::Action::call; } //レイズしても届かなかったり所持金の問題で指定分レイズできなかった場合callにする
+				else { pay += raiseAdd; } //普通にレイズできれば増分を加える
 			}
 			if (action == Cmp_BetActionRecord::Action::call && pay == 0) { action = Cmp_BetActionRecord::Action::check; } //指定アクションがcallで金額支払いが不要の場合チェックになる
 
@@ -226,10 +225,11 @@ void Poker::Main::Update() {
 	Cmp_BetActionRecord::Action action = Cmp_BetActionRecord::Action::check; //今回のアクションを記録する、取り敢えずcheckを入れる
 	Cmp_BetActionRecord* record = actionRecord[access]; //このキャラのベット記録を取得
 	int pay = playerGage->GetVol() * parent->dealer->GetMaxBet() * parent->dealer->GetBB(); //現在ゲージに合わせた支払額
+	int oldPay = parent->pot->Inquiry(*parent->chara[access]); //前回までの支払額
 
-	if (pay == parent->pot->GetCurrentMaxBet()) { action = Cmp_BetActionRecord::Action::call; } //支払額が現在最大ベットと同値だった場合アクションはcall
+	if (pay == parent->pot->GetCurrentMaxBet() && pay - oldPay != 0) { action = Cmp_BetActionRecord::Action::call; } //支払額が現在最大ベットと同値だった場合アクションはcall、但し最終支払額が0になる場合check
 	if (pay > parent->pot->GetCurrentMaxBet()) { action = Cmp_BetActionRecord::Action::raise; } //支払額が現在最大ベットを超えていた場合アクションはraise
-	pay -= parent->pot->Inquiry(*parent->chara[access]); //支払状況を加味した額に変更
+	pay -= oldPay; //支払状況を加味した額に変更
 	
 	if (parent->chara[access]->GetCoint() - pay < 0) { action = Cmp_BetActionRecord::Action::allIn; } //支払額が所持金を超えていた場合AllIn
 
@@ -249,6 +249,7 @@ void Poker::Main::Update() {
 		parent->chara[access]->SetCoin(parent->chara[access]->GetCoint() - pay); //所持金から支払額を減算する
 
 		if (action == Cmp_BetActionRecord::Action::raise) { //レイズしていた場合全員のアクション状況の見直しを行う
+			playerGageBorder->SetBorder((pay + oldPay) / parent->dealer->GetBB() * parent->dealer->GetMaxBet()); //ゲージの最低値を更新
 			for (auto itr : actionRecord) { if (!BetIgnore(itr)) { itr->SetIsAction(false); } } //fold,allInをしていない場合未アクション状態に更新する
 		}
 		record->SetActionRecord(action, true); //該当アクションを動作済みにする

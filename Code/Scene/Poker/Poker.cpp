@@ -145,7 +145,7 @@ Poker::Poker() :pot(new Pot()), dealer(new PK_Dealer()), cardDealer(new CardDeal
 		}
 		else { //cpuの精製を指定された場合
 			current = new CPU(); //cpuの精製
-			current->SetCmp(new Cmp_CPUBetLogic()); //cpuのベットに必要なデータを纏めたBetLogicを導入
+			current->SetCmp(new Cmp_CPUBetLogic(*dealer)); //cpuのベットに必要なデータを纏めたBetLogicを導入
 		}
 
 

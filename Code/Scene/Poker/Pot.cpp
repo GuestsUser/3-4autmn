@@ -90,6 +90,6 @@ void Pot::SetMainPot(int pay, const Chara& user) {
 	}
 
 	pot[pay + old] += pay - paid; //Šeƒ|ƒbƒg‚Öx•¥‚Á‚½Šz‚ğæ‚èœ‚¢‚Ä¡‰ñŠz‚Ìƒ|ƒbƒg‚Öx•¥‚¤
-	charaPayment[&user] = pay + old; //¡‰ñ‚Ìx•¥Šz‚ğ‹L˜^
+	charaPayment[&user] += pay; //¡‰ñ‚Ìx•¥Šz‚ğ‹L˜^
 
 }
