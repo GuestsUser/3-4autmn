@@ -11,7 +11,7 @@
 
 int Chara::coinIni = 5000; //所持金初期値設定
 
-Chara::Chara() :coin(coinIni), card(std::deque<PK_Card*>()), coinBack(std::deque<Cmp_Image*>()), cmp(std::deque<Component*>()) {
+Chara::Chara() :coin(coinIni), bbView(BBView::hide), card(std::deque<PK_Card*>()), coinBack(std::deque<Cmp_Image*>()), cmp(std::deque<Component*>()){
 	for (int i = 0; i < 5; ++i) { card.push_back(new PK_Card()); }
 
 	coinBack.push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/poker_score_back.png")), 1));
@@ -30,10 +30,12 @@ void Chara::FullReset() {
 	for (auto itr : cmp) { itr->FullReset(); } //追加機能の完全初期化
 	for (auto itr : card) { itr->FullReset(); } //カードの完全初期化
 	coin = coinIni; //所持金を初期値に合わせる
+	SetBBView(BBView::hide); //BB、SB表示を隠す
 }
 void Chara::Reset() {
 	for (auto itr : cmp) { itr->Reset(); } //追加機能の初期化
 	for (auto itr : card) { itr->Reset(); } //カードの初期化
+	SetBBView(BBView::hide); //BB、SB表示を隠す
 }
 
 void Chara::Place(std::deque<Cmp_Transform>& cardPos, Cmp_Transform& backPos) {
@@ -76,4 +78,11 @@ void Chara::ClearCmp() {
 
 void Chara::GetHandNum(std::deque<int>& set) const {
 	for (auto itr : card) { set.push_back(itr->GetCard()); } //手札から数値のみを取り出す処理
+}
+
+
+void Chara::SetBBView(BBView set) {
+	bbView = set; //表示を新しい物に入れ替え
+	if (bbView == BBView::hide) { coinBack[1]->SetRunDraw(false); } //隠し指定だった場合描写を切る
+	else { coinBack[1]->SetAnimeSub((int)bbView); } //新しい表示に切り替える
 }

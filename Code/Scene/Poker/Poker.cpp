@@ -162,6 +162,8 @@ Poker::Poker() :pot(new Pot()), dealer(new PK_Dealer()), cardDealer(new CardDeal
 	list.push_back(new Main(*this));
 	list.push_back(new Change(*this));
 	list.push_back(new ShowDown(*this));
+	list.push_back(new NoContest(*this));
+
 
 
 	run = list[1];

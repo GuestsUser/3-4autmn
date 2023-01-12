@@ -24,6 +24,7 @@ class Cmp_CPUBetLogic :public Component {
 public:
 	Cmp_CPUBetLogic(PK_Dealer& setDealer);
 	void Reset(); //ラウンド開始時に呼び出すとレイズ分割数とラウンド回数に応じて基準のリセットをしてくれる
+	void FullReset() { Reset(); } //Resetと処理内容は同じ
 	void Update() {}
 
 	void RaiseVolDecision(const Chara& chara, bool isCheckReach); //ハンドの評価結果を引数に与える事でそれに応じたレイズ可能回数を決定する関数、boolにtrueを入れるとリーチチェックも加味した結果となる

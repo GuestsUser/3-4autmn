@@ -9,6 +9,7 @@ class PK_Dealer { //ポーカーに関する色々なデータを管理するディーラーなクラス
 	int maxBet; //現在BBから最大何倍まで掛けられるかを示す数値
 
 	int BB; //現在BB
+	int addBB; //1巡する毎にBBに加算される値
 	int gameCount; //現在のラウンド数
 	int playSub; //現在アクションを行うキャラの添え字を記録
 
@@ -25,6 +26,7 @@ public:
 	int GetActionCharaSub() const { return playSub; } //今回アクションさせるキャラの添え字を取得
 
 	const Btn* ReadBtn() const { return &btn; } //ボタンポジションを読み取り専用形式で取得
+	Btn* EditBtn() { return &btn; } //ボタンポジションを編集可能形式で取得
 
 	void SetActionChara(int set); //次アクションを行うキャラを設定する
 };

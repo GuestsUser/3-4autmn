@@ -1,6 +1,7 @@
 #include "../Scene.h"
 #include "Poker.h"
 #include "PokerSections.h"
+#include "../Code/ConstVal.h"
 
 #include "Btn.h"
 #include "CPU.h"
@@ -14,42 +15,36 @@
 #include "../Code/Component/Cmp_Image.h"
 #include "../Code/Component/Button.h"
 #include "../Code/Component/Gage.h"
+#include "../Code/Component/Cmp_Gage_Border.h"
+#include "../Code/Component/Cmp_Gage_MouseControl.h"
+#include "../Code/Component/Cmp_Button_ClickCheck.h"
 #include "Cmp_BetActionRecord.h"
 #include "Cmp_CPUBetLogic.h"
 #include "Cmp_PlayerRaiseDraw.h"
-#include "../Code/Component/Cmp_Gage_Border.h"
-#include "../Code/Component/Cmp_Gage_MouseControl.h"
 
 #include <algorithm>
 #include <deque>
 #include <typeinfo>
 #include <string>
 
-//未完成
-void BBSBLevy(int BBpos, std::deque<Chara*>& chara, Pot& pot) { //BB、SBポジションキャラからBB、SBを回収
-	for (int i = 0; i < 2; ++i) {
-		int levy = (BBpos + i) % chara.size();
-		pot.SetMainPot(50 / (i + 1), *chara[levy]);
-	}
-}
-
 Cmp_BetActionRecord::Action ActionDecision(Cmp_CPUBetLogic* betLogic) { //入れられたbetLogicによってraiseすべきかcallすべきか返す
 	return betLogic->GetSelfRaise() ? Cmp_BetActionRecord::Action::raise : Cmp_BetActionRecord::Action::call;
 }
 
 bool BetIgnore(Cmp_BetActionRecord* record) { //キャラのアクション記録を渡す事でそのキャラのベットをスキップすべきか否か返す、trueでスキップ
-	return record->GetActionRecord(Cmp_BetActionRecord::Action::allIn) || record->GetActionRecord(Cmp_BetActionRecord::Action::fold) || record->GetIsLoose(); //allIn、Fold、敗北済みの場合ベットをスキップ
+	return record->GetActionRecord(Cmp_BetActionRecord::Action::allIn) || record->GetActionRecord(Cmp_BetActionRecord::Action::fold) || record->GetIsLose(); //allIn、Fold、敗北済みの場合ベットをスキップ
 }
 
 bool IsFold(Cmp_BetActionRecord& record) { //recordのキャラがアクションを終わらせた又はfoldで除外された等そのフェーズ中干渉できなくなっていればtrueを返す
-	return record.GetActionRecord(Cmp_BetActionRecord::Action::fold) || record.GetIsLoose() || record.GetIsAction(); //foldしている、敗北済み、アクション実行済みでtrueを返す
+	return record.GetActionRecord(Cmp_BetActionRecord::Action::fold) || record.GetIsLose() || record.GetIsAction(); //foldしている、敗北済み、アクション実行済みでtrueを返す
 }
 
 int FoldCount(std::deque<Cmp_BetActionRecord*>& actionRecord, int center) { //ゲームから抜けたキャラ数を返す、centerにrecordへ使用する添え字を入れるとそのキャラを中心にチェックする
 	int dropCount = 1; //このラウンドから抜けたキャラを記録する
-	for (dropCount; dropCount < (int)Poker::Character::length; ++dropCount) {
-		Cmp_BetActionRecord current = *actionRecord[(center + dropCount) % (int)Poker::Character::length]; //今回チェックするキャラ、そのアクセスショートカット
-		if (!(current.GetActionRecord(Cmp_BetActionRecord::Action::fold) || current.GetIsLoose())) { break; } //チェックキャラが終了条件の1つにも引っかからなかった場合中断
+
+	for (int i = 1; i < (int)Poker::Character::length; ++i) {
+		Cmp_BetActionRecord current = *actionRecord[(center + i) % (int)Poker::Character::length]; //今回チェックするキャラ、そのアクセスショートカット
+		dropCount += current.GetActionRecord(Cmp_BetActionRecord::Action::fold) || current.GetIsLose(); //飛ばし条件の何れかに掛かっていれば+1する
 	}
 	return dropCount;
 }
@@ -85,10 +80,68 @@ void SequenceNextReset(const std::deque<Cmp_BetActionRecord*>& chara) { //次シー
 	}
 }
 
+//未完成
+void BBSBLevy(int BBpos, std::deque<Chara*>& chara, std::deque<Cmp_BetActionRecord*>& actionRecord, Pot& pot, PK_Dealer& dealer) { //BB、SBポジションキャラからBB、SBを回収
+
+	for (int i = 0; i < 2; ++i) { //BB、SBの2回徴収が必要なのでi<2
+		int levy = (BBpos + i) % chara.size(); //今回のキャラチェック位置
+
+		for (int j = 0; j < chara.size(); ++j) { //今回キャラを中心に対象キャラが敗北しているか調べる
+			if (!IsFold(*actionRecord[levy + j])) { break; } //対象が未敗北の場合敗北チェック終了
+			levy = (levy + 1) % chara.size(); //1つキャラを進める
+		}
+		int coin = chara[levy]->GetCoint(); //現在所持金
+		int pay = dealer.GetBB() / (i + 1); //支払額
+		chara[levy]->SetBBView((Chara::BBView)i); //支払額に応じてBB支払いかSB支払いか表示を設定する
+
+		if (coin - pay <= 0) { //支払額が所持金を上回っていた場合
+			actionRecord[i]->SetActionRecord(Cmp_BetActionRecord::Action::allIn, true); //強制allIn
+			actionRecord[i]->SetIsAction(true); //アクション済みにされる
+			pot.SetSidePot(coin, *chara[levy]); //持ってる分だけ支払ってもらう
+			chara[levy]->SetCoin(0); //空にする
+
+			//parent->dealer->SetActionChara((pos + 1) % parent->chara.size()); //位置更新に合わせて初めにアクションを開始するキャラを更新する
+
+
+
+			continue; //このキャラに対する操作終わり
+		}
+
+		pot.SetMainPot(pay, *chara[levy]); //BB、SBの支払い
+		chara[levy]->SetCoin(coin - pay); //支払い分所持金から差し引く
+
+	}
+}
+
+void LoseSet(const std::deque<Chara*>& chara, std::deque<Cmp_BetActionRecord*>& actionRecord) { //現在所持金に合わせて敗北設定を行う
+	for (int i = 0; i < chara.size(); ++i) { actionRecord[i]->SetIsLose(chara[i]->GetCoint() <= 0); } //所持金が0以下になったら敗北に設定する
+}
+
+Poker::Section GameEndCheck(const std::deque<Chara*>& chara, const std::deque<Cmp_BetActionRecord*>& actionRecord) { //現在の敗北状況から向かうべきシーンを返す
+	int loseCount = 0; //敗北キャラ数のカウント
+	for (auto itr : actionRecord) { loseCount += itr->GetIsLose(); } //全キャラをチェックし敗北キャラ数をカウントしてゆく
+	
+	Poker::Section val = Poker::Section::ini; //返す値、ゲームを続行すべきならiniを返す
+	if (loseCount >= (int)Poker::Character::length - 1) { val = Poker::Section::gameclear; } //1キャラ以外全てが敗北していた場合ゲームクリアを設定
+	if (actionRecord[(int)Poker::Character::player]->GetIsLose()) { val = Poker::Section::gameover; } //プレイヤーが敗北していた場合ゲームオーバーを設定、クリアとオーバーではオーバーが優先
+
+	return val;
+}
+
+void FullReset(std::deque<Chara*>& chara, Pot& pot, PK_Dealer& dealer, CardDealer& cardDealer) { //各種fullResetを実行しPreから新しいゲームを始められるようにする
+	pot.Reset();
+	dealer.FullReset();
+	cardDealer.Reset();
+	for (auto chara : chara) { chara->FullReset(); }
+}
 
 
 
 
+
+Poker::Ini::Ini(Poker& set) :parent(&set), actionRecord(std::deque<Cmp_BetActionRecord*>(4)) {
+	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
+}
 
 void Poker::Ini::Update() {
 	parent->pot->Reset();
@@ -96,10 +149,27 @@ void Poker::Ini::Update() {
 	parent->cardDealer->Reset();
 	for (auto chara : parent->chara) { chara->Reset(); }
 
+	//未デバッグ
+	//int pos = parent->dealer->ReadBtn()->GetBtnPos(); //敗北済みキャラを飛ばしてポジション決定から
+	//for (int i = 0; i < parent->chara.size(); ++i) { //全キャラ調べ
+	//	if (!IsFold(*actionRecord[pos])) { break; } //現在キャラが勝負可能ならループ抜け
+	//	pos = (pos + 1) % parent->chara.size(); //1つキャラを進める
+	//}
+	//parent->dealer->EditBtn()->SetBtnPos(pos); //勝負可能な最短のキャラ位置に設定する
+	//parent->dealer->SetActionChara((pos + 1) % parent->chara.size()); //位置更新に合わせて初めにアクションを開始するキャラを更新する
+
 	parent->run = parent->list[(int)Poker::Section::pre];
 }
 
+Poker::Pre::Pre(Poker& set) :parent(&set), actionRecord(std::deque<Cmp_BetActionRecord*>(4)) {
+	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
+}
+
 void Poker::Pre::Update() {
+	//未デバッグ
+	//BBSBLevy(parent->dealer->ReadBtn()->GetBtnPos(), parent->chara, actionRecord, *parent->pot, *parent->dealer); //BB、SBの徴収
+
+
 	for (auto itr : parent->chara) {
 
 		//デバッグ用
@@ -422,14 +492,28 @@ std::string Hand2String(const std::deque<int>& hand) {
 	case CardDealer::HandRank::OnePair: return "ワンペア"; break;
 	case CardDealer::HandRank::TwoPair: return "ツーペア"; break;
 	case CardDealer::HandRank::ThreeCard: return "スリーカード"; break;
-	case CardDealer::HandRank::Straight: return "ストレート"; break;
-	case CardDealer::HandRank::Flash: return "フラッシュ"; break;
-	case CardDealer::HandRank::FullHause: return "フルハウス"; break;
-	case CardDealer::HandRank::FourCard: return "フォーカード!"; break;
-	case CardDealer::HandRank::StraightFlash: return "ストレートフラッシュ!"; break;
-	case CardDealer::HandRank::RoyalStraightFlash: return "ロイヤルストレートフラッシュ!!"; break;
+	case CardDealer::HandRank::Straight: return "ストレート!"; break;
+	case CardDealer::HandRank::Flash: return "フラッシュ!"; break;
+	case CardDealer::HandRank::FullHause: return "フルハウス!"; break;
+	case CardDealer::HandRank::FourCard: return "フォーカード!!"; break;
+	case CardDealer::HandRank::StraightFlash: return "ストレートフラッシュ!!"; break;
+	case CardDealer::HandRank::RoyalStraightFlash: return "ロイヤルストレートフラッシュ!!!"; break;
 	}
 
+}
+
+void FoldMemberPayOut(std::deque<Chara*>& chara, Pot& pot) { //foldキャラへPayOut
+	Chara* maxChara = chara[0]; //最大支払額を持つキャラ
+	int max = pot.Inquiry(*maxChara); //最大支払額
+	for (int i = 1; i < chara.size(); ++i) {
+		int current = pot.Inquiry(*chara[i]); //今回キャラの支払額
+		if (max < current) { //今回キャラが最大ベット額を持っていればmax系の中身を交換
+			max = current;
+			maxChara = chara[i];
+		}
+	}
+	max = pot.PayOut(*maxChara) / chara.size(); //最大支払額を持つキャラでポットから金額取り出し
+	for (int i = 0; i < chara.size(); ++i) { chara[i]->SetCoin(chara[i]->GetCoint() + max); } //残りを分配
 }
 
 
@@ -446,6 +530,8 @@ Poker::ShowDown::ShowDown(Poker& set) :parent(&set), count(0), actionRecord(std:
 
 	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
 }
+
+
 
 
 
@@ -473,7 +559,7 @@ void Poker::ShowDown::Update() {
 		std::deque<std::deque<int>> enableHand = std::deque<std::deque<int>>(); //勝負を行うキャラのハンド評価纏め
 
 		for (int i = 0; i < parent->chara.size(); ++i) { //キャラを勝負をするキャラ、foldキャラ、除外キャラに仕分ける
-			if (actionRecord[i]->GetIsLoose()) { continue; } //敗北済みの場合何もせず次キャラへ移行
+			if (actionRecord[i]->GetIsLose()) { continue; } //敗北済みの場合何もせず次キャラへ移行
 			if (actionRecord[i]->GetActionRecord(Cmp_BetActionRecord::Action::fold)) { foldChara.push_back(parent->chara[i]); continue; } //foldしてる場合foldCaraへ格納し次キャラへ移行
 			enableChara.push_back(parent->chara[i]); //現在キャラをenableCharaへ格納
 			enableHand.push_back(hand[i]); //現在キャラのハンド評価格納
@@ -488,6 +574,9 @@ void Poker::ShowDown::Update() {
 				if (enableHand[max[0]][0] == enableHand[i][0]) { max.push_back(i); } //強さが同じなら今回キャラも支払い対象として配列に追加する
 			}
 
+			//デバッグ用
+			//std::deque<int> max = std::deque<int>(); //今回支払を行うキャラの添え字集、取り敢えず要素数1で格納値は0
+			//for (int i = 0; i < enableChara.size(); ++i) { max.push_back(i); }
 
 			std::deque<int> copy = max; //maxを編集する為のコピー
 			if (copy.size() == 1) { //要素が1つしかない場合
@@ -528,8 +617,9 @@ void Poker::ShowDown::Update() {
 					}
 				}
 			}
+			FoldMemberPayOut(foldChara, *parent->pot); //余ったpotはfoldキャラへ分配
 		}
-		//foldCharaへの支払い作成はこれから
+		
 	}
 
 	if (count == 240) {
@@ -551,4 +641,95 @@ void Poker::ShowDown::Draw() {
 	}
 
 
+}
+
+
+Poker::NoContest::NoContest(Poker& set) :parent(&set), count(0), payOutTime(60), clickStartTime(120), blink(30), nextButton(WINDOW_X / 2, WINDOW_Y / 2, WINDOW_X / 2, WINDOW_Y / 2, false), actionRecord(std::deque<Cmp_BetActionRecord*>(4)) {
+	titlePos.SetXYZ(513, 189, 0); //ノーコンテストである事を示すメッセージの位置設定
+	explainPos.SetXYZ(484, 312, 0); //ボタン説明配置位置
+
+	nextButton.SetClick(new Cmp_Button_ClickCheck()); //クリックチェック用コンポーネント追加
+
+	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
+}
+
+void Poker::NoContest::Update() {
+	nextButton.Update(); //ボタンUpdate実行
+
+	if (count == payOutTime) {
+		Chara* enableChara = nullptr; //降りなかったキャラが入る
+		std::deque<Chara*> foldChara = std::deque<Chara*>(); //フォールドしたキャラ纏め(敗北済みは除く)
+
+		for (int i = 0; i < parent->chara.size(); ++i) { //キャラを勝負をするキャラ、foldキャラ、除外キャラに仕分ける
+			if (actionRecord[i]->GetIsLose()) { continue; } //敗北済みの場合何もせず次キャラへ移行
+			if (actionRecord[i]->GetActionRecord(Cmp_BetActionRecord::Action::fold)) { foldChara.push_back(parent->chara[i]); continue; } //foldしてる場合foldCaraへ格納し次キャラへ移行
+			enableChara = parent->chara[i]; //現在キャラをenableCharaへ格納
+			break; //有効キャラは1人だけなのでここまでこれたら終わり
+		}
+		enableChara->SetCoin(enableChara->GetCoint() + parent->pot->PayOut(*enableChara)); //金額総取り
+		if (parent->pot->TotalAmount() <= 0) { ++count; return; } //金額がなくなれば終わり
+		FoldMemberPayOut(foldChara, *parent->pot); //余っていればfoldキャラへ分配
+
+	}
+
+	if (count == clickStartTime) { //クリック検知開始タイミングになったら
+
+		//未デバッグ
+		//LoseSet(parent->chara, actionRecord); //敗北状況の設定
+		//Poker::Section next = GameEndCheck(parent->chara, actionRecord); //敗北状況から次向かうべきシーンを取得
+
+		//if (next != Poker::Section::ini) { //ini(続行すべき)以外が入った場合
+		//	parent->run = parent->list[(int)next]; //そのシーンに移行
+		//	count = -1; //カウントリセット
+		//	return; //終わり
+		//}
+
+		nextButton.SetRunClickMonitor(true); //クリック検知開始
+	}
+
+	if (nextButton.GetRunUpdateClick()) { //クリックされた場合
+		parent->run = parent->list[(int)Poker::Section::ini]; //最初の状態に戻る
+
+		nextButton.SetRunUpdate(false); //クリック状態を戻す
+		nextButton.SetRunDraw(false); //念の為Drawも戻す
+		nextButton.SetRunClickMonitor(false); //クリック検知の無効化
+		count = -1; //カウントリセット
+	}
+
+	++count;
+}
+
+void Poker::NoContest::Draw() {
+	DrawStringToHandle(titlePos.GetX(), titlePos.GetY(), "ノーコンテスト!", *PokerFontData::GetColor(PokerFontData::color::normal), *PokerFontData::GetHandle(PokerFontData::type::normal));
+	if (count >= clickStartTime && ((count - clickStartTime) / blink) % 2 == 0) { DrawStringToHandle(explainPos.GetX(), explainPos.GetY(), "画面をクリックで次ゲームへ", *PokerFontData::GetColor(PokerFontData::color::edgeColor), *PokerFontData::GetHandle(PokerFontData::type::edge), *PokerFontData::GetColor(PokerFontData::color::edgeNormal)); }
+}
+
+
+Poker::GameOver::GameOver(Poker& set) :parent(&set), count(0), clickStartTime(60), blink(30), nextButton(WINDOW_X / 2, WINDOW_Y / 2, WINDOW_X / 2, WINDOW_Y / 2, false) {
+	titlePos.SetXYZ(513, 189, 0); //ノーコンテストである事を示すメッセージの位置設定
+	explainPos.SetXYZ(432, 312, 0); //ボタン説明配置位置
+
+	nextButton.SetClick(new Cmp_Button_ClickCheck()); //クリックチェック用コンポーネント追加
+}
+
+void Poker::GameOver::Update() {
+	nextButton.Update(); //ボタンUpdate実行
+	if (count == clickStartTime) { nextButton.SetRunClickMonitor(true); } //開始タイミングになったらクリック検知開始
+
+	if (nextButton.GetRunUpdateClick()) { //クリックされた場合
+		FullReset(parent->chara, *parent->pot, *parent->dealer, *parent->cardDealer); //新しいゲームの準備をする
+		parent->run = parent->list[(int)Poker::Section::pre]; //最初の状態に戻る
+
+		nextButton.SetRunUpdate(false); //クリック状態を戻す
+		nextButton.SetRunDraw(false); //念の為Drawも戻す
+		nextButton.SetRunClickMonitor(false); //クリック検知の無効化
+		count = -1; //カウントリセット
+	}
+
+	++count;
+}
+
+void Poker::GameOver::Draw() {
+	DrawStringToHandle(titlePos.GetX(), titlePos.GetY(), "ゲームオーバー!", *PokerFontData::GetColor(PokerFontData::color::normal), *PokerFontData::GetHandle(PokerFontData::type::normal));
+	if (count >= clickStartTime && ((count - clickStartTime) / blink) % 2 == 0) { DrawStringToHandle(explainPos.GetX(), explainPos.GetY(), "画面をクリックで新しく始める", *PokerFontData::GetColor(PokerFontData::color::edgeColor), *PokerFontData::GetHandle(PokerFontData::type::edge), *PokerFontData::GetColor(PokerFontData::color::edgeNormal)); }
 }

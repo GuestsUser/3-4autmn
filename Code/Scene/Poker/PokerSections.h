@@ -9,6 +9,9 @@
 #include "PK_Player.h"
 #include "CardDealer.h"
 
+#include "../Code/Component/Component.h"
+#include "../Code/Component/Button.h"
+
 #include <deque>
 #include <string>
 
@@ -18,7 +21,6 @@ class Cmp_CPUBetLogic;
 class Cmp_Gage_Border;
 class Cmp_Gage_MouseControl;
 class Cmp_PlayerRaiseDraw;
-class Button;
 class Gage;
 class CardDealer;
 class Card;
@@ -26,15 +28,19 @@ class Vector3;
 
 class Poker::Ini :public Scene { //ラウンド開始時の処理を記したUpdateを持つ初期化クラス
 	Poker* parent; //このクラスの実体を持つPokerへの参照
+	std::deque<Cmp_BetActionRecord*> actionRecord; //charaから抜き出したコンポーネントを保持、配列の添え字はキャラと同様なので同じ列挙型でそのキャラのコンポーネントが取れる
+
 public:
-	Ini(Poker& set) :parent(&set) {}
+	Ini(Poker& set);
 	void Update();
 };
 
 class Poker::Pre :public Scene { //カードを各キャラへ配るフェイズ
 	Poker* parent; //このクラスの実体を持つPokerへの参照
+	std::deque<Cmp_BetActionRecord*> actionRecord; //charaから抜き出したコンポーネントを保持、配列の添え字はキャラと同様なので同じ列挙型でそのキャラのコンポーネントが取れる
+
 public:
-	Pre(Poker& set) :parent(&set) {}
+	Pre(Poker& set);
 	void Update();
 };
 
@@ -108,21 +114,44 @@ public:
 
 class Poker::NoContest :public Scene {
 	Poker* parent; //このクラスの実体を持つPokerへの参照
+	std::deque<Cmp_BetActionRecord*> actionRecord; //charaから抜き出したコンポーネントを保持、配列の添え字はキャラと同様なので同じ列挙型でそのキャラのコンポーネントが取れる
+	Button nextButton; //クリックする事で次シーンへ移行する
+
+	int count;
+	int payOutTime; //このタイミングで支払いを行う
+	int clickStartTime; //countがこの数値に達するとボタンクリックの検知を開始する
+	int blink; //この時間間隔で説明を点滅させる
+
+	Vector3 titlePos; //ノーコンテストである事を示すメッセージの表示位置
+	Vector3 explainPos; //ボタン説明の配置位置
 public:
-	NoContest(Poker& set) :parent(&set) {}
+	NoContest(Poker& set);
 	void Update();
+	void Draw();
 };
 
 class Poker::GameOver :public Scene {
 	Poker* parent; //このクラスの実体を持つPokerへの参照
+	Button nextButton; //クリックする事で次シーンへ移行する
+
+	int count;
+	int clickStartTime; //countがこの数値に達するとボタンクリックの検知を開始する
+	int blink; //この時間間隔で説明を点滅させる
+
+	Vector3 titlePos; //ゲームオーバーである事を示すメッセージの表示位置
+	Vector3 explainPos; //ボタン説明の配置位置
 public:
-	GameOver(Poker& set) :parent(&set) {}
+	GameOver(Poker& set);
 	void Update();
+	void Draw();
 };
 
 class Poker::GameClear :public Scene {
 	Poker* parent; //このクラスの実体を持つPokerへの参照
+	Vector3 titlePos; //ゲームクリアである事を示すメッセージの表示位置
+
 public:
 	GameClear(Poker& set) :parent(&set) {}
 	void Update();
+	void Draw();
 };
