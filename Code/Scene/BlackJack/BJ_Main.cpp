@@ -241,7 +241,7 @@ void BlackJack::Draw() {
     SetFontSize(DEFAULT_FONT_SIZE);
     if (!player->Now_Game()) {
       if (player->P_MaxCoin() <= 0) {
-        if (BlackJack::Wait_Time(1))game_endflg = true;
+        if (BlackJack::Wait_Time(1))game_endflg = end = true;
       }
       else {
         DrawGraph(240, 320, continue_img[4], true);

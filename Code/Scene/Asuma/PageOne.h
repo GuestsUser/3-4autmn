@@ -178,7 +178,10 @@ private:
 	int n2_pow;		//NPC２号が出したカードの強さ
 	int n3_pow;		//NPC３号が出したカードの強さ
 
-	int lead;	//場のスートの基準にするカードの順番（基本は先頭（0番目））
+	int p_suit;		//プレイヤーの手札のスートを確認する
+	int n1_suit;	//NPC１号の手札のスートを確認する
+	int n2_suit;	//NPC２号の手札のスートを確認する
+	int n3_suit;	//NPC３号の手札のスートを確認する
 
 	int i;	//ループに使っている変数
 	int r;	//ランダム用変数

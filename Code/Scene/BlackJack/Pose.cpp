@@ -63,7 +63,7 @@ void Pose_Update() {
 }
 void Pose_Draw() {
   /*ポーズボタン*/
-  DrawRotaGraph(110, 65, 0.9, 0, Pause_Button, TRUE);
+  if(!end)DrawRotaGraph(110, 65, 0.9, 0, Pause_Button, TRUE);
   if (PauseFlg && !end) {
     DrawRotaGraph(650, 380, 1.15, 0, Pause_Back, TRUE);
     if (450 <= Mouse_X && Mouse_X <= 850 && 320 <= Mouse_Y && Mouse_Y <= 440) {

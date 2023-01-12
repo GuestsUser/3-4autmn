@@ -114,7 +114,6 @@ void PageOne::PageOne_Initialize(Scene* scene) {
 	NPC2_Pass_Flg = false;
 	NPC3_Pass_Flg = false;
 
-	lead = 0;
 	pri = 1;
 	draw = false;
 	finish = false;
@@ -147,6 +146,7 @@ void PageOne::PageOne_Finalize() {
 
 	//カード画像
 	DeleteGraph(card_img);
+	DeleteGraph(Card_back);
 
 	//リザルト画像
 	DeleteGraph(PlayerCrown);
@@ -285,35 +285,33 @@ void PageOne::PageOne_Update() {
 					f_itr = Field_card.begin();
 
 					if (Field_card.empty() == false && (*f_itr).suit == 5) {
-						lead = 1;
-					}
-					else {
-						lead = 0;
+						f_itr++;
 					}
 
 					reset = false;
 
-					if (Field_card.empty()) {
+					if (Field_card.empty() == false) {
+						p_suit = std::find(Player_card.front().suit, Player_card.back().suit, (*f_itr).suit);
+					}
+					else {
+						p_suit = 5;
+					}
+
+					if (Field_card.empty() || (*f_itr).suit == p_suit || p_suit == 5) {
 						draw = false;
 					}
 					else {
+						draw = true;
+					}
 
-						if (lead == 1) {
-							f_itr++;
-						}
-
-						for (p_itr = Player_card.begin(); p_itr != Player_card.end(); p_itr++) {
-							if ((*p_itr).suit == 5) {
-								draw = false;
-							}
-							else if ((*f_itr).suit == (*p_itr).suit) {
-								draw = false;
-							}
+					for (p_itr = Player_card.begin(); p_itr != Player_card.end(); p_itr++) {
+						if ((*p_itr).suit == 5) {
+							draw = false;
 						}
 					}
 
 					//プレイヤーがカード引く用
-					if (draw == true) {
+					if (draw == true && Card_obj.empty() == false) {
 						if (n > 30) {
 							if ((Mouse_X > Deck_X - (card_w * 0.7) / 2) && (Mouse_X < Deck_X + (card_w * 0.7) / 2) && (Mouse_Y > Deck_Y - (card_h * 0.7) / 2) && (Mouse_Y < Deck_Y + (card_h * 0.7) / 2)) {
 								if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
@@ -333,15 +331,20 @@ void PageOne::PageOne_Update() {
 									Card_obj.erase(itr);
 									
 									n = 0;
+									draw = false;
 									break;
 								}
 							}
 						}
 					}
 
+
 					for (p_itr = Player_card.begin(); p_itr != Player_card.end(); p_itr++) {
 						//山札0枚＆手札に出せるカードがない場合パスをする
-						if (Card_obj.empty() == true && (*f_itr).suit != (*p_itr).suit && (*p_itr).suit != 5) {
+						if (Field_card.empty() == true || Card_obj.empty() == false || p_suit == (*f_itr).suit || (*p_itr).suit == 5 || p_suit == 5) {
+							Player_Pass_Flg = false;
+						}
+						else {
 							Player_Pass_Flg = true;
 							if ((Mouse_X > 890) && (Mouse_X < 1040) && (Mouse_Y > 440) && (Mouse_Y < 515)) {
 								if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
@@ -352,9 +355,6 @@ void PageOne::PageOne_Update() {
 									break;
 								}
 							}
-						}
-						else {
-							Player_Pass_Flg = false;
 						}
 					}
 
@@ -408,7 +408,6 @@ void PageOne::PageOne_Update() {
 
 										p_pow = (*p_itr).num;
 										priority++;
-										draw = true;
 										flg_p = true;
 										n = 0;
 										PageOne_flg = false;
@@ -458,24 +457,21 @@ void PageOne::PageOne_Update() {
 					f_itr = Field_card.begin();
 
 					if (Field_card.empty() == false && (*f_itr).suit == 5) {
-						lead = 1;
-					}
-					else {
-						lead = 0;
+						f_itr++;
 					}
 
 					reset = false;
 
-					if (Field_card.empty()) {
+					if (Field_card.empty() == false) {
+						n1_suit = std::find(NPC_card_1.front().suit, NPC_card_1.back().suit, (*f_itr).suit);
+					}
+
+					if (Field_card.empty() || n1_suit == (*f_itr).suit) {
 						draw = false;
 					}
 					else {
 						npc_1 = NPC_card_1.size();
 						n1_itr = NPC_card_1.begin();
-
-						if (lead == 1) {
-							f_itr++;
-						}
 
 						for (i = 0; i < npc_1; i++) {
 							if ((*n1_itr).suit == 5) {
@@ -487,7 +483,7 @@ void PageOne::PageOne_Update() {
 							n1_itr++;
 						}
 					}
-		
+					
 					//NPCがカード引く用
 					if (draw == true && Card_obj.empty() == false) {
 						if (n > 30) {
@@ -540,37 +536,22 @@ void PageOne::PageOne_Update() {
 					else {
 						f_itr = Field_card.begin();
 					}
-		
+
+
 					//NPCの手札からカードだす
 					for (n1_itr = NPC_card_1.begin(); n1_itr != NPC_card_1.end(); n1_itr++) {
 		
 						//山札0枚＆手札に出せるカードがない場合パスをする
-						if (Card_obj.empty() == true && Field_card.empty() == false && (*f_itr).suit != (*n1_itr).suit && (*n1_itr).suit != 5) {
-		
-							if (50 < n && n <= 90) {
-								if (OneShot == false) {
-									PlaySoundMem(pass_SE, DX_PLAYTYPE_BACK, TRUE);
-									OneShot = true;
-								}
-		
-								NPC1_Pass_Flg = true;
-							}
-		
+						if (Field_card.empty() == true || Card_obj.empty() == false || n1_suit == (*f_itr).suit || (*p_itr).suit == 5) {
+							NPC1_Pass_Flg = false;
 							if (n > 90) {
-								flg_1 = true;
-								priority++;
-								n = 0;
-							}
-						}
-						else {
-							if (n > 90) {
-		
+
 								if (Field_card.empty() || Field_card.front().suit == 5 || (*f_itr).suit == (*n1_itr).suit || (*n1_itr).suit == 5) {
-		
+
 									if (PageOne_npc1 == false) {
 										PlaySoundMem(card_SE_2, DX_PLAYTYPE_BACK, TRUE);
 										Field_card.push_back(*n1_itr);
-		
+
 										if ((*n1_itr).num == 99) {
 											pri = 99;
 										}
@@ -595,6 +576,22 @@ void PageOne::PageOne_Update() {
 										NPC_card_1.erase(n1_itr);
 										break;
 									}
+								}
+							}
+						}
+						else {
+							if (50 < n && n <= 90) {
+								if (OneShot == false) {
+									PlaySoundMem(pass_SE, DX_PLAYTYPE_BACK, TRUE);
+									OneShot = true;
+								}
+
+								NPC1_Pass_Flg = true;
+
+								if (n > 90) {
+									flg_1 = true;
+									priority++;
+									n = 0;
 								}
 							}
 						}
@@ -634,13 +631,14 @@ void PageOne::PageOne_Update() {
 					f_itr = Field_card.begin();
 
 					if (Field_card.empty() == false && (*f_itr).suit == 5) {
-						lead = 1;
-					}
-					else {
-						lead = 0;
+						f_itr++;
 					}
 
 					reset = false;
+
+					if (Field_card.empty() == false) {
+						n2_suit = std::find(NPC_card_2.front().suit, NPC_card_2.back().suit, (*f_itr).suit);
+					}
 
 					if (Field_card.empty()) {
 						draw = false;
@@ -648,10 +646,6 @@ void PageOne::PageOne_Update() {
 					else {
 						npc_2 = NPC_card_2.size();
 						n2_itr = NPC_card_2.begin();
-
-						if (lead == 1) {
-							f_itr++;
-						}
 
 						for (i = 0; i < npc_2; i++) {
 							if ((*n2_itr).suit == 5) {
@@ -808,13 +802,14 @@ void PageOne::PageOne_Update() {
 					f_itr = Field_card.begin();
 
 					if (Field_card.empty() == false && (*f_itr).suit == 5) {
-						lead = 1;
-					}
-					else {
-						lead = 0;
+						f_itr++;
 					}
 
 					reset = false;
+
+					if (Field_card.empty() == false) {
+						n3_suit = std::find(NPC_card_3.front().suit, NPC_card_3.back().suit, (*f_itr).suit);
+					}
 
 					if (Field_card.empty()) {
 						draw = false;
@@ -822,10 +817,6 @@ void PageOne::PageOne_Update() {
 					else {
 						npc_3 = NPC_card_3.size();
 						n3_itr = NPC_card_3.begin();
-
-						if (lead == 1) {
-							f_itr++;
-						}
 
 						for (i = 0; i < npc_3; i++) {
 							if ((*n3_itr).suit == 5) {
