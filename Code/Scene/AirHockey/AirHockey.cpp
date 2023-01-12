@@ -4,8 +4,8 @@
 #include "./../Scene.h"
 #include "AirHockey.h"
 
-void AirHockey_Scene::AirHockey_Initialize() {
-	//Parent = 
+void AirHockey_Scene::AirHockey_Initialize(Scene* scene) {
+	Parent = scene;
 	//色宣言
 	 White = GetColor(255, 255, 255);
 	 Red = GetColor(255, 50, 50);
@@ -31,7 +31,7 @@ void AirHockey_Scene::AirHockey_Initialize() {
 void AirHockey_Scene::Status_Reset() {
 	t_circle1.m_X = wall_xC -160, t_circle1.m_Y = wall_yC + 120, t_circle1.m_R = 27.0f;	//プレイヤー
 	t_circle2.m_X = wall_xC +160, t_circle2.m_Y = wall_yC - 120, t_circle2.m_R = 27.0f;	//CPU
-	t_circle3.m_X = wall_xC, t_circle3.m_Y = wall_yC, t_circle3.m_R = 20.0f, t_circle3.m_boundP = 6.0f, t_circle3.X_spd = 0.0f, t_circle3.Y_spd = 0.0f, t_circle3.Maxspd = 15.0f;	//パック
+	t_circle3.m_X = wall_xC, t_circle3.m_Y = wall_yC, t_circle3.m_R = 20.0f, t_circle3.m_boundPx = 1.0f,t_circle3.m_boundPy = 1.0f, t_circle3.X_spd = 0.0f, t_circle3.Y_spd = 0.0f, t_circle3.Maxspd = 15.0f;	//パック
 };
 
 //勝敗のフラグ関数
@@ -152,7 +152,6 @@ void  AirHockey_Scene::Player_Hit() {
 
 	if (Player_Wall_Check_Hit() == true)		//プレイヤーと壁が衝突した場合
 	{
-		DrawFormatString(150, 80,Red , "x:%d y:%d", mouseX, mouseY);
 		if (wall_L > t_circle1.m_l) {	//押し戻す処理　なんかガクガクする
 			t_circle1.m_X += 2.0f;
 		}
@@ -177,8 +176,8 @@ void  AirHockey_Scene::Player_Hit() {
 
 		if (t_circle1.m_X != mouseX) {
 
-			if (t_circle3.Maxspd > t_circle3.X_spd + t_circle3.m_boundP) { //パックの速度上限をパックの速度と加算速度を合わせた速度が上回らなければ
-				t_circle3.X_spd += t_circle3.m_boundP;					   //パックのX速度に加算速度を足す
+			if (t_circle3.Maxspd > t_circle3.X_spd + t_circle3.m_boundPx) { //パックの速度上限をパックの速度と加算速度を合わせた速度が上回らなければ
+				t_circle3.X_spd += t_circle3.m_boundPx;					   //パックのX速度に加算速度を足す
 			}
 			else {														   //速度上限を上回っていたら
 				t_circle3.X_spd = t_circle3.Maxspd;						   // 上限速度と同じ速度に置き換える
@@ -191,8 +190,8 @@ void  AirHockey_Scene::Player_Hit() {
 
 		if (t_circle1.m_Y != mouseY) {
 
-			if (t_circle3.Maxspd > t_circle3.Y_spd + t_circle3.m_boundP) {//上記処理のY軸バージョン
-				t_circle3.Y_spd += t_circle3.m_boundP;
+			if (t_circle3.Maxspd > t_circle3.Y_spd + t_circle3.m_boundPy) {//上記処理のY軸バージョン
+				t_circle3.Y_spd += t_circle3.m_boundPy;
 			}
 			else {
 				t_circle3.Y_spd = t_circle3.Maxspd;
@@ -210,7 +209,7 @@ void AirHockey_Scene::CPU_Movement() {
 
 	//CPUの思考シーケンス
 	if (Resalt() == false) {//試合中の間
-
+		
 
 	}
 }
@@ -430,6 +429,18 @@ void AirHockey_Scene::AirHockey_Update(){
 	Player_Hit();
 	Puck_Movement();
 	CPU_Movement();
+	if (Resalt() == true) {
+		if (score1 > score2) {
+			
+				Parent->SetNext(new Scene_Select());    // セレクトシーンに移動
+		}
+
+		if (score1 < score2) {
+
+				Parent->SetNext(new Scene_Select());    // セレクトシーンに移動
+			
+		}
+	}
 }
 
 void AirHockey_Scene::AirHockey_Draw() {
@@ -466,20 +477,18 @@ void AirHockey_Scene::Draw_All() {
 		//Effect();
 		DrawFormatString(wall_xC - 50, wall_T - 50, White, "%d - %d", score1, score2);
 	}
-	if (Resalt() == true) {
-		if (score1 > score2) {
-			for (int i = 0; i < 60; i++) {
 
-				DrawFormatString(wall_xC - 80, wall_yC, Red, "Victory!!");
-				//Parent->SetNext(new Scene_Select());    // セレクトシーンに移動
-			}
-		}
+	//試合終了後の勝敗描画
+	//if (Resalt() == true) {
+	//	if (score1 > score2) {
+	//			DrawFormatString(wall_xC - 80, wall_yC, Red, "Victory!!");
+	//			//Parent->SetNext(new Scene_Select());    // セレクトシーンに移動
+	//		
+	//	}
 
-		if (score1 < score2) {
-			for (int i = 0; i < 60; i++) {
-				DrawFormatString(wall_xC -100, wall_yC, Blue, "Defeat･･･");
-				//Parent->SetNext(new Scene_Select());    // セレクトシーンに移動
-			}
-		}
-	}
+	//	if (score1 < score2) {
+	//			DrawFormatString(wall_xC -100, wall_yC, Blue, "Defeat･･･");
+	//			//Parent->SetNext(new Scene_Select());    // セレクトシーンに移動
+	//	}
+	//}
 }

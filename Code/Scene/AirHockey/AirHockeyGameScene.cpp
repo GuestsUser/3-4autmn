@@ -5,7 +5,7 @@
 Scene_AirHockey::Scene_AirHockey() {
 	C_Air = new AirHockey_Scene();
 
-	C_Air->AirHockey_Initialize();
+	C_Air->AirHockey_Initialize(this);
 }
 
 Scene_AirHockey::~Scene_AirHockey() {

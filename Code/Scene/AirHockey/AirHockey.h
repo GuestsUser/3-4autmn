@@ -3,10 +3,10 @@
 class AirHockey_Scene {
 private:
 
-	//Scene* 
+	Scene* Parent;
 
 	typedef struct {
-		float m_X, m_Y, m_R, m_boundP,
+		float m_X, m_Y, m_R, m_boundPx, m_boundPy,
 			m_r, m_l, m_b, m_t,
 			X_spd, Y_spd, Maxspd;
 
@@ -29,7 +29,7 @@ private:
 	int wall_L, wall_R, wall_T, wall_B, wall_xC, wall_yC;
 
 public:
-	void AirHockey_Initialize();
+	void AirHockey_Initialize(Scene* scene);
 	void AirHockey_Draw();
 	void AirHockey_Update();
 	void AirHockey_Finalize();
@@ -38,6 +38,7 @@ public:
 	void Draw_All(); //描画
 	void Status_Reset();//プレイヤー、CPU、パックの初期位置と半径
 	bool Resalt();//勝敗のフラグ
+	void Debug_Data();
 
 	void Player_Control();//プレイヤー操作
 	bool Player_Puck_Check_Hit();//プレイヤーとパックの衝突判定フラグ
