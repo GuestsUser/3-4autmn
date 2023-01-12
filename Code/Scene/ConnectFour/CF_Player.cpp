@@ -110,14 +110,18 @@ void CF_Player::CF_Player_Update() {
 				if (PlayUser == Coin_CPU) {
 					CPU_CoinCheck(CF_Board, j, i);
 					if (j * 114 + 306 - 48 < CPU_X && CPU_X < j * 114 + 306 + 48) {
-						if (CF_Board[j][0] == Coin_Space) {
-							Coin_Fall();
+						if (CF_Board[j][0] != Coin_Space) {
+							while (CPU_j == j)
+							{
+								CPU_j = rand() % 7;
+								if (CPU_j != j) {
+									Coin_Fall();
+									break;
+								}
+							}
 						}
 						else {
-							CPU_RandomFall();
-							if (CPU_j != j) {
-								Coin_Fall();
-							}
+							Coin_Fall();
 						}
 					}
 				}
@@ -264,19 +268,21 @@ void CF_Player::CF_Player_Draw() {
 		if (CF_Clear == false) {
 			//ƒ|[ƒYƒ{ƒ^ƒ“
 			DrawRotaGraph(110, 65, 0.9, 0, Pause_Button, TRUE);
-			if (PlayUser == Coin_Player) {
-				DrawFormatString(1080, 50, 0x000000, "‚ ‚È‚½‚Ì”Ô‚Å‚·");
-				DrawRotaGraph(Player_X, Player_Y, 0.17, 0, pcoin[0], TRUE);
-			}
-			else {
-				DrawFormatString(1080, 50, 0x000000, "‚b‚o‚t‚Ì”Ô‚Å‚·");
-				DrawRotaGraph(CPU_X, Player_Y, 0.17, 0, ccoin[0], TRUE);
+			if (CF_Draw == false) {
+				if (PlayUser == Coin_Player) {
+					DrawFormatString(1080, 50, 0x000000, "‚ ‚È‚½‚Ì”Ô‚Å‚·");
+					DrawRotaGraph(Player_X, Player_Y, 0.17, 0, pcoin[0], TRUE);
+				}
+				else {
+					DrawFormatString(1080, 50, 0x000000, "‚b‚o‚t‚Ì”Ô‚Å‚·");
+					DrawRotaGraph(CPU_X, Player_Y, 0.17, 0, ccoin[0], TRUE);
+				}
 			}
 		}
 		SetFontSize(16);
 		for (i = 0; i < Board_Ysize; i++) {
 			for (j = 0; j < Board_Xsize; j++) {
-				if (CF_Board[j][0] == Coin_Space && PlayUser == Coin_Player) {
+				if (CF_Board[j][0] == Coin_Space && PlayUser == Coin_Player && CF_Draw == false && CF_Clear == false) {
 					DrawFormatString(297 + j * 114.5, Yajirusi_Y, Yajirusi_Col[j], "¥");
 				}
 				if (CF_Board[j][i] == Coin_Player) {
@@ -345,14 +351,17 @@ void CF_Player::CF_Player_Draw() {
 		}
 	}
 	if (CF_ClearText == true) {
+		SetFontSize(72);
 		if (CF_Clear == true) {
-			SetFontSize(72);
 			if (PlayUser != Coin_Player) {
 				DrawFormatString(400, 50, 0xffffff, "ƒvƒŒƒCƒ„[‚ÌŸ‚¿I");
 			}
 			else {
 				DrawFormatString(420, 50, 0xffffff, "‚b‚o‚t‚ÌŸ‚¿I");
 			}
+		}
+		else if (CF_Draw == true) {
+			DrawFormatString(500, 50, 0xffffff, "ˆø ‚« •ª ‚¯");
 		}
 		SetFontSize(48);
 		if (485 <= Mouse_X && Mouse_X <= 909 && 340 <= Mouse_Y && Mouse_Y <= 398) {
@@ -386,11 +395,6 @@ void CF_Player::CF_Player_Draw() {
 			DrawBox(465, 490, 927, 558, 0xffffff, TRUE);
 			DrawFormatString(480, 500, 0x000000, "ƒZƒŒƒNƒg‰æ–Ê‚É–ß‚é");
 		}
-	}
-	if (CF_Draw == true) {
-		SetFontSize(72);
-		DrawFormatString(440, 50, 0xffffff, "ˆø ‚« •ª ‚¯");
-		SetFontSize(16);
 	}
 	SetFontSize(16);
 
@@ -494,11 +498,9 @@ void CF_Player::ChangeTurn(int *PlayUser) {
 }
 int CF_Player::DrawCheck(int board[Board_Xsize][Board_Ysize]) {
 	int a, b, DrawFlg;
-	for (a = Board_Ysize; a >= 0; a--) {
-		for (b = Board_Xsize, DrawFlg = 1; b >= 0; b--) {
-			if (board[b][a] == Coin_Space) {
-				DrawFlg = 0;
-			}
+	for (b = 0, DrawFlg = 1; b < Board_Xsize; b++) {
+		if (board[b][0] == Coin_Space) {
+			DrawFlg = 0;
 		}
 	}
 	if (DrawFlg == 1) {
@@ -524,8 +526,8 @@ void CF_Player::CPU_CoinCheck(int board[Board_Xsize][Board_Ysize], int x, int y)
 				}
 			}
 		}
-		SpaceCheck(board, x, y);
 		if (CoinCheck == 1) { //3ƒ}ƒX‚Æ‚à“¯‚¶‚à‚Ì‚ª‚ ‚Á‚½‚ç
+			SpaceCheck(board, x, y);
 			if (board[x][y] == Coin_CPU) {
 				if (a == 0 && board[x + b * dx[a]][(y - b * dy[a])] == Coin_Space && 0 <= (y - (b * dy[a]))) { //ã‚É3‚Â‘±‚¢‚Ä‚¢‚ÄA‚»‚Ìã‚É‰½‚à‚È‚¢‚È‚ç
 					if (CPU_Position == 99) {
@@ -609,8 +611,8 @@ void CF_Player::CPU_CoinCheck(int board[Board_Xsize][Board_Ysize], int x, int y)
 				}
 			}
 		}
-		SpaceDoubleCheck(board, x, y);
-		if (DoubleCheck == 1 && CoinCheck == 0) { //2ŒÂ‘±‚¢‚Ä‚¢‚ÄA3ŒÂ‘±‚¢‚Ä‚¢‚é‚à‚Ì‚ª‚È‚¢Žž
+		else if (DoubleCheck == 1 && CoinCheck == 0) { //2ŒÂ‘±‚¢‚Ä‚¢‚ÄA3ŒÂ‘±‚¢‚Ä‚¢‚é‚à‚Ì‚ª‚È‚¢Žž
+			SpaceDoubleCheck(board, x, y);
 			if (board[x][y] == Coin_CPU) {
 				//ã‚É2‚Â‘±‚¢‚Ä‚¢‚ÄA‚»‚Ìã‚É‰½‚à‚È‚¢‚È‚ç
 				if (a == 0 && board[x + b * dx[a]][(y - (b * dy[a]) + 1)] == Coin_Space && 0 <= (y - (b * dy[a]) + 1)) {
