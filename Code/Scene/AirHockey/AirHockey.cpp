@@ -128,7 +128,7 @@ bool AirHockey_Scene::Puck_Wall_Check_Hit() {
 	t_circle3.m_t = t_circle3.m_Y - t_circle3.m_R;//上
 
 	if (wall_yC - 90 > t_circle3.m_t || wall_yC + 90 < t_circle3.m_b) {
-		if (wall_L > t_circle3.m_l || wall_R < t_circle3.m_r) {
+		if (wall_L > t_circle3.m_l || wall_R < t_circle3.m_X + t_circle3.m_R /2 ) {
 			return true;
 		}
 	}
@@ -144,6 +144,24 @@ bool AirHockey_Scene::Puck_Wall_Check_Hit() {
 };
 ////////////ここまで////////////
 
+///////////移動方向フラグ/////////////
+
+//プレイヤー
+bool AirHockey_Scene::Player_Move_Right() {
+
+}
+
+bool AirHockey_Scene::Player_Move_Left() {
+
+}
+
+bool AirHockey_Scene::Player_Move_Up() {
+
+}
+
+bool AirHockey_Scene::Player_Move_Under() {
+
+}
 
 ///////////移動処理や衝突時の条件分岐まとめ//////////
 

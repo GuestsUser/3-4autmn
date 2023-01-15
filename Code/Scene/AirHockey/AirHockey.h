@@ -43,12 +43,21 @@ public:
 	void Player_Control();//プレイヤー操作
 	bool Player_Puck_Check_Hit();//プレイヤーとパックの衝突判定フラグ
 	bool Player_Wall_Check_Hit();//プレイヤーと壁の衝突判定フラグ
+	bool Player_Move_Right();//プレイヤーが右に移動時のフラグ
+	bool Player_Move_Left();//プレイヤーが左に移動時のフラグ
+	bool Player_Move_Up();//プレイヤーが上に移動時のフラグ
+	bool Player_Move_Under();//プレイヤーが下に移動時のフラグ
 	void Player_Hit();//プレイヤー動きのまとめ
 
+	void CPU_Movement();//CPUの思考ルーチン
 	bool CPU_Puck_Check_Hit();//CPUとパックの衝突判定フラグ
+	bool CPU_Move_Right();//CPUが右に移動時の判定フラグ
+	bool CPU_Move_Left();//CPUが左に移動時の判定フラグ
+	bool CPU_Move_Up();//CPUが上に移動時の判定フラグ
+	bool CPU_Move_Under();//CPUが下に移動時の判定フラグ
 
 	bool Puck_Wall_Check_Hit();//パックと壁の衝突
-	void CPU_Movement();//CPUの動き
+	
 	void Puck_Movement();//パックの動き
 	void Effect();//パック衝突時のエフェクト
 };
