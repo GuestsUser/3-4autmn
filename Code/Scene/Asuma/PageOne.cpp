@@ -290,21 +290,14 @@ void PageOne::PageOne_Update() {
 
 					reset = false;
 
-					if (Field_card.empty() == false) {
-						p_suit = std::find(Player_card.front().suit, Player_card.back().suit, (*f_itr).suit);
-					}
-					else {
-						p_suit = 5;
-					}
-
-					if (Field_card.empty() || (*f_itr).suit == p_suit || p_suit == 5) {
-						draw = false;
-					}
-					else {
-						draw = true;
-					}
-
 					for (p_itr = Player_card.begin(); p_itr != Player_card.end(); p_itr++) {
+						if (Field_card.empty() == false || (*f_itr).suit == p_suit) {
+							draw = false;
+						}
+						else {
+							draw = true;
+						}
+
 						if ((*p_itr).suit == 5) {
 							draw = false;
 						}
@@ -463,10 +456,13 @@ void PageOne::PageOne_Update() {
 					reset = false;
 
 					if (Field_card.empty() == false) {
-						n1_suit = std::find(NPC_card_1.front().suit, NPC_card_1.back().suit, (*f_itr).suit);
+						n1_suit = std::find((*NPC_card_1.begin()).suit, (*NPC_card_1.end()).suit, (*f_itr).suit);
+					}
+					else {
+						n1_suit = 5;
 					}
 
-					if (Field_card.empty() || n1_suit == (*f_itr).suit) {
+					if (Field_card.empty() || n1_suit == (*f_itr).suit || n1_suit == 5) {
 						draw = false;
 					}
 					else {
@@ -542,11 +538,11 @@ void PageOne::PageOne_Update() {
 					for (n1_itr = NPC_card_1.begin(); n1_itr != NPC_card_1.end(); n1_itr++) {
 		
 						//山札0枚＆手札に出せるカードがない場合パスをする
-						if (Field_card.empty() == true || Card_obj.empty() == false || n1_suit == (*f_itr).suit || (*p_itr).suit == 5) {
+						if (Field_card.empty() == true || Card_obj.empty() == false || n1_suit == (*f_itr).suit || (*n1_itr).suit == 5) {
 							NPC1_Pass_Flg = false;
 							if (n > 90) {
 
-								if (Field_card.empty() || Field_card.front().suit == 5 || (*f_itr).suit == (*n1_itr).suit || (*n1_itr).suit == 5) {
+								if (Field_card.empty() || Field_card.front().suit == 5 || (*f_itr).suit == (*n1_itr).suit || (*n1_itr).suit == 5 || n1_suit == 5) {
 
 									if (PageOne_npc1 == false) {
 										PlaySoundMem(card_SE_2, DX_PLAYTYPE_BACK, TRUE);
@@ -637,7 +633,10 @@ void PageOne::PageOne_Update() {
 					reset = false;
 
 					if (Field_card.empty() == false) {
-						n2_suit = std::find(NPC_card_2.front().suit, NPC_card_2.back().suit, (*f_itr).suit);
+						n2_suit = std::find((*NPC_card_2.begin()).suit, (*NPC_card_2.end()).suit, (*f_itr).suit);
+					}
+					else {
+						n2_suit = 5;
 					}
 
 					if (Field_card.empty()) {
@@ -715,27 +714,11 @@ void PageOne::PageOne_Update() {
 					for (n2_itr = NPC_card_2.begin(); n2_itr != NPC_card_2.end(); n2_itr++) {
 
 						//山札0枚＆手札に出せるカードがない場合パスをする
-						if (Card_obj.empty() == true && Field_card.empty() == false && (*f_itr).suit != (*n2_itr).suit && (*n2_itr).suit != 5) {
-
-							if (50 < n && n <= 90) {
-								if (OneShot == false) {
-									PlaySoundMem(pass_SE, DX_PLAYTYPE_BACK, TRUE);
-									OneShot = true;
-								}
-
-								NPC2_Pass_Flg = true;
-							}
-
-							if (n > 90) {
-								flg_2 = true;
-								priority++;
-								n = 0;
-							}
-						}
-						else {
+						if (Field_card.empty() == true || Card_obj.empty() == false || n2_suit == (*f_itr).suit || (*n2_itr).suit == 5) {
+							NPC1_Pass_Flg = false;
 							if (n > 90) {
 
-								if (Field_card.empty() || Field_card.front().suit == 5 || (*f_itr).suit == (*n2_itr).suit || (*n2_itr).suit == 5) {
+								if (Field_card.empty() || Field_card.front().suit == 5 || (*f_itr).suit == (*n2_itr).suit || (*n2_itr).suit == 5 || n2_suit == 5) {
 
 									if (PageOne_npc2 == false) {
 										PlaySoundMem(card_SE_2, DX_PLAYTYPE_BACK, TRUE);
@@ -768,6 +751,22 @@ void PageOne::PageOne_Update() {
 								}
 							}
 						}
+						else {
+							if (50 < n && n <= 90) {
+								if (OneShot == false) {
+									PlaySoundMem(pass_SE, DX_PLAYTYPE_BACK, TRUE);
+									OneShot = true;
+								}
+
+								NPC2_Pass_Flg = true;
+
+								if (n > 90) {
+									flg_2 = true;
+									priority++;
+									n = 0;
+								}
+							}
+						}
 					}
 				}
 				else {
@@ -775,6 +774,7 @@ void PageOne::PageOne_Update() {
 				}
 				break;
 			}
+
 		case 3:	// NPC3
 			if (NPC3_setup == false) {
 				if (n > 15) {
@@ -808,7 +808,10 @@ void PageOne::PageOne_Update() {
 					reset = false;
 
 					if (Field_card.empty() == false) {
-						n3_suit = std::find(NPC_card_3.front().suit, NPC_card_3.back().suit, (*f_itr).suit);
+						n3_suit = std::find((*NPC_card_3.begin()).suit, (*NPC_card_3.end()).suit, (*f_itr).suit);
+					}
+					else {
+						n3_suit = 5;
 					}
 
 					if (Field_card.empty()) {
@@ -885,31 +888,16 @@ void PageOne::PageOne_Update() {
 					//NPCの手札からカードだす
 					for (n3_itr = NPC_card_3.begin(); n3_itr != NPC_card_3.end(); n3_itr++) {
 
-						//山札0枚＆手札に出せるカードがない場合パスをする（手動）
-						if (Card_obj.empty() == true && Field_card.empty() == false && (*f_itr).suit != (*n3_itr).suit && (*n3_itr).suit != 5) {
-
-							if (50 < n && n <= 90) {
-								if (OneShot == false) {
-									PlaySoundMem(pass_SE, DX_PLAYTYPE_BACK, TRUE);
-									OneShot = true;
-								}
-
-								NPC3_Pass_Flg = true;
-							}
-
-							if (n > 90) {
-								flg_3 = true;
-								priority++;
-								n = 0;
-							}
-						}
-						else {
+						//山札0枚＆手札に出せるカードがない場合パスをする
+						if (Field_card.empty() == true || Card_obj.empty() == false || n3_suit == (*f_itr).suit || (*n3_itr).suit == 5) {
+							NPC1_Pass_Flg = false;
 							if (n > 90) {
 
-								if (Field_card.empty() || Field_card.front().suit == 5 || (*f_itr).suit == (*n3_itr).suit || (*n3_itr).suit == 5) {
+								if (Field_card.empty() || Field_card.front().suit == 5 || (*f_itr).suit == (*n3_itr).suit || (*n3_itr).suit == 5 || n3_suit == 5) {
 
 									if (PageOne_npc3 == false) {
-										PlaySoundMem(card_SE_3, DX_PLAYTYPE_BACK, TRUE);
+										PlaySoundMem(card_SE_2, DX_PLAYTYPE_BACK, TRUE);
+										Field_card.push_back(*n3_itr);
 
 										if ((*n3_itr).num == 99) {
 											pri = 99;
@@ -932,12 +920,25 @@ void PageOne::PageOne_Update() {
 										flg_3 = true;
 										n = 0;
 										PageOne_flg = false;
-
-										Field_card.push_back(*n3_itr);
-
 										NPC_card_3.erase(n3_itr);
 										break;
 									}
+								}
+							}
+						}
+						else {
+							if (50 < n && n <= 90) {
+								if (OneShot == false) {
+									PlaySoundMem(pass_SE, DX_PLAYTYPE_BACK, TRUE);
+									OneShot = true;
+								}
+
+								NPC3_Pass_Flg = true;
+
+								if (n > 90) {
+									flg_3 = true;
+									priority++;
+									n = 0;
 								}
 							}
 						}
