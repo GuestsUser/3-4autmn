@@ -55,9 +55,27 @@ public:
 	bool CPU_Move_Left();//CPUが左に移動時の判定フラグ
 	bool CPU_Move_Up();//CPUが上に移動時の判定フラグ
 	bool CPU_Move_Under();//CPUが下に移動時の判定フラグ
-
-	bool Puck_Wall_Check_Hit();//パックと壁の衝突
 	
 	void Puck_Movement();//パックの動き
+	bool Puck_Wall_Check_Hit();//パックと壁の衝突
 	void Effect();//パック衝突時のエフェクト
+
+	//****プレイヤーから見たパックの位置方向フラグ****
+	bool PlayerBase_CPUPosition_Up();//上
+	bool PlayerBase_CPUPosition_UpperRight();//右上
+	bool PlayerBase_CPUPosition_Right();//右
+	bool PlayerBase_CPUPosition_UnderRight();//右下
+	bool PlayerBase_CPUPosition_Under();//下
+	bool PlayerBase_CPUPosition_UnderLeft();//左下
+	bool PlayerBase_CPUPosition_Left();//左
+	bool PlayerBase_CPUPosition_UpperLeft();//左上
+	//****CPUから見たパックの位置方向フラグ
+	bool CPUBase_CPUPosition_Up();//上
+	bool CPUBase_CPUPosition_UpperRight();//右上
+	bool CPUBase_CPUPosition_Right();//右
+	bool CPUBase_CPUPosition_UnderRight();//右下
+	bool CPUBase_CPUPosition_Under();//下
+	bool CPUBase_CPUPosition_UnderLeft();//左下
+	bool CPUBase_CPUPosition_Left();//左
+	bool CPUBase_CPUPosition_UpperLeft();//左上
 };

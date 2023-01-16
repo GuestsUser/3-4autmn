@@ -23,14 +23,14 @@ void AirHockey_Scene::AirHockey_Initialize(Scene* scene) {
 	 //メモ 画面サイズはx1280 y720  フィールドサイズ x150+980=1130 y180+480=660 1050			//シーン移行　parent->SetNext(new Scene_Select());
 	 wall_L = 150, wall_R = 1130, wall_T = 180, wall_B = 660, wall_xC = 640, wall_yC = 420;
 
-	//プレイヤー、CPUの初期位置と半径を設定    パックは加えてマレットからの運動量、X、Y軸の速度、速度上限を設定
+	//プレイヤー、CPUの初期位置、半径、X,Y軸の速度を設定    パックはさらにマレットからのX,Y軸の運動量、速度上限を設定
 	Status_Reset();
 }
 
 //位置リセット
 void AirHockey_Scene::Status_Reset() {
-	t_circle1.m_X = wall_xC -160, t_circle1.m_Y = wall_yC + 120, t_circle1.m_R = 27.0f;	//プレイヤー
-	t_circle2.m_X = wall_xC +160, t_circle2.m_Y = wall_yC - 120, t_circle2.m_R = 27.0f;	//CPU
+	t_circle1.m_X = wall_xC -160, t_circle1.m_Y = wall_yC + 120, t_circle1.m_R = 27.0f,t_circle1.X_spd = 3.0f,t_circle1.Y_spd = 3.0f;	//プレイヤー
+	t_circle2.m_X = wall_xC +160, t_circle2.m_Y = wall_yC - 120, t_circle2.m_R = 27.0f,t_circle2.X_spd = 3.0f,t_circle2.Y_spd = 3.0f;//CPU
 	t_circle3.m_X = wall_xC, t_circle3.m_Y = wall_yC, t_circle3.m_R = 20.0f, t_circle3.m_boundPx = 1.0f,t_circle3.m_boundPy = 1.0f, t_circle3.X_spd = 0.0f, t_circle3.Y_spd = 0.0f, t_circle3.Maxspd = 15.0f;	//パック
 };
 
@@ -121,7 +121,7 @@ bool AirHockey_Scene::CPU_Puck_Check_Hit() {
 
 //パックと壁の当たり判定
 bool AirHockey_Scene::Puck_Wall_Check_Hit() {
-	//衝突点を左右上下に設定
+	//衝突点を四方向に設定
 	t_circle3.m_r = t_circle3.m_X + t_circle3.m_R;//右
 	t_circle3.m_l = t_circle3.m_X - t_circle3.m_R;//左
 	t_circle3.m_b = t_circle3.m_Y + t_circle3.m_R;//下
@@ -147,24 +147,69 @@ bool AirHockey_Scene::Puck_Wall_Check_Hit() {
 ///////////移動方向フラグ/////////////
 
 //プレイヤー
-bool AirHockey_Scene::Player_Move_Right() {
-
+bool AirHockey_Scene::Player_Move_Right() {//右に移動中
+	if (t_circle1.m_X < mouseX) {
+		true;
+	}
+	false;
 }
 
-bool AirHockey_Scene::Player_Move_Left() {
-
+bool AirHockey_Scene::Player_Move_Left() {//左に移動中
+	if (t_circle1.m_X > mouseX) {
+		true;
+	}
+	false;
 }
 
-bool AirHockey_Scene::Player_Move_Up() {
-
+bool AirHockey_Scene::Player_Move_Up() {//上に移動中
+	if (t_circle1.m_Y > mouseY) {
+		true;
+	}
+	false;
 }
 
-bool AirHockey_Scene::Player_Move_Under() {
-
+bool AirHockey_Scene::Player_Move_Under() {//下に移動中
+	if (t_circle1.m_Y < mouseY) {
+		true;
+	}
+	false;
 }
+
+//CPU
+bool AirHockey_Scene::CPU_Move_Right() {//右に移動中
+	if (0.0f < t_circle2.X_spd) {
+		true;
+	}
+	false;
+}
+
+bool AirHockey_Scene::CPU_Move_Left() {//左に移動中
+	if (0.0f > t_circle2.X_spd) {
+		true;
+	}
+	false;
+}
+
+bool AirHockey_Scene::CPU_Move_Up() {//上に移動中
+	if (0.0f > t_circle2.Y_spd) {
+		true;
+	}
+	false;
+}
+
+bool AirHockey_Scene::CPU_Move_Under() {//下に移動中
+	if (0.0f < t_circle2.Y_spd) {
+		true;
+	}
+	false;
+}
+/////////ここまで//////////
+
+///////パック位置フラグ
+
+
 
 ///////////移動処理や衝突時の条件分岐まとめ//////////
-
 //プレイヤーが壁とパックに衝突時のそれぞれの処理
 void  AirHockey_Scene::Player_Hit() {
 
@@ -235,6 +280,9 @@ void AirHockey_Scene::CPU_Movement() {
 //パック
 void  AirHockey_Scene::Puck_Movement() {
 
+	t_circle3.m_X += t_circle3.X_spd;
+	t_circle3.m_Y += t_circle3.Y_spd;
+
 	//停止するまで減速し続ける
 	if (0.0f < t_circle3.X_spd) {
 		t_circle3.X_spd -= 0.01f;
@@ -278,7 +326,7 @@ void  AirHockey_Scene::Puck_Movement() {
 			t_circle3.Y_spd *= -1.0f;//縦軸反射
 		}
 
-		if (wall_R < t_circle3.m_X || wall_L > t_circle3.m_X) {//ゴールにパックが半分より多く入っていたら
+		if (wall_R < t_circle3.m_X || wall_L > t_circle3.m_X) {//ゴールにパックが
 			//ゴール内のy軸反射
 				if (wall_yC - 90 < t_circle3.m_b) {
 					t_circle3.m_Y -= t_circle3.m_R;//下
@@ -301,8 +349,6 @@ void  AirHockey_Scene::Puck_Movement() {
 			t_circle3.Y_spd *= -1.0f;//縦軸反射
 		}
 	}
-	t_circle3.m_X += t_circle3.X_spd;
-	t_circle3.m_Y += t_circle3.Y_spd;
 };
 
 //プレイヤー等速移動処理
@@ -493,7 +539,7 @@ void AirHockey_Scene::Draw_All() {
 		//DrawBox(wall_L - 10, wall_T - 10, wall_R + 11, wall_B + 11, White, FALSE);	//フィールド壁
 
 		//Effect();
-		DrawFormatString(wall_xC - 50, wall_T - 50, White, "%d - %d", score1, score2);
+		DrawFormatString(wall_xC - 50, wall_T - 50, White, "%d - %d", score1, score2);//得点
 	}
 
 	//試合終了後の勝敗描画
