@@ -290,16 +290,17 @@ void PageOne::PageOne_Update() {
 
 					reset = false;
 
-					for (p_itr = Player_card.begin(); p_itr != Player_card.end(); p_itr++) {
-						if (Field_card.empty() == false || (*f_itr).suit == p_suit) {
-							draw = false;
-						}
-						else {
-							draw = true;
-						}
+					if (draw == true) {
+						for (p_itr = Player_card.begin(); p_itr != Player_card.end(); p_itr++) {
+							if (Field_card.empty() || (*f_itr).suit == (*p_itr).suit) {
+								draw = false;
+								break;
+							}
 
-						if ((*p_itr).suit == 5) {
-							draw = false;
+							if ((*p_itr).suit == 5) {
+								draw = false;
+								break;
+							}
 						}
 					}
 
@@ -324,7 +325,7 @@ void PageOne::PageOne_Update() {
 									Card_obj.erase(itr);
 									
 									n = 0;
-									draw = false;
+									draw = true;
 									break;
 								}
 							}
@@ -334,7 +335,7 @@ void PageOne::PageOne_Update() {
 
 					for (p_itr = Player_card.begin(); p_itr != Player_card.end(); p_itr++) {
 						//山札0枚＆手札に出せるカードがない場合パスをする
-						if (Field_card.empty() == true || Card_obj.empty() == false || p_suit == (*f_itr).suit || (*p_itr).suit == 5 || p_suit == 5) {
+						if (Field_card.empty() == true || Card_obj.empty() == false || (*p_itr).suit == (*f_itr).suit || (*p_itr).suit == 5) {
 							Player_Pass_Flg = false;
 						}
 						else {
@@ -404,6 +405,7 @@ void PageOne::PageOne_Update() {
 										flg_p = true;
 										n = 0;
 										PageOne_flg = false;
+										draw = true;
 										Player_card.erase(p_itr);
 										break;
 									}
