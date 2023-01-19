@@ -19,6 +19,7 @@ class Cmp_Image;
 class Cmp_BetActionRecord;
 class Cmp_CPUBetLogic;
 class Cmp_Gage_Border;
+class Cmp_Gage_UpperBorder;
 class Cmp_Gage_MouseControl;
 class Cmp_PlayerRaiseDraw;
 class Gage;
@@ -38,6 +39,8 @@ public:
 class Poker::Pre :public Scene { //カードを各キャラへ配るフェイズ
 	Poker* parent; //このクラスの実体を持つPokerへの参照
 	std::deque<Cmp_BetActionRecord*> actionRecord; //charaから抜き出したコンポーネントを保持、配列の添え字はキャラと同様なので同じ列挙型でそのキャラのコンポーネントが取れる
+	Cmp_Gage_Border* playerGageBorder; //プレイヤーのゲージ下限設定機能のコンポーネント
+	Cmp_Gage_UpperBorder* playerGageUpper; //プレイヤーのゲージ上限設定機能のコンポーネント
 
 public:
 	Pre(Poker& set);
@@ -57,6 +60,7 @@ class Poker::Main :public Scene { //メインベットフェイズ
 
 	Gage* playerGage; //プレイヤー保持のゲージ
 	Cmp_Gage_Border* playerGageBorder; //プレイヤーのゲージ下限設定機能のコンポーネント
+	Cmp_Gage_UpperBorder* playerGageUpper; //プレイヤーのゲージ上限設定機能のコンポーネント
 	Cmp_Gage_MouseControl* gageControl; //ゲージ操作を受け付けるコンポーネント
 
 	Poker* parent; //このクラスの実体を持つPokerへの参照

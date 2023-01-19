@@ -7,7 +7,7 @@
 
 #include <string>
 
-PK_Dealer::PK_Dealer() :btn(Btn()), baseBB(50), addBB(10), maxBet(10) { FullReset(); } //maxBetはゲーム中変化しないのでFullResetには含めずこちらで10と定義しておく
+PK_Dealer::PK_Dealer() :btn(Btn()), baseBB(600), addBB(10), maxBet(10) { FullReset(); } //maxBetはゲーム中変化しないのでFullResetには含めずこちらで10と定義しておく
 
 void PK_Dealer::Draw() {
 	btn.Draw(); //ボタン画像の描写

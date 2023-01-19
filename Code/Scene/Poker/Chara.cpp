@@ -83,6 +83,7 @@ void Chara::GetHandNum(std::deque<int>& set) const {
 
 void Chara::SetBBView(BBView set) {
 	bbView = set; //表示を新しい物に入れ替え
+	coinBack[1]->SetRunDraw(true); //表示を付ける
 	if (bbView == BBView::hide) { coinBack[1]->SetRunDraw(false); } //隠し指定だった場合描写を切る
 	else { coinBack[1]->SetAnimeSub((int)bbView); } //新しい表示に切り替える
 }
