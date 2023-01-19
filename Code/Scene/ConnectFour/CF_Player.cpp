@@ -611,7 +611,7 @@ void CF_Player::CPU_CoinCheck(int board[Board_Xsize][Board_Ysize], int x, int y)
 				}
 			}
 		}
-		else if (DoubleCheck == 1 && CoinCheck == 0) { //2ŒÂ‘±‚¢‚Ä‚¢‚ÄA3ŒÂ‘±‚¢‚Ä‚¢‚é‚à‚Ì‚ª‚È‚¢
+		if (DoubleCheck == 1 && CoinCheck == 0) { //2ŒÂ‘±‚¢‚Ä‚¢‚ÄA3ŒÂ‘±‚¢‚Ä‚¢‚é‚à‚Ì‚ª‚È‚¢
 			SpaceDoubleCheck(board, x, y);
 			if (board[x][y] == Coin_CPU) {
 				//ã‚É2‚Â‘±‚¢‚Ä‚¢‚ÄA‚»‚Ìã‚É‰½‚à‚È‚¢‚È‚ç
