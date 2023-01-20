@@ -125,8 +125,7 @@ void PageOne::PageOne_Initialize(Scene* scene) {
 	npc_2 = 0;
 	npc_3 = 0;
 
-	//priority = GetRand(MAX - 1);
-	priority = 0;
+	priority = GetRand(MAX - 1);
 
 	for (i = 0; i < 52; i++) {
 		Card_obj.push_back(Card(card_type[i], i % 13, i / 13, Deck_X, Deck_Y));
@@ -261,24 +260,22 @@ void PageOne::PageOne_Update() {
 		case 0:	// player
 			if (Player_setup == false) {
 				if (n > 15) {
-					if (Player_card.size() != 0) {
-						itr = Card_obj.begin();
-						r = GetRand(Card_obj.size() - 1);
-						for (int i = 0; i < r; i++) {
-							itr++;
-						}
-						(*itr).card_x = Player_X;
-						(*itr).card_y = Player_Y;
-						PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
-						Player_card.push_back(*itr);
-
-						if (Player_card.size() >= MAX) {
-							Player_setup = true;
-						}
-						priority++;
-						n = 0;
-						Card_obj.erase(itr);
+					itr = Card_obj.begin();
+					r = GetRand(Card_obj.size() - 1);
+					for (int i = 0; i < r; i++) {
+						itr++;
 					}
+					(*itr).card_x = Player_X;
+					(*itr).card_y = Player_Y;
+					PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
+					Player_card.push_back(*itr);
+
+					if (Player_card.size() >= MAX) {
+						Player_setup = true;
+					}
+					priority++;
+					n = 0;
+					Card_obj.erase(itr);
 				}
 				break;
 			}
