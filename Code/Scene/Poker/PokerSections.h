@@ -39,6 +39,7 @@ public:
 class Poker::Pre :public Scene { //カードを各キャラへ配るフェイズ
 	Poker* parent; //このクラスの実体を持つPokerへの参照
 	std::deque<Cmp_BetActionRecord*> actionRecord; //charaから抜き出したコンポーネントを保持、配列の添え字はキャラと同様なので同じ列挙型でそのキャラのコンポーネントが取れる
+	Gage* playerGage; //プレイヤー保持のゲージ
 	Cmp_Gage_Border* playerGageBorder; //プレイヤーのゲージ下限設定機能のコンポーネント
 	Cmp_Gage_UpperBorder* playerGageUpper; //プレイヤーのゲージ上限設定機能のコンポーネント
 
@@ -152,10 +153,17 @@ public:
 
 class Poker::GameClear :public Scene {
 	Poker* parent; //このクラスの実体を持つPokerへの参照
+	Button nextButton; //クリックする事で次シーンへ移行する
+
+	int count;
+	int clickStartTime; //countがこの数値に達するとボタンクリックの検知を開始する
+	int blink; //この時間間隔で説明を点滅させる
+
 	Vector3 titlePos; //ゲームクリアである事を示すメッセージの表示位置
+	Vector3 explainPos; //ボタン説明の配置位置
 
 public:
-	GameClear(Poker& set) :parent(&set) {}
+	GameClear(Poker& set);
 	void Update();
 	void Draw();
 };

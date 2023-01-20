@@ -55,7 +55,10 @@ int ActionEndCount(std::deque<Cmp_BetActionRecord*>& actionRecord, int center) {
 	int endCount = 1; //アクションが終わったキャラ数を記録する
 	for (endCount; endCount < (int)Poker::Character::length; ++endCount) {
 		Cmp_BetActionRecord current = *actionRecord[(center + endCount) % (int)Poker::Character::length]; //今回チェックするキャラ、そのアクセスショートカット
-		if (!(BetIgnore(&current) || current.GetIsAction())) { break; } //チェックキャラが終了条件の1つにも引っかからなかった場合中断
+		if (current.GetIsAction()) { continue; } //アクション終了済みならやり直し
+		if (BetIgnore(&current)) { continue; } //アクション不能ならやり直し
+		break; //ここまで来たキャラはアクション可能なので終わり
+		//if (!(BetIgnore(&current) || current.GetIsAction())) { break; } //チェックキャラが終了条件の1つにも引っかからなかった場合中断
 	}
 	return endCount;
 }
@@ -73,7 +76,9 @@ int EnableCharaSearch(std::deque<Cmp_BetActionRecord*>& actionRecord, int center
 	int add = 0;
 	for (add; add < actionRecord.size(); ++add) { //centerを中心に対象キャラが敗北しているか調べる
 		Cmp_BetActionRecord current = *actionRecord[(center + add) % actionRecord.size()]; //今回チェックするキャラ、そのアクセスショートカット
-		if (!(BetIgnore(&current) || current.GetIsAction())) { break; } //チェックキャラが終了条件の1つにも引っかからなかった場合中断
+		if (current.GetIsAction()) { continue; } //アクション終了済みならやり直し
+		if (BetIgnore(&current)) { continue; } //アクション不能ならやり直し
+		break; //ここまで来たキャラはアクション可能なので終わり
 	}
 	if (add >= actionRecord.size()) { return -1; } //全員操作不能になっていた場合-1を返す
 	return (center + add) % actionRecord.size(); //centerの次にすぐ行動可能なキャラ添え字を返す
@@ -172,9 +177,16 @@ void Poker::Ini::Update() {
 	parent->pot->Reset();
 	parent->dealer->Reset();
 	parent->cardDealer->Reset();
-	for (auto chara : parent->chara) { chara->Reset(); }
+	for (int i = 0; i < parent->chara.size(); ++i) {
+		parent->chara[i]->Reset(); //キャラコンポーネントのリセット
 
-	//未デバッグ
+		if (actionRecord[i]->GetIsLose()) { //今回キャラが敗北済みの場合
+			std::deque<PK_Card*>* card = parent->chara[i]->EditCard(); //カードを管理する配列を取得
+			for (auto itr : *card) { itr->SetDrawMode(PK_Card::DrawMode::fold); } //カードをfold表示にする
+		}
+
+	}
+
 	int pos = EnableCharaSearch(actionRecord, parent->dealer->ReadBtn()->GetBtnPos()); //敗北済みキャラを飛ばしてポジション決定
 	parent->dealer->EditBtn()->SetBtnPos(pos); //勝負可能な最短のキャラ位置に設定する
 	parent->dealer->SetActionChara(EnableCharaSearch(actionRecord, (pos + 1) % parent->chara.size())); //位置更新に合わせて初めにアクションを開始するキャラを更新する
@@ -183,13 +195,15 @@ void Poker::Ini::Update() {
 }
 
 Poker::Pre::Pre(Poker& set) :parent(&set), actionRecord(std::deque<Cmp_BetActionRecord*>(4)) {
-	playerGageBorder = parent->chara[(int)Poker::Character::player]->EditCmp<Gage>()->EditCmp<Cmp_Gage_Border>(); //プレイヤーゲージから下限設定機能の取り出し
-	playerGageUpper = parent->chara[(int)Poker::Character::player]->EditCmp<Gage>()->EditCmp<Cmp_Gage_UpperBorder>(); //プレイヤーゲージから上限設定機能の取り出し
+	playerGage = parent->chara[(int)Poker::Character::player]->EditCmp<Gage>(); //ゲージ取り出し
+	playerGageBorder = playerGage->EditCmp<Cmp_Gage_Border>(); //ゲージから各種機能を取り出す
+	playerGageUpper = playerGage->EditCmp<Cmp_Gage_UpperBorder>(); //プレイヤーゲージから上限設定機能の取り出し
 	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
 }
 
 void Poker::Pre::Update() {
 	BBSBLevy(parent->dealer->ReadBtn()->GetBtnPos(), parent->chara, actionRecord, *playerGageBorder, *playerGageUpper, *parent->pot, *parent->dealer); //BB、SBの徴収
+	playerGage->SetVol(0); //プレイヤーのベットゲージ初期化
 
 	for (auto itr : parent->chara) {
 
@@ -290,10 +304,9 @@ void Poker::Main::Update() {
 				playerGageBorder->SetBorder((float)(pay + oldPay) / (parent->dealer->GetBB() * parent->dealer->GetMaxBet())); //ゲージの最低値を更新
 				record->SetIsAction(true); //レイズしたキャラのアクションは終了済みに設定する
 			}
-			parent->dealer->SetActionChara((ActionEndCount(actionRecord, access) + access) % (int)Poker::Character::length); //終了済みキャラを飛ばし次のキャラへアクション順を回す
-
-
 			int endCount = ActionEndCount(actionRecord, access); //アクション終了済みキャラのチェックを行う
+			parent->dealer->SetActionChara((endCount + access) % (int)Poker::Character::length); //終了済みキャラを飛ばし次のキャラへアクション順を回す
+
 			if (endCount >= (int)Poker::Character::length) { //全キャラ終了済みの場合
 				SequenceNextReset(actionRecord); //アクション実行状況を次シーン向けにリセット
 				parent->dealer->SetActionChara((ChangeEndCount(actionRecord, access) + access) % (int)Poker::Character::length); //changeはallInしたキャラもアクション対象なので次回キャラの設定に含める
@@ -419,6 +432,7 @@ void Poker::Change::Update() {
 
 			if (endCount >= (int)Poker::Character::length) { //全キャラ終了済みの場合
 				SequenceNextReset(actionRecord); //アクション実行状況を次シーン向けにリセット
+
 				parent->dealer->SetActionChara((ActionEndCount(actionRecord, access) + access) % (int)Poker::Character::length); //mainではallInキャラのアクションは不能なのでそれを取り除いた値に応じてとなる
 				parent->run = parent->list[(int)Poker::Section::main]; //セカンドベットへ
 				((Poker::Main*)parent->list[(int)Poker::Section::main])->SetPhase(1);
@@ -743,7 +757,6 @@ void Poker::NoContest::Update() {
 
 	if (count == clickStartTime) { //クリック検知開始タイミングになったら
 
-		//未デバッグ
 		LoseSet(parent->chara, actionRecord); //敗北状況の設定
 		Poker::Section next = GameEndCheck(parent->chara, actionRecord); //敗北状況から次向かうべきシーンを取得
 
@@ -775,8 +788,8 @@ void Poker::NoContest::Draw() {
 
 
 Poker::GameOver::GameOver(Poker& set) :parent(&set), count(0), clickStartTime(60), blink(30), nextButton(WINDOW_X / 2, WINDOW_Y / 2, WINDOW_X / 2, WINDOW_Y / 2, false) {
-	titlePos.SetXYZ(513, 189, 0); //ノーコンテストである事を示すメッセージの位置設定
-	explainPos.SetXYZ(432, 312, 0); //ボタン説明配置位置
+	titlePos.SetXYZ(513, 189, 0); //ゲームオーバーである事を示すメッセージの位置設定
+	explainPos.SetXYZ(472, 312, 0); //ボタン説明配置位置
 
 	nextButton.SetClick(new Cmp_Button_ClickCheck()); //クリックチェック用コンポーネント追加
 }
@@ -800,5 +813,34 @@ void Poker::GameOver::Update() {
 
 void Poker::GameOver::Draw() {
 	DrawStringToHandle(titlePos.GetX(), titlePos.GetY(), "ゲームオーバー!", *PokerFontData::GetColor(PokerFontData::color::normal), *PokerFontData::GetHandle(PokerFontData::type::normal));
+	if (count >= clickStartTime && ((count - clickStartTime) / blink) % 2 == 0) { DrawStringToHandle(explainPos.GetX(), explainPos.GetY(), "画面をクリックで新しく始める", *PokerFontData::GetColor(PokerFontData::color::edgeColor), *PokerFontData::GetHandle(PokerFontData::type::edge), *PokerFontData::GetColor(PokerFontData::color::edgeNormal)); }
+}
+
+Poker::GameClear::GameClear(Poker& set) :parent(&set), count(0), clickStartTime(60), blink(30), nextButton(WINDOW_X / 2, WINDOW_Y / 2, WINDOW_X / 2, WINDOW_Y / 2, false) {
+	titlePos.SetXYZ(513, 189, 0); //ゲームクリアである事を示すメッセージの位置設定
+	explainPos.SetXYZ(472, 312, 0); //ボタン説明配置位置
+
+	nextButton.SetClick(new Cmp_Button_ClickCheck()); //クリックチェック用コンポーネント追加
+}
+
+void Poker::GameClear::Update() {
+	nextButton.Update(); //ボタンUpdate実行
+	if (count == clickStartTime) { nextButton.SetRunClickMonitor(true); } //開始タイミングになったらクリック検知開始
+
+	if (nextButton.GetRunUpdateClick()) { //クリックされた場合
+		FullReset(parent->chara, *parent->pot, *parent->dealer, *parent->cardDealer); //新しいゲームの準備をする
+		parent->run = parent->list[(int)Poker::Section::pre]; //最初の状態に戻る
+
+		nextButton.SetRunUpdateClick(false); //クリック状態を戻す
+		nextButton.SetRunDrawClick(false); //念の為Drawも戻す
+		nextButton.SetRunClickMonitor(false); //クリック検知の無効化
+		count = -1; //カウントリセット
+	}
+
+	++count;
+}
+
+void Poker::GameClear::Draw() {
+	DrawStringToHandle(titlePos.GetX(), titlePos.GetY(), "ゲームクリア!!", *PokerFontData::GetColor(PokerFontData::color::normal), *PokerFontData::GetHandle(PokerFontData::type::normal));
 	if (count >= clickStartTime && ((count - clickStartTime) / blink) % 2 == 0) { DrawStringToHandle(explainPos.GetX(), explainPos.GetY(), "画面をクリックで新しく始める", *PokerFontData::GetColor(PokerFontData::color::edgeColor), *PokerFontData::GetHandle(PokerFontData::type::edge), *PokerFontData::GetColor(PokerFontData::color::edgeNormal)); }
 }

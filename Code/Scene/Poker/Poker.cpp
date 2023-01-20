@@ -149,6 +149,7 @@ Poker::Poker() :pot(new Pot()), dealer(new PK_Dealer()), cardDealer(new CardDeal
 			current = new CPU(); //cpuの精製
 			current->SetCmp(new Cmp_CPUBetLogic(*dealer)); //cpuのベットに必要なデータを纏めたBetLogicを導入
 		}
+		current->SetBBView(PK_Player::BBView::hide); //BB表示は隠しておく
 
 
 		current->Place(cardPos, backPos); //カードとコイン表示背景の配置
@@ -166,6 +167,7 @@ Poker::Poker() :pot(new Pot()), dealer(new PK_Dealer()), cardDealer(new CardDeal
 	list.push_back(new ShowDown(*this));
 	list.push_back(new NoContest(*this));
 	list.push_back(new GameOver(*this));
+	list.push_back(new GameClear(*this));
 
 
 
