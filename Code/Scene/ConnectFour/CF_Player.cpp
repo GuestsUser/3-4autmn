@@ -46,6 +46,7 @@ void CF_Player::CF_Player_Initialize(Scene* scene){
 	PlayUser = rand() % 2 + 1; //プレイヤーの先攻後攻をランダムで取得
 	CPU_j = rand() % 7;
 	CPU_Position = 99;
+	CPU_Start = 0;
 	OldKey = KEY_FREE;
 
 	Pause_OneClick = false;
@@ -527,9 +528,9 @@ void CF_Player::CPU_CoinCheck(int board[Board_Xsize][Board_Ysize], int x, int y)
 			}
 		}
 		if (CoinCheck == 1) { //3マスとも同じものがあったら
-			SpaceCheck(board, x, y);
+			DoubleCheck = 0;
 			if (board[x][y] == Coin_CPU) {
-				if (a == 0 && board[x + b * dx[a]][(y - b * dy[a])] == Coin_Space && 0 <= (y - (b * dy[a]))) { //上に3つ続いていて、その上に何もないなら
+				if (a == 0 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space && 0 <= y - (b * dy[a])) { //上に3つ続いていて、その上に何もないなら
 					if (CPU_Position == 99) {
 						CPU_j = x;
 						CPU_Position = 0;
@@ -570,7 +571,7 @@ void CF_Player::CPU_CoinCheck(int board[Board_Xsize][Board_Ysize], int x, int y)
 				}
 			}
 			else if (board[x][y] == Coin_Player) {
-				if (a == 0 && board[x + b * dx[a]][(y - b * dy[a])] == Coin_Space && 0 <= (y - (b * dy[a]))) { //上に3つ続いていて、その上に何もないなら
+				if (a == 0 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space && 0 <= y - (b * dy[a])) { //上に3つ続いていて、その上に何もないなら
 					if (CPU_Position == 99) {
 						CPU_j = x;
 						CPU_Position = 0;
@@ -610,9 +611,9 @@ void CF_Player::CPU_CoinCheck(int board[Board_Xsize][Board_Ysize], int x, int y)
 					}
 				}
 			}
+			SpaceCheck(board, x, y);
 		}
-		if (DoubleCheck == 1 && CoinCheck == 0) { //2個続いていて、3個続いているものがない時
-			SpaceDoubleCheck(board, x, y);
+		else if (DoubleCheck == 1 && CoinCheck == 0) { //2個続いていて、3個続いているものがない時
 			if (board[x][y] == Coin_CPU) {
 				//上に2つ続いていて、その上に何もないなら
 				if (a == 0 && board[x + b * dx[a]][(y - (b * dy[a]) + 1)] == Coin_Space && 0 <= (y - (b * dy[a]) + 1)) {
@@ -690,6 +691,7 @@ void CF_Player::CPU_CoinCheck(int board[Board_Xsize][Board_Ysize], int x, int y)
 					}
 				}
 			}
+			SpaceDoubleCheck(board, x, y);
 		}
 		if (CPU_Position == 99) {
 			CPU_RandomFall();
@@ -848,7 +850,18 @@ void CF_Player::SpaceDoubleCheck(int board[Board_Xsize][Board_Ysize], int x, int
 }
 void CF_Player::CPU_RandomFall() {
 	if (DlayCount == 0) {
-		CPU_j = rand() % 7;
+		if (CPU_Start == 0) {
+			CPU_j = 3;
+			CPU_Start = 1;
+		}
+		else {
+			if (CF_Board[1][0] == Coin_Space || CF_Board[2][0] == Coin_Space || CF_Board[3][0] == Coin_Space || CF_Board[4][0] == Coin_Space ||CF_Board[5][0] == Coin_Space ) {
+				CPU_j = rand() % 5 + 1;
+			}
+			else {
+				CPU_j = rand() % 7;
+			}
+		}
 		DlayCount = 1;
 	}
 }
