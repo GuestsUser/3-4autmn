@@ -38,7 +38,7 @@ public:
 	void Draw_All(); //描画
 	void Status_Reset();//プレイヤー、CPU、パックの初期位置と半径
 	bool Resalt();//勝敗のフラグ
-	void Debug_Data();
+	void Debug_Data();//デバック表示
 
 	void Player_Control();//プレイヤー操作
 	bool Player_Puck_Check_Hit();//プレイヤーとパックの衝突判定フラグ
