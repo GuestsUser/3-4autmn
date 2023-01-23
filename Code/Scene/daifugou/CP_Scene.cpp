@@ -26,6 +26,6 @@ void CP_Scene::Update() {
 
 void CP_Scene::Draw() {
 	//Player->CP_Player_Draw();
-	Player->CP::Player_Draw();
+	Player->Player_Draw();
 	/*Player->main();*/
 }
