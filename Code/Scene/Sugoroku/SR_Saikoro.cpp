@@ -28,6 +28,7 @@ SR_Saikoro::SR_Saikoro(Scene*scene) {
 	SR_BGM = LoadSoundMem("Resource/bgm/SR_BGM.wav"); //ゲーム中のBGM
 	SR_saikoro = LoadSoundMem("Resource/se/SR_saikoro.wav"); //ゲーム中のBGM
 	SR_idou = LoadSoundMem("Resource/se/SR_idou.wav"); //ゲーム中のBGM
+	SR_resaikoro = LoadSoundMem("Resource/se/SR_cursor.wav"); //サイコロのBGM
 
 	SR_GOAL = LoadGraph("Resource//image/SR_GOAL.png");
 	Pause_Button = LoadGraph("Resource/image/PauseButton.png");
@@ -69,7 +70,10 @@ void SR_Saikoro::Update() {
 		}
 		array[0] = Player1sum; array[1] = Player2sum; array[2] = Player3sum; array[3] = Player4sum;
 		if (Shuffle == true) {
-			//PlaySoundMem(SR_saikoro, DX_PLAYTYPE_BACK);
+			if (count % 4 == 0) {
+				PlaySoundMem(SR_resaikoro, DX_PLAYTYPE_BACK);
+			}
+			//PlaySoundFile("Resource/se/SR_saikoro.wav", DX_PLAYTYPE_BACK);
 		}
 		switch (num) {
 		case 1:	/*プレイヤーのターン*/

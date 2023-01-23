@@ -29,6 +29,7 @@ private:
 	int SR_saikoro;
 	int SR_idou;
 	int SR_BGM;
+	int SR_resaikoro;
 
 
 	int count;
