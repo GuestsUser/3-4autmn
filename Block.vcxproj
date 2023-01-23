@@ -23,7 +23,6 @@
     <ClCompile Include="Code\Component\Cmp_ButtonGroup.cpp" />
     <ClCompile Include="Code\Component\Cmp_Gage_Border.cpp" />
     <ClCompile Include="Code\Component\Cmp_Gage_MouseControl.cpp" />
-    <ClCompile Include="Code\Component\Cmp_Gage_UpperBorder.cpp" />
     <ClCompile Include="Code\Component\Cmp_Image.cpp" />
     <ClCompile Include="Code\Component\Gage.cpp" />
     <ClCompile Include="Code\GetKey.cpp" />
@@ -52,7 +51,6 @@
     <ClCompile Include="Code\Scene\Othello\Scene_Othello.cpp" />
     <ClCompile Include="Code\Scene\daifugou\CP_Scene.cpp" />
     <ClCompile Include="Code\Scene\Poker\Btn.cpp" />
-    <ClCompile Include="Code\Scene\Poker\Cmp_ThinkingImage.cpp" />
     <ClCompile Include="Code\Scene\Poker\PK_Card.cpp" />
     <ClCompile Include="Code\Scene\Poker\CardDealer.cpp" />
     <ClCompile Include="Code\Scene\Poker\Chara.cpp" />
@@ -84,7 +82,6 @@
     <ClInclude Include="Code\Component\Cmp_Button_ClickCheck.h" />
     <ClInclude Include="Code\Component\Cmp_Gage_Border.h" />
     <ClInclude Include="Code\Component\Cmp_Gage_MouseControl.h" />
-    <ClInclude Include="Code\Component\Cmp_Gage_UpperBorder.h" />
     <ClInclude Include="Code\Component\Component.h" />
     <ClInclude Include="Code\Component\Cmp_Image.h" />
     <ClInclude Include="Code\Component\Cmp_Transform.h" />
@@ -117,7 +114,6 @@
     <ClInclude Include="Code\Scene\daifugou\CP_Scene.h" />
     <ClInclude Include="Code\Scene\Poker\BetLogicInitializeData.h" />
     <ClInclude Include="Code\Scene\Poker\Btn.h" />
-    <ClInclude Include="Code\Scene\Poker\Cmp_ThinkingImage.h" />
     <ClInclude Include="Code\Scene\Poker\PK_Card.h" />
     <ClInclude Include="Code\Scene\Poker\CardDealer.h" />
     <ClInclude Include="Code\Scene\Poker\Chara.h" />

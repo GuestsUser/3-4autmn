@@ -18,7 +18,6 @@ protected:
   int spt_hand_num;         /*スプリット時の手札枚数*/
   int spt_score;            /*スプリット時の返り値用変数（計算結果)*/
 
-  int card_hdl[54];
   int card_type[5][13];
   int cd_x, cd_y, cd_w, cd_h;
   int type;                 /*カードの種類（スペード、ハート、ダイヤ、クラブ）を探索*/
@@ -45,9 +44,9 @@ protected:
   bool split;
   bool D_dbl = false;
   bool D_spt_dbl = false;
-  bool D_ins;
 
 public:
+  int card_hdl[54];
 
   Dealer();                /*コンストラクタ*/
   ~Dealer();               /*デストラクタ*/
@@ -60,7 +59,6 @@ public:
   int Spt_Calc();          /*スプリット時のスコアの計算*/
 
   bool BlackJack();
-  bool Set_Ins();
 
   virtual int Set_Magnification(float setrate,int getcoin);
   virtual void Show_Hand();        /*手札を表示*/

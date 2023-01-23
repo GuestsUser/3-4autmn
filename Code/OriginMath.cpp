@@ -63,13 +63,13 @@ void OriginMath::VertexModification(Vector3 pos[4], const Vector3& size, const C
 	float sizeY = size.GetY() * ts.ReadScale().GetY();
 
 	//頂点作成
-	float x[] = { -sizeX / 2 - (sizeX / 2 * (int)hp), sizeX / 2 - (sizeX / 2 * (int)hp) }; //pivotに合わせて画像サイズを変形
-	float y[] = { -sizeY / 2 - (sizeY / 2 * (int)vp), sizeY / 2 - (sizeY / 2 * (int)vp) };
+	float x[] = { -sizeX / 2 - (sizeX / 2 * (int)vp), sizeX / 2 - (sizeX / 2 * (int)vp) }; //pivotに合わせて画像サイズを変形
+	float y[] = { -sizeY / 2 - (sizeY / 2 * (int)hp), sizeY / 2 - (sizeY / 2 * (int)hp) };
 	float point[] = { x[0],y[0],x[1],y[0],x[1],y[1],x[0],y[1] }; //左上、右上、右下、左下頂点
 	Quaternion modify = OriginMath::Rad2Quaternion(ts.ReadRotate()); //回転のクォータニオン化
 
 	Vector3 local = ts.ReadPos();
-	local.SetXYZ(local.GetX() + size.GetX() / 2 * (int)hp, local.GetY() + size.GetY() / 2 * (int)vp, 0);//pivotに合わせて現在座標が表示の中心に来るようxyを調整
+	local.SetXYZ(local.GetX() + sizeX / 2 * (int)vp, local.GetY() + sizeY / 2 * (int)hp, 0);//pivotに合わせて現在座標が表示の中心に来るようxyを調整
 
 	for (int i = 0; i < 4; i++) {
 		pos[i].SetXYZ(point[i * 2], point[i * 2 + 1], 0);

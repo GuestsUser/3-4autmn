@@ -224,23 +224,24 @@ void sort(int sort_x, int* sort_y, int sort_z) {
 		int i;
 
 		onesec();
+
 		/* トラッシュを表示 */
 		if (trash[0] == 0) /* ﾄﾗｯｼｭが空だった場合 */
 			DrawFormatString(650, 250, GetColor(255, 255, 255), "[場] 空", trash[0]);
-			//printf("[場] 空\n");
+		//printf("[場] 空\n");
 		else { /* ﾄﾗｯｼｭにｶｰﾄﾞがあった場合 */
-			DrawFormatString(650, 250, GetColor(255, 255, 255), "[場]",trash[0]);
+			DrawFormatString(650, 250, GetColor(255, 255, 255), "[場]", trash[0]);
 			//printf("[場]");
 			for (i = 1; i <= trash[0]; i++) {
 
 				if (mar(trash[i]) != 'J')
 					//DrawRotaGraph(100,100,500, 350, 0.5, 0, card_type[i], TRUE);// mar(*trash), num(*trash)
 					printf(" %c%2d ", mar(trash[i]), num(trash[i]));
-					//DrawFormatString(650, 450, GetColor(255, 255, 255), "%c%2d", mar(trash[i]), num(trash[i]));
+				//DrawFormatString(650, 450, GetColor(255, 255, 255), "%c%2d", mar(trash[i]), num(trash[i]));
 				else
 					printf(" %c ", mar(trash[i]));
-					//DrawRotaGraph(100,100,50, 350, GetColor(255, 255, 255), card_type[i],TRUE); //mar(*trash),
-					//DrawFormatString(650, 650, GetColor(255, 255, 255), "%c", mar(trash[i]));
+				//DrawRotaGraph(100,100,50, 350, GetColor(255, 255, 255), card_type[i],TRUE); //mar(*trash),
+				//DrawFormatString(650, 650, GetColor(255, 255, 255), "%c", mar(trash[i]));
 			}
 		}
 
@@ -254,12 +255,13 @@ void sort(int sort_x, int* sort_y, int sort_z) {
 
 			/* ジョーカーだった場合 数字を非表示 */
 			if (mar(*data[n].hand) != 'J')
-				DrawFormatString(50, 450, GetColor(255, 255, 255), " %c%2d ", mar(*data[n].hand), num(data[n].hand[i]));
+				//DrawFormatString(50, 450, GetColor(255, 255, 255), " %c%2d ", mar(*data[n].hand), num(data[n].hand[i]));
 			/*else
 				DrawFormatString(50, 350, GetColor(255, 255, 255), " %c ", (data[n].hand[i]));*/
-		}
-		//DrawFormatString(350, 150, GetColor(255, 255, 255), "あなたの番です");
 
+			DrawFormatString(350, 150, GetColor(255, 255, 255), "あなたの番です");
+
+		}
 	}
 	
 

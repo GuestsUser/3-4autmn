@@ -12,20 +12,20 @@ void PageOne::PageOne_Initialize(Scene* scene) {
 	background = LoadGraph("Resource/image/CareerPoker.png");
 
 	//カード画像
-	card_img = LoadDivGraph("Resource/image/toranpu_all.png", 54, 13, 5, 200, 300, card_type);
+	card = LoadDivGraph("Resource/image/toranpu_all.png", 54, 13, 5, 200, 300, card_type);
 
 	//リザルト画像
 	PlayerCrown = LoadGraph("Resource/image/PageOne_Image/Player_Crown.png");
 	NPC1_Icon = LoadGraph("Resource/image/PageOne_Image/NPC1_Crown.png");
 	NPC2_Icon = LoadGraph("Resource/image/PageOne_Image/NPC2_Crown.png");
 	NPC3_Icon = LoadGraph("Resource/image/PageOne_Image/NPC3_Crown.png");
-
+	
 	//パス画像
 	Player_Pass_Icon = LoadGraph("Resource/image/PageOne_Image/Pass.png");
 	NPC1_Pass_Icon = LoadGraph("Resource/image/PageOne_Image/NPC1_Pass.png");
 	NPC2_Pass_Icon = LoadGraph("Resource/image/PageOne_Image/NPC2_Pass.png");
 	NPC3_Pass_Icon = LoadGraph("Resource/image/PageOne_Image/NPC3_Pass.png");
-
+	
 	//ページワン宣言画像
 	Player_PageOne_Icon = LoadGraph("Resource/image/PageOne_Image/Page_One.png");
 	NPC1_PageOne_Icon = LoadGraph("Resource/image/PageOne_Image/Page_One_N1.png");
@@ -114,16 +114,13 @@ void PageOne::PageOne_Initialize(Scene* scene) {
 	NPC2_Pass_Flg = false;
 	NPC3_Pass_Flg = false;
 
+	lead = 0;
 	pri = 1;
 	draw = false;
 	finish = false;
 	reset = false;
-
-	field = 0;
-	player = 0;
-	npc_1 = 0;
-	npc_2 = 0;
-	npc_3 = 0;
+	
+	cemetery = 0;
 
 	priority = GetRand(MAX - 1);
 
@@ -145,8 +142,7 @@ void PageOne::PageOne_Finalize() {
 	DeleteGraph(background);
 
 	//カード画像
-	DeleteGraph(card_img);
-	DeleteGraph(Card_back);
+	DeleteGraph(card);
 
 	//リザルト画像
 	DeleteGraph(PlayerCrown);
@@ -191,14 +187,14 @@ void PageOne::PageOne_Finalize() {
 	DeleteSoundMem(win_SE);
 	DeleteSoundMem(BGM);
 
-	//配列の初期化
+	//Vector型配列の初期化
 	Card_obj.clear();
 	Player_card.clear();
-	Field_card.clear();
-	Cemetery_card.clear();
 	NPC_card_1.clear();
 	NPC_card_2.clear();
 	NPC_card_3.clear();
+	Field_card.clear();
+	Cemetery_card.clear();
 }
 
 void PageOne::PageOne_Update() {
@@ -246,8 +242,6 @@ void PageOne::PageOne_Update() {
 		if (625 <= Mouse_X && Mouse_X <= 1025 && 565 <= Mouse_Y && Mouse_Y <= 685) {
 			if (Old_key != KEY_FREE && Now_key == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
 				PlaySoundMem(Select_SE, DX_PLAYTYPE_BACK);
-				StopSoundMem(BGM);
-				PageOne_Finalize();
 				select->SetNext(new Scene_Select());
 			}
 		}
@@ -260,38 +254,36 @@ void PageOne::PageOne_Update() {
 		case 0:	// player
 			if (Player_setup == false) {
 				if (n > 15) {
-					itr = Card_obj.begin();
-					r = GetRand(Card_obj.size() - 1);
-					for (int i = 0; i < r; i++) {
-						itr++;
-					}
-					(*itr).card_x = Player_X;
-					(*itr).card_y = Player_Y;
+					r = GetRand(Card_obj.size());
+					Card_obj[r].card_x = Player_X;
+					Card_obj[r].card_y = Player_Y;
 					PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
-					Player_card.push_back(*itr);
-
+					Player_card.push_back(Card_obj[r]);
+					Cemetery_card.push_back(Card_obj[r]);
+					Card_obj.erase(Card_obj.begin() + r);
 					if (Player_card.size() >= MAX) {
 						Player_setup = true;
 					}
 					priority++;
 					n = 0;
-					Card_obj.erase(itr);
 				}
 				break;
 			}
 			else {
 				if (flg_p == false) {
-
-					//場のスートの判定基準を決めている
-					if (Field_card.empty() == false && (*f_itr).suit == 5 && Field_card.size() == 2) {
-						f_itr++;
-					}
-
 					reset = false;
 
-					for (p_itr = Player_card.begin(); p_itr != Player_card.end(); p_itr++) {
-						if (Field_card.empty() || (*f_itr).suit == 5 || (*f_itr).suit == (*p_itr).suit || (*p_itr).suit == 5) {
-							draw = false;
+					if (Field_card.empty()) {
+						draw = false;
+					}
+					else {
+						player = Player_card.size();
+						for (i = 0; i < player; i++) {
+							if (Player_card[i].suit == 5) {
+								draw = false;
+							}else if (Field_card[lead].suit == Player_card[i].suit) {
+								draw = false;
+							}
 						}
 					}
 
@@ -300,113 +292,118 @@ void PageOne::PageOne_Update() {
 						if (n > 30) {
 							if ((Mouse_X > Deck_X - (card_w * 0.7) / 2) && (Mouse_X < Deck_X + (card_w * 0.7) / 2) && (Mouse_Y > Deck_Y - (card_h * 0.7) / 2) && (Mouse_Y < Deck_Y + (card_h * 0.7) / 2)) {
 								if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
-									itr = Card_obj.begin();
-
 									PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
-									r = GetRand(Card_obj.size() - 1);
+									r = GetRand(Card_obj.size());
+									Card_obj[r].card_x = Player_X;
+									Card_obj[r].card_y = Player_Y;
+									Player_card.push_back(Card_obj[r]);
+									Card_obj.erase(Card_obj.begin() + r);
+									n = 0;
+									break;
+								}
 
-									for (int i = 0; i < r; i++) {
-										itr++;
-									}
-									
-									(*itr).card_x = Player_X;
-									(*itr).card_y = Player_Y;
-									
-									Player_card.push_back(*itr);
-									Card_obj.erase(itr);
-									
+								//デバッグ用
+								//color = GetColor(255, 0, 0);
+							}
+						}
+					}
+
+					if (Field_card.empty() == false && Field_card[0].suit == 5) {
+						lead = 1;
+					}
+					else {
+						lead = 0;
+					}
+
+					player = Player_card.size();
+
+					//プレイヤーの手札からカードだす
+					for (i = 0; i < player; i++) {
+
+						//山札0枚＆手札に出せるカードがない場合パスをする
+						if (Card_obj.empty() == true && Field_card.empty() == false && Field_card[lead].suit != Player_card[i].suit && Player_card[i].suit != 5) {
+							Player_Pass_Flg = true;
+							if ((Mouse_X > 890) && (Mouse_X < 1040) && (Mouse_Y > 440) && (Mouse_Y < 515)) {
+								if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
+									PlaySoundMem(pass_SE, DX_PLAYTYPE_BACK, TRUE);
+									flg_p = true;
+									priority++;
 									n = 0;
 									break;
 								}
 							}
 						}
-					}
-
-
-					//山札0枚＆手札に出せるカードがない場合パスをする
-					if (Card_obj.empty() && draw == true) {
-						Player_Pass_Flg = true;
-						if ((Mouse_X > 890) && (Mouse_X < 1040) && (Mouse_Y > 440) && (Mouse_Y < 515)) {
-							if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
-								PlaySoundMem(pass_SE, DX_PLAYTYPE_BACK, TRUE);
-								flg_p = true;
-								priority++;
-								n = 0;
-								break;
-							}
-						}
-					}
-					else {
-						Player_Pass_Flg = false;
-					}
-
-					player = Player_card.size();
-					p_itr = Player_card.begin();
-
-					//プレイヤーの手札からカードだす
-					for (i = 0; i < player; i++) {
-						if (Field_card.empty() || (*f_itr).suit == 5 || (*f_itr).suit == (*p_itr).suit || (*p_itr).suit == 5) {
-							//手札が残り二枚だとページワン宣言できる
-							if (Player_card.size() == 2 && PageOne_flg == false) {
-								PageOne_player = true;
-							}
-							else {
-								PageOne_player = false;
-							}
-
-							//ページワン宣言ボタン
-							if (PageOne_player == true) {
-								if ((Mouse_X > 500) && (Mouse_X < 800) && (Mouse_Y > 400) && (Mouse_Y < 500)) {
-									if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
-										PlaySoundMem(pageone_SE, DX_PLAYTYPE_BACK, TRUE);
-										PageOne_player = false;
-										PageOne_flg = true;
-									}
-								}
-							}
-							if (PageOne_player == false) {
-								if (Card::Hit(Mouse_X, Mouse_Y, Player_X + (card_w * 0.5) * (i % 10), Player_Y + (card_h * pow(0.5, 2)) * (i / 10), card_w, card_h, 0.5)) {
-									(*p_itr).card_y = Player_Y - 50;
-									if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
-										PlaySoundMem(card_SE_2, DX_PLAYTYPE_BACK, TRUE);
-
-										Field_card.push_back(*p_itr);
-
-										if ((*p_itr).num == 99) {
-											pri = 99;
-										}
-										else if ((*p_itr).num == 0) {
-											if (pri != 99) {
-												pri = 0;
-											}
-											else {
-												pri = 99;
-											}
-										}
-										else if (pri != 0 && pri < (*p_itr).num) {
-											pri = (*p_itr).num;
-										}
-
-										p_pow = (*p_itr).num;
-										priority++;
-										flg_p = true;
-										n = 0;
-										PageOne_flg = false;
-										draw = true;
-										Player_card.erase(p_itr);
-										break;
-									}
+						else {
+							if (Field_card.empty() || Field_card[0].suit == 5 || Field_card[lead].suit == Player_card[i].suit || Player_card[i].suit == 5) {
+								//手札が残り二枚だとページワン宣言できる
+								if (Player_card.size() == 2 && PageOne_flg == false) {
+									PageOne_player = true;
 								}
 								else {
-									(*p_itr).card_y = Player_Y;
+									PageOne_player = false;
+								}
+
+								//ページワン宣言ボタン
+								if (PageOne_player == true) {
+									if ((Mouse_X > 500) && (Mouse_X < 800) && (Mouse_Y > 400) && (Mouse_Y < 500)) {
+										if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
+											PlaySoundMem(pageone_SE, DX_PLAYTYPE_BACK, TRUE);
+											PageOne_player = false;
+											PageOne_flg = true;
+										}
+									}
+								}
+								if (PageOne_player == false) {
+									if (Card::Hit(Mouse_X, Mouse_Y, Player_X + (card_w * 0.5) * (i % 10), Player_Y + (card_h * pow(0.5, 2)) * (i / 10), card_w, card_h, 0.5)) {
+										Player_card[i].card_y = Player_Y - 50;
+										if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
+											PlaySoundMem(card_SE_2, DX_PLAYTYPE_BACK, TRUE);
+											Field_card.push_back(Player_card[i]);
+
+											if (Player_card[i].num == 99) {
+												pri = 99;
+											}
+
+											if (Player_card[i].num == 0) {
+												pri = 0;
+											}
+
+											if (pri != 0 && pri < Player_card[i].num) {
+												pri = Player_card[i].num;
+											}
+
+											if (pri == 0 && Player_card[i].num != 99) {
+												pri = 0;
+											}
+
+											p_pow = Player_card[i].num;
+											p = i;
+											priority++;
+											draw = true;
+											flg_p = true;
+											n = 0;
+											PageOne_flg = false;
+											break;
+										}
+									}
+									else {
+										Player_card[i].card_y = Player_Y;
+									}
 								}
 							}
 						}
-						++p_itr;
 					}
+					if (flg_p == true && Player_Pass_Flg != true) {
+						Player_card.erase(Player_card.begin() + p);
+					}
+					Player_Pass_Flg = false;
 				}
 				else {
 					priority++;
+				}
+
+				if (Player_card.empty()) {
+					break;
 				}
 				break;
 			}
@@ -414,299 +411,300 @@ void PageOne::PageOne_Update() {
 		case 1:	// NPC1
 			if (NPC1_setup == false) {
 				if (n > 15) {
-					itr = Card_obj.begin();
-					r = GetRand(Card_obj.size() - 1);
-					for (int i = 0; i < r; i++) {
-						itr++;
-					}
-					(*itr).card_x = NPC1_X;
-					(*itr).card_y = NPC1_Y;
+					r = GetRand(sizeof(Card_obj));
+					Card_obj[r].card_x = NPC1_X;
+					Card_obj[r].card_y = NPC1_Y;
 					PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
-					NPC_card_1.push_back(*itr);
-
+					NPC_card_1.push_back(Card_obj[r]);
+					Cemetery_card.push_back(Card_obj[r]);
+					Card_obj.erase(Card_obj.begin() + r);
 					if (NPC_card_1.size() >= MAX) {
 						NPC1_setup = true;
 					}
 					priority++;
 					n = 0;
-					Card_obj.erase(itr);
 				}
 				break;
 			}
 			else {
 				if (flg_1 == false) {
-
-					f_itr = Field_card.begin();
-
-					//場のスートの判定基準を決めている
-					if (Field_card.empty() == false && (*f_itr).suit == 5 && Field_card.size() == 2) {
-						f_itr++;
-					}
-
 					reset = false;
 
-					for (n1_itr = NPC_card_1.begin(); n1_itr != NPC_card_1.end(); n1_itr++) {
-						if (Field_card.empty() || (*f_itr).suit == 5 || (*f_itr).suit == (*n1_itr).suit || (*n1_itr).suit == 5) {
-							draw = false;
-						}
-					}
-
-					if (Card_obj.empty() && draw == true) {
-						if (50 < n) {
-							NPC1_Pass_Flg = true;
-						}
+					if (Field_card.empty()) {
+						draw = false;
 					}
 					else {
-						NPC1_Pass_Flg = false;
+						npc_1 = NPC_card_1.size();
+						for (i = 0; i < npc_1; i++) {
+							if (NPC_card_1[i].suit == 5) {
+								draw = false;
+							}
+							if (Field_card[lead].suit == NPC_card_1[i].suit) {
+								draw = false;
+							}
+						}
 					}
 
 					//NPCがカード引く用
 					if (draw == true && Card_obj.empty() == false) {
 						if (n > 30) {
-							itr = Card_obj.begin();
-
+							r = GetRand(Card_obj.size());
 							PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
-							r = GetRand(Card_obj.size() - 1);
-
-							for (int i = 0; i < r; i++) {
-								itr++;
-							}
-
-							(*itr).card_x = NPC1_X;
-							(*itr).card_y = NPC1_X;
-
-							NPC_card_1.push_back(*itr);
-							Card_obj.erase(itr);
-
+							NPC_card_1.push_back(Card_obj[r]);
+							Card_obj.erase(Card_obj.begin() + r);
 							n = 0;
 							break;
 						}
 					}
 
-					//NPCの手札からカードだす
-					for (n1_itr = NPC_card_1.begin(); n1_itr != NPC_card_1.end(); n1_itr++) {
-						//山札0枚＆手札に出せるカードがない場合パスをする
-						if (NPC1_Pass_Flg == false) {
-							//手札が残り二枚だとページワン宣言できる
-							if (NPC_card_1.size() == 2 && PageOne_flg == false) {
-								if (50 < n && n <= 90) {
-									if (OneShot == false) {
-										PlaySoundMem(pageone_SE, DX_PLAYTYPE_BACK, TRUE);
-										OneShot = true;
-									}
-									PageOne_npc1 = true;
-								}
-								if (n > 90) {
-									n = 0;
-									PageOne_npc1 = false;
-									PageOne_flg = true;
-									OneShot = false;
-								}
-							}
-							else {
-								PageOne_npc1 = false;
-							}
-
-							if (n > 90) {
-								if (Field_card.empty() || (*f_itr).suit == 5 || (*f_itr).suit == (*n1_itr).suit || (*n1_itr).suit == 5) {
-
-									if (PageOne_npc1 == false) {
-										PlaySoundMem(card_SE_2, DX_PLAYTYPE_BACK, TRUE);
-										Field_card.push_back(*n1_itr);
-
-										if ((*n1_itr).num == 99) {
-											pri = 99;
-										}
-										else if ((*n1_itr).num == 0) {
-											if (pri != 99) {
-												pri = 0;
-											}
-											else {
-												pri = 99;
-											}
-										}
-										else if (pri != 0 && pri < (*n1_itr).num) {
-											pri = (*n1_itr).num;
-										}
-
-										n1_pow = (*n1_itr).num;
-										priority++;
-										draw = true;
-										flg_1 = true;
-										n = 0;
-										PageOne_flg = false;
-										NPC_card_1.erase(n1_itr);
-										break;
-									}
-								}
-							}
-						}
-						else {
+					//手札が残り二枚だとページワン宣言できる
+					if (NPC_card_1.size() == 2 && PageOne_flg == false) {
+						if (50 < n && n <= 90) {
 							if (OneShot == false) {
-								PlaySoundMem(pass_SE, DX_PLAYTYPE_BACK, TRUE);
+								PlaySoundMem(pageone_SE, DX_PLAYTYPE_BACK, TRUE);
 								OneShot = true;
+							}
+							PageOne_npc1 = true;
+						}
+						if (n > 90) {
+							n = 0;
+							PageOne_npc1 = false;
+							PageOne_flg = true;
+							OneShot = false;
+						}
+					}
+					else {
+						PageOne_npc1 = false;
+					}
+
+					//場のスートの判定基準を決めている
+					if (Field_card.empty() == false && Field_card[0].suit == 5) {
+						lead = 1;
+					}
+					else {
+						lead = 0;
+					}
+
+					npc_1 = NPC_card_1.size();
+
+					//NPCの手札からカードだす
+					for (i = 0; i < npc_1; i++) {
+
+						//山札0枚＆手札に出せるカードがない場合パスをする（手動）
+						if (Card_obj.empty() == true && Field_card.empty() == false && Field_card[lead].suit != NPC_card_1[i].suit && NPC_card_1[i].suit != 5) {
+
+							if (50 < n && n <= 90) {
+								if (OneShot == false) {
+									PlaySoundMem(pass_SE, DX_PLAYTYPE_BACK, TRUE);
+									OneShot = true;
+								}
+
+								NPC1_Pass_Flg = true;
 							}
 
 							if (n > 90) {
 								flg_1 = true;
 								priority++;
 								n = 0;
+								NPC1_Pass_Flg = false;
 							}
 						}
+						else {
+							if (n > 90) {
+
+								if (Field_card.empty() || Field_card[0].suit == 5 || Field_card[lead].suit == NPC_card_1[i].suit || NPC_card_1[i].suit == 5) {
+
+									if (PageOne_npc1 == false) {
+										PlaySoundMem(card_SE_2, DX_PLAYTYPE_BACK, TRUE);
+										Field_card.push_back(NPC_card_1[i]);
+
+										if (NPC_card_1[i].num == 99) {
+											pri = 99;
+										}
+
+										if (NPC_card_1[i].num == 0) {
+											pri = 0;
+										}
+
+										if (pri != 0 && pri < NPC_card_1[i].num) {
+											pri = NPC_card_1[i].num;
+										}
+
+										if (pri == 0 && NPC_card_1[i].num != 99) {
+											pri = 0;
+										}
+
+										n1_pow = NPC_card_1[i].num;
+										n1 = i;
+										priority++;
+										draw = true;
+										flg_1 = true;
+										n = 0;
+										PageOne_flg = false;
+									}
+								}
+							}
+						}
+					}
+					if (flg_1 == true) {
+						NPC_card_1.erase(NPC_card_1.begin() + n1);
 					}
 				}
 				else {
 					priority++;
 				}
+
+				if (NPC_card_1.empty()) {
+					break;
+				}
 				break;
 			}
-		
+
 		case 2:	// NPC2
 			if (NPC2_setup == false) {
 				if (n > 15) {
-					itr = Card_obj.begin();
-					r = GetRand(Card_obj.size() - 1);
-					for (int i = 0; i < r; i++) {
-						itr++;
-					}
-					(*itr).card_x = NPC2_X;
-					(*itr).card_y = NPC2_Y;
+					r = GetRand(Card_obj.size());
+					Card_obj[r].card_x = NPC2_X;
+					Card_obj[r].card_y = NPC2_Y;
 					PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
-					NPC_card_2.push_back(*itr);
-					
+					NPC_card_2.push_back(Card_obj[r]);
+					Cemetery_card.push_back(Card_obj[r]);
+					Card_obj.erase(Card_obj.begin() + r);
 					if (NPC_card_2.size() >= MAX) {
 						NPC2_setup = true;
 					}
 					priority++;
 					n = 0;
-					Card_obj.erase(itr);
 				}
 				break;
 			}
 			else {
+
 				if (flg_2 == false) {
-
-					f_itr = Field_card.begin();
-
-					//場のスートの判定基準を決めている
-					if (Field_card.empty() == false && (*f_itr).suit == 5 && Field_card.size() == 2) {
-						f_itr++;
-					}
-
 					reset = false;
 
-					for (n2_itr = NPC_card_2.begin(); n2_itr != NPC_card_2.end(); n2_itr++) {
-						if (Field_card.empty() || (*f_itr).suit == 5 || (*f_itr).suit == (*n2_itr).suit || (*n2_itr).suit == 5) {
-							draw = false;
-						}
-					}
-
-					if (Card_obj.empty() && draw == true) {
-						if (50 < n) {
-							NPC2_Pass_Flg = true;
-						}
+					if (Field_card.empty()) {
+						draw = false;
 					}
 					else {
-						NPC2_Pass_Flg = false;
+						npc_2 = NPC_card_2.size();
+						for (i = 0; i < npc_2; i++) {
+							if (NPC_card_2[i].suit == 5) {
+								draw = false;
+							}
+							if (Field_card[lead].suit == NPC_card_2[i].suit) {
+								draw = false;
+							}
+						}
 					}
 
 					//NPCがカード引く用
 					if (draw == true && Card_obj.empty() == false) {
 						if (n > 30) {
-							itr = Card_obj.begin();
-
+							r = GetRand(Card_obj.size());
 							PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
-							r = GetRand(Card_obj.size() - 1);
-
-							for (int i = 0; i < r; i++) {
-								itr++;
-							}
-
-							(*itr).card_x = NPC2_X;
-							(*itr).card_y = NPC2_X;
-
-							NPC_card_2.push_back(*itr);
-							Card_obj.erase(itr);
-
+							NPC_card_2.push_back(Card_obj[r]);
+							Card_obj.erase(Card_obj.begin() + r);
 							n = 0;
 							break;
 						}
 					}
 
-					//NPCの手札からカードだす
-					for (n2_itr = NPC_card_2.begin(); n2_itr != NPC_card_2.end(); n2_itr++) {
-						//山札0枚＆手札に出せるカードがない場合パスをする
-						if (NPC2_Pass_Flg == false) {
-							//手札が残り二枚だとページワン宣言できる
-							if (NPC_card_2.size() == 2 && PageOne_flg == false) {
-								if (50 < n && n <= 90) {
-									if (OneShot == false) {
-										PlaySoundMem(pageone_SE, DX_PLAYTYPE_BACK, TRUE);
-										OneShot = true;
-									}
-									PageOne_npc2 = true;
-								}
-								if (n > 90) {
-									n = 0;
-									PageOne_npc2 = false;
-									PageOne_flg = true;
-									OneShot = false;
-								}
+					//手札が残り二枚だとページワン宣言できる
+					if (NPC_card_2.size() == 2 && PageOne_flg == false) {
+
+						if (50 < n && n <= 90) {
+							if (OneShot == false) {
+								PlaySoundMem(pageone_SE, DX_PLAYTYPE_BACK, TRUE);
+								OneShot = true;
 							}
-							else {
-								PageOne_npc2 = false;
+
+							PageOne_npc2 = true;
+						}
+
+						if (n > 90) {
+							n = 0;
+							PageOne_npc2 = false;
+							PageOne_flg = true;
+							OneShot = false;
+						}
+					}
+					else {
+						PageOne_npc2 = false;
+					}
+
+					//場のスートの判定基準を決めている
+					if (Field_card.empty() == false && Field_card[0].suit == 5) {
+						lead = 1;
+					}
+					else {
+						lead = 0;
+					}
+
+					npc_2 = NPC_card_2.size();
+
+					//NPCの手札からカードだす
+					for (i = 0; i < npc_2; i++) {
+
+						//山札0枚＆手札に出せるカードがない場合パスをする（手動）
+						if (Card_obj.empty() == true && Field_card.empty() == false && Field_card[lead].suit != NPC_card_2[i].suit && NPC_card_2[i].suit != 5) {
+							if (50 < n && n <= 90) {
+								NPC2_Pass_Flg = true;
 							}
 
 							if (n > 90) {
-								if (Field_card.empty() || (*f_itr).suit == 5 || (*f_itr).suit == (*n2_itr).suit || (*n2_itr).suit == 5) {
-
+								PlaySoundMem(pass_SE, DX_PLAYTYPE_BACK, TRUE);
+								flg_2 = true;
+								priority++;
+								n = 0;
+								NPC2_Pass_Flg = false;
+							}
+						}
+						else {
+							if (n > 90) {
+								if (Field_card.empty() || Field_card[0].suit == 5 || Field_card[lead].suit == NPC_card_2[i].suit || NPC_card_2[i].suit == 5) {
 									if (PageOne_npc2 == false) {
 										PlaySoundMem(card_SE_2, DX_PLAYTYPE_BACK, TRUE);
-										Field_card.push_back(*n2_itr);
+										Field_card.push_back(NPC_card_2[i]);
 
-										if ((*n2_itr).num == 99) {
+										if (NPC_card_2[i].num == 99) {
 											pri = 99;
 										}
-										else if ((*n2_itr).num == 0) {
-											if (pri != 99) {
-												pri = 0;
-											}
-											else {
-												pri = 99;
-											}
-										}
-										else if (pri != 0 && pri < (*n2_itr).num) {
-											pri = (*n2_itr).num;
+
+										if (NPC_card_2[i].num == 0) {
+											pri = 0;
 										}
 
-										n2_pow = (*n2_itr).num;
+										if (pri != 0 && pri < NPC_card_2[i].num) {
+											pri = NPC_card_2[i].num;
+										}
+
+										if (pri == 0 && NPC_card_2[i].num != 99) {
+											pri = 0;
+										}
+
+										n2_pow = NPC_card_2[i].num;
+										n2 = i;
 										priority++;
 										draw = true;
 										flg_2 = true;
 										n = 0;
 										PageOne_flg = false;
-										NPC_card_2.erase(n2_itr);
-										break;
 									}
 								}
 							}
 						}
-						else {
-							if (OneShot == false) {
-								PlaySoundMem(pass_SE, DX_PLAYTYPE_BACK, TRUE);
-								OneShot = true;
-							}
-
-							if (n > 90) {
-								flg_2 = true;
-								priority++;
-								n = 0;
-							}
-						}
+					}
+					if (flg_2 == true) {
+						NPC_card_2.erase(NPC_card_2.begin() + n2);
 					}
 				}
 				else {
 					priority++;
+				}
+
+				if (NPC_card_2.empty()) {
+					break;
 				}
 				break;
 			}
@@ -714,147 +712,148 @@ void PageOne::PageOne_Update() {
 		case 3:	// NPC3
 			if (NPC3_setup == false) {
 				if (n > 15) {
-					itr = Card_obj.begin();
-					r = GetRand(Card_obj.size() - 1);
-					for (int i = 0; i < r; i++) {
-						itr++;
-					}
-					(*itr).card_x = NPC3_X;
-					(*itr).card_y = NPC3_Y;
+					r = GetRand(Card_obj.size());
+					Card_obj[r].card_x = NPC3_X;
+					Card_obj[r].card_y = NPC3_Y;
 					PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
-					NPC_card_3.push_back(*itr);
+					NPC_card_3.push_back(Card_obj[r]);
+					Cemetery_card.push_back(Card_obj[r]);
+					Card_obj.erase(Card_obj.begin() + r);
 					if (NPC_card_3.size() >= MAX) {
 						NPC3_setup = true;
 					}
 					priority++;
 					n = 0;
-					Card_obj.erase(itr);
 				}
 				break;
 			}
 			else {
 				if (flg_3 == false) {
-
-					f_itr = Field_card.begin();
-
-					//場のスートの判定基準を決めている
-					if (Field_card.empty() == false && (*f_itr).suit == 5 && Field_card.size() == 2) {
-						f_itr++;
-					}
-
 					reset = false;
 
-					for (n3_itr = NPC_card_3.begin(); n3_itr != NPC_card_3.end(); n3_itr++) {
-						if (Field_card.empty() || (*f_itr).suit == 5 || (*f_itr).suit == (*n3_itr).suit || (*n3_itr).suit == 5) {
-							draw = false;
-						}
-					}
-
-					if (Card_obj.empty() && draw == true) {
-						if (50 < n) {
-							NPC3_Pass_Flg = true;
-						}
+					if (Field_card.empty()) {
+						draw = false;
 					}
 					else {
-						NPC3_Pass_Flg = false;
+						npc_3 = NPC_card_3.size();
+						for (i = 0; i < npc_3; i++) {
+							if (NPC_card_3[i].suit == 5) {
+								draw = false;
+							}
+							if (Field_card[lead].suit == NPC_card_3[i].suit) {
+								draw = false;
+							}
+						}
 					}
 
 					//NPCがカード引く用
 					if (draw == true && Card_obj.empty() == false) {
 						if (n > 30) {
-							itr = Card_obj.begin();
-
+							r = GetRand(Card_obj.size());
 							PlaySoundMem(card_SE_1, DX_PLAYTYPE_BACK, TRUE);
-							r = GetRand(Card_obj.size() - 1);
-
-							for (int i = 0; i < r; i++) {
-								itr++;
-							}
-
-							(*itr).card_x = NPC3_X;
-							(*itr).card_y = NPC3_X;
-
-							NPC_card_3.push_back(*itr);
-							Card_obj.erase(itr);
-
+							NPC_card_3.push_back(Card_obj[r]);
+							Card_obj.erase(Card_obj.begin() + r);
 							n = 0;
 							break;
 						}
 					}
 
-					//NPCの手札からカードだす
-					for (n3_itr = NPC_card_3.begin(); n3_itr != NPC_card_3.end(); n3_itr++) {
-						//山札0枚＆手札に出せるカードがない場合パスをする
-						if (NPC3_Pass_Flg == false) {
-							//手札が残り二枚だとページワン宣言できる
-							if (NPC_card_3.size() == 2 && PageOne_flg == false) {
-								if (50 < n && n <= 90) {
-									if (OneShot == false) {
-										PlaySoundMem(pageone_SE, DX_PLAYTYPE_BACK, TRUE);
-										OneShot = true;
-									}
-									PageOne_npc3 = true;
-								}
-								if (n > 90) {
-									n = 0;
-									PageOne_npc3 = false;
-									PageOne_flg = true;
-									OneShot = false;
-								}
+					//手札が残り二枚だとページワン宣言できる
+					if (NPC_card_3.size() == 2 && PageOne_flg == false) {
+
+						if (50 < n && n <= 90) {
+							if (OneShot == false) {
+								PlaySoundMem(pageone_SE, DX_PLAYTYPE_BACK, TRUE);
+								OneShot = true;
 							}
-							else {
-								PageOne_npc3 = false;
+							PageOne_npc3 = true;
+						}
+
+						if (n > 90) {
+							n = 0;
+							PageOne_npc3 = false;
+							PageOne_flg = true;
+							OneShot = false;
+						}
+					}
+					else {
+						PageOne_npc3 = false;
+					}
+
+					//場のスートの判定基準を決めている
+					if (Field_card.empty() == false && Field_card[0].suit == 5) {
+						lead = 1;
+					}
+					else {
+						lead = 0;
+					}
+
+					npc_3 = NPC_card_3.size();
+
+					//NPCの手札からカードだす
+					for (i = 0; i < npc_3; i++) {
+
+						//山札0枚＆手札に出せるカードがない場合パスをする（手動）
+						if (Card_obj.empty() == true && Field_card.empty() == false && Field_card[lead].suit != NPC_card_3[i].suit && NPC_card_3[i].suit != 5) {
+							if (50 < n && n <= 90) {
+								NPC3_Pass_Flg = true;
 							}
 
 							if (n > 90) {
-								if (Field_card.empty() || (*f_itr).suit == 5 || (*f_itr).suit == (*n3_itr).suit || (*n3_itr).suit == 5) {
+								PlaySoundMem(pass_SE, DX_PLAYTYPE_NORMAL, TRUE);
+								flg_3 = true;
+								priority++;
+								n = 0;
+								NPC3_Pass_Flg = false;
+							}
+						}
+						else {
+							if (n > 90) {
+								if (Field_card.empty() || Field_card[0].suit == 5 || Field_card[lead].suit == NPC_card_3[i].suit || NPC_card_3[i].suit == 5) {
+
 									if (PageOne_npc3 == false) {
 										PlaySoundMem(card_SE_2, DX_PLAYTYPE_BACK, TRUE);
-										Field_card.push_back(*n3_itr);
+										Field_card.push_back(NPC_card_3[i]);
 
-										if ((*n3_itr).num == 99) {
+										if (NPC_card_3[i].num == 99) {
 											pri = 99;
 										}
-										else if ((*n3_itr).num == 0) {
-											if (pri != 99) {
-												pri = 0;
-											}
-											else {
-												pri = 99;
-											}
-										}
-										else if (pri != 0 && pri < (*n3_itr).num) {
-											pri = (*n3_itr).num;
+
+										if (NPC_card_3[i].num == 0) {
+											pri = 0;
 										}
 
-										n3_pow = (*n3_itr).num;
+										if (pri != 0 && pri < NPC_card_3[i].num) {
+											pri = NPC_card_3[i].num;
+										}
+
+										if (pri == 0 && NPC_card_3[i].num != 99) {
+											pri = 0;
+										}
+
+										n3_pow = NPC_card_3[i].num;
+
+										n3 = i;
 										priority++;
 										draw = true;
 										flg_3 = true;
 										n = 0;
 										PageOne_flg = false;
-										NPC_card_3.erase(n3_itr);
-										break;
 									}
 								}
 							}
 						}
-						else {
-							if (OneShot == false) {
-								PlaySoundMem(pass_SE, DX_PLAYTYPE_BACK, TRUE);
-								OneShot = true;
-							}
-
-							if (n > 90) {
-								flg_3 = true;
-								priority++;
-								n = 0;
-							}
-						}
+					}
+					if (flg_3 == true) {
+						NPC_card_3.erase(NPC_card_3.begin() + n3);
 					}
 				}
 				else {
 					priority++;
+				}
+
+				if (NPC_card_3.empty()) {
+					break;
 				}
 				break;
 			}
@@ -875,26 +874,24 @@ void PageOne::PageOne_Update() {
 					Field_X += 20;
 					n++;
 				}
-				else if (180 <= n) {
-					Player_Pass_Flg = false;
-					NPC1_Pass_Flg = false;
-					NPC2_Pass_Flg = false;
-					NPC3_Pass_Flg = false;
+				else if(180 <= n) {
 
 					if (pri == p_pow) {
 						priority = 0;
+						pri = 1;
 					}
 					if (pri == n1_pow) {
 						priority = 1;
+						pri = 1;
 					}
 					if (pri == n2_pow) {
 						priority = 2;
+						pri = 1;
 					}
 					if (pri == n3_pow) {
 						priority = 3;
+						pri = 1;
 					}
-
-					pri = 1;
 
 					flg_p = false;
 					flg_1 = false;
@@ -902,18 +899,16 @@ void PageOne::PageOne_Update() {
 					flg_3 = false;
 
 					cemetery = Field_card.size();
-					f_itr = Field_card.begin();
-
+					
 					for (i = 0; i < cemetery; i++) {
-						Cemetery_card.push_back((*f_itr));
-						f_itr++;
+						Cemetery_card.push_back(Field_card[i]);
 					}
 
-					Field_card.clear();
+					Field_card.erase(Field_card.begin(), Field_card.end());
 					Field_X = 500;
 					if (Card_obj.empty() == true) {
 						Card_obj = Cemetery_card;
-						Cemetery_card.clear();
+						Cemetery_card.erase(Cemetery_card.begin(), Cemetery_card.end());
 					}
 					OneShot = false;
 					n = 0;
@@ -933,9 +928,6 @@ void PageOne::PageOne_Draw() {
 	npc_2 = NPC_card_2.size();
 	npc_3 = NPC_card_3.size();
 
-	f_itr = Field_card.begin();
-	p_itr = Player_card.begin();
-
 	DrawRotaGraph(640, 360, 1.0, 0, background, TRUE);
 
 	if (reset == false && Player_setup == true && NPC1_setup == true && NPC2_setup == true && NPC3_setup == true) {
@@ -943,13 +935,12 @@ void PageOne::PageOne_Draw() {
 		switch (priority) {
 		case 0:
 			DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：プレイヤー");
-			if (draw == true && Card_obj.empty() == false) {
+			if (draw == true & Field_card.empty() == false) {
 				DrawFormatString(250, 450, GetColor(100, 100, 255), "カードを引いてください");
 			}
-			if (Player_Pass_Flg == true) {
+			else if (Player_Pass_Flg == true) {
 				DrawFormatString(250, 450, GetColor(100, 100, 255), "パスをしてください");
 			}
-
 			break;
 		case 1:
 			DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：NPC１号");
@@ -964,7 +955,7 @@ void PageOne::PageOne_Draw() {
 
 		DrawFormatString(1000, 375, GetColor(255, 255, 255), "現在のスート");
 		if (Field_card.empty() == false) {
-			switch (Field_card.front().suit) {
+			switch (Field_card[0].suit) {
 			case 0:
 				DrawRotaGraph(1100, 450, 0.8, 0, Spade, TRUE);
 				break;
@@ -994,14 +985,12 @@ void PageOne::PageOne_Draw() {
 
 	//場に出ているカードの描画
 	for (i = 0; i < field; i++) {
-		DrawRotaGraph(Field_X + i * 100, Field_Y, 0.5, 0, (*f_itr).img, TRUE);
-		f_itr++;
+		DrawRotaGraph(Field_X + i * 100, Field_Y, 0.5, 0, Field_card[i].img, TRUE);
 	}
 
 	//プレイヤーの手札描画
 	for (i = 0; i < player; i++) {
-		DrawRotaGraph((*p_itr).card_x + (i % 10) * (card_w * 0.5), (*p_itr).card_y + (i / 10) * (card_h * pow(0.5, 2)), 0.5, 0, (*p_itr).img, TRUE);
-		p_itr++;
+		DrawRotaGraph(Player_card[i].card_x + (i % 10) * (card_w * 0.5), Player_card[i].card_y + (i / 10) * (card_h * pow(0.5, 2)), 0.5, 0, Player_card[i].img, TRUE);
 	}
 
 	//NPC１号の手札描画
@@ -1146,16 +1135,6 @@ void PageOne::PageOne_Draw() {
 	//デバッグ用
 	//DrawBox(890, 440,980, 500, color, TRUE);
 	//DrawFormatString(900, 450, GetColor(255, 0, 0), "パス");
-	//DrawFormatString(900, 450, GetColor(255, 0, 0), "list:%d", Field_card.size());
-	//if (Field_card.empty() == true) {
-	//	DrawFormatString(900, 450, GetColor(255, 0, 0), "空っぽだよ");
-	//}
-	//else if (Field_card.empty() == false) {
-	//	DrawFormatString(900, 450, GetColor(255, 0, 0), "入ってるよ");
-	//}
-	//else {
-	//	DrawFormatString(900, 450, GetColor(255, 0, 0), "そもそもないよ");
-	//}
 	//DrawGraph(0, 175, NPC_Pass_Icon, true);
 	//DrawGraph(500, 400, NPC_PageOne_Icon, true);
 }
