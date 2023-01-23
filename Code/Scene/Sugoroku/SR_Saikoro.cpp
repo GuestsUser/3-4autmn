@@ -285,86 +285,86 @@ void SR_Saikoro::Draw() {
 	case 1:	/*プレイヤーの時*/
 		if (Whoisplay == true && Shuffle == false) {
 			if (Player1sum == 8 || Player1sum == 19 ||Player1sum == 27 || Player1sum == 40) {
-				DrawString(484, 620, "もう一度サイコロを振る", GetColor(0, 0, 0));
+				DrawString(454, 620, "もう一度サイコロを振る", GetColor(0, 0, 0));
 			}
 			else if (Player1sum == 12 || Player1sum == 48) {
-				DrawString(484, 620, "4つ進む", GetColor(0, 0, 0));
+				DrawString(454, 620, "4つ進む", GetColor(0, 0, 0));
 			}
 			else if (Player1sum == 22) {
-				DrawString(484, 620, "スタート地点に戻る", GetColor(0, 0, 0));
+				DrawString(454, 620, "スタート地点に戻る", GetColor(0, 0, 0));
 			}
 			else if (Player1sum == 34) {
-				DrawString(484, 620, "4つ戻る", GetColor(0, 0, 0));
+				DrawString(454, 620, "4つ戻る", GetColor(0, 0, 0));
 			}
 			else {
-				DrawString(484, 620, "Player1のターン", GetColor(0, 0, 0));
+				DrawString(454, 620, "Player1のターン", GetColor(0, 0, 0));
 			}
 		}
-		else if (Shuffle == false && Whoisplay == false && Back == false) { DrawFormatString(484, 620, GetColor(0, 0, 0), "Player1は%d進んだ", Sum); }
-		else if (Shuffle == true ) { DrawString(484, 620, "サイコロコロコロ", GetColor(0, 0, 0)); }
+		else if (Shuffle == false && Whoisplay == false && Back == false) { DrawFormatString(454, 620, GetColor(0, 0, 0), "Player1は%d進んだ", Sum); }
+		else if (Shuffle == true ) { DrawString(454, 620, "サイコロコロコロ", GetColor(0, 0, 0)); }
 		break;
 	case 2:
 		if (Whoisplay == true && Shuffle == false) {
 			if (Player2sum == 8 || Player2sum == 19 || Player2sum == 27 || Player2sum == 40) {
-				DrawString(484, 620, "もう一度サイコロを振る", GetColor(0, 0, 0));
+				DrawString(454, 620, "もう一度サイコロを振る", GetColor(0, 0, 0));
 			}
 			else if (Player2sum == 12 || Player2sum == 48) {
-				DrawString(484, 620, "4つ進む", GetColor(0, 0, 0));
+				DrawString(454, 620, "4つ進む", GetColor(0, 0, 0));
 			}
 			else if (Player2sum == 22) {
-				DrawString(484, 620, "スタート地点に戻る", GetColor(0, 0, 0));
+				DrawString(454, 620, "スタート地点に戻る", GetColor(0, 0, 0));
 			}
 			else if (Player2sum == 34) {
-				DrawString(484, 620, "4つ戻る", GetColor(0, 0, 0));
+				DrawString(454, 620, "4つ戻る", GetColor(0, 0, 0));
 			}
 			else {
-				DrawString(484, 620, "Player2のターン", GetColor(0, 0, 0));
+				DrawString(454, 620, "Player2のターン", GetColor(0, 0, 0));
 			}
 		}
-		if (Shuffle == false && Whoisplay == false) { DrawFormatString(484, 620, GetColor(0, 0, 0), "Player2は%d進んだ", Sum); }
-		else if (Shuffle == true) { DrawString(484, 620, "サイコロコロコロ", GetColor(0, 0, 0)); }
+		if (Shuffle == false && Whoisplay == false) { DrawFormatString(454, 620, GetColor(0, 0, 0), "Player2は%d進んだ", Sum); }
+		else if (Shuffle == true) { DrawString(454, 620, "サイコロコロコロ", GetColor(0, 0, 0)); }
 		break;
 	case 3:
 		if (Whoisplay == true && Shuffle == false) {
 			if (Player3sum == 8 || Player3sum == 19 || Player3sum == 27 || Player3sum == 40) {
-				DrawString(484, 620, "もう一度サイコロを振る", GetColor(0, 0, 0));
+				DrawString(454, 620, "もう一度サイコロを振る", GetColor(0, 0, 0));
 			}
 			else if (Player3sum == 12 || Player3sum == 48) {
-				DrawString(484, 620, "4つ進む", GetColor(0, 0, 0));
+				DrawString(454, 620, "4つ進む", GetColor(0, 0, 0));
 			}
 			else if (Player3sum == 22) {
-				DrawString(484, 620, "スタート地点に戻る", GetColor(0, 0, 0));
+				DrawString(454, 620, "スタート地点に戻る", GetColor(0, 0, 0));
 			}
 			else if (Player3sum == 34) {
-				DrawString(484, 620, "4つ戻る", GetColor(0, 0, 0));
+				DrawString(454, 620, "4つ戻る", GetColor(0, 0, 0));
 			}
 			else {
-				DrawString(484, 620, "Player3のターン", GetColor(0, 0, 0));
+				DrawString(454, 620, "Player3のターン", GetColor(0, 0, 0));
 			}
 		}
-		if (Shuffle == false && Whoisplay == false) { DrawFormatString(484, 620, GetColor(0, 0, 0), "Player3は%d進んだ", Sum); }
-		else if (Shuffle == true) { DrawString(484, 620, "サイコロコロコロ", GetColor(0, 0, 0)); }
+		if (Shuffle == false && Whoisplay == false) { DrawFormatString(454, 620, GetColor(0, 0, 0), "Player3は%d進んだ", Sum); }
+		else if (Shuffle == true) { DrawString(454, 620, "サイコロコロコロ", GetColor(0, 0, 0)); }
 		break;
 	case 4:
 		if (Whoisplay == true && Shuffle == false) {
 			if (Player4sum == 8 || Player4sum == 19 || Player4sum == 27 || Player4sum == 40) {
-				DrawString(484, 620, "もう一度サイコロを振る", GetColor(0, 0, 0));
+				DrawString(454, 620, "もう一度サイコロを振る", GetColor(0, 0, 0));
 			}
 			else if (Player4sum == 12 || Player4sum == 48) {
-				DrawString(484, 620, "4つ進む", GetColor(0, 0, 0));
+				DrawString(454, 620, "4つ進む", GetColor(0, 0, 0));
 			}
 			else if (Player4sum == 22) {
-				DrawString(484, 620, "スタート地点に戻る", GetColor(0, 0, 0));
+				DrawString(454, 620, "スタート地点に戻る", GetColor(0, 0, 0));
 			}
 			else if (Player4sum == 34) {
-				DrawString(484, 620, "4つ戻る", GetColor(0, 0, 0));
+				DrawString(454, 620, "4つ戻る", GetColor(0, 0, 0));
 			}
 			else {
-				DrawString(484, 620, "Player4のターン", GetColor(0, 0, 0));
+				DrawString(454, 620, "Player4のターン", GetColor(0, 0, 0));
 			}
 		}
-		if (Shuffle == false && Whoisplay == false) { DrawFormatString(484, 620, GetColor(0, 0, 0), "Player4は%d進んだ", Sum); }
-		else if (Shuffle == true) { DrawString(484, 620, "サイコロコロコロ", GetColor(0, 0, 0)); }
+		if (Shuffle == false && Whoisplay == false) { DrawFormatString(454, 620, GetColor(0, 0, 0), "Player4は%d進んだ", Sum); }
+		else if (Shuffle == true) { DrawString(454, 620, "サイコロコロコロ", GetColor(0, 0, 0)); }
 		break;
 	case 5:
 		if (Goalflg == true) {
