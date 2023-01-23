@@ -23,6 +23,7 @@
     <ClCompile Include="Code\Component\Cmp_ButtonGroup.cpp" />
     <ClCompile Include="Code\Component\Cmp_Gage_Border.cpp" />
     <ClCompile Include="Code\Component\Cmp_Gage_MouseControl.cpp" />
+    <ClCompile Include="Code\Component\Cmp_Gage_UpperBorder.cpp" />
     <ClCompile Include="Code\Component\Cmp_Image.cpp" />
     <ClCompile Include="Code\Component\Gage.cpp" />
     <ClCompile Include="Code\GetKey.cpp" />
@@ -83,6 +84,7 @@
     <ClInclude Include="Code\Component\Cmp_Button_ClickCheck.h" />
     <ClInclude Include="Code\Component\Cmp_Gage_Border.h" />
     <ClInclude Include="Code\Component\Cmp_Gage_MouseControl.h" />
+    <ClInclude Include="Code\Component\Cmp_Gage_UpperBorder.h" />
     <ClInclude Include="Code\Component\Component.h" />
     <ClInclude Include="Code\Component\Cmp_Image.h" />
     <ClInclude Include="Code\Component\Cmp_Transform.h" />

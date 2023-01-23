@@ -16,7 +16,10 @@ public:
 	void FullReset(); //ゲーム完全初期化を行いたい時呼び出す、ボタン初期位置をランダム決定したりする
 
 	int GetBtnPos() const { return usePos; } //ボタン現在位置を添え字で取得、取得した添え字はキャラを格納する配列に使えばそのキャラを呼び出せる
-	void SetBtnPos(int set) { usePos = set % posList.size(); } //ボタン位置を新しく設定、キャラ数を超える値を入れても範囲内に修正してくれる
+	void SetBtnPos(int set) { //ボタン位置を新しく設定、キャラ数を超える値を入れても範囲内に修正してくれる
+		usePos = set - 1; //ResetはusePosに+1するのでsetを正しくセットする為-1している
+		Reset(); //リセットによりボタン表示位置の更新をする
+	}
 
 	void Draw();
 };

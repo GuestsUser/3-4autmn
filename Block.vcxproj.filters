@@ -58,6 +58,7 @@
     <ClCompile Include="Code\Scene\AirHockey\AirHockeyGameScene.cpp" />
     <ClCompile Include="Code\Scene\AirHockey\AirHockey.cpp" />
     <ClCompile Include="Code\Scene\Poker\Cmp_ThinkingImage.cpp" />
+    <ClCompile Include="Code\Component\Cmp_Gage_UpperBorder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Component\Button.h" />
@@ -124,6 +125,7 @@
     <ClInclude Include="Code\Scene\AirHockey\AirHockey.h" />
     <ClInclude Include="Code\Scene\AirHockey\AirHockeyGameScene.h" />
     <ClInclude Include="Code\Scene\Poker\Cmp_ThinkingImage.h" />
+    <ClInclude Include="Code\Component\Cmp_Gage_UpperBorder.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Scene\Title\SelectScene.cd" />

@@ -3,15 +3,15 @@
 
 class Gage;
 
-class Cmp_Gage_Border :public Component { //ゲージの最後にこれを追加するとゲージの最低値を指定可能になり、操作などでこれを下回っても強制的にこの数値となる
+class Cmp_Gage_UpperBorder :public Component { //Borderの上限版、これを最後にセットすると上限が決められる、下限を優先するか上限を優先するかはセット順で決められる
 	Gage* parent;
-	float border; //ゲージ下限
+	float border; //ゲージ上限
 
 public:
-	Cmp_Gage_Border(Gage& setGage) :parent(&setGage), border(0) {}
+	Cmp_Gage_UpperBorder(Gage& setGage) :parent(&setGage), border(1) {}
 	void Update();
 
-	void Reset() { border = 0; }
+	void Reset() { border = 1; }
 	void FullReset() { Reset(); }
 
 	void SetBorder(float set) { 

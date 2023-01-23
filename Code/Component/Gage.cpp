@@ -35,7 +35,7 @@ void Gage::Update() {
 void Gage::Draw() {
 	if (!GetRunDraw()) { return; } //実行禁止が出ていれば実行しない
 
-	full->EditTranform()->EditScale().SetX(iniSize * vol * 0.01); //ゲージ実体サイズ設定
+	full->EditTranform()->EditScale().SetX(iniSize * vol); //ゲージ実体サイズ設定
 
 	base->Draw(); //ベース描写
 	full->Draw(); //実体描写

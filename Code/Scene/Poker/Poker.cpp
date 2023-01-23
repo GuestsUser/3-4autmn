@@ -23,6 +23,7 @@
 #include "../Code/Component/Cmp_Button_ClickCheck.h"
 #include "../Code/Component/Cmp_Gage_MouseControl.h"
 #include "../Code/Component/Cmp_Gage_Border.h"
+#include "../Code/Component/Cmp_Gage_UpperBorder.h"
 #include "../Code/Component/Cmp_Image.h"
 
 #include <deque>
@@ -125,6 +126,7 @@ Poker::Poker() :pot(new Pot()), dealer(new PK_Dealer()), cardDealer(new CardDeal
 			control->SetRunUpdate(false); //コントロールコンポーネントは通常実行を切っておく
 			gage->SetCmp(control); //ゲージをマウスからコントロールする機能の追加
 			gage->SetCmp(new Cmp_Gage_Border(*gage)); //ゲージ下限設定機能の追加
+			gage->SetCmp(new Cmp_Gage_UpperBorder(*gage)); //ゲージ上限設定機能の追加
 
 
 			
@@ -147,6 +149,7 @@ Poker::Poker() :pot(new Pot()), dealer(new PK_Dealer()), cardDealer(new CardDeal
 			current = new CPU(); //cpuの精製
 			current->SetCmp(new Cmp_CPUBetLogic(*dealer)); //cpuのベットに必要なデータを纏めたBetLogicを導入
 		}
+		current->SetBBView(PK_Player::BBView::hide); //BB表示は隠しておく
 
 
 		current->Place(cardPos, backPos); //カードとコイン表示背景の配置
@@ -163,6 +166,8 @@ Poker::Poker() :pot(new Pot()), dealer(new PK_Dealer()), cardDealer(new CardDeal
 	list.push_back(new Change(*this));
 	list.push_back(new ShowDown(*this));
 	list.push_back(new NoContest(*this));
+	list.push_back(new GameOver(*this));
+	list.push_back(new GameClear(*this));
 
 
 
