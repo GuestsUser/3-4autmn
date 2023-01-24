@@ -14,7 +14,7 @@
 #include"../Code/Scene/ConnectFour/Scene_ConnectFour.h"
 #include"../Code/Scene/daifugou/CP_Scene.h"
 #include"../Code/Scene/BlackJack/BJ_Main.h"
-#include"../Code/Scene/Asuma/Scene_PageOne.h"
+#include"../Code/Scene/PageOne/Scene_PageOne.h"
 #include"../Code/Scene/Othello/Scene_Othello.h"
 #include"../Code/Scene/Sugoroku/SR_Game.h"
 #include "../Code/Scene/Poker/Poker.h"
