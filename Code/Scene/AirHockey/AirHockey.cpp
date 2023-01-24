@@ -372,7 +372,7 @@ void  AirHockey_Scene::Player_Hit() {
 
 		if (Player_Move_Right() == true) {//プレイヤーが右に移動していたら******************
 			if (PlayerBase_PuckPosition_Up() == true) {//パックがプレイヤーの上に位置していたら
-				if (0.0f < t_circle3.X_spd) {//パックの加算速度が正の値だったら(パックが右に移動中)
+				if (0.0f <= t_circle3.X_spd) {//パックの加算速度が正の値だったら(パックが右に移動中)
 					if (0.0f < t_circle3.X_spd - t_circle3.m_boundPx) {//+x減
 						t_circle3.X_spd -= t_circle3.m_boundPx;
 					}
@@ -1400,7 +1400,7 @@ void AirHockey_Scene::CPU_Movement() {
 		}
 
 		if(wall_xC < t_circle3.m_X){
-			if (wall_R > t_circle2.m_r + t_circle2.X_spd) {
+			if (wall_R > t_circle2.m_r) {
 				t_circle2.m_X += t_circle2.X_spd;
 			}
 		}
@@ -2518,6 +2518,23 @@ void  AirHockey_Scene::Puck_Movement() {
 	t_circle3.m_X += t_circle3.X_spd;
 	t_circle3.m_Y += t_circle3.Y_spd;
 
+	if (Player_Puck_Check_Hit ()== true) {
+		if (t_circle3.m_X > t_circle1.m_X) {
+			t_circle3.m_X += t_circle1.X_spd;
+		}
+		else if (t_circle3.m_X < t_circle1.m_X)
+		{
+			t_circle3.m_X -= t_circle1.X_spd;
+		};
+
+		if (t_circle3.m_Y < t_circle1.m_Y) {
+			t_circle3.m_Y -= t_circle1.Y_spd;
+		}
+		else if (t_circle3.m_Y > t_circle1.m_Y)
+		{
+			t_circle3.m_Y += t_circle1.Y_spd;
+		};
+	}
 	//停止するまで減速し続ける
 	if (0.0f < t_circle3.X_spd) {
 		t_circle3.X_spd -= 0.01f;
@@ -2626,30 +2643,15 @@ void AirHockey_Scene::Player_Control() {
 		if (wall_L < t_circle1.m_l - 3.0f) {
 			t_circle1.m_X -= 3.0f;
 
-			/*if (Player_Puck_Check_Hit()== true && 0.0f == t_circle3.X_spd) {
-				t_circle3.m_X -= t_circle3.X_spd;
-			}*/
-
 			if (wall_L < t_circle1.m_l - 3.0f) {
 				t_circle1.m_X -= 3.0f;
-
-				/*if (Player_Puck_Check_Hit() == true && 0.0f == t_circle3.X_spd) {
-					t_circle3.m_X -= t_circle3.X_spd;
-				}*/
 
 				if (wall_L < t_circle1.m_l - 3.0f) {
 					t_circle1.m_X -= 3.0f;
 
-					/*if (Player_Puck_Check_Hit() == true && 0.0f == t_circle3.X_spd) {
-						t_circle3.m_X -= t_circle3.X_spd;
-					}*/
-
 					if (wall_L > t_circle1.m_l - 0.5f) {
 						t_circle1.m_X -= 0.5f;
 
-						/*if (Player_Puck_Check_Hit() == true && 0.0f == t_circle3.X_spd) {
-							t_circle3.m_X -= t_circle3.X_spd;
-						}*/
 					}
 				}
 			}
@@ -2662,30 +2664,14 @@ void AirHockey_Scene::Player_Control() {
 		if (wall_B > t_circle1.m_b + 3.0f) {
 			t_circle1.m_Y += 3.0f;
 
-			/*if (Player_Puck_Check_Hit()== true && 0.0f == t_circle3.Y_spd) {
-				t_circle3.m_Y += t_circle3.Y_spd;
-			}*/
-
 			if (wall_B > t_circle1.m_b + 3.0f) {
 				t_circle1.m_Y += 3.0f;
-
-				//if (Player_Puck_Check_Hit() == true && 0.0f == t_circle3.Y_spd) {
-				//	t_circle3.m_Y += t_circle3.Y_spd;
-				//}
 
 				if (wall_B > t_circle1.m_b + 3.0f) {
 					t_circle1.m_Y += 3.0f;
 
-					/*	if (Player_Puck_Check_Hit() == true && 0.0f == t_circle3.Y_spd) {
-							t_circle3.m_Y += t_circle3.Y_spd;
-						}*/
-
 					if (wall_B > t_circle1.m_b + 0.5f) {
 						t_circle1.m_Y += 0.5f;
-
-						/*if (Player_Puck_Check_Hit() == true && 0.0f == t_circle3.Y_spd) {
-							t_circle3.m_Y += t_circle3.Y_spd;
-						}*/
 					}
 				}
 			}
@@ -2698,30 +2684,14 @@ void AirHockey_Scene::Player_Control() {
 		if (wall_T < t_circle1.m_t - 3.0f) {
 			t_circle1.m_Y -= 3.0f;
 
-			/*if (Player_Puck_Check_Hit() == true && 0.0f == t_circle3.Y_spd) {
-				t_circle3.m_Y -= t_circle3.Y_spd;
-			}*/
-
 			if (wall_T < t_circle1.m_t - 3.0f) {
 				t_circle1.m_Y -= 3.0f;
-
-				/*	if (Player_Puck_Check_Hit() == true && 0.0f == t_circle3.Y_spd) {
-						t_circle3.m_Y -= t_circle3.Y_spd;
-					}*/
 
 				if (wall_T < t_circle1.m_t - 3.0f) {
 					t_circle1.m_Y -= 3.0f;
 
-					/*	if (Player_Puck_Check_Hit() == true && 0.0f == t_circle3.Y_spd) {
-							t_circle3.m_Y -= t_circle3.Y_spd;
-						}*/
-
 					if (wall_T < t_circle1.m_t - 0.5f) {
 						t_circle1.m_Y -= 0.5f;
-
-						/*if (Player_Puck_Check_Hit() == true && 0.0f == t_circle3.Y_spd) {
-							t_circle3.m_Y -= t_circle3.Y_spd;
-						}*/
 					}
 				}
 			}
