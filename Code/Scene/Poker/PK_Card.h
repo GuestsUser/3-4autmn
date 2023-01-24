@@ -21,6 +21,8 @@ public:
 	~PK_Card();
 
 	void Reset(); //新しいラウンドを開始する時呼び出す、見た目を初期状態(マーキングなし、裏側表示)に戻す
+	void FullReset() { Reset(); } //Resetと内容は同じ
+
 	void Place(int x, int y); //カードを配置する
 
 	const Cmp_Transform* ReadTransform() const; //座標系情報を読み取り専用形式で取得

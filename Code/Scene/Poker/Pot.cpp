@@ -60,7 +60,7 @@ int Pot::TotalAmount() {
 }
 
 void Pot::SetSidePot(int pay, const Chara& user) {
-	charaPayment[&user] = pay; //取り敢えずサイドポット用支払額を記録しておく
+	charaPayment[&user] = charaPayment[&user] + pay; //取り敢えずサイドポット用支払額を記録しておく
 
 	std::deque<std::pair<int, const Chara*>> copy = std::deque<std::pair<int, const Chara*>>(); //支払状況をコピーする
 	for (auto itr : charaPayment) { copy.push_back(std::make_pair(itr.second, itr.first)); } //mapもunordered_mapも余計な機能のせいでソートできないからpairを使う
@@ -90,6 +90,6 @@ void Pot::SetMainPot(int pay, const Chara& user) {
 	}
 
 	pot[pay + old] += pay - paid; //各ポットへ支払った額を取り除いて今回額のポットへ支払う
-	charaPayment[&user] = pay + old; //今回の支払額を記録
+	charaPayment[&user] += pay; //今回の支払額を記録
 
 }

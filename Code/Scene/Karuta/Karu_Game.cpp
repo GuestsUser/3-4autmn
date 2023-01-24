@@ -633,8 +633,8 @@ void Karu_Game::Cpu_config() {
 	cpu_2.Time++;
 	cpu_3.Time++;
 	if (!Cpu_Set) {
-		cpu_1.setTime = GetRand(60) + 30;
-		cpu_2.setTime = GetRand(60) + 20;
+		cpu_1.setTime = GetRand(60) + 40;
+		cpu_2.setTime = GetRand(60) + 30;
 		cpu_3.setTime = GetRand(60) + 60;
 		Cpu_Set = true;
 	}

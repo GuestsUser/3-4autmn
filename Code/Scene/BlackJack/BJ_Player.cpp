@@ -435,7 +435,7 @@ void Player::Draw() {
 
   SetFontSize(32);
   if(ins_flg)DrawRotaGraph(ins_x + ins_w / 2, ins_y + ins_h / 2, ins_r, 0, ins_img, true);
-  if (insurance)DrawFormatString(520, 0, 0xff00ff, "Insurance：%d", ins_coin);
+  if (insurance)DrawFormatString(520, 0, 0xffffff, "Insurance：%d", ins_coin);
   /*ボタン表示*/
 
   DrawRotaGraph(hit_x + hit_w / 2, hit_y + hit_h / 2, hit_r, 0, hit_img, true);
