@@ -116,6 +116,7 @@ void PageOne::PageOne_Initialize(Scene* scene) {
 
 	pri = 1;
 	draw = false;
+	draw_text = false;
 	finish = false;
 	reset = false;
 
@@ -281,9 +282,10 @@ void PageOne::PageOne_Update() {
 			}
 			else {
 				if (flg_p == false) {
+					f_itr = Field_card.begin();
 
 					//場のスートの判定基準を決めている
-					if (Field_card.empty() == false && (*f_itr).suit == 5 && Field_card.size() == 2) {
+					if (Field_card.empty() == false && (*f_itr).suit == 5 && Field_card.size() >= 2) {
 						f_itr++;
 					}
 
@@ -297,6 +299,7 @@ void PageOne::PageOne_Update() {
 
 					//プレイヤーがカード引く用
 					if (draw == true && Card_obj.empty() == false) {
+						draw_text = true;
 						if (n > 30) {
 							if ((Mouse_X > Deck_X - (card_w * 0.7) / 2) && (Mouse_X < Deck_X + (card_w * 0.7) / 2) && (Mouse_Y > Deck_Y - (card_h * 0.7) / 2) && (Mouse_Y < Deck_Y + (card_h * 0.7) / 2)) {
 								if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
@@ -308,18 +311,21 @@ void PageOne::PageOne_Update() {
 									for (int i = 0; i < r; i++) {
 										itr++;
 									}
-									
+
 									(*itr).card_x = Player_X;
 									(*itr).card_y = Player_Y;
-									
+
 									Player_card.push_back(*itr);
 									Card_obj.erase(itr);
-									
+
 									n = 0;
 									break;
 								}
 							}
 						}
+					}
+					else {
+						draw_text = false;
 					}
 
 
@@ -439,7 +445,7 @@ void PageOne::PageOne_Update() {
 					f_itr = Field_card.begin();
 
 					//場のスートの判定基準を決めている
-					if (Field_card.empty() == false && (*f_itr).suit == 5 && Field_card.size() == 2) {
+					if (Field_card.empty() == false && (*f_itr).suit == 5 && Field_card.size() >= 2) {
 						f_itr++;
 					}
 
@@ -589,7 +595,7 @@ void PageOne::PageOne_Update() {
 					f_itr = Field_card.begin();
 
 					//場のスートの判定基準を決めている
-					if (Field_card.empty() == false && (*f_itr).suit == 5 && Field_card.size() == 2) {
+					if (Field_card.empty() == false && (*f_itr).suit == 5 && Field_card.size() >= 2) {
 						f_itr++;
 					}
 
@@ -738,7 +744,7 @@ void PageOne::PageOne_Update() {
 					f_itr = Field_card.begin();
 
 					//場のスートの判定基準を決めている
-					if (Field_card.empty() == false && (*f_itr).suit == 5 && Field_card.size() == 2) {
+					if (Field_card.empty() == false && (*f_itr).suit == 5 && Field_card.size() >= 2) {
 						f_itr++;
 					}
 
@@ -943,7 +949,7 @@ void PageOne::PageOne_Draw() {
 		switch (priority) {
 		case 0:
 			DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：プレイヤー");
-			if (draw == true && Card_obj.empty() == false) {
+			if (draw_text == true) {
 				DrawFormatString(250, 450, GetColor(100, 100, 255), "カードを引いてください");
 			}
 			if (Player_Pass_Flg == true) {
