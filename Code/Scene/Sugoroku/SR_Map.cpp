@@ -4,10 +4,12 @@
 #include "./../../SceneManager.h"
 #include "SR_Saikoro.h"
 #include "SR_Game.h"
+
 extern int Player1sum;
 extern int Player2sum;
 extern int Player3sum;
 extern int Player4sum;
+
 SR_Map::SR_Map() {
 	/*-------------------------------Player1用座標----------------------------------------*/
 	/*スタート*/

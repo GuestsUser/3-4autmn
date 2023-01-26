@@ -188,7 +188,7 @@ void BlackJack::Update() {
       }
       if (sct_flg) {
 
-          game_endflg = true;
+          game_endflg = end = true;
       }
 
     }
