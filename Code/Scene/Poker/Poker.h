@@ -21,7 +21,6 @@ class Poker :public Scene { //ポーカーのゲームシーン
 	Scene* run; //これに入ってるシーンを実行する
 public:
 	enum class Character { leftCom, topCom, rightCom, player, length }; //charaから狙ったキャラを取り出す為の要素指定用列挙型、lengthを参照すればキャラ数を取得できるライフハック
-	enum class Section { ini, pre, main, change, showdown, nocontest, gameover, gameclear }; //list配列から望んだシーンを取り出す為の要素指定用列挙型
 
 	Poker();
 	~Poker();
@@ -29,6 +28,7 @@ public:
 	void Draw();
 
 private: //ポーカーを行う為のデータを操作する処理を定義したPoker管理シーン前方宣言
+	enum class Section { ini, pre, main, change, showdown, nocontest, gameover, gameclear }; //list配列から望んだシーンを取り出す為の要素指定用列挙型
 	class Ini;
 	class Pre;
 	class Main;

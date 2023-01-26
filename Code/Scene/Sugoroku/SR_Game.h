@@ -9,7 +9,6 @@ private:
 	SR_Saikoro* saikoro;
 	SR_Map* map;
 	int SR_MAP;	/*”wŒi‰æ‘œ*/
-	int SR_BGM;
 public:
 	SR_Game();
 	void Update();
