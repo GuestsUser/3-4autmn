@@ -4,7 +4,7 @@
 #define PB 10			// ボードの配列の数
 #define MAP_SIZE 66		// ボードの1マス当たりの大きさ
 
-
+// クラス
 class Othello_Board {
 private:
 	Scene* Parent;
