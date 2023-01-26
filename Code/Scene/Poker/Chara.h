@@ -9,16 +9,11 @@ class Cmp_Transform;
 class PK_Card;
 
 class Chara :public Component {
-public:
-	enum class BBView { BB, SB, hide }; //BB、SBである事を示す表示をどう表示するかの為の列挙型、hideは非表示、BB,SBはそう表示する
-
-private:
 	static int coinIni; //初期所持金記録用変数
 	int coin;
 	std::deque<PK_Card*> card;
 	std::deque<Cmp_Image*> coinBack;
 	std::deque<Component*> cmp;
-	BBView bbView;
 
 public:
 	Chara();
@@ -40,9 +35,6 @@ public:
 	void SetCmp(Component* set) { cmp.push_back(set); } //追加機能の追加
 	void EraseCmp(Component* set); //指定追加機能削除
 	void ClearCmp(); //追加機能全削除
-
-	BBView GetBBView() const { return bbView; } //BB表示の状態を得る
-	void SetBBView(BBView set); //BB表示状態を設定する
 
 	std::deque<Component*>* EditCmpFull() { return &cmp; } //コンポーネント全てを取得、各コンポーネントの中身を気にしない場合こちらを使用
 

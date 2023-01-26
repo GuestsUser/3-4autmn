@@ -14,7 +14,7 @@ Btn::Btn() :posList(std::deque<Cmp_Transform>((int)Poker::Character::length)) {
 	posList[(int)Poker::Character::leftCom].EditPos().SetXYZ(87, 511, 0); //各キャラがボタンポジションになった際、ボタンを配置する座標を設定
 	posList[(int)Poker::Character::topCom].EditPos().SetXYZ(754, 146, 0);
 	posList[(int)Poker::Character::rightCom].EditPos().SetXYZ(1015, 491, 0);
-	posList[(int)Poker::Character::player].EditPos().SetXYZ(674, 671, 0);
+	posList[(int)Poker::Character::player].EditPos().SetXYZ(677, 699, 0);
 
 	FullReset(); //初期ボタンポジションをランダム決定
 }

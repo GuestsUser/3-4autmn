@@ -9,13 +9,10 @@
     <ClCompile Include="Code\main.cpp" />
     <ClCompile Include="Code\OriginMath.cpp" />
     <ClCompile Include="Code\SceneManager.cpp" />
-    <ClCompile Include="Code\Scene\Asuma\PageOne.cpp" />
     <ClCompile Include="Code\Scene\BlackJack\BJ_Dealer.cpp" />
     <ClCompile Include="Code\Scene\BlackJack\BJ_Main.cpp" />
     <ClCompile Include="Code\Scene\BlackJack\BJ_Player.cpp" />
     <ClCompile Include="Code\Scene\BlackJack\BJ_Shoe.cpp" />
-    <ClCompile Include="Code\Scene\Asuma\PO_Player.cpp" />
-    <ClCompile Include="Code\Scene\Asuma\Scene_PageOne.cpp" />
     <ClCompile Include="Code\Scene\ConnectFour\CF_Player.cpp" />
     <ClCompile Include="Code\Scene\ConnectFour\Scene_ConnectFour.cpp" />
     <ClCompile Include="Code\Scene\daifugou\CP_Player.cpp" />
@@ -59,6 +56,8 @@
     <ClCompile Include="Code\Scene\AirHockey\AirHockey.cpp" />
     <ClCompile Include="Code\Scene\Poker\Cmp_ThinkingImage.cpp" />
     <ClCompile Include="Code\Component\Cmp_Gage_UpperBorder.cpp" />
+    <ClCompile Include="Code\Scene\PageOne\PageOne.cpp" />
+    <ClCompile Include="Code\Scene\PageOne\Scene_PageOne.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Component\Button.h" />
@@ -71,14 +70,11 @@
     <ClInclude Include="Code\GlovalLoading.h" />
     <ClInclude Include="Code\OriginMath.h" />
     <ClInclude Include="Code\SceneManager.h" />
-    <ClInclude Include="Code\Scene\Asuma\PageOne.h" />
     <ClInclude Include="Code\Scene\BlackJack\BJ_Dealer.h" />
     <ClInclude Include="Code\Scene\BlackJack\BJ_Head.h" />
     <ClInclude Include="Code\Scene\BlackJack\BJ_Main.h" />
     <ClInclude Include="Code\Scene\BlackJack\BJ_Player.h" />
     <ClInclude Include="Code\Scene\BlackJack\BJ_Shoe.h" />
-    <ClInclude Include="Code\Scene\Asuma\PO_Player.h" />
-    <ClInclude Include="Code\Scene\Asuma\Scene_PageOne.h" />
     <ClInclude Include="Code\Scene\ConnectFour\CF_Player.h" />
     <ClInclude Include="Code\Scene\ConnectFour\Scene_ConnectFour.h" />
     <ClInclude Include="Code\Scene\daifugou\CP_Player.h" />
@@ -126,6 +122,8 @@
     <ClInclude Include="Code\Scene\AirHockey\AirHockeyGameScene.h" />
     <ClInclude Include="Code\Scene\Poker\Cmp_ThinkingImage.h" />
     <ClInclude Include="Code\Component\Cmp_Gage_UpperBorder.h" />
+    <ClInclude Include="Code\Scene\PageOne\PageOne.h" />
+    <ClInclude Include="Code\Scene\PageOne\Scene_PageOne.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Scene\Title\SelectScene.cd" />

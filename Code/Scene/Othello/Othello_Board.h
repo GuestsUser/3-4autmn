@@ -9,34 +9,25 @@ class Othello_Board {
 private:
 	Scene* Parent;
 
-	/* オセロで使う画像 */
 	int PutCheckImage;	// かっこの画像を入れる用の変数
 	int ResultImage;
 	int WinLoseImage[3];
 	int Black;
 	int White;
-	int PlayerImage[2];
-	int SenteGote;
-	int NumberImage[10];
 
-
-	/* ポーズ画面で使う画像 */
 	int Pause_Button;
 	int Pause_Back;
 	int Pause_Continue;
 	int Pause_Select;
+
 	int pause_continue[2];
 	int pause_select[2];
 
-
-	/* サウンド関係 */
 	int BGM;		// BGM用の変数
 	int PutSE;		// 石を置くときのSE用の変数
 	int PassSE;		// パスされたときのSE用の変数
 	int PauseClickSE;
 	int PauseSelectSE;
-
-
 
 	int BlackCr;	// 黒色をセットしておく用の変数
 	int WhiteCr;	// 白色をセットしておく用の変数
@@ -62,8 +53,6 @@ private:
 	int OldKey;
 	int nowKey;
 
-	float SizeCount;
-
 	bool DrawFlag;		// カーソルがマスの上に来た時に赤く描画していいか判定
 	bool CheckFlag;		// 
 	bool PassFlag;		// パスされたかどうかを判定
@@ -72,7 +61,6 @@ private:
 	bool CornerFlag;	// 角が取れるかどうかを判定
 	bool PauseFlg;		// ポーズ画面を開いているかどうか
 	bool SEFlag[4];
-	bool SizeFlag;
 
 public:
 	int Square_X;		// マウスから読みとったX座標を、MAP_SIZEで割った値を入れた変数

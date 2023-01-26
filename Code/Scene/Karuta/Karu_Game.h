@@ -20,8 +20,6 @@
 
 #define TOTAL_PLAYER 4			//参加人数
 
-#define CARD_MAX_SPEED 10.0f	//絵札の最大速度
-
 #include "./../Scene.h"
 
 class Karu_Game{
@@ -89,9 +87,6 @@ private:
 	int Se_GameOver;			//ゲームオーバー時のSE
 	int Se_Result;				//リザルト時のSE
 
-	float Card_Ac;
-	float Card_Spd;
-
 	bool end;
 	bool Gameover;
 
@@ -110,7 +105,6 @@ public:
 
 	void Click_Anim();
 	void Otetuki_Anim();
-	void Karuta_Anim();
 
 	void Cpu_config();
 	void Cpu_reset();
@@ -147,15 +141,6 @@ struct YOMIFUDA
 };
 
 extern struct YOMIFUDA Yomifuda[KARU_MAX_Y][KARU_MAX_X];
-
-struct CARD 
-{
-	int img;
-	float  x, y;
-	float Spd = 50.0f;
-	float Ace = 1.0f;
-};
-extern struct CARD Anim_Card;
 
 struct FUDA
 {
