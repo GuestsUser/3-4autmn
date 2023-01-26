@@ -33,6 +33,8 @@ private:
   bool pose_flg, ptn,ctn,scn;
   bool st;
 
+  std::string next;
+
   /*カードシューオブジェクトの生成*/
   Shoe* shoe;
   /*プレイヤーオブジェクトの生成*/

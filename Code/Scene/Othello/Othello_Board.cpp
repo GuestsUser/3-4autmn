@@ -19,16 +19,11 @@ void Othello_Board::Othello_Board_Initialize(Scene* scene) {
 
     PutCheckImage = LoadGraph("Resource/image/Othello_Image/OthelloPutCheck2.png");     // 置ける場所のカッコの画像の読み込み
     ResultImage = LoadGraph("Resource/image/Othello_Image/Othello_Result2.png");        // リザルト画面の画像の読み込み
-    Black = LoadGraph("Resource/image/Othello_Image/Black.png");            // 黒石の画像の読み込み
-    White = LoadGraph("Resource/image/Othello_Image/White.png");            // 白石の画像の読み込み
-    SenteGote = LoadGraph("Resource/image/Othello_Image/SenteGote.png");    // 先手・後手の画像の読み込み 
+    Black = LoadGraph("Resource/image/Othello_Image/Black.png");        // 黒石の画像の読み込み
+    White = LoadGraph("Resource/image/Othello_Image/White.png");        // 白石の画像の読み込み
 
     // 勝ち・負け・引き分けの画像の読み込み
     LoadDivGraph("Resource/image/Othello_Image/winlosedraw.png", 3, 3, 1, 400, 120, WinLoseImage);
-    // プレイヤーかCPUかの画像の読み込み
-    LoadDivGraph("Resource/image/Othello_Image/Player.png", 2, 2, 1, 450, 150, PlayerImage);
-    // ナンバー画像の読み込み
-    LoadDivGraph("Resource/image/Othello_Image/Number.png", 10, 10, 1, 45, 70, NumberImage);
 
     Pause_Button = LoadGraph("Resource/image/PauseButton.png");     // ポーズボタンの画像の読み込み
     Pause_Back = LoadGraph("Resource/image/PauseBack.png");         // ポーズ画面の背景の画像の読み込み
@@ -68,8 +63,6 @@ void Othello_Board::Othello_Board_Initialize(Scene* scene) {
     BoardShift_X = 180 - 99;        // ボードをずらした分のX座標の値を設定
     BoardShift_Y = (80 - 66) * 2;   // ボードをずらした分のY座標の値を設定
 
-    SizeCount = 0.5f;
-
     srand(time(NULL));  // 現在の時刻を取得
 
     DrawFlag = false;       // カーソルが石を置ける場所に来た時に使うフラグの初期化
@@ -78,13 +71,11 @@ void Othello_Board::Othello_Board_Initialize(Scene* scene) {
     EndFlag = false;        // ゲームの終了条件を満たしたかどうかに使うフラグの初期化
     RandomFlag = false;     // ランダムな値を取得したかどうかに使うフラグの初期化
     PauseFlg = false;       // ポーズ画面を表示させるかどうかに使うフラグの初期化
-    SizeFlag = false;
 
     for (int i = 0; i < 4; i++) {
         SEFlag[i] = false;
     }
 
-    RandomOrder();      // プレイヤーが先手・後手かをランダムに決める関数
     Init_OthelloBoard(Board);           // ボードを初期化
     BoardScore(ScoreBoard);             // ボードに評価値を入れる
 }
@@ -97,13 +88,11 @@ void Othello_Board::Othello_Board_Finalize() {
     DeleteGraph(White);             // 白石の画像の削除
     DeleteGraph(Pause_Button);      // ポーズボタンの画像の削除
     DeleteGraph(Pause_Back);        // ポーズ画面の背景の画像の削除
-    DeleteGraph(SenteGote);
 
     // ポーズの「つづける」と「セレクトに戻る」の画像の削除
     for (int i = 0; i < 2; i++) {
         DeleteGraph(pause_continue[i]);
         DeleteGraph(pause_select[i]);
-        DeleteGraph(PlayerImage[i]);
     }
     // 勝ち・負け・引き分けの画像の削除
     for (int i = 0; i < 3; i++) {
@@ -127,19 +116,17 @@ void Othello_Board::Othello_Board_Update() {
     Square_X = (Mouse_X - BoardShift_X) / MAP_SIZE;      // マウスカーソルの位置を MAP_SIZE + BoardShift_X で割った値を代入
     Square_Y = (Mouse_Y - BoardShift_Y) / MAP_SIZE;      // マウスカーソルの位置を MAP_SIZE + BoardShift_X で割った値を代入
 
-    BoardSearchBWNumber(Board);         // 黒石と白石の数を数える関数実行
+    RandomOrder();      // プレイヤーが先手・後手かをランダムに決める関数
 
     /* プレイヤーとCPUの操作管理 */
     if (PauseFlg == false) {
-
         if (EndFlag == false) {   // ゲームが終わったかどうか
+
+            PlaySoundMem(BGM, DX_PLAYTYPE_LOOP, false);
 
             if (PassFlag == false) {    // パスフラグが false なら
 
                 if (RandomFlag == true) {
-
-                    PlaySoundMem(BGM, DX_PLAYTYPE_LOOP, false);
-
                     switch (Player) {
                     case 0:
                         if (OrderNum == 0) {    // 黒の番だったら
@@ -151,9 +138,7 @@ void Othello_Board::Othello_Board_Update() {
                                 PassFlag = true;    // パスフラグを true にする
                             }
 
-                            //BoardSearchBlack(Board);
-
-                            //BoardSearchBWNumber(Board);         // 黒石と白石の数を数える関数実行
+                            BoardSearchBlack(Board);
 
                             if (Board[Square_X][Square_Y] == 3 ||
                                 Board[Square_X][Square_Y] == 6 ||
@@ -167,7 +152,7 @@ void Othello_Board::Othello_Board_Update() {
                                     BlackPut();                         // 置いた場所から白を黒にひっくり返す
                                     PlaySoundMem(PutSE, DX_PLAYTYPE_BACK, true);
                                     OrderNum = 1;                       // 白の手番にする
-                                    //BoardSearchBWNumber(Board);         // 黒石と白石の数を数える関数実行
+                                    BoardSearchBWNumber(Board);         // 黒石と白石の数を数える関数実行
 
                                     if (EndGame(Board)) {               // ゲームが終わる条件を満たしたら
                                         EndFlag = true;   // エンドフラグを true にする
@@ -200,7 +185,7 @@ void Othello_Board::Othello_Board_Update() {
                                 OrderNum = 0;       // 黒の番にする
                             }
 
-                            //BoardSearchBWNumber(Board);     // 黒石と白石の数を数える
+                            BoardSearchBWNumber(Board);     // 黒石と白石の数を数える
 
                             // ゲームの終了条件が揃っていたら  
                             if (EndGame(Board)) {
@@ -227,7 +212,7 @@ void Othello_Board::Othello_Board_Update() {
                                 OrderNum = 1;       // 白の番にする
                             }
 
-                            //BoardSearchBWNumber(Board);     // 黒石と白石の数を数える
+                            BoardSearchBWNumber(Board);     // 黒石と白石の数を数える
 
                             // ゲームの終了条件が揃っていたら  
                             if (EndGame(Board)) {
@@ -242,8 +227,6 @@ void Othello_Board::Othello_Board_Update() {
                                 PassFlag = true;    // パスフラグを true にする
                             }
 
-                            //BoardSearchBWNumber(Board);         // 黒石と白石の数を数える関数実行
-
                             if (Board[Square_X][Square_Y] == 4 ||
                                 Board[Square_X][Square_Y] == 6 ||
                                 Board[Square_X][Square_Y] == 8) {   // 白石が置ける場所にカーソルがあっていたら
@@ -256,6 +239,7 @@ void Othello_Board::Othello_Board_Update() {
                                     WhitePut();                         // 置いた場所から黒を白にひっくり返す
                                     PlaySoundMem(PutSE, DX_PLAYTYPE_BACK, true);
                                     OrderNum = 0;                       // 黒の手番にする
+                                    BoardSearchBWNumber(Board);         // 黒石と白石の数を数える関数実行
 
                                     if (EndGame(Board)) {               // ゲームが終わる条件を満たしたら
                                         EndFlag = true;   // エンドフラグを true にする
@@ -368,97 +352,23 @@ void Othello_Board::Othello_Board_Update() {
 
 // ------------------描画-----------------------------------------------
 void Othello_Board::Othello_Board_Draw() {
-    // 先手・後手を分かりやすくするための処理
-    if (RandomFlag == false) {
-        switch (Player) {
-        case 0:
-            // プレイヤーが黒
-            DrawRotaGraph(640, 360, 1.0, 0.0, SenteGote, TRUE);     // 背景の描画
-            // "あなた"の文字のサイズを縮小・拡大を繰り返す
-            if (SizeFlag == false) {
-                if (SizeCount <= 1.0f) {
-                    SizeCount += 0.01f;
-                }
-                else {
-                    SizeFlag = true;
-                }
-            }
-            else {
-                if (SizeCount >= 0.5f) {
-                    SizeCount -= 0.01f;
-                }
-                else {
-                    SizeFlag = false;
-                }
-            }
-            DrawRotaGraph(1050, 150, SizeCount, 0.0, PlayerImage[0], TRUE); // プレイヤー
-            DrawRotaGraph(1050, 570, 1.0, 0.0, PlayerImage[1], TRUE);       // CPU
-            if (TimeCount++ >= 180) {
-                TimeCount = 0;
-                RandomFlag = true;
-            }
-            break;
 
-        case 1:
-            // プレイヤーが白
-            //DrawBox(0, 0, 1280, 720, BlackCr, true);
-            DrawRotaGraph(640, 360, 1.0, 0.0, SenteGote, TRUE);
-            // "あなた"の文字のサイズを縮小・拡大を繰り返す
-            if (SizeFlag == false) {
-                if (SizeCount <= 1.0f) {
-                    SizeCount += 0.01f;
-                }
-                else {
-                    SizeFlag = true;
-                }
-            }
-            else {
-                if (SizeCount >= 0.5f) {
-                    SizeCount -= 0.01f;
-                }
-                else {
-                    SizeFlag = false;
-                }
-            }
-            DrawRotaGraph(1050, 150, 1.0, 0.0, PlayerImage[1], TRUE);       // CPU
-            DrawRotaGraph(1050, 570, SizeCount, 0.0, PlayerImage[0], TRUE); // プレイヤー
-            if (TimeCount++ >= 180) {
-                TimeCount = 0;
-                RandomFlag = true;
-            }
-            break;
-        }
-    }
-    else {
-        // 背景を一色に染める
-        DrawBox(0, 0, 1280, 720, Cr, TRUE);
+    // 背景を一色に染める
+    DrawBox(0, 0, 1280, 720, Cr, TRUE);
 
-        // ボードの後ろを黒色で囲む
-        DrawBox(60 + BoardShift_X, 60 + BoardShift_Y,
-            (MAP_SIZE * 9) + BoardShift_X + 6, (MAP_SIZE * 9) + BoardShift_Y + 6, BlackCr, TRUE);
+    // ボードの後ろを黒色で囲む
+    DrawBox(60 + BoardShift_X, 60 + BoardShift_Y,
+        (MAP_SIZE * 9) + BoardShift_X + 6, (MAP_SIZE * 9) + BoardShift_Y + 6, BlackCr, TRUE);
 
-        Print_OthelloBoard(Board);      // オセロボードの描画
+    Print_OthelloBoard(Board);      // オセロボードの描画
 
-        switch (Player) {
-        case 0:
-            DrawRotaGraph(800, 184, 0.35, 0, Black, TRUE);
-            DrawRotaGraph(800, 304, 0.35, 0, White, TRUE);
+    DrawRotaGraph(800, 184, 0.35, 0, Black, TRUE);
+    DrawRotaGraph(800, 304, 0.35, 0, White, TRUE);
 
-            DrawFormatString(800 + MAP_SIZE / 2, 167, BlackCr, "黒:%d ← あなた", BlackNum);      // 黒石の現在の数を表示
-            DrawFormatString(800 + MAP_SIZE / 2, 287, BlackCr, "白:%d ← C P U", WhiteNum);      // 白石の現在の数を表示
+    DrawFormatString(800 + MAP_SIZE / 2, 167, BlackCr, "黒:%d", BlackNum);      // 黒石の現在の数を表示
+    DrawFormatString(800 + MAP_SIZE / 2, 287, BlackCr, "白:%d", WhiteNum);      // 白石の現在の数を表示
 
-            break;
-        case 1:
-            DrawRotaGraph(800, 184, 0.35, 0, Black, TRUE);
-            DrawRotaGraph(800, 304, 0.35, 0, White, TRUE);
 
-            DrawFormatString(800 + MAP_SIZE / 2, 167, BlackCr, "黒:%d ← C P U", BlackNum);      // 黒石の現在の数を表示
-            DrawFormatString(800 + MAP_SIZE / 2, 287, BlackCr, "白:%d ← あなた", WhiteNum);      // 白石の現在の数を表示
-
-            break;
-        }
-
-    
     // ----- ゲームの終了条件を満たしたら -----
     if (EndFlag == true) {
 
@@ -700,8 +610,9 @@ void Othello_Board::Othello_Board_Draw() {
         else {
 
             DrawFormatString(800, 90, BlackCr, "パス！");      // パス！と表示する
+            TimeCount++;
             // 1秒経ったら
-            if (TimeCount++ >= 60)
+            if (TimeCount >= 60)
             {
                 TimeCount = 0;      // TimeCount を初期化
 
@@ -756,8 +667,6 @@ void Othello_Board::Othello_Board_Draw() {
     }
     DrawRotaGraph(90, 40, 0.9, 0, Pause_Button, TRUE);      // ポーズボタンの表示
     // ------------------------------------------------------------------------
-    }
-    //DrawFormatString(900, 600, WhiteCr, "%d", RandomNum);
 }
 // ---------------------------------------------------------------------
 
@@ -1403,9 +1312,10 @@ int Othello_Board::CPUBlack(int board[PB][PB], int scoreboard[PB][PB]) {
 * 戻り値：なし
 */
 void Othello_Board::RandomOrder() {
-
-    RandomNum = rand();
-
+    if (RandomFlag == false) {
+        RandomNum = rand();
+        RandomFlag = true;
+    }
 
     // 50以上で黒色がプレイヤー、それ以外は白色がプレイヤー
     if (RandomNum % 2 == 0) {

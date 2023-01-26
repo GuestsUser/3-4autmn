@@ -27,14 +27,14 @@ int CardDealer::DeckDraw() {
 
 
 
-void HandComboCheck(std::deque<int> hand, CardDealer::deque_map& get) { //handに現在手札を渡すとその手札で同じ強さのカードの個数をgetに入れてくれる
+void HandComboCheck(std::deque<int>& hand, CardDealer::deque_map& get) { //handに現在手札を渡すとその手札で同じ強さのカードの個数をgetに入れてくれる
 	for (int i = 0; i < hand.size(); ++i) {
 		if (hand[i] == -1) { continue; } //チェック済みの-1札の場合飛ばす
 		get.push_back(std::pair<int, int>(hand[i] % 13, 1)); //非チェックのカードなら追加しておく
 
 		int sub = get.size() - 1; //今回の添え字
-		for (int j = i + 1; j < hand.size(); ++j) {
-			if (get[sub].first != hand[j] % (int)CardDealer::CardPower::max) { continue; } //札が違う場合やり直し
+		for (int j = i; j < hand.size(); ++j) {
+			if (hand[i] % (int)CardDealer::CardPower::max != hand[j] % (int)CardDealer::CardPower::max) { continue; } //札が違う場合やり直し
 			++get[sub].second; //その札の枚数カウントを増やす
 			hand[j] = -1; //同じ札をチェックしないよう調べた札に-1入れる
 		}
@@ -90,14 +90,8 @@ int HandStraightReachCheck(CardDealer::deque_map combo, const std::deque<int>& h
 		combo.erase(combo.begin()); //先頭を削除
 		combo.push_back(std::pair<int, int>((int)CardDealer::CardPower::one, copy)); //後ろに追加aceをoneに改めた物を追加
 	}
-
-	//oneの場合のストレートチェック未完成、aceを除き、2345の内3枚があればaceをoneとして扱う
-	//if (combo[0].first == (int)CardDealer::CardPower::ace) {
-
-	//}
-
-
-	int start = combo[0].first - combo[1].first > 1; //一番強いカードと次のカードが繋がっている場合false、繋がっていなければtrueが返る、int型なので其々0、1に変換される
+	
+	int start = combo[0].first - combo[1].first > 0; //一番強いカードと次のカードが繋がっている場合false、繋がっていなければtrueが返る、int型なので其々0、1に変換される
 	int changeCount = start; //繋がってないカードを検知した回数記録、startが1なら先頭と次が繋がってないからこちらも1開始
 
 	if (straight != -1 && combo[0].first - combo[1].first > 1) { return -1; } //重複カードがある且つ先頭と次のカードの差が2以上の場合重複カードと先頭カードを交換する必要があるのでストレートは無理
@@ -155,7 +149,7 @@ std::deque<int> CardDealer::HandCheck(const Chara& chara) {
 	}
 
 
-	if ((combo.begin() + 1)->second == 1) { //カードがペア(aaa33のように同じカードの組ができてる、ワンペアは対象外)ではない場合
+	if (++combo.begin()->second == 1) { //カードがペア(aaa33のように同じカードの組ができてる、ワンペアは対象外)ではない場合
 		HandRank rank = HandRank::OnePair; //同じカードの枚数に応じてランクを決定、取り敢えずワンペア
 		if (combo.begin()->second == 3) { rank = HandRank::ThreeCard; } //3枚あればスリーカード
 		if (combo.begin()->second == 4) { rank = HandRank::FourCard; } //4枚ならばフォーカード

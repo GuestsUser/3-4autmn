@@ -31,7 +31,7 @@ void Pose_Update() {
   GetMousePoint(&Mouse_X, &Mouse_Y);
   nowKey = key->GetKeyState(REQUEST_MOUSE_LEFT); /*現在のマウス左ボタンの入力状態の取得*/
     /*ポーズボタンを押したらポーズ画面を開くフラグをtrueにする*/
-  if (((20 <= Mouse_X && Mouse_X <= 200 && 25 <= Mouse_Y && Mouse_Y <= 105) || ((450 <= Mouse_X && Mouse_X <= 850 && 320 <= Mouse_Y && Mouse_Y <= 440)) && PauseFlg) && !end) {
+  if ((20 <= Mouse_X && Mouse_X <= 200 && 25 <= Mouse_Y && Mouse_Y <= 105) || ((450 <= Mouse_X && Mouse_X <= 850 && 320 <= Mouse_Y && Mouse_Y <= 440) && PauseFlg)) {
     if (!seflg && 450 <= Mouse_X && Mouse_X <= 850 && 320 <= Mouse_Y && Mouse_Y <= 440) {
       PlaySoundMem(Se_Cursor, DX_PLAYTYPE_BACK, TRUE);
     }
@@ -44,7 +44,7 @@ void Pose_Update() {
     }
   }
   else { seflg = false; }
-  if (PauseFlg && !end) {
+  if (PauseFlg) {
 
     if (450 <= Mouse_X && Mouse_X <= 850 && 470 <= Mouse_Y && Mouse_Y <= 590) {
       if (!seflg2 && Mouse_X <= 850 && 470 <= Mouse_Y && Mouse_Y <= 590) {
@@ -54,6 +54,7 @@ void Pose_Update() {
       if (OldKey != KEY_FREE && nowKey == KEY_PULL && !btn) {  /*前の入力で左キーを話していなくて、今マウスの左キーを離した時*/
         btn = true;
         PlaySoundMem(Se_Select, DX_PLAYTYPE_BACK, TRUE);
+        StopSoundMem(CF_GameBGM);
         end = true;
       }
     }
@@ -63,8 +64,8 @@ void Pose_Update() {
 }
 void Pose_Draw() {
   /*ポーズボタン*/
-  if(!end)DrawRotaGraph(110, 65, 0.9, 0, Pause_Button, TRUE);
-  if (PauseFlg && !end) {
+  DrawRotaGraph(110, 65, 0.9, 0, Pause_Button, TRUE);
+  if (PauseFlg == true) {
     DrawRotaGraph(650, 380, 1.15, 0, Pause_Back, TRUE);
     if (450 <= Mouse_X && Mouse_X <= 850 && 320 <= Mouse_Y && Mouse_Y <= 440) {
       if (!btn &&nowKey == KEY_HOLD) {
