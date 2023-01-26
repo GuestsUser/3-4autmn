@@ -534,16 +534,16 @@ void CF_Player::CPU_CoinCheck(int board[Board_Xsize][Board_Ysize], int x, int y)
 					DoubleCheck = 0;
 					CoinCheck = 0;
 				}
-				else {
+				else if(b == 2){
 					CoinCheck = 0;
 				}
 			}
 		}
+		SpaceCheck(board, x, y);
 		if (CoinCheck == 1) { //3マスとも同じものがあったら
 			DoubleCheck = 0;
-			SpaceCheck(board, x, y);
 			if (board[x][y] == Coin_CPU) {
-				if (a == 0 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space && 0 <= y - (b * dy[a])) { //上に3つ続いていて、その上に何もないなら
+				if (a == 0 && board[x + b * dx[a]][y - b * dy[a] - 1] == Coin_Space && 0 <= y - (b * dy[a]) - 1) { //上に3つ続いていて、その上に何もないなら
 					if (CPU_Position == 99) {
 						CPU_j = x;
 						CPU_Position = 0;
@@ -575,16 +575,11 @@ void CF_Player::CPU_CoinCheck(int board[Board_Xsize][Board_Ysize], int x, int y)
 					if (CPU_Position == 99) {
 						CPU_j = x + 1;
 						CPU_Position = 0;
-					}
-				}
-				else {
-					if (CPU_Position == 99) {
-						CPU_RandomFall();
 					}
 				}
 			}
 			else if (board[x][y] == Coin_Player) {
-				if (a == 0 && board[x + b * dx[a]][y - b * dy[a]] == Coin_Space && 0 <= y - (b * dy[a])) { //上に3つ続いていて、その上に何もないなら
+				if (a == 0 && board[x + b * dx[a]][y - b * dy[a] - 1] == Coin_Space && 0 <= y - (b * dy[a]) - 1) { //上に3つ続いていて、その上に何もないなら
 					if (CPU_Position == 99) {
 						CPU_j = x;
 						CPU_Position = 0;
@@ -618,18 +613,13 @@ void CF_Player::CPU_CoinCheck(int board[Board_Xsize][Board_Ysize], int x, int y)
 						CPU_Position = 0;
 					}
 				}
-				else {
-					if (CPU_Position == 99) {
-						CPU_RandomFall();
-					}
-				}
 			}
 		}
-		if (DoubleCheck == 1) { //2個続いていて、3個続いているものがない時
-			SpaceDoubleCheck(board, x, y);
+		SpaceDoubleCheck(board, x, y);
+		if (DoubleCheck == 1 && CoinCheck == 0) { //2個続いていて、3個続いているものがない時
 			if (board[x][y] == Coin_CPU) {
 				//上に2つ続いていて、その上に何もないなら
-				if (a == 0 && board[x + b * dx[a]][(y - (b * dy[a]) + 1)] == Coin_Space && 0 <= (y - (b * dy[a]) + 1)) {
+				if (a == 0 && board[x + b * dx[a]][(y - (b * dy[a]) - 1)] == Coin_Space && 0 <= (y - (b * dy[a]) - 1)) {
 					if (CPU_Position == 99) {
 						CPU_j = x;
 						CPU_Position = 0;
@@ -663,15 +653,16 @@ void CF_Player::CPU_CoinCheck(int board[Board_Xsize][Board_Ysize], int x, int y)
 						CPU_Position = 0;
 					}
 				}
-				else {
-					if (CPU_Position == 99) {
-						CPU_RandomFall();
-					}
-				}
 			}
 			else if (board[x][y] == Coin_Player) {
 				//横2つ続いていて右端の一つ右に何もない時か、右斜めに2つ続いていてその右上に何もない時
-				if (((a == 1 && board[x + (b * dx[a]) - 1][y - b * dy[a]] == Coin_Space) && board[x + b * dx[a] - 1][y - b * dy[a] + 1] != Coin_Space) || ((a == 2 && board[x + b * dx[a] - 1][y - b * dy[a] + 1] == Coin_Space) && board[x + b * dx[a] - 1][y - b * dy[a] + 2] != Coin_Space)) {
+				if (a == 0 && board[x + b * dx[a]][(y - (b * dy[a]) - 1)] == Coin_Space && 0 <= (y - (b * dy[a]) - 1)) {
+					if (CPU_Position == 99) {
+						CPU_j = x;
+						CPU_Position = 0;
+					}
+				}
+				else if (((a == 1 && board[x + (b * dx[a]) - 1][y - b * dy[a]] == Coin_Space) && board[x + b * dx[a] - 1][y - b * dy[a] + 1] != Coin_Space) || ((a == 2 && board[x + b * dx[a] - 1][y - b * dy[a] + 1] == Coin_Space) && board[x + b * dx[a] - 1][y - b * dy[a] + 2] != Coin_Space)) {
 					if (CPU_Position == 99) {
 						CPU_j = x + (b * dx[a]) - 1;
 						CPU_Position = 0;
@@ -696,11 +687,6 @@ void CF_Player::CPU_CoinCheck(int board[Board_Xsize][Board_Ysize], int x, int y)
 					if (CPU_Position == 99) {
 						CPU_j = x + 1;
 						CPU_Position = 0;
-					}
-				}
-				else {
-					if (CPU_Position == 99) {
-						CPU_RandomFall();
 					}
 				}
 			}
@@ -733,7 +719,7 @@ void CF_Player::SpaceCheck(int board[Board_Xsize][Board_Ysize], int x, int y) {
 							}
 							else if (a == 1) { //右上を見ているとき
 								//1個右上が空いているか2個右上が空いているとき
-								if ((b == 1 && board[x][y] == board[x + b * dx[a] + 1][y - b * dy[a] - 1] && board[x][y] == board[x + b * dx[a] + 2][y - b * dy[a] - 1])|| (b == 2 && board[x][y] == board[x + b * dx[a] + 1][y - b * dy[a] - 1])) {
+								if ((b == 1 && board[x][y] == board[x + b * dx[a] + 1][y - b * dy[a] - 1] && board[x][y] == board[x + b * dx[a] + 2][y - b * dy[a] - 2])|| (b == 2 && board[x][y] == board[x + b * dx[a] + 1][y - b * dy[a] - 1])) {
 									if (CPU_Position == 99) {
 										CPU_j = x + b * dx[a];
 										CPU_Position = 0;
@@ -742,7 +728,7 @@ void CF_Player::SpaceCheck(int board[Board_Xsize][Board_Ysize], int x, int y) {
 							}
 							else if (a == 2) { //左上を見ているとき
 								//1個左上が空いているか2個左上が空いているとき
-								if ((b == 1 && board[x][y] == board[x + b * dx[a] - 1][y - b * dy[a] - 1] && board[x][y] == board[x + b * dx[a] - 2][y - b * dy[a] - 1]) || (b == 2 && board[x][y] == board[x + b * dx[a] - 1][y - b * dy[a] - 1])) {
+								if ((b == 1 && board[x][y] == board[x + b * dx[a] - 1][y - b * dy[a] - 1] && board[x][y] == board[x + b * dx[a] - 2][y - b * dy[a] - 2]) || (b == 2 && board[x][y] == board[x + b * dx[a] - 1][y - b * dy[a] - 1])) {
 									if (CPU_Position == 99) {
 										CPU_j = x + b * dx[a];
 										CPU_Position = 0;
@@ -761,7 +747,7 @@ void CF_Player::SpaceCheck(int board[Board_Xsize][Board_Ysize], int x, int y) {
 							}
 							else if (a == 1) { //右上を見ているとき
 								//1個右上が空いているか2個右上が空いているとき
-								if ((b == 1 && board[x][y] == board[x + b * dx[a] + 1][y - b * dy[a] - 1] && board[x][y] == board[x + b * dx[a] + 2][y - b * dy[a] - 1]) || (b == 2 && board[x][y] == board[x + b * dx[a] + 1][y - b * dy[a] - 1])) {
+								if ((b == 1 && board[x][y] == board[x + b * dx[a] + 1][y - b * dy[a] - 1] && board[x][y] == board[x + b * dx[a] + 2][y - b * dy[a] - 2]) || (b == 2 && board[x][y] == board[x + b * dx[a] + 1][y - b * dy[a] - 1])) {
 									if (CPU_Position == 99) {
 										CPU_j = x + b * dx[a];
 										CPU_Position = 0;
@@ -770,7 +756,7 @@ void CF_Player::SpaceCheck(int board[Board_Xsize][Board_Ysize], int x, int y) {
 							}
 							else if (a == 2) { //左上を見ているとき
 								//1個左上が空いているか2個左上が空いているとき
-								if ((b == 1 && board[x][y] == board[x + b * dx[a] - 1][y - b * dy[a] - 1] && board[x][y] == board[x + b * dx[a] - 2][y - b * dy[a] - 1]) || (b == 2 && board[x][y] == board[x + b * dx[a] - 1][y - b * dy[a] - 1])) {
+								if ((b == 1 && board[x][y] == board[x + b * dx[a] - 1][y - b * dy[a] - 1] && board[x][y] == board[x + b * dx[a] - 2][y - b * dy[a] - 2]) || (b == 2 && board[x][y] == board[x + b * dx[a] - 1][y - b * dy[a] - 1])) {
 									if (CPU_Position == 99) {
 										CPU_j = x + b * dx[a];
 										CPU_Position = 0;
@@ -798,7 +784,7 @@ void CF_Player::SpaceDoubleCheck(int board[Board_Xsize][Board_Ysize], int x, int
 					if (board[x + b * dx[a]][y - b * dy[a] + 1] != Coin_Space) {
 						if (board[x][y] == Coin_CPU) {
 							if (a == 0) { //右を見ているとき
-								//1個右が空いているか2個右が空いているとき
+								//1個右が空いているとき
 								if (b == 1 && board[x][y] == board[x + b * dx[a] + 1][y - b * dy[a]]) {
 									if (CPU_Position == 99) {
 										CPU_j = x + b * dx[a];
@@ -807,7 +793,7 @@ void CF_Player::SpaceDoubleCheck(int board[Board_Xsize][Board_Ysize], int x, int
 								}
 							}
 							else if (a == 1) { //右上を見ているとき
-								//1個右上が空いているか2個右上が空いているとき
+								//1個右上が空いているとき
 								if (b == 1 && board[x][y] == board[x + b * dx[a] + 1][y - b * dy[a] - 1]) {
 									if (CPU_Position == 99) {
 										CPU_j = x + b * dx[a];
@@ -816,7 +802,7 @@ void CF_Player::SpaceDoubleCheck(int board[Board_Xsize][Board_Ysize], int x, int
 								}
 							}
 							else if (a == 2) { //左上を見ているとき
-								//1個左上が空いているか2個左上が空いているとき
+								//1個左上が空いているとき
 								if (b == 1 && board[x][y] == board[x + b * dx[a] - 1][y - b * dy[a] - 1]) {
 									if (CPU_Position == 99) {
 										CPU_j = x + b * dx[a];
@@ -827,7 +813,7 @@ void CF_Player::SpaceDoubleCheck(int board[Board_Xsize][Board_Ysize], int x, int
 						}
 						else if (board[x][y] == Coin_Player) {
 							if (a == 0) { //右を見ているとき
-								//1個右が空いているか2個右が空いているとき
+								//1個右が空いているとき
 								if (b == 1 && board[x][y] == board[x + b * dx[a] + 1][y - b * dy[a]]) {
 									if (CPU_Position == 99) {
 										CPU_j = x + b * dx[a];
@@ -836,7 +822,7 @@ void CF_Player::SpaceDoubleCheck(int board[Board_Xsize][Board_Ysize], int x, int
 								}
 							}
 							else if (a == 1) { //右上を見ているとき
-								//1個右上が空いているか2個右上が空いているとき
+								//1個右上が空いているとき
 								if (b == 1 && board[x][y] == board[x + b * dx[a] + 1][y - b * dy[a] - 1]) {
 									if (CPU_Position == 99) {
 										CPU_j = x + b * dx[a];
@@ -845,7 +831,7 @@ void CF_Player::SpaceDoubleCheck(int board[Board_Xsize][Board_Ysize], int x, int
 								}
 							}
 							else if (a == 2) { //左上を見ているとき
-								//1個左上が空いているか2個左上が空いているとき
+								//1個左上が空いているとき
 								if (b == 1 && board[x][y] == board[x + b * dx[a] - 1][y - b * dy[a] - 1]) {
 									if (CPU_Position == 99) {
 										CPU_j = x + b * dx[a];
