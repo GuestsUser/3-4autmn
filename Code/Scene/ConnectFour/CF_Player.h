@@ -16,7 +16,9 @@ private:
 	int CF_Board[Board_Xsize][Board_Ysize]; //パネルの情報の二次元配列
 	int CF_CircleBoard[Board_Xsize][Board_Ysize]; //クリア時に表示する円の二次元配列
 	int CF_PCoin; //プレイヤーのコイン
+	int pcoin[2];
 	int CF_CCoin; //CPUのコイン
+	int ccoin[2];
 	int CF_Yajirusi; //矢印
 	int CF_GameBGM; //ゲーム中のBGM
 	int CF_StartSE; //先攻後攻を表示する時のSE
@@ -41,6 +43,9 @@ private:
 	int CPU_j;
 	int PlayUser; //今プレイしているコインの所持者
 	int DlayCount; //コインが落ちてからプレイヤーに変わるまでのディレイ時間
+	int CPU_Position;
+	int CPU_Start;
+	int Coin_Switch;
 	 
 	float yadd; //重力加速度
 	float Yajirusi_Move; //矢印のアニメーションの値
