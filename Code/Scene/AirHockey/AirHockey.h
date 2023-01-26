@@ -3,10 +3,10 @@
 class AirHockey_Scene {
 private:
 
-	//Scene* 
+	Scene* Parent;
 
 	typedef struct {
-		float m_X, m_Y, m_R, m_boundP,
+		float m_X, m_Y, m_R, m_boundPx, m_boundPy,
 			m_r, m_l, m_b, m_t,
 			X_spd, Y_spd, Maxspd;
 
@@ -29,21 +29,53 @@ private:
 	int wall_L, wall_R, wall_T, wall_B, wall_xC, wall_yC;
 
 public:
-	void AirHockey_Initialize();
+	void AirHockey_Initialize(Scene* scene);
 	void AirHockey_Draw();
 	void AirHockey_Update();
 	void AirHockey_Finalize();
 
 	//プロトタイプ宣言
 	void Draw_All(); //描画
-	//void Field_Out();
-	void Player_Control();//プレイヤー等速移動
 	void Status_Reset();//プレイヤー、CPU、パックの初期位置と半径
-	bool Player_Puck_Check_Hit();//プレイヤーとパックの衝突判定
-	void Player_Hit();//プレイヤーの衝突判定と動きのまとめ
-	bool Player_Wall_Check_Hit();//プレイヤーと壁の衝突判定
+	bool Resalt();//勝敗のフラグ
+	void Debug_Data();//デバック表示
+
+	void Player_Control();//プレイヤー操作
+	bool Player_Puck_Check_Hit();//プレイヤーとパックの衝突判定フラグ
+	bool Player_Wall_Check_Hit();//プレイヤーと壁の衝突判定フラグ
+	bool Player_Move_Right();//プレイヤーが右に移動時のフラグ
+	bool Player_Move_Left();//プレイヤーが左に移動時のフラグ
+	bool Player_Move_Up();//プレイヤーが上に移動時のフラグ
+	bool Player_Move_Under();//プレイヤーが下に移動時のフラグ
+	void Player_Hit();//プレイヤー動きのまとめ
+
+	void CPU_Movement();//CPUの思考ルーチン
+	bool CPU_Puck_Check_Hit();//CPUとパックの衝突判定フラグ
+	bool CPU_Move_Right();//CPUが右に移動時の判定フラグ
+	bool CPU_Move_Left();//CPUが左に移動時の判定フラグ
+	bool CPU_Move_Up();//CPUが上に移動時の判定フラグ
+	bool CPU_Move_Under();//CPUが下に移動時の判定フラグ
+	
+	void Puck_Movement();//パックの動き
 	bool Puck_Wall_Check_Hit();//パックと壁の衝突
-	void Puck_Move();//パックの挙動
 	void Effect();//パック衝突時のエフェクト
-	bool Resalt();
+
+	//****プレイヤーから見たパックの位置方向フラグ****
+	bool PlayerBase_PuckPosition_Up();//上
+	bool PlayerBase_PuckPosition_UpperRight();//右上
+	bool PlayerBase_PuckPosition_Right();//右
+	bool PlayerBase_PuckPosition_UnderRight();//右下
+	bool PlayerBase_PuckPosition_Under();//下
+	bool PlayerBase_PuckPosition_UnderLeft();//左下
+	bool PlayerBase_PuckPosition_Left();//左
+	bool PlayerBase_PuckPosition_UpperLeft();//左上
+	//****CPUから見たパックの位置方向フラグ
+	bool CPUBase_PuckPosition_Up();//上
+	bool CPUBase_PuckPosition_UpperRight();//右上
+	bool CPUBase_PuckPosition_Right();//右
+	bool CPUBase_PuckPosition_UnderRight();//右下
+	bool CPUBase_PuckPosition_Under();//下
+	bool CPUBase_PuckPosition_UnderLeft();//左下
+	bool CPUBase_PuckPosition_Left();//左
+	bool CPUBase_PuckPosition_UpperLeft();//左上
 };
