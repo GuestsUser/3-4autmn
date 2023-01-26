@@ -14,7 +14,7 @@
 #include"../Code/Scene/ConnectFour/Scene_ConnectFour.h"
 #include"../Code/Scene/daifugou/CP_Scene.h"
 #include"../Code/Scene/BlackJack/BJ_Main.h"
-#include"../Code/Scene/Asuma/Scene_PageOne.h"
+#include"../Code/Scene/PageOne/Scene_PageOne.h"
 #include"../Code/Scene/Othello/Scene_Othello.h"
 #include"../Code/Scene/Sugoroku/SR_Game.h"
 #include "../Code/Scene/Poker/Poker.h"
@@ -68,9 +68,9 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			*img = LoadGraph("Resource/image/Select_PageOne.png");
 			gameScene = new Scene_PageOne();
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/PageOne_Image/Explain_PageOne1.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/PageOne_Image/Explain_PageOne4.png")), 1));
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/PageOne_Image/Explain_PageOne2.png")), 1));
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/PageOne_Image/Explain_PageOne3.png")), 1));
-			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/PageOne_Image/Explain_PageOne4.png")), 1));
 			break;
 		case 6: //ポーカー
 			*img = LoadGraph("Resource/image/Select_Poker.png");

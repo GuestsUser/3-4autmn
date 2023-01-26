@@ -131,6 +131,7 @@ private:
 
 	int pri;		//親を決めるための変数
 	bool draw;		//カードが引けるかどうかを決めるためのフラグ(false:引けない　true:引ける)
+	bool draw_text;	//カードを引いてくださいって描画するよう
 
 	bool Player_setup;		//プレイヤー準備フラグ
 	bool NPC1_setup;		//NPC1準備フラグ
@@ -138,7 +139,7 @@ private:
 	bool NPC3_setup;		//NPC3準備フラグ
 
 	bool finish;	//ゲーム終了フラグ
-	bool reset;	//盤面リセットフラグ
+	bool reset;		//盤面リセットフラグ
 
 	int player;		//プレイヤーの手札の枚数
 	bool flg_p;		//プレイヤーの手番が終わったかどうか
