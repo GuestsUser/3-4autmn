@@ -52,6 +52,7 @@ Dealer::Dealer() {
 
 Dealer::~Dealer() {
 
+
 }
 
 /*変数初期化*/
@@ -63,7 +64,6 @@ void Dealer::Initialize() {
   type = 0;                               /*トランプのマーク*/
   
   D_BlackJakc = false;
-  D_ins = false;
 
 }
 
@@ -103,7 +103,6 @@ void Dealer::Show_Hand() {
   SetFontSize(60);
   DrawFormatString(580, 200, 0, "%d\n", Dealer::Calc());
   SetFontSize(DEFAULT_FONT_SIZE);
-  Dealer::Set_Ins();
 
 }
 /*スコアの計算*/
@@ -154,15 +153,6 @@ int Dealer::Calc() {
     /*スコアにデータを加える*/
     score += data[0];
 
-  }
-
-  if (hand[0] % 13 == 0 && hand.size() <= 1) {
-
-    D_ins = true;
-
-  }
-  else {
-    D_ins = false;
   }
 
   delete[] data;    /*メモリの開放*/
@@ -251,8 +241,3 @@ int Dealer::Set_Magnification(float setrate, int getcoin) {
   return setrate*getcoin;
 }
 
-bool Dealer::Set_Ins() {
-
-  return D_ins;
-
-}
