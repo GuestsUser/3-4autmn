@@ -11,10 +11,10 @@ Slider::Slider() {
   SetFillColor(0x00ffff);
   SetFillColor(0x00ffff);
 
-  SetMinValue(1000); //最大値と最小値の指定する順番に注意
-  SetMaxValue(20000);  //先に最大値を指定しようとすると、その指定した値が現在の最小値よりも小さいと指定できません
+  SetMinValue(100); //最大値と最小値の指定する順番に注意
+  SetMaxValue(10000);  //先に最大値を指定しようとすると、その指定した値が現在の最小値よりも小さいと指定できません
 
-  SetValue(1000);
+  SetValue(100);
 }
 
 void Slider::Inisialize() {
@@ -51,21 +51,11 @@ void Slider::Update(int mousePosX, int mousePoxY, bool isClick) {
 
     //value = ((handlePosition.x - (position.x - backSize.x)) / (backSize.x * 2.0f) * (maxValue - minValue) + minValue) /*+ value / 1000*/;
     value = (((handlePosition.x - (position.x - backSize.x)) / (backSize.x * 2.0f)) * (maxValue - minValue) + minValue);
-    value -= (int)value % 1000;
-
-    //if (maxValue > 100 && maxValue <= 1000) {
-    //  value -= (int)value % 10;
-    //}
-    //else if (maxValue > 1000 && maxValue <= 10000) {
-    //  value -= (int)value % 100;
-    //}
-    //else if (maxValue > 10000 && maxValue <= 100000) {
-    //  value -= (int)value % 1000;
-    //}
+    value -= (int)value % 100;
 
     if (value < minValue) value = minValue;
     else if (value > maxValue) value = maxValue;
-    if (minValue <= 1000)SetMinValue(1000);
+    if (minValue <= 1)SetMinValue(1);
 
   }
   else {
