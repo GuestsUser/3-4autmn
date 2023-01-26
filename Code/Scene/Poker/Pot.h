@@ -23,8 +23,6 @@ public:
 	void SetMainPot(int pay, const Chara& user); //平常時ポットへの支払があれば呼び出し
 
 	int Inquiry(const Chara& user); //payOut同様だがこちらは払い出しは行わない自分が幾ら出したか照会する為の機能
-	int TotalAmount(); //pot内の現在合計金額を返す
-	int GetCurrentMaxBet() { return pot.size() > 0 ? (--pot.end())->first : 0; } //一度でも支払があった場合potの最後の要素の添え字が最大ベット額となる
 
 	void Draw(); //ポット金額表示の背景を描写する
 };
