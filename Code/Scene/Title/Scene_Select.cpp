@@ -76,7 +76,35 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			*img = LoadGraph("Resource/image/Select_Poker.png");
 			gameScene = new Poker();
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker1.png")), 1));
-			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker2.png")), 1)); //複数の説明画面導入作例
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker2.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker3.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker4.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker5.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker6.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker7.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker8.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker9.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker10.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker11.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker12.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker13.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker14.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker15.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker16.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker17.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker18.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker19.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker20.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker21.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker22.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker23.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker24.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker25.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker26.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker27.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker28.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker29.png")), 1));
+			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Poker30.png")), 1));
 			break;
 		case 7: //すごろく
 			*img = LoadGraph("Resource/image/Select_Sugoroku.png");
