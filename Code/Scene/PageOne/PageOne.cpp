@@ -950,10 +950,10 @@ void PageOne::PageOne_Draw() {
 		case 0:
 			DrawFormatString(50, 350, GetColor(255, 255, 255), "手番：プレイヤー");
 			if (draw_text == true) {
-				DrawFormatString(250, 450, GetColor(100, 100, 255), "カードを引いてください");
+				DrawFormatString(250, 450, GetColor(255, 0, 255), "カードを引いてください");
 			}
 			if (Player_Pass_Flg == true) {
-				DrawFormatString(250, 450, GetColor(100, 100, 255), "パスをしてください");
+				DrawFormatString(250, 450, GetColor(255, 0, 255), "パスをしてください");
 			}
 
 			break;
