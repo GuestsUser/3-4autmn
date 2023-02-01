@@ -16,7 +16,7 @@ void AirHockey_Scene::AirHockey_Initialize(Scene* scene) {
 	 Purple = GetColor(218, 112, 214);
 	 Black = GetColor(0, 0, 0);
 
-	 score1 = 0,score2 = 0;//得点格納用(1がプレイヤー 2がCPU)
+	 score1 = 0,score2 = -1;//得点格納用(1がプレイヤー 2がCPU)
 	 mouseX = 0, mouseY = 0;//マウスの座標格納用
 	 
 	 //メモ マジックナンバーを使用してしまってい る箇所はマレットの初期座標、ゴールの範囲設定、壁の縦横の中心(wall_xC,yC)
@@ -43,33 +43,33 @@ bool AirHockey_Scene::Resalt() {
 
 
 //衝突時のエフェクト試作
-void AirHockey_Scene::Effect()
-{
-	if (wall_R < t_circle3.m_r) {
-		for (int i = 0; i <= 120; i++) {
-			DrawPixel(t_circle3.m_r, t_circle3.m_t - t_circle3.m_r, Purple);
-			DrawPixel(t_circle3.m_r + i, t_circle3.m_t - t_circle3.m_r + i, Purple);
-		};
-	}
-	if (wall_L > t_circle3.m_l) {
-		for (int i = 0; i <= 120; i++) {
-			DrawPixel(t_circle3.m_r, t_circle3.m_t - t_circle3.m_r, Purple);
-			DrawPixel(t_circle3.m_r + i, t_circle3.m_t - t_circle3.m_r + i, Purple);
-		};
-	}
-	if (wall_T > t_circle3.m_t) {
-		for (int i = 0; i <= 120; i++) {
-			DrawPixel(t_circle3.m_r, t_circle3.m_t - t_circle3.m_r, Purple);
-			DrawPixel(t_circle3.m_r + i, t_circle3.m_t - t_circle3.m_r + i, Purple);
-		};
-	}
-	if (wall_B < t_circle3.m_b) {
-		for (int i = 0; i <= 120; i++) {
-			DrawPixel(t_circle3.m_r, t_circle3.m_t - t_circle3.m_r, Purple);
-			DrawPixel(t_circle3.m_r + i, t_circle3.m_t - t_circle3.m_r + i, Purple);
-		};
-	}
-};
+//void AirHockey_Scene::Effect()
+//{
+//	if (wall_R < t_circle3.m_r) {
+//		for (int i = 0; i <= 120; i++) {
+//			DrawPixel(t_circle3.m_r, t_circle3.m_t - t_circle3.m_r, Purple);
+//			DrawPixel(t_circle3.m_r + i, t_circle3.m_t - t_circle3.m_r + i, Purple);
+//		};
+//	}
+//	if (wall_L > t_circle3.m_l) {
+//		for (int i = 0; i <= 120; i++) {
+//			DrawPixel(t_circle3.m_r, t_circle3.m_t - t_circle3.m_r, Purple);
+//			DrawPixel(t_circle3.m_r + i, t_circle3.m_t - t_circle3.m_r + i, Purple);
+//		};
+//	}
+//	if (wall_T > t_circle3.m_t) {
+//		for (int i = 0; i <= 120; i++) {
+//			DrawPixel(t_circle3.m_r, t_circle3.m_t - t_circle3.m_r, Purple);
+//			DrawPixel(t_circle3.m_r + i, t_circle3.m_t - t_circle3.m_r + i, Purple);
+//		};
+//	}
+//	if (wall_B < t_circle3.m_b) {
+//		for (int i = 0; i <= 120; i++) {
+//			DrawPixel(t_circle3.m_r, t_circle3.m_t - t_circle3.m_r, Purple);
+//			DrawPixel(t_circle3.m_r + i, t_circle3.m_t - t_circle3.m_r + i, Purple);
+//		};
+//	}
+//};
 
 //デバック表示
 void AirHockey_Scene::Debug_Data(){
@@ -80,7 +80,14 @@ void AirHockey_Scene::Debug_Data(){
 		DrawFormatString(150, 80, White, "x:%d y:%d", mouseX, mouseY);//デバック用 マウス座標表示
 	}
 
-	DrawFormatString(150, 50, White, "px:%4f py:%4%f", t_circle1.m_X, t_circle1.m_Y);
+	if (t_circle3.m_X < wall_xC) {
+		DrawFormatString(150, 50, Red, "px:%3f py:%3%f", t_circle1.m_X, t_circle1.m_Y);
+	}
+	else if (t_circle3.m_X > wall_xC) 
+	{
+		DrawFormatString(150, 50, Blue, "px:%3f py:%3%f", t_circle1.m_X, t_circle1.m_Y);
+	}
+	
 };
 
 ////////当たり判定フラグ//////
@@ -1386,7 +1393,11 @@ void  AirHockey_Scene::Player_Hit() {
 void AirHockey_Scene::CPU_Movement() {
 	//CPUの思考シーケンス
 	if (Resalt() == false) {//試合中の間
-	
+		
+
+
+
+
 
 	}
 
@@ -2504,6 +2515,42 @@ void  AirHockey_Scene::Puck_Movement() {
 		}
 	}
 
+	if (CPU_Puck_Check_Hit()==true) {
+		if (CPU_Move_Right() == true)
+		{
+			if (t_circle2.m_X < t_circle3.m_X) {
+				t_circle3.m_X += t_circle2.X_spd;
+			}
+		}
+
+		if (CPU_Move_Left() == true)
+		{
+			if (t_circle2.m_X > t_circle3.m_X) {
+				t_circle3.m_X -= t_circle2.X_spd;
+			}
+		}
+
+		if (CPU_Move_Up() == true)
+		{
+			if (t_circle2.m_Y > t_circle3.m_Y) {
+				t_circle3.m_Y -= t_circle2.Y_spd;
+			}
+		}
+
+		if (CPU_Move_Under() == true)
+		{
+			if (t_circle2.m_Y < t_circle3.m_Y) {
+				t_circle3.m_Y += t_circle2.Y_spd;
+			}
+		}
+	}
+
+	/*if (t_circle3.X_spd == 0 && t_circle3.Y_spd == 0) {
+		if (t_circle3.m_X > wall_xC) {
+			Status_Reset();
+		}
+	}*/
+
 	//停止するまで減速し続ける
 	if (0.0f < t_circle3.X_spd) {//正の値だったら
 		t_circle3.X_spd -= 0.01f;//引く
@@ -2691,7 +2738,7 @@ void AirHockey_Scene::AirHockey_Draw() {
 }
 
 void AirHockey_Scene::Draw_All() {
-	Debug_Data();//*****************デバック表示********************//
+	//Debug_Data();//*****************デバック表示********************//
 
 	DrawLine(wall_xC, wall_T, wall_xC, wall_B, Yellow);//中心線
 	DrawOvalAA(wall_L, wall_yC, 20, 90, 30, DarkRed, TRUE);//プレイヤーゴール線
