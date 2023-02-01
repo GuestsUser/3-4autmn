@@ -215,7 +215,7 @@ void Poker::Pre::Update() {
 	for (auto itr : parent->chara) {
 
 		//デバッグ用
-		for (auto card : *itr->EditCard()) { card->SetDrawMode(PK_Card::DrawMode::front); } //カードを可視化しておく 
+		//for (auto card : *itr->EditCard()) { card->SetDrawMode(PK_Card::DrawMode::front); } //カードを可視化しておく 
 
 		for (auto card : *itr->EditCard()) { card->SetCard(parent->cardDealer->DeckDraw()); } //山札から引いてきたカードを手札に設定
 		if (typeid(*itr) == typeid(CPU)) { //このキャラがcpuだった場合
