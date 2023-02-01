@@ -98,7 +98,7 @@ int HandStraightReachCheck(CardDealer::deque_map combo, const std::deque<int>& h
 
 
 	int start = combo[0].first - combo[1].first > 1; //一番強いカードと次のカードが繋がっている場合false、繋がっていなければtrueが返る、int型なので其々0、1に変換される
-	int changeCount = start; //繋がってないカードを検知した回数記録、startが1なら先頭と次が繋がってないからこちらも1開始
+	int changeCount = 0; //繋がってないカードを検知した回数記録
 
 	if (straight != -1 && combo[0].first - combo[1].first > 1) { return -1; } //重複カードがある且つ先頭と次のカードの差が2以上の場合重複カードと先頭カードを交換する必要があるのでストレートは無理
 	if (straight == -1 && start) { straight = combo[0].first; } //先頭カードと次カードが繋がってなかった場合交換カードに先頭カードを指定、重複カードがあった場合そっちを優先
@@ -109,7 +109,7 @@ int HandStraightReachCheck(CardDealer::deque_map combo, const std::deque<int>& h
 	for (int i = start + 1; i < combo.size(); ++i) { //先頭以外に繋がってない部分がないかチェック
 		if (old - 1 != combo[i].first) { //前回数値が今回数値と繋がらかかった場合
 			if (changeCount > 0) { return -1; } //2回目の実行ならストレートは不可
-			old = old - 1; //次に繋がるようoldを補完しておく
+			old = old - 2; //次に繋がるようoldを補完しておく、今回のfirstに合わせると2枚以上カードを飛び越える可能性があるので-2という形にする
 			changeCount++; //繋がってないカードカウント
 			continue; //やり直し
 		}
