@@ -594,7 +594,7 @@ void CP::Player_Update() {
 	//d3start();//ダイヤの三もちの人から開始
 	//phase(n);//ターンが回ってくる処理
 	//status(n);//プレイヤー用の場を表示させる奴
-	//sort(sort_x, sort_y, sort_z);//カードのソート
+	sort(sort_x, sort_y, sort_z);//カードのソート
 	//arrange(n);//トラッシュの処理
 	////print(n);//出したもん表示させる奴
 	//revolution();//おれのリロードはレボリューションだ！！
@@ -620,7 +620,7 @@ void CP::Player_Draw() {
 	d3start();//ダイヤの三もちの人から開始
 	phase(n);//ターンが回ってくる処理
 	status(n);//プレイヤー用の場を表示させる奴
-	sort(sort_x, sort_y, sort_z);//カードのソート
+	//sort(sort_x, sort_y, sort_z);//カードのソート
 	arrange(n);//トラッシュの処理
 	print(n);//出したもん表示させる奴
 	revolution();//おれのリロードはレボリューションだ！！

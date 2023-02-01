@@ -50,7 +50,7 @@ Scene_Select::Scene_Select() :explain(std::deque<Scene_Explain*>()), button(std:
 			 explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/BJ_Image/Explain_Blackjack1.png")), 1));
 			break;
 		case 2: //大富豪
-			*img = LoadGraph("Resource/image/Select_CareerPoker.png");
+			*img = LoadGraph("Resource/image/Select_CareerPoker_comingsoon.png");
 			gameScene = new CP_Scene();
 			explainImage->push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_CareerPoker1.png")),1));
 			break;
