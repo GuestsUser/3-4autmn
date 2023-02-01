@@ -29,6 +29,13 @@
 #include <string>
 #include <cmath>
 
+
+PK_Card* Power2Card(std::deque<PK_Card*>& hand, int target) { //handからtargetに渡されたカードの強さと一致するカードを抽出する
+	for (auto itr : hand) {
+		if (itr->GetCard() % (int)CardDealer::CardPower::max == target) { return itr; } //targetと一致するPK_Card参照を返す
+	}
+}
+
 Cmp_BetActionRecord::Action ActionDecision(Cmp_CPUBetLogic* betLogic) { //入れられたbetLogicによってraiseすべきかcallすべきか返す
 	return betLogic->GetSelfRaise() ? Cmp_BetActionRecord::Action::raise : Cmp_BetActionRecord::Action::call;
 }
@@ -218,9 +225,6 @@ void Poker::Pre::Update() {
 			for (auto card : *itr->EditCard()) { card->SetDrawMode(PK_Card::DrawMode::front); } //カードを可視化しておく 
 		}
 	}
-	//デバッグ用
-	//parent->run = parent->list[(int)Poker::Section::change];
-
 
 	if (EnableCharaSearch(actionRecord, parent->dealer->ReadBtn()->GetBtnPos()) <= -1) { //この段階で全キャラアクションを終了していた場合
 		SequenceNextReset(actionRecord); //アクション実行記憶の初期化
@@ -229,6 +233,9 @@ void Poker::Pre::Update() {
 	}
 	parent->run = parent->list[(int)Poker::Section::main];
 	((Poker::Main*)parent->list[(int)Poker::Section::main])->SetPhase(0); //ダウンキャストだが中身がハッキリしてるから許して……
+
+	//デバッグ用
+	parent->run = parent->list[(int)Poker::Section::change];
 }
 
 void PlayerButtonAnalyze(const std::deque<Button*>& button, Button** action, Button** fold) { //buttonにplayerのボタンをいれるとactionにアクション用ボタン、foldにfold用ボタンを入れて返してくれる
@@ -400,7 +407,7 @@ void Poker::Main::Update() {
 	count = 0; //カウントリセット
 }
 
-Poker::Change::Change(Poker& set) :parent(&set), count(0), cpuWait(30), moveY(-48), border(CardDealer::CardPower::ten), isClick(std::deque<bool>()), actionRecord(std::deque<Cmp_BetActionRecord*>(4)), actionButton(nullptr), cardButton(std::deque<Button*>()), cardPos(std::deque<Vector3*>()){
+Poker::Change::Change(Poker& set) :parent(&set), count(0), cpuWait(30), moveY(-48), border(CardDealer::CardPower::jack), isClick(std::deque<bool>()), actionRecord(std::deque<Cmp_BetActionRecord*>(4)), actionButton(nullptr), cardButton(std::deque<Button*>()), cardPos(std::deque<Vector3*>()){
 	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
 	
 	std::deque<Button*> playerButton = std::deque<Button*>();
@@ -416,6 +423,8 @@ Poker::Change::Change(Poker& set) :parent(&set), count(0), cpuWait(30), moveY(-4
 	
 	originalY = (*parent->chara[(int)Poker::Character::player]->EditCard())[0]->ReadTransform()->ReadPos().GetY(); //カードの元yを記憶しておく
 }
+
+
 
 void Poker::Change::Update() {
 	++count;
@@ -445,6 +454,7 @@ void Poker::Change::Update() {
 				if (endCount >= actionRecord.size()) { parent->run = parent->list[(int)Poker::Section::showdown]; } //どのキャラもベット不能の場合ショーダウン直行
 			}
 
+			//特定状態で動いてない可能性あり
 			std::deque<int> hand = parent->cardDealer->HandCheck(*parent->chara[access]); //手札評価を得る
 			if (hand[0] <= (int)CardDealer::HandRank::OnePair * (int)CardDealer::CardPower::max) { //ワンペア以下だった場合リーチチェックを行う
 				int change = parent->cardDealer->ReachCheck(*parent->chara[access]); //ストレート、フラッシュに不要なカード
@@ -460,25 +470,27 @@ void Poker::Change::Update() {
 			}
 
 			std::deque<PK_Card*> changeList = std::deque<PK_Card*>(); //交換を行う手札の参照を入れてゆく
+			int handRank = hand[0] / (int)CardDealer::CardPower::max; //完成役を数値に直した物を格納
 			int start = 1; //hand評価から交換カード取り出しを始める位置
-			switch ((CardDealer::HandRank)(hand[0] / (int)CardDealer::CardPower::max)) {
-			case CardDealer::HandRank::No: start = 1; break;
-			case CardDealer::HandRank::OnePair: start = 2; break;
-			case CardDealer::HandRank::TwoPair: start = 3; break;
-			case CardDealer::HandRank::ThreeCard: start = 2; break;
-			case CardDealer::HandRank::FourCard: start = 2; break;
+			switch ((CardDealer::HandRank)handRank) {
+			case CardDealer::HandRank::No: start = 0; break;
+			case CardDealer::HandRank::OnePair: start = 1; break;
+			case CardDealer::HandRank::TwoPair: start = 2; break;
+			case CardDealer::HandRank::ThreeCard: start = 1; break;
+			case CardDealer::HandRank::FourCard: start = 1; break;
 			default: start = hand.size(); break; //上記ハンドでない場合交換はしない
 			}
 
-			//交換ロジックにミスを感じる
-			//922qqの様な状況で9を交換しなかった
-			for (int i = start; i < hand.size(); ++i) {
-				if (i == start && hand[start] >= (int)border) { continue; } //開始位置(役以外で一番強いカード)が指定以上の強さを持ってた場合そのカードは取っておく
-				for (auto itr : *parent->chara[access]->EditCard()) {
-					if (itr->GetCard() % (int)CardDealer::CardPower::max == hand[i]) { changeList.push_back(itr); break; } //handと一致するカードを交換カードとしてリストに加える処理
-				}
+
+			if (handRank <= (int)CardDealer::HandRank::OnePair) { //完成役がワンペア以下だった場合
+				if (hand[start] < (int)border) { changeList.push_back(Power2Card(*parent->chara[access]->EditCard(), hand[start])); } //最初のカードがborder以下ならそのカードは交換する
+				++start; //startは交換の有無に関わらず進めないと強制的に交換されてしまうので進める
 			}
-			for (auto itr : changeList) { 
+
+			for (int i = start; i < hand.size(); ++i) { //役になってないカードを交換に指定する
+				changeList.push_back(Power2Card(*parent->chara[access]->EditCard(), hand[i])); //handと一致するカードを交換カードとしてリストに加える処理
+			}
+			for (auto itr : changeList) { //リスト内のカードを交換する処理
 				itr->SetCard(parent->cardDealer->DeckDraw()); //交換指定のあるカードを交換
 				itr->SetMarking(true); //交換したカードをマーキング
 			}

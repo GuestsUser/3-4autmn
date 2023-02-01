@@ -304,7 +304,7 @@ void SR_Saikoro::Draw() {
 				DrawString(454, 620, "Player1のターン", GetColor(0, 0, 0));
 			}
 		}
-		else if (Shuffle == false && Whoisplay == false && Back == false) { DrawFormatString(454, 620, GetColor(0, 0, 0), "Player1は%d進んだ", Sum); }
+		else if (Shuffle == false && Whoisplay == false) { DrawFormatString(454, 620, GetColor(0, 0, 0), "Player1は%d進んだ", Sum); }
 		else if (Shuffle == true ) { DrawString(454, 620, "サイコロコロコロ", GetColor(0, 0, 0)); }
 		break;
 	case 2:
