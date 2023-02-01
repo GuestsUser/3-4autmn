@@ -29,9 +29,9 @@ struct player data[4] = {
 int stage;
 int cards[54]; /* 山札 */
 int order[4]; /* 誰から始めるか */
-int card_type[54];
+int card_type[54];//画像用保存場所
 int trash[15] = { 0 }; /* ﾄﾗｯｼｭ */
-int produce[2][15]; /* 出す手札 */
+int produce[4][13]; /* 出す手札 */
 int rev = 0; /* 革命 */
 int eback = 0; /* 11バック */
 int pc = -1; /* 最後に誰が出したかカウント */
@@ -42,13 +42,16 @@ char mark[5] = { 'C','D','S','H','J' };/* トランプのマーク */
 
 void CP::Player_Initialize() {
 	stage = LoadGraph("Resource/image/CareerPoker.png");//背景画像
-	LoadDivGraph("Resource/image/toranpu_all.png", 53, 13, 5, 200, 300, cards, TRUE);
+	LoadDivGraph("Resource/image/toranpu_all.png", 53, 13, 5, 200, 300, card_type, TRUE);
+
+	Player_X = 150;
+	Player_Y = 575;
 }
 
 void CP::Player_Finalize() {
 	DeleteGraph(stage);
 	for (int i = 0; i < 53; i++) {
-		DeleteGraph(cards[i]);
+		DeleteGraph(card_type[i]);
 	}
 }
 
@@ -142,12 +145,13 @@ void sort(int sort_x, int* sort_y, int sort_z) {
 
 	void CP::deckshuffle(void) {
 	/* 山札をシャッフル */
-		int i, x, y, z;
-		for (i = 0; cards[i] < 100; i++){
-			x = rand() % 14;
-			y = rand() % 14;
+		int i, x, y,z;
+
+		for (i = 0; card_type[i] < 53; i++){
+			x = GetRand(13);
+			y = GetRand(1);
 			z = cards[x];
-			cards[x] = cards[y];
+			cards[y] = cards[x];
 			cards[y] = z;
 		}
 		onesec();
@@ -186,7 +190,7 @@ void sort(int sort_x, int* sort_y, int sort_z) {
 				i++;
 			}
 			for (int n = 0; n < 15; n++) {
-				if (data[j].hand[n] == 16) /* ダイヤの３のカード番号は16 */
+				if (data[j].hand[n] == produce[3][2]) /* ダイヤの３のカード番号は16 */
 					break;
 			}
 			
@@ -232,35 +236,36 @@ void sort(int sort_x, int* sort_y, int sort_z) {
 			DrawFormatString(650, 250, GetColor(255, 255, 255), "[場]",trash[0]);
 			//printf("[場]");
 			for (i = 1; i <= trash[0]; i++) {
-
+			
 				if (mar(trash[i]) != 'J')
 					//DrawRotaGraph(100,100,500, 350, 0.5, 0, card_type[i], TRUE);// mar(*trash), num(*trash)
-					printf(" %c%2d ", mar(trash[i]), num(trash[i]));
-					//DrawFormatString(650, 450, GetColor(255, 255, 255), "%c%2d", mar(trash[i]), num(trash[i]));
-				else
-					printf(" %c ", mar(trash[i]));
+					DrawFormatString(650, 450, GetColor(255, 255, 255), "%c", mar(trash[i]));
+					DrawFormatString(650, 450, GetColor(255, 255, 255), "%d",num(trash[i]));
+				/*else
+					printf(" %c ", mar(trash[i]));*/
 					//DrawRotaGraph(100,100,50, 350, GetColor(255, 255, 255), card_type[i],TRUE); //mar(*trash),
 					//DrawFormatString(650, 650, GetColor(255, 255, 255), "%c", mar(trash[i]));
 			}
 		}
-
+	
 		/* 手札を表示 */
-		for (i = 1; i <= data[n].hand[0]; i++) {
-			//DrawRotaGraph(20, -360,0.3,0,cards[i],TRUE);
-			//DrawFormatString(150, 350, GetColor(255, 255, 255), "%3d",i);
-			//DrawFormatString(150, 350, GetColor(255, 255, 255), "\n");
-		}
-		for (i = 1; i <= data[n].hand[0]; i++) {
 
-			/* ジョーカーだった場合 数字を非表示 */
-			if (mar(*data[n].hand) != 'J')
-				DrawFormatString(50, 450, GetColor(255, 255, 255), " %c%2d ", mar(*data[n].hand), num(data[n].hand[i]));
-			/*else
-				DrawFormatString(50, 350, GetColor(255, 255, 255), " %c ", (data[n].hand[i]));*/
+
+			for (i = 0; i <= data[n].hand[i]; i++) {
+				for (i = 0; i <= data[n].hand[i]; i++) {
+				
+					DrawRotaGraph(100 + (i * 60), 460, 0.3, 0, card_type[i], TRUE, data[n].hand[i]);
+					/* ジョーカーだった場合 数字を非表示 */
+					if (mar(data[n].hand[0]) != 'J') {
+
+					}
+
+				}
+			}
 		}
+	
 		//DrawFormatString(350, 150, GetColor(255, 255, 255), "あなたの番です");
 
-	}
 	
 
 	int judg(int n) {
@@ -352,11 +357,12 @@ void CP::print(int n) {
 		if (mar(trash[i]) == 0)
 			//DrawFormatString(50, 350, GetColor(255, 255, 255), "%c", mar(trash[i]));
 		//else
-			//DrawFormatString(50, 350, GetColor(255, 255, 255), "%c%2d", mar(trash[i]), num(trash[i]));
-			if (i != trash[0])
-				//DrawFormatString(50, 350, GetColor(255, 255, 255), "と");
+			DrawFormatString(10, 300, GetColor(0, 0, 255), "%c", mar(trash[i]));
+			DrawFormatString(30, 350, GetColor(255, 255, 255),  "%2d", num(trash[i]));
+			//if (i != trash[0])
+			//	//DrawFormatString(50, 350, GetColor(255, 255, 255), "と");
 
-				DrawFormatString(250, 450, GetColor(255, 255, 255), "を出しました 残り%d枚です", data[n].hand[0]);
+			//	//DrawFormatString(250, 450, GetColor(255, 255, 255), "を出しました 残り%d枚です", data[n].hand[0]);
 	}
 }
 
@@ -578,15 +584,17 @@ void CP::main() {
 
 
 void CP::Player_Update() {
+	GetMousePoint(&Mouse_X, &Mouse_Y);
 	//int n = 0;
 	//onesec();//1秒数える
-	//deckmake();//山札作成
+	deckmake();//山札作成
+	//deckshuffle();
 	//datareset();//プレイヤーなんかのデータ設定
 	//dealcards();//誰からカードを配るか？
 	//d3start();//ダイヤの三もちの人から開始
 	//phase(n);//ターンが回ってくる処理
 	//status(n);//プレイヤー用の場を表示させる奴
-	//sort(sort_x, sort_y, sort_z);//カードのソート
+	sort(sort_x, sort_y, sort_z);//カードのソート
 	//arrange(n);//トラッシュの処理
 	////print(n);//出したもん表示させる奴
 	//revolution();//おれのリロードはレボリューションだ！！
@@ -602,16 +610,17 @@ void CP::Player_Update() {
 void CP::Player_Draw() {
 	int n = 0;
 	DrawRotaGraph(640, 360, 1.0, 0, stage, TRUE);
-	DrawRotaGraph(100, 360, 0.5, 0, cards[i], TRUE);
+	//DrawRotaGraph(100, 360, 0.5, 0, cards[i], TRUE);
 
 	onesec();//1秒数える
-	deckmake();//山札作成
+	//deckmake();//山札作成
+	deckshuffle();
 	datareset();//プレイヤーなんかのデータ設定
 	dealcards();//誰からカードを配るか？
 	d3start();//ダイヤの三もちの人から開始
 	phase(n);//ターンが回ってくる処理
 	status(n);//プレイヤー用の場を表示させる奴
-	sort(sort_x, sort_y, sort_z);//カードのソート
+	//sort(sort_x, sort_y, sort_z);//カードのソート
 	arrange(n);//トラッシュの処理
 	print(n);//出したもん表示させる奴
 	revolution();//おれのリロードはレボリューションだ！！
