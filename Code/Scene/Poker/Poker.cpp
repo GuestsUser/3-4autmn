@@ -132,9 +132,9 @@ Poker::Poker() :pot(new Pot()), dealer(new PK_Dealer()), cardDealer(new CardDeal
 
 			Cmp_Gage_MouseControl* control = new Cmp_Gage_MouseControl(*gage, Vector3(sizeX * monitorArea.GetX(), sizeY * monitorArea.GetY()), dealer->GetMaxBet()); //ゲージのマウスコントロール受け付けコンポーネント作成
 			control->SetRunUpdate(false); //コントロールコンポーネントは通常実行を切っておく
-			gage->SetCmp(control); //ゲージをマウスからコントロールする機能の追加
-			gage->SetCmp(new Cmp_Gage_Border(*gage)); //ゲージ下限設定機能の追加
-			gage->SetCmp(new Cmp_Gage_UpperBorder(*gage)); //ゲージ上限設定機能の追加
+			gage->EditAppendCmp()->SetCmp(control); //ゲージをマウスからコントロールする機能の追加
+			gage->EditAppendCmp()->SetCmp(new Cmp_Gage_Border(*gage)); //ゲージ下限設定機能の追加
+			gage->EditAppendCmp()->SetCmp(new Cmp_Gage_UpperBorder(*gage)); //ゲージ上限設定機能の追加
 
 
 			
@@ -144,25 +144,25 @@ Poker::Poker() :pot(new Pot()), dealer(new PK_Dealer()), cardDealer(new CardDeal
 				Button* button = new Button(cardPos[j].ReadPos().GetX(), cardPos[j].ReadPos().GetY(), 60, 75, false); //カードクリック判定用ボタンの作成
 				button->SetClick(new Cmp_Button_ClickCheck()); //クリック検知用空コンポーネントの追加
 
-				card[j]->SetCmp(button); //カードにボタンを追加
+				card[j]->EditAppendCmp()->SetCmp(button); //カードにボタンを追加
 			}
 
 
-			current->SetCmp(gage); //ゲージをプレイヤーに追加
-			current->SetCmp(action); //アクションボタンをプレイヤーに追加
-			current->SetCmp(fold); //foldボタンをプレイヤーに追加
-			current->SetCmp(new Cmp_PlayerRaiseDraw(*current, *pot, *dealer)); //プレイヤーの現在ゲージでの支払額表示用コンポーネントを追加
+			current->EditAppendCmp()->SetCmp(gage); //ゲージをプレイヤーに追加
+			current->EditAppendCmp()->SetCmp(action); //アクションボタンをプレイヤーに追加
+			current->EditAppendCmp()->SetCmp(fold); //foldボタンをプレイヤーに追加
+			current->EditAppendCmp()->SetCmp(new Cmp_PlayerRaiseDraw(*current, *pot, *dealer)); //プレイヤーの現在ゲージでの支払額表示用コンポーネントを追加
 		}
 		else { //cpuの精製を指定された場合
 			current = new CPU(); //cpuの精製
-			current->SetCmp(new Cmp_CPUBetLogic(*dealer)); //cpuのベットに必要なデータを纏めたBetLogicを導入
+			current->EditAppendCmp()->SetCmp(new Cmp_CPUBetLogic(*dealer)); //cpuのベットに必要なデータを纏めたBetLogicを導入
 		}
 		current->SetBBView(PK_Player::BBView::hide); //BB表示は隠しておく
 
 
 		current->Place(cardPos, backPos); //カードとコイン表示背景の配置
-		current->SetCmp(new Cmp_BetActionRecord()); //アクションの状態を記録するActionRecordを導入
-		current->SetCmp(new Cmp_ThinkingImage(*current, chara, *dealer, backPosFirst[i].ReadPos())); //考え用画像を表示するコンポーネントの導入
+		current->EditAppendCmp()->SetCmp(new Cmp_BetActionRecord()); //アクションの状態を記録するActionRecordを導入
+		current->EditAppendCmp()->SetCmp(new Cmp_ThinkingImage(*current, chara, *dealer, backPosFirst[i].ReadPos())); //考え用画像を表示するコンポーネントの導入
 
 		chara.push_back(current);
 	}

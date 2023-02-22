@@ -13,6 +13,7 @@
 
 #include "Cmp_BetActionRecord.h"
 #include "../Code/Component/Cmp_Button_ClickCheck.h"
+#include "../Code/Component/ComponentArray.h"
 
 Poker::NoContest::NoContest(Poker& set) :parent(&set), count(0), payOutTime(60), clickStartTime(120), blink(30), nextButton(WINDOW_X / 2, WINDOW_Y / 2, WINDOW_X / 2, WINDOW_Y / 2, false), actionRecord(std::deque<Cmp_BetActionRecord*>(4)) {
 	titlePos.SetXYZ(513, 189, 0); //ノーコンテストである事を示すメッセージの位置設定
@@ -20,7 +21,7 @@ Poker::NoContest::NoContest(Poker& set) :parent(&set), count(0), payOutTime(60),
 
 	nextButton.SetClick(new Cmp_Button_ClickCheck()); //クリックチェック用コンポーネント追加
 
-	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
+	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditAppendCmp()->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
 }
 
 void Poker::NoContest::Update() {

@@ -4,9 +4,10 @@ class Component { //これを継承したクラスにオブジェクトへの追加機能などを書くと汎
 private:
 	bool isUpdate; //trueでUpdateを実行
 	bool isDraw; //trueでDrawを実行
+
 public:
 	Component() :isUpdate(true), isDraw(true) {}
-	virtual ~Component() {}
+	virtual ~Component() {  }
 
 	virtual void Update() = 0;
 	virtual void Draw() {}
@@ -19,4 +20,5 @@ public:
 
 	void SetRunUpdate(bool set) { isUpdate = set; }
 	void SetRunDraw(bool set) { isDraw = set; }
+	
 };

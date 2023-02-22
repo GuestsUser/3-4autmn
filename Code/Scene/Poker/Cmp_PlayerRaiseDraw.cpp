@@ -9,13 +9,14 @@
 
 #include "PokerFontData.h"
 #include "../Code/Component/Cmp_Transform.h"
+#include "../Code/Component/ComponentArray.h"
 
 #include <string>
 #include <cmath>
 
 Cmp_PlayerRaiseDraw::Cmp_PlayerRaiseDraw(Chara& player, Pot& setPot, PK_Dealer& setDealer) :parent(&player), pot(&setPot), dealer(&setDealer),drawPos(new Cmp_Transform()) {
 	drawPos->EditPos().SetXYZ(442, 633, 0); //表示位置の設定
-	gage = parent->EditCmp<Gage>(); //ゲージ取得
+	gage = parent->EditAppendCmp()->EditCmp<Gage>(); //ゲージ取得
 }
 
 Cmp_PlayerRaiseDraw::~Cmp_PlayerRaiseDraw() { delete drawPos; } //独自生成した位置設定用変数の削除

@@ -66,6 +66,8 @@
     <ClCompile Include="Code\Scene\Poker\PK_ShowDown.cpp" />
     <ClCompile Include="Code\Scene\Poker\PK_NoContest.cpp" />
     <ClCompile Include="Code\Scene\Poker\PK_GameOver.cpp" />
+    <ClCompile Include="Code\Component\Component.cpp" />
+    <ClCompile Include="Code\Component\ComponentArray.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Component\Button.h" />
@@ -140,6 +142,7 @@
     <ClInclude Include="Code\Scene\Poker\PK_ShowDown.h" />
     <ClInclude Include="Code\Scene\Poker\PK_NoContest.h" />
     <ClInclude Include="Code\Scene\Poker\PK_GameOver.h" />
+    <ClInclude Include="Code\Component\ComponentArray.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Scene\Title\SelectScene.cd" />

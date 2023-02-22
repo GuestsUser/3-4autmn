@@ -2,12 +2,13 @@
 
 #include "PK_Card.h"
 #include "../Code/Component/Component.h"
+#include "../Code/Component/ComponentArray.h"
 #include "../Code/Component/Cmp_Image.h"
 #include "../Code/Component/Cmp_Transform.h"
 
 #include <deque>
 
-PK_Card::PK_Card() :card(0), drawMode(DrawMode::front), cmp(std::deque<Component*>()) {
+PK_Card::PK_Card() :card(0), drawMode(DrawMode::front), cmp(ComponentArray()) {
 	int* handle = new int[54];
 	LoadDivGraph("Resource/image/poker_card.png", 54, 13, 5, 120, 150, handle); //カード画像読み込み
 	image = new Cmp_Image(*handle, 53); //カード画像格納
@@ -19,7 +20,6 @@ PK_Card::PK_Card() :card(0), drawMode(DrawMode::front), cmp(std::deque<Component
 PK_Card::~PK_Card() { //newした画像系は終了と共に削除
 	delete image;
 	delete markingImage;
-	for (auto itr : cmp) { delete itr; }
 }
 
 void PK_Card::Reset() {
@@ -34,7 +34,7 @@ void PK_Card::Place(int x, int y) {
 
 void PK_Card::Update() {
 	if (!GetRunUpdate()) { return; } //実行禁止命令があれば実行しない
-	for (auto itr : cmp) { if (itr->GetRunUpdate()) { itr->Update(); } }
+	cmp.Update();
 }
 
 
@@ -49,6 +49,8 @@ void PK_Card::Draw() {
 	
 	image->Draw();
 	markingImage->Draw();
+
+	cmp.Draw();
 }
 
 void PK_Card::SetMarking(bool set) { markingImage->SetRunDraw(set); } //trueでマーキング表示を行うようにする

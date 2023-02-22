@@ -14,14 +14,15 @@
 #include "../Code/Component/Gage.h"
 #include "../Code/Component/Cmp_Gage_Border.h"
 #include "../Code/Component/Cmp_Gage_UpperBorder.h"
+#include "../Code/Component/ComponentArray.h"
 #include "Cmp_CPUBetLogic.h"
 
 
 Poker::Pre::Pre(Poker& set) :parent(&set), actionRecord(std::deque<Cmp_BetActionRecord*>(4)) {
-	playerGage = parent->chara[(int)Poker::Character::player]->EditCmp<Gage>(); //ゲージ取り出し
-	playerGageBorder = playerGage->EditCmp<Cmp_Gage_Border>(); //ゲージから各種機能を取り出す
-	playerGageUpper = playerGage->EditCmp<Cmp_Gage_UpperBorder>(); //プレイヤーゲージから上限設定機能の取り出し
-	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
+	playerGage = parent->chara[(int)Poker::Character::player]->EditAppendCmp()->EditCmp<Gage>(); //ゲージ取り出し
+	playerGageBorder = playerGage->EditAppendCmp()->EditCmp<Cmp_Gage_Border>(); //ゲージから各種機能を取り出す
+	playerGageUpper = playerGage->EditAppendCmp()->EditCmp<Cmp_Gage_UpperBorder>(); //プレイヤーゲージから上限設定機能の取り出し
+	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditAppendCmp()->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
 }
 
 void Poker::Pre::Update() {
@@ -35,7 +36,7 @@ void Poker::Pre::Update() {
 
 		for (auto card : *itr->EditCard()) { card->SetCard(parent->cardDealer->DeckDraw()); } //山札から引いてきたカードを手札に設定
 		if (typeid(*itr) == typeid(CPU)) { //このキャラがcpuだった場合
-			(itr->EditCmp<Cmp_CPUBetLogic>())->RaiseVolDecision(*itr, true); //現在手札からレイズ数と分割、自主レイズするかどうかを決定する
+			(itr->EditAppendCmp()->EditCmp<Cmp_CPUBetLogic>())->RaiseVolDecision(*itr, true); //現在手札からレイズ数と分割、自主レイズするかどうかを決定する
 		}
 		else { //プレイヤーだった場合
 			for (auto card : *itr->EditCard()) { card->SetDrawMode(PK_Card::DrawMode::front); } //カードを可視化しておく 

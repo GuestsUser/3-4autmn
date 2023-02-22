@@ -12,21 +12,22 @@
 #include "PK_Dealer.h"
 #include "PK_Player.h"
 
+#include "../Code/Component/ComponentArray.h"
 #include "../Code/Component/Cmp_Image.h"
 #include "../Code/Component/Button.h"
 #include "Cmp_CPUBetLogic.h"
 
 Poker::Change::Change(Poker& set) :parent(&set), count(0), cpuWait(30), moveY(-48), border(CardDealer::CardPower::jack), isClick(std::deque<bool>()), actionRecord(std::deque<Cmp_BetActionRecord*>(4)), actionButton(nullptr), cardButton(std::deque<Button*>()), cardPos(std::deque<Vector3*>()) {
-	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
+	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditAppendCmp()->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
 
 	std::deque<Button*> playerButton = std::deque<Button*>();
 	Button* fold = nullptr; //ボタン分解の際のfoldボタン格納用、今回はfoldは使わないのでローカル変数
-	parent->chara[(int)Poker::Character::player]->EditCmpMulti<Button>(playerButton); //ボタン取り出し
+	parent->chara[(int)Poker::Character::player]->EditAppendCmp()->EditCmpMulti<Button>(playerButton); //ボタン取り出し
 	PlayerButtonAnalyze(playerButton, &actionButton, &fold); //ボタン配列をactionとfoldに分解格納
 	actionButtonImage = actionButton->EditAlwaysCmp<Cmp_Image>(); //アクション用ボタンの画像を取り出す
 
 	for (auto itr : *parent->chara[(int)Poker::Character::player]->EditCard()) {
-		cardButton.push_back(itr->EditCmp<Button>()); //プレイヤーのカードから入力受付用ボタンを取得
+		cardButton.push_back(itr->EditAppendCmp()->EditCmp<Button>()); //プレイヤーのカードから入力受付用ボタンを取得
 		cardPos.push_back(&itr->EditTransform()->EditPos()); //各カードのTransformから位置情報を抜き出しておく
 	}
 

@@ -11,7 +11,7 @@
 
 int Chara::coinIni = 5000; //所持金初期値設定
 
-Chara::Chara() :coin(coinIni), bbView(BBView::hide), card(std::deque<PK_Card*>()), coinBack(std::deque<Cmp_Image*>()), cmp(std::deque<Component*>()){
+Chara::Chara() :coin(coinIni), bbView(BBView::hide), card(std::deque<PK_Card*>()), coinBack(std::deque<Cmp_Image*>()), cmp(ComponentArray()){
 	for (int i = 0; i < 5; ++i) { card.push_back(new PK_Card()); }
 
 	coinBack.push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/poker_score_back.png")), 1));
@@ -23,17 +23,18 @@ Chara::Chara() :coin(coinIni), bbView(BBView::hide), card(std::deque<PK_Card*>()
 Chara::~Chara() {
 	for (auto itr : card) { delete itr; }
 	for (auto itr : coinBack) { delete itr; }
-	ClearCmp();
 }
 
 void Chara::FullReset() {
-	for (auto itr : cmp) { itr->FullReset(); } //追加機能の完全初期化
+	cmp.FullReset(); //追加機能の完全初期化
+
 	for (auto itr : card) { itr->FullReset(); } //カードの完全初期化
 	coin = coinIni; //所持金を初期値に合わせる
 	SetBBView(BBView::hide); //BB、SB表示を隠す
 }
 void Chara::Reset() {
-	for (auto itr : cmp) { itr->Reset(); } //追加機能の初期化
+	cmp.Reset(); //追加機能の初期化
+
 	for (auto itr : card) { itr->Reset(); } //カードの初期化
 	SetBBView(BBView::hide); //BB、SB表示を隠す
 }
@@ -55,7 +56,7 @@ void Chara::Place(std::deque<Cmp_Transform>& cardPos, Cmp_Transform& backPos) {
 void Chara::Update() {
 	if (!GetRunUpdate()) { return; }
 	for (auto itr : card) { itr->Update(); } //カード追加処理実行
-	for (auto itr : cmp) { if (itr->GetRunUpdate()) { itr->Update(); } }
+	cmp.Update(); //追加機能実行
 }
 void Chara::Draw() {
 	if (!GetRunDraw()) { return; }
@@ -63,18 +64,9 @@ void Chara::Draw() {
 	for (auto itr : coinBack) { itr->Draw(); } //コイン描写用背景描写
 	DrawStringToHandle(coinBack[0]->EditTranform()->ReadPos().GetX(), coinBack[0]->EditTranform()->ReadPos().GetY(), std::to_string(coin).c_str(), *PokerFontData::GetColor(PokerFontData::color::normal), *PokerFontData::GetHandle(PokerFontData::type::normal));
 
-	for (auto itr : cmp) { 
-		if (itr->GetRunDraw()) { itr->Draw(); } 
-	}
+	cmp.Draw(); //追加機能実行
 }
 
-
-void Chara::EraseCmp(Component* set) {
-	for (auto itr : cmp) { if (itr == set) { delete set; return; } }
-}
-void Chara::ClearCmp() {
-	for (auto itr : cmp) { delete itr; }
-}
 
 void Chara::GetHandNum(std::deque<int>& set) const {
 	for (auto itr : card) { set.push_back(itr->GetCard()); } //手札から数値のみを取り出す処理

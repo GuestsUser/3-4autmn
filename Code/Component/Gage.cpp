@@ -13,23 +13,18 @@ Gage::Gage(Cmp_Image& baseImgae, Cmp_Image& fullImage, int iniVol) :base(&baseIm
 	iniSize = fullImage.ReadTranform()->ReadScale().GetX(); //初期拡大率取得
 }
 
-void Gage::Reset() {
-	for (auto itr : cmp) { itr->Reset(); } //コンポーネントのResetを呼び出す
-}
-void Gage::FullReset() {
-	for (auto itr : cmp) { itr->FullReset(); } //コンポーネントのFullResetを呼び出す
-}
+void Gage::Reset() { cmp.Reset(); } //コンポーネントのResetを呼び出す
+void Gage::FullReset() { cmp.FullReset(); } //コンポーネントのFullResetを呼び出す
 
 
 Gage::~Gage() {
 	delete full;
 	delete base;
-	for (auto itr : cmp) { delete itr; }
 }
 
 void Gage::Update() {
 	if (!GetRunUpdate()) { return; } //実行禁止が出ていれば実行しない
-	for (auto itr : cmp) { itr->Update(); } //追加機能の実行
+	cmp.Update(); //追加機能の実行
 }
 
 void Gage::Draw() {
@@ -39,4 +34,6 @@ void Gage::Draw() {
 
 	base->Draw(); //ベース描写
 	full->Draw(); //実体描写
+
+	cmp.Draw(); //追加機能描写実行
 }

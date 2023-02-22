@@ -25,6 +25,8 @@
     <ClCompile Include="Code\Component\Cmp_Gage_MouseControl.cpp" />
     <ClCompile Include="Code\Component\Cmp_Gage_UpperBorder.cpp" />
     <ClCompile Include="Code\Component\Cmp_Image.cpp" />
+    <ClCompile Include="Code\Component\Component.cpp" />
+    <ClCompile Include="Code\Component\ComponentArray.cpp" />
     <ClCompile Include="Code\Component\Gage.cpp" />
     <ClCompile Include="Code\GetKey.cpp" />
     <ClCompile Include="Code\GlovalLoading.cpp" />
@@ -95,6 +97,7 @@
     <ClInclude Include="Code\Component\Component.h" />
     <ClInclude Include="Code\Component\Cmp_Image.h" />
     <ClInclude Include="Code\Component\Cmp_Transform.h" />
+    <ClInclude Include="Code\Component\ComponentArray.h" />
     <ClInclude Include="Code\Component\Gage.h" />
     <ClInclude Include="Code\ConstVal.h" />
     <ClInclude Include="Code\GetKey.h" />

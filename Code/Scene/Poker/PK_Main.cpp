@@ -11,6 +11,7 @@
 #include "PK_Dealer.h"
 #include "PK_Player.h"
 
+#include "../Code/Component/ComponentArray.h"
 #include "../Code/Component/Cmp_Image.h"
 #include "../Code/Component/Button.h"
 #include "../Code/Component/Gage.h"
@@ -20,18 +21,20 @@
 #include "Cmp_BetActionRecord.h"
 #include "Cmp_CPUBetLogic.h"
 
+
+
 Poker::Main::Main(Poker& set) :parent(&set), phase(0), count(0), cpuWait(30), actionRecord(std::deque<Cmp_BetActionRecord*>(4)), betLogic(std::deque<Cmp_CPUBetLogic*>(3)), playerButton(std::deque<Button*>()), actionButton(nullptr), foldButton(nullptr), playerGage(nullptr), playerGageBorder(nullptr), gageControl(nullptr), actionButtonImage(nullptr) {
-	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
-	for (int i = 0; i < betLogic.size(); ++i) { betLogic[i] = parent->chara[i]->EditCmp<Cmp_CPUBetLogic>(); } //ベットロジック取り出し、chara配列の並び順がplayer最後になってるのでこれで動く、不安ならif文でplayerチェックしてもいい
-	parent->chara[(int)Poker::Character::player]->EditCmpMulti<Button>(playerButton); //ボタン取り出し
+	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditAppendCmp()->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
+	for (int i = 0; i < betLogic.size(); ++i) { betLogic[i] = parent->chara[i]->EditAppendCmp()->EditCmp<Cmp_CPUBetLogic>(); } //ベットロジック取り出し、chara配列の並び順がplayer最後になってるのでこれで動く、不安ならif文でplayerチェックしてもいい
+	parent->chara[(int)Poker::Character::player]->EditAppendCmp()->EditCmpMulti<Button>(playerButton); //ボタン取り出し
 	PlayerButtonAnalyze(playerButton, &actionButton, &foldButton); //ボタン配列をactionとfoldに分解格納
 	actionButtonImage = actionButton->EditAlwaysCmp<Cmp_Image>(); //アクション用ボタンの画像を取り出す
 
 
-	playerGage = parent->chara[(int)Poker::Character::player]->EditCmp<Gage>(); //ゲージ取り出し
-	playerGageBorder = playerGage->EditCmp<Cmp_Gage_Border>(); //ゲージから各種機能を取り出す
-	playerGageUpper = playerGage->EditCmp<Cmp_Gage_UpperBorder>(); //プレイヤーゲージから上限設定機能の取り出し
-	gageControl = playerGage->EditCmp<Cmp_Gage_MouseControl>();
+	playerGage = parent->chara[(int)Poker::Character::player]->EditAppendCmp()->EditCmp<Gage>(); //ゲージ取り出し
+	playerGageBorder = playerGage->EditAppendCmp()->EditCmp<Cmp_Gage_Border>(); //ゲージから各種機能を取り出す
+	playerGageUpper = playerGage->EditAppendCmp()->EditCmp<Cmp_Gage_UpperBorder>(); //プレイヤーゲージから上限設定機能の取り出し
+	gageControl = playerGage->EditAppendCmp()->EditCmp<Cmp_Gage_MouseControl>();
 }
 
 void Poker::Main::Update() {

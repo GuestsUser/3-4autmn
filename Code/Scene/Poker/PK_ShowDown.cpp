@@ -14,6 +14,7 @@
 #include "PokerFontData.h"
 
 #include "Cmp_BetActionRecord.h"
+#include "../Code/Component/ComponentArray.h"
 
 Poker::ShowDown::ShowDown(Poker& set) :parent(&set), count(0), actionRecord(std::deque<Cmp_BetActionRecord*>(4)), hand(std::deque<std::deque<int>>(4, std::deque<int>(5))), handPos(std::deque<Vector3>(4)), handString(std::deque<std::string>(4)) {
 	titlePos.SetXYZ(513, 189, 0); //ショーダウンである事を示すメッセージの位置設定
@@ -24,7 +25,7 @@ Poker::ShowDown::ShowDown(Poker& set) :parent(&set), count(0), actionRecord(std:
 	handPos[2].SetXYZ(1039, 377, 0);
 	handPos[3].SetXYZ(497, 400, 0);
 
-	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
+	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditAppendCmp()->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
 }
 
 void Poker::ShowDown::Update() {

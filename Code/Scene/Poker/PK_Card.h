@@ -1,5 +1,6 @@
 #pragma once
 #include "../Code/Component/Component.h"
+#include "../Code/Component/ComponentArray.h"
 #include <deque>
 
 class Cmp_Image;
@@ -15,7 +16,7 @@ private:
 	int card; //カード画像から目的の画像を取り出す添え字変数
 	DrawMode drawMode; //表示モード格納変数
 
-	std::deque<Component*> cmp;
+	ComponentArray cmp;
 public:
 	PK_Card();
 	~PK_Card();
@@ -39,12 +40,6 @@ public:
 	void SetDrawMode(DrawMode set) { drawMode = set; } //表示形式の設定
 
 
-	void SetCmp(Component* set) { cmp.push_back(set); } //追加機能の追加
-	template<class T> T* EditCmp() const { //コンポーネント取得
-		const type_info& master = typeid(T); //取得するコンポーネントの型を入れておく
-		for (Component* get : cmp) {
-			if (typeid(*get) == master) { return dynamic_cast<T*>(get); }
-		}
-		return nullptr;
-	}
+	ComponentArray* EditAppendCmp() { return &cmp; } //追加機能集へのアクセスを渡す
+	const ComponentArray* const ReadAppendCmp() { return &cmp; } //追加機能集へのアクセス、こちらは読み出し専用
 };
