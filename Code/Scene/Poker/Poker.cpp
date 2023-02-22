@@ -2,8 +2,16 @@
 
 #include "../Scene.h"
 #include "Poker.h"
-#include "PokerSections.h" //Poker管理のシーン定義を行っている
 #include "PokerFontData.h"
+
+#include "PK_Ini.h"
+#include "PK_Pre.h"
+#include "PK_Main.h"
+#include "PK_Change.h"
+#include "PK_ShowDown.h"
+#include "PK_NoContest.h"
+#include "PK_GameOver.h"
+#include "PK_GameClear.h"
 
 #include "PK_Card.h"
 #include "CPU.h"
