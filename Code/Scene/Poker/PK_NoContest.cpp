@@ -15,7 +15,7 @@
 #include "../Code/Component/Cmp_Button_ClickCheck.h"
 #include "../Code/Component/ComponentArray.h"
 
-Poker::NoContest::NoContest(Poker& set) :parent(&set), count(0), payOutTime(60), clickStartTime(120), blink(30), nextButton(WINDOW_X / 2, WINDOW_Y / 2, WINDOW_X / 2, WINDOW_Y / 2, false), actionRecord(std::deque<Cmp_BetActionRecord*>(4)) {
+Poker::NoContest::NoContest(Poker& set) :parent(&set), count(0), payOutTime(60), clickStartTime(120), blink(30), nextButton(WINDOW_X / 2, WINDOW_Y / 2, WINDOW_X / 2, WINDOW_Y / 2, false), actionRecord(std::deque<Cmp_BetActionRecord*>((int)Poker::Character::length)) {
 	titlePos.SetXYZ(513, 189, 0); //ノーコンテストである事を示すメッセージの位置設定
 	explainPos.SetXYZ(484, 312, 0); //ボタン説明配置位置
 

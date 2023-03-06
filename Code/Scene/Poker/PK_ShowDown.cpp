@@ -16,14 +16,15 @@
 #include "Cmp_BetActionRecord.h"
 #include "../Code/Component/ComponentArray.h"
 
-Poker::ShowDown::ShowDown(Poker& set) :parent(&set), count(0), actionRecord(std::deque<Cmp_BetActionRecord*>(4)), hand(std::deque<std::deque<int>>(4, std::deque<int>(5))), handPos(std::deque<Vector3>(4)), handString(std::deque<std::string>(4)) {
+Poker::ShowDown::ShowDown(Poker& set) :parent(&set), count(0), actionRecord(std::deque<Cmp_BetActionRecord*>((int)Poker::Character::length)), hand(std::deque<std::deque<int>>((int)Poker::Character::length, std::deque<int>(5))), handPos(std::deque<Vector3>((int)Poker::Character::length)), handString(std::deque<std::string>((int)Poker::Character::length)) {
 	titlePos.SetXYZ(513, 189, 0); //ショーダウンである事を示すメッセージの位置設定
 
 	//手札役を表示する為の位置設定
 	handPos[0].SetXYZ(108, 382, 0);
-	handPos[1].SetXYZ(776, 31, 0);
-	handPos[2].SetXYZ(1039, 377, 0);
-	handPos[3].SetXYZ(497, 400, 0);
+	handPos[1].SetXYZ(455, 28, 0);
+	handPos[2].SetXYZ(1012, 28, 0);
+	handPos[3].SetXYZ(1039, 377, 0);
+	handPos[4].SetXYZ(497, 400, 0);
 
 	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditAppendCmp()->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
 }

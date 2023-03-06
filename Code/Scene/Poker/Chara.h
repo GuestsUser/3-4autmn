@@ -1,6 +1,7 @@
 #pragma once
 #include "../Code/Component/Component.h"
 #include "../Code/Component/ComponentArray.h"
+#include "Cmp_BetActionRecord.h"
 #include <deque>
 
 #include <typeinfo>
@@ -22,6 +23,8 @@ private:
 
 	ComponentArray cmp; //追加機能集
 public:
+	enum class Section { main, change }; //sectionModuleから目的のセクションを指定する為の列挙型
+
 	Chara();
 	virtual ~Chara();
 	void FullReset();
@@ -30,6 +33,9 @@ public:
 	void Place(std::deque<Cmp_Transform>& cardPos, Cmp_Transform& backPos);
 	void Update();
 	void Draw();
+
+	virtual void SectionUpdate() = 0; //ゲームの各セクションから呼び出すUpdate、セクションに応じて適切な処理を実行してくれる
+	virtual void SetSection(Section set) = 0; //使用Section指定用関数
 
 	int GetCoint() const { return coin; }
 	const std::deque<PK_Card*>* ReadCard() const { return &card; }

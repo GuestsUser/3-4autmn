@@ -15,7 +15,7 @@
 #include "../Code/Component/ComponentArray.h"
 
 
-Poker::Ini::Ini(Poker& set) :parent(&set), actionRecord(std::deque<Cmp_BetActionRecord*>(4)) {
+Poker::Ini::Ini(Poker& set) :parent(&set), actionRecord(std::deque<Cmp_BetActionRecord*>((int)Poker::Character::length)) {
 	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditAppendCmp()->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
 }
 
@@ -25,6 +25,8 @@ void Poker::Ini::Update() {
 	parent->cardDealer->Reset();
 	for (int i = 0; i < parent->chara.size(); ++i) {
 		parent->chara[i]->Reset(); //キャラコンポーネントのリセット
+		parent->chara[i]->SetSection(Chara::Section::main); //実行セクションをmainに設定
+
 
 		if (actionRecord[i]->GetIsLose()) { //今回キャラが敗北済みの場合
 			std::deque<PK_Card*>* card = parent->chara[i]->EditCard(); //カードを管理する配列を取得

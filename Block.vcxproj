@@ -54,6 +54,9 @@
     <ClCompile Include="Code\Scene\PageOne\Scene_PageOne.cpp" />
     <ClCompile Include="Code\Scene\Poker\Btn.cpp" />
     <ClCompile Include="Code\Scene\Poker\Cmp_ThinkingImage.cpp" />
+    <ClCompile Include="Code\Scene\Poker\CPU_Change.cpp" />
+    <ClCompile Include="Code\Scene\Poker\CPU_Main.cpp" />
+    <ClCompile Include="Code\Scene\Poker\CPU_DataPlace.cpp" />
     <ClCompile Include="Code\Scene\Poker\PK_GameOver.cpp" />
     <ClCompile Include="Code\Scene\Poker\PK_NoContest.cpp" />
     <ClCompile Include="Code\Scene\Poker\PK_Main.cpp" />
@@ -64,6 +67,8 @@
     <ClCompile Include="Code\Scene\Poker\Cmp_PlayerRaiseDraw.cpp" />
     <ClCompile Include="Code\Scene\Poker\PK_Change.cpp" />
     <ClCompile Include="Code\Scene\Poker\PK_Ini.cpp" />
+    <ClCompile Include="Code\Scene\Poker\PK_Player_Change.cpp" />
+    <ClCompile Include="Code\Scene\Poker\PK_Player_Main.cpp" />
     <ClCompile Include="Code\Scene\Poker\PK_Pre.cpp" />
     <ClCompile Include="Code\Scene\Poker\PK_SectionLibrary.cpp" />
     <ClCompile Include="Code\Scene\Poker\PK_ShowDown.cpp" />
@@ -127,6 +132,9 @@
     <ClInclude Include="Code\Scene\Poker\BetLogicInitializeData.h" />
     <ClInclude Include="Code\Scene\Poker\Btn.h" />
     <ClInclude Include="Code\Scene\Poker\Cmp_ThinkingImage.h" />
+    <ClInclude Include="Code\Scene\Poker\CPU_Change.h" />
+    <ClInclude Include="Code\Scene\Poker\CPU_Main.h" />
+    <ClInclude Include="Code\Scene\Poker\CPU_DataPlace.h" />
     <ClInclude Include="Code\Scene\Poker\PK_GameOver.h" />
     <ClInclude Include="Code\Scene\Poker\PK_NoContest.h" />
     <ClInclude Include="Code\Scene\Poker\PK_Main.h" />
@@ -138,6 +146,8 @@
     <ClInclude Include="Code\Scene\Poker\Cmp_PlayerRaiseDraw.h" />
     <ClInclude Include="Code\Scene\Poker\PK_Change.h" />
     <ClInclude Include="Code\Scene\Poker\PK_Ini.h" />
+    <ClInclude Include="Code\Scene\Poker\PK_Player_Change.h" />
+    <ClInclude Include="Code\Scene\Poker\PK_Player_Main.h" />
     <ClInclude Include="Code\Scene\Poker\PK_Pre.h" />
     <ClInclude Include="Code\Scene\Poker\PK_SectionLibrary.h" />
     <ClInclude Include="Code\Scene\Poker\PK_ShowDown.h" />

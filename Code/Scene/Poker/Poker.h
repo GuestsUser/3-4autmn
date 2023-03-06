@@ -20,7 +20,7 @@ class Poker :public Scene { //ポーカーのゲームシーン
 	std::deque<Scene*> list; //ポーカーを行う為の処理を行うシーンの実体保持用配列
 	Scene* run; //これに入ってるシーンを実行する
 public:
-	enum class Character { leftCom, topCom, rightCom, player, length }; //charaから狙ったキャラを取り出す為の要素指定用列挙型、lengthを参照すればキャラ数を取得できるライフハック
+	enum class Character { leftCom, topLeftCom, topRightCom, rightCom, player, length }; //charaから狙ったキャラを取り出す為の要素指定用列挙型、lengthを参照すればキャラ数を取得できるライフハック
 	enum class Section { ini, pre, main, change, showdown, nocontest, gameover, gameclear }; //list配列から望んだシーンを取り出す為の要素指定用列挙型
 
 	Poker();

@@ -68,6 +68,11 @@
     <ClCompile Include="Code\Scene\Poker\PK_GameOver.cpp" />
     <ClCompile Include="Code\Component\Component.cpp" />
     <ClCompile Include="Code\Component\ComponentArray.cpp" />
+    <ClCompile Include="Code\Scene\Poker\PK_Player_Change.cpp" />
+    <ClCompile Include="Code\Scene\Poker\PK_Player_Main.cpp" />
+    <ClCompile Include="Code\Scene\Poker\CPU_Main.cpp" />
+    <ClCompile Include="Code\Scene\Poker\CPU_Change.cpp" />
+    <ClCompile Include="Code\Scene\Poker\CPU_DataPlace.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Component\Button.h" />
@@ -143,6 +148,11 @@
     <ClInclude Include="Code\Scene\Poker\PK_NoContest.h" />
     <ClInclude Include="Code\Scene\Poker\PK_GameOver.h" />
     <ClInclude Include="Code\Component\ComponentArray.h" />
+    <ClInclude Include="Code\Scene\Poker\PK_Player_Change.h" />
+    <ClInclude Include="Code\Scene\Poker\PK_Player_Main.h" />
+    <ClInclude Include="Code\Scene\Poker\CPU_Main.h" />
+    <ClInclude Include="Code\Scene\Poker\CPU_Change.h" />
+    <ClInclude Include="Code\Scene\Poker\CPU_DataPlace.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Scene\Title\SelectScene.cd" />

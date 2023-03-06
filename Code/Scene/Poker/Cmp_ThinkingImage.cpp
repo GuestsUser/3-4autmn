@@ -14,15 +14,10 @@
 
 #include "Cmp_ThinkingImage.h"
 
-Cmp_ThinkingImage::Cmp_ThinkingImage(Chara& setParent, std::deque<Chara*>& setChara, PK_Dealer& setDealer, const Vector3& place) : parent(&setParent), chara(&setChara), dealer(&setDealer) {
-	int space = 118; //placeにこの数値分だけxをずらした位置に配置する
-
+Cmp_ThinkingImage::Cmp_ThinkingImage(Poker::Character parent, PK_Dealer& setDealer, const Vector3& place) :parent(parent), dealer(&setDealer) {
 	image = new Cmp_Image(*new int(LoadGraph("Resource/image/poker_cpu_thinking.png")), 1); //画像作成
-	image->EditTranform()->EditPos().SetXYZ(place.GetX() + space, place.GetY(), place.GetZ()); //xをspace分ずらした位置に配置する
-
-	isPlayer = typeid(*parent) == typeid(PK_Player);
+	image->EditTranform()->EditPos().SetXYZ(place.GetX(), place.GetY(), place.GetZ()); //xをspace分ずらした位置に配置する
 }
-
 
 void Cmp_ThinkingImage::Update() {
 	if (!GetRunUpdate()) { return; } //禁止令が出てる場合実行しない
@@ -30,8 +25,7 @@ void Cmp_ThinkingImage::Update() {
 }
 void Cmp_ThinkingImage::Draw() {
 	if (!GetRunDraw()) { return; } //禁止令が出てる場合実行しない
-	if (isPlayer) { return; } //プレイヤーの場合表示しない
-	if ((*chara)[dealer->GetActionCharaSub()] != parent) { return; } //現在アクション実行中キャラが親ではない場合実行しない
+	if (dealer->GetActionCharaSub() != (int)parent) { return; } //現在アクション実行中キャラが自身を持つオブジェクトと違う場合実行しない
 
 	image->Draw(); //描写
 }

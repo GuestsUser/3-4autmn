@@ -12,7 +12,8 @@ Btn::Btn() :posList(std::deque<Cmp_Transform>((int)Poker::Character::length)) {
 	img = new Cmp_Image(*new int(LoadGraph("Resource/image/poker_dealer.png")), 1); //ゲージ画像の作成
 
 	posList[(int)Poker::Character::leftCom].EditPos().SetXYZ(87, 511, 0); //各キャラがボタンポジションになった際、ボタンを配置する座標を設定
-	posList[(int)Poker::Character::topCom].EditPos().SetXYZ(754, 146, 0);
+	posList[(int)Poker::Character::topLeftCom].EditPos().SetXYZ(437, 142, 0);
+	posList[(int)Poker::Character::topRightCom].EditPos().SetXYZ(994, 142, 0);
 	posList[(int)Poker::Character::rightCom].EditPos().SetXYZ(1015, 491, 0);
 	posList[(int)Poker::Character::player].EditPos().SetXYZ(674, 671, 0);
 
