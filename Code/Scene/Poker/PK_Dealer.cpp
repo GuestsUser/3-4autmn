@@ -1,13 +1,13 @@
 #include "DxLib.h"
-
-#include "Btn.h"
-#include "PK_Dealer.h"
 #include "Poker.h"
+
+#include "PK_Btn.h"
+#include "PK_Dealer.h"
 #include "PokerFontData.h"
 
 #include <string>
 
-PK_Dealer::PK_Dealer() :btn(Btn()), baseBB(100), addBB(50), maxBet(10) { FullReset(); } //maxBetはゲーム中変化しないのでFullResetには含めずこちらで10と定義しておく
+PK_Dealer::PK_Dealer() :btn(PK_Btn()), baseBB(100), addBB(50), maxBet(10) { FullReset(); } //maxBetはゲーム中変化しないのでFullResetには含めずこちらで10と定義しておく
 
 void PK_Dealer::Draw() {
 	btn.Draw(); //ボタン画像の描写

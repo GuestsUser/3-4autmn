@@ -1,0 +1,15 @@
+diff a/Code/Scene/AirHockey/AirHockey.cpp b/Code/Scene/AirHockey/AirHockey.cpp	(rejected hunks)
+@@ -2724,11 +2724,11 @@
+ 	if (Resalt() == true) {
+ 		if (score1 > score2) 
+ 		{
+-				Parent->SetNext(new Scene_Select());    // �Z���N�g�V�[���Ɉړ�
++				Parent->SetNext(nullptr);    // �Z���N�g�V�[���Ɉړ�
+ 		}
+ 		else
+ 		{
+-				Parent->SetNext(new Scene_Select());    // �Z���N�g�V�[���Ɉړ�
++				Parent->SetNext(nullptr);    // �Z���N�g�V�[���Ɉړ�
+ 		}
+ 	}
+ }

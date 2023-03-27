@@ -2,7 +2,7 @@
 #include"Scene_PageOne.h"
 #include"DxLib.h"
 #include"./../Code/GetKey.h"
-#include "./../Title/Scene_Select.h"
+#include "./../Title/Title_Select.h"
 #include "./../Title/Cmp_SelectSelector.h"
 
 
@@ -227,7 +227,7 @@ void PageOne::PageOne_Update() {
 				PlaySoundMem(Select_SE, DX_PLAYTYPE_BACK);
 				StopSoundMem(BGM);
 				PageOne_Finalize();
-				select->SetNext(new Scene_Select());
+				select->SetNext(new Title_Select());
 			}
 		}
 	}
@@ -249,7 +249,7 @@ void PageOne::PageOne_Update() {
 				PlaySoundMem(Select_SE, DX_PLAYTYPE_BACK);
 				StopSoundMem(BGM);
 				PageOne_Finalize();
-				select->SetNext(new Scene_Select());
+				select->SetNext(new Title_Select());
 			}
 		}
 	}

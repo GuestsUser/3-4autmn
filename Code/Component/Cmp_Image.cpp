@@ -9,7 +9,11 @@
 
 void DelImage(int* gh, int len) { //画像の削除、外部公開したくなかったからこちらに記す
 	if (gh == nullptr) { return; } //空なら何もしない
-	if (len == 1) { DeleteGraph(*gh); delete gh; return; } //要素が一つなら単体用削除
+	if (len == 1) { //要素が一つなら
+		DeleteGraph(*gh); //画像解放
+		delete gh; //確保領域解放
+		return; //終わり
+	}
 	for (int i = 0; i < len; ++i) { DeleteGraph(gh[i]); } //配列解放
 	delete[] gh; //複数なら配列用削除
 }

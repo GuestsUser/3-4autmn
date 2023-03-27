@@ -15,10 +15,16 @@ void ComponentArray::ClearCmp() {
 }
 
 void ComponentArray::Update() {
-	if (!GetRunUpdate()) { return; }
+	if (!GetRunUpdate()) { return; } //このコンポーネント自身が実行不可なら追加機能も実行しない
 	for (auto itr : cmp) { if (itr->GetRunUpdate()) { itr->Update(); } }
 }
 void ComponentArray::Draw() {
-	if (!GetRunDraw()) { return; }
+	if (!GetRunDraw()) { return; } //このコンポーネント自身が実行不可なら追加機能も実行しない
 	for (auto itr : cmp) { if (itr->GetRunDraw()) { itr->Draw(); } }
+}
+void ComponentArray::SetRunUpdateBundle(bool set) {
+	for (auto itr : cmp) { itr->SetRunUpdate(set); }
+}
+void ComponentArray::SetRunDrawBundle(bool set) {
+	for (auto itr : cmp) { itr->SetRunDraw(set); }
 }

@@ -1,10 +1,11 @@
 #include "DxLib.h"
 
 #include "PK_Card.h"
-#include "../Code/Component/Component.h"
-#include "../Code/Component/ComponentArray.h"
-#include "../Code/Component/Cmp_Image.h"
-#include "../Code/Component/Cmp_Transform.h"
+
+#include "Component.h"
+#include "ComponentArray.h"
+#include "Cmp_Image.h"
+#include "Cmp_Transform.h"
 
 #include <deque>
 

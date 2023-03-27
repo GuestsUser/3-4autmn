@@ -10,7 +10,7 @@
 #include <time.h>
 #include <algorithm>
 #include<iostream>
-#include "./../Title/Scene_Select.h"
+#include "./../Title/Title_Select.h"
 
 using namespace std;
 using std::cout; using std::cin;
@@ -254,7 +254,7 @@ void SR_Saikoro::Update() {
 		case 5:
 			if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {	/*もし左クリックしたら*/
 				StopSoundMem(SR_BGM);
-				parent->SetNext(new Scene_Select());
+				parent->SetNext(new Title_Select());
 			}
 			break;
 		case 6:
@@ -559,7 +559,7 @@ void SR_Saikoro::SR_Pose_Update() {
 		if (450 <= MouseX && MouseX <= 850 && 470 <= MouseY && MouseY <= 590) {
 			if (OldKey != KEY_FREE && nowKey == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
 				//StopSoundMem(CF_GameBGM);
-				parent->SetNext(new Scene_Select());
+				parent->SetNext(new Title_Select());
 				StopSoundMem(SR_BGM);
 			}
 		}

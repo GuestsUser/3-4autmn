@@ -1,7 +1,7 @@
 #include"DxLib.h"
 #include"./../Code/GetKey.h"
 #include"Karu_Game.h"
-#include "./../Title/Scene_Select.h"
+#include "./../Title/Title_Select.h"
 
 #include <random>
 #include <math.h>
@@ -827,7 +827,7 @@ void Karu_Game::Pause_Controller() {
 		on_MenuButton = true;
 		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
 			PlaySoundMem(Se_Select, DX_PLAYTYPE_BACK);
-			parent->SetNext(new Scene_Select());
+			parent->SetNext(new Title_Select());
 		}	
 	}
 	else {
@@ -968,7 +968,7 @@ void Karu_Game::Karu_GameOver() {
 			if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
 				now_GoSe = false;
 				PlaySoundMem(Se_Select, DX_PLAYTYPE_BACK);
-				parent->SetNext(new Scene_Select());
+				parent->SetNext(new Title_Select());
 			}
 		}
 		else {
@@ -1037,7 +1037,7 @@ void Karu_Game::Karu_End() {
 		on_MenuButton = true;
 		if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) { // 左クリックしたら
 			PlaySoundMem(Se_Select, DX_PLAYTYPE_BACK);
-			parent->SetNext(new Scene_Select());
+			parent->SetNext(new Title_Select());
 		}
 	}
 	else {

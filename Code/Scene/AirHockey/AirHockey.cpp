@@ -1,5 +1,5 @@
 #include <DxLib.h>
-#include "./../Title/Scene_Select.h"
+#include "./../Title/Title_Select.h"
 #include "../../SceneManager.h"
 #include "./../Scene.h"
 #include "AirHockey.h"
@@ -2724,11 +2724,11 @@ void AirHockey_Scene::AirHockey_Update(){
 	if (Resalt() == true) {
 		if (score1 > score2) 
 		{
-				Parent->SetNext(new Scene_Select());    // セレクトシーンに移動
+				Parent->SetNext(new Title_Select());    // セレクトシーンに移動
 		}
 		else
 		{
-				Parent->SetNext(new Scene_Select());    // セレクトシーンに移動
+				Parent->SetNext(new Title_Select());    // セレクトシーンに移動
 		}
 	}
 }

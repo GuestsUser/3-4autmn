@@ -217,7 +217,7 @@ void BlackJack::Draw() {
   if (game_endflg || end) {
     pose_flg = false;
     if (BlackJack::Wait_Time(3.0f)) {
-      SetNext(new Scene_Select());
+      SetNext(new Title_Select());
     }
     else {
 

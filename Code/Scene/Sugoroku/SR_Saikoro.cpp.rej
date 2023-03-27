@@ -1,0 +1,10 @@
+diff a/Code/Scene/Sugoroku/SR_Saikoro.cpp b/Code/Scene/Sugoroku/SR_Saikoro.cpp	(rejected hunks)
+@@ -254,7 +254,7 @@
+ 		case 5:
+ 			if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {	/*������N���b�N������*/
+ 				StopSoundMem(SR_BGM);
+-				parent->SetNext(new Scene_Select());
++				parent->SetNext(nullptr);
+ 			}
+ 			break;
+ 		case 6:

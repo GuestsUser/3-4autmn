@@ -1,6 +1,6 @@
 #pragma once
-#include "../Code/Component/Component.h"
-#include "../Code/Component/ComponentArray.h"
+#include "Component.h"
+#include "ComponentArray.h"
 #include <deque>
 
 class Cmp_Image;

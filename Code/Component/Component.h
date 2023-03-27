@@ -15,8 +15,8 @@ public:
 	virtual void FullReset() {} //コンポーネントを初期化せずゲームを再スタートする際に使用するリセット
 	virtual void Reset() {} //ゲームの1ピリオドが終了した時、次に移行する為実行するリセット
 
-	bool GetRunUpdate() { return isUpdate; }
-	bool GetRunDraw() { return isDraw; }
+	bool GetRunUpdate() const { return isUpdate; }
+	bool GetRunDraw() const { return isDraw; }
 
 	void SetRunUpdate(bool set) { isUpdate = set; }
 	void SetRunDraw(bool set) { isDraw = set; }

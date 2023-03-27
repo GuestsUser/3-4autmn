@@ -10,7 +10,7 @@
 #include"DxLib.h"
 
 #include"../Scene.h"
-#include"../Title/Scene_Select.h"
+#include "./../Title/Title_Select.h"
 
 #include"BJ_Shoe.h"
 #include"BJ_Dealer.h"

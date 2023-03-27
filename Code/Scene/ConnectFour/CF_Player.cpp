@@ -3,15 +3,15 @@
 #include"./../Code/GetKey.h"
 #include<time.h>
 #include "../../SceneManager.h"
-#include "../Title/Scene_GameTitle.h"
 #include"Scene_ConnectFour.h"
 #include "./../Scene.h"
-#include "./../Title/Scene_Select.h"
+#include "../Title/Title.h"
+#include "./../Title/Title_Select.h"
 
 
 //CF_Player cf_player;
-void CF_Player::CF_Player_Initialize(Scene* scene){
-	parent = scene;
+void CF_Player::CF_Player_Initialize(Scene* scene) {
+	this->parent = scene;
 
 	CF_Back = LoadGraph("Resource/image/CF_Back.png"); //背景
 	CF_Panel = LoadGraph("Resource/image/CF_Panel.png"); //パネル
@@ -209,7 +209,7 @@ void CF_Player::CF_Player_Update() {
 			}
 			if (OldKey != KEY_FREE && nowKey == KEY_PULL) {  //マウスの左キーを離した時
 				PlaySoundMem(Pause_Click, DX_PLAYTYPE_BACK);
-				parent->SetNext(new Scene_Select());
+				parent->SetNext(new Title_Select());
 				StopSoundMem(CF_GameBGM);
 			}
 		}
@@ -239,7 +239,7 @@ void CF_Player::CF_Player_Update() {
 			}
 			if (OldKey != KEY_FREE && nowKey == KEY_PULL) {  //マウスの左キーを離した時
 				PlaySoundMem(Pause_Click, DX_PLAYTYPE_BACK);
-				parent->SetNext(new Scene_Select());
+				parent->SetNext(new Title_Select());
 				StopSoundMem(CF_GameBGM);
 			}
 		}

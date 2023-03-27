@@ -6,8 +6,8 @@
 #include "./../Code/GetKey.h"
 #include "./Othello_Board.h"
 #include "./../Scene.h"
-#include "./../Title/Scene_Select.h"
-#include "../Title/Scene_GameTitle.h"
+#include "./../Title/Title_Select.h"
+#include "./../Title/Title.h"
 #include "../../SceneManager.h"
 
 //Othello_Board* OB;
@@ -315,7 +315,7 @@ void Othello_Board::Othello_Board_Update() {
             if (OldKey != KEY_FREE && nowKey == KEY_PULL) {  //前の入力で左キーを話していなくて、今マウスの左キーを離した時
                 StopSoundMem(BGM);      // BGMを止める
                 PlaySoundMem(PauseClickSE, DX_PLAYTYPE_BACK, true);
-                Parent->SetNext(new Scene_Select());    // セレクトシーンに移動
+                Parent->SetNext(new Title_Select());    // セレクトシーンに移動
             }
         }
         else {
@@ -354,7 +354,7 @@ void Othello_Board::Othello_Board_Update() {
             if (key->GetKeyState(REQUEST_MOUSE_LEFT) == KEY_PUSH) {
                 PlaySoundMem(PauseClickSE, DX_PLAYTYPE_BACK, true);
                 StopSoundMem(BGM);                      // BGMを止める
-                Parent->SetNext(new Scene_Select());    // セレクトシーンに移動
+                Parent->SetNext(new Title_Select());    // セレクトシーンに移動
             }
         }
         else {

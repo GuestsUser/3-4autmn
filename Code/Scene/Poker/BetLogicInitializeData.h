@@ -1,25 +1,25 @@
 #pragma once
-#include "CardDealer.h"
+#include "PK_CardDealer.h"
 #include <deque>
 
 void BorderBaseIni(std::deque<int>& base) { //base‚É“ü‚ê‚ç‚ê‚½•Ï”‚Éborderbase‚ğİ’è‚·‚é
-	base.push_back((int)CardDealer::HandRank::No * (int)CardDealer::CardPower::max + (int)CardDealer::CardPower::seven);
-	base.push_back((int)CardDealer::HandRank::OnePair * (int)CardDealer::CardPower::max + (int)CardDealer::CardPower::six);
+	base.push_back((int)PK_CardDealer::HandRank::No * (int)PK_CardDealer::CardPower::max + (int)PK_CardDealer::CardPower::seven);
+	base.push_back((int)PK_CardDealer::HandRank::OnePair * (int)PK_CardDealer::CardPower::max + (int)PK_CardDealer::CardPower::six);
 
-	base.push_back((int)CardDealer::HandRank::OnePair * (int)CardDealer::CardPower::max + (int)CardDealer::CardPower::two);
-	base.push_back((int)CardDealer::HandRank::OnePair * (int)CardDealer::CardPower::max + (int)CardDealer::CardPower::queen);
+	base.push_back((int)PK_CardDealer::HandRank::OnePair * (int)PK_CardDealer::CardPower::max + (int)PK_CardDealer::CardPower::two);
+	base.push_back((int)PK_CardDealer::HandRank::OnePair * (int)PK_CardDealer::CardPower::max + (int)PK_CardDealer::CardPower::queen);
 
-	base.push_back((int)CardDealer::HandRank::OnePair * (int)CardDealer::CardPower::max + (int)CardDealer::CardPower::six);
-	base.push_back((int)CardDealer::HandRank::TwoPair * (int)CardDealer::CardPower::max + (int)CardDealer::CardPower::two);
+	base.push_back((int)PK_CardDealer::HandRank::OnePair * (int)PK_CardDealer::CardPower::max + (int)PK_CardDealer::CardPower::six);
+	base.push_back((int)PK_CardDealer::HandRank::TwoPair * (int)PK_CardDealer::CardPower::max + (int)PK_CardDealer::CardPower::two);
 
-	base.push_back((int)CardDealer::HandRank::OnePair * (int)CardDealer::CardPower::max + (int)CardDealer::CardPower::queen);
-	base.push_back((int)CardDealer::HandRank::TwoPair * (int)CardDealer::CardPower::max + (int)CardDealer::CardPower::six);
+	base.push_back((int)PK_CardDealer::HandRank::OnePair * (int)PK_CardDealer::CardPower::max + (int)PK_CardDealer::CardPower::queen);
+	base.push_back((int)PK_CardDealer::HandRank::TwoPair * (int)PK_CardDealer::CardPower::max + (int)PK_CardDealer::CardPower::six);
 
-	base.push_back((int)CardDealer::HandRank::TwoPair * (int)CardDealer::CardPower::max + (int)CardDealer::CardPower::five);
-	base.push_back((int)CardDealer::HandRank::TwoPair * (int)CardDealer::CardPower::max + (int)CardDealer::CardPower::ten);
+	base.push_back((int)PK_CardDealer::HandRank::TwoPair * (int)PK_CardDealer::CardPower::max + (int)PK_CardDealer::CardPower::five);
+	base.push_back((int)PK_CardDealer::HandRank::TwoPair * (int)PK_CardDealer::CardPower::max + (int)PK_CardDealer::CardPower::ten);
 
-	base.push_back((int)CardDealer::HandRank::TwoPair * (int)CardDealer::CardPower::max + (int)CardDealer::CardPower::ten);
-	base.push_back((int)CardDealer::HandRank::ThreeCard * (int)CardDealer::CardPower::max + (int)CardDealer::CardPower::four);
+	base.push_back((int)PK_CardDealer::HandRank::TwoPair * (int)PK_CardDealer::CardPower::max + (int)PK_CardDealer::CardPower::ten);
+	base.push_back((int)PK_CardDealer::HandRank::ThreeCard * (int)PK_CardDealer::CardPower::max + (int)PK_CardDealer::CardPower::four);
 }
 
 void RaiseBorderBaseIni(std::deque<int>& base) { //base‚É“ü‚ê‚ç‚ê‚½•Ï”‚Éraiseborderbase‚ğİ’è‚·‚é

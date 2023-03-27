@@ -1,11 +1,13 @@
 #pragma once
-#include "../Code/Component/Component.h"
-#include "../Code/Component/Cmp_Transform.h"
-#include "../Code/OriginMath.h"
+#include "Component.h"
+#include "ComponentArray.h"
+#include "Cmp_Transform.h"
 
 #include <deque>
-#include <typeinfo>
 
+//always‚Æclick‚É‚Â‚¢‚Ä
+//always‚Æclick‚ÌUpdate‚ÍButton::Update‚ÅÀs‚³‚ê‚é‚ª‚»‚ÌÀs‡‚Íalways¨click‚Ì‡‚É‚È‚Á‚Ä‚¢‚é
+//click‚ÍƒNƒŠƒbƒN‚ğŒŸ’m‚µ‚½uŠÔ‚©‚çUpdateADraw‚Ç‚¿‚ç‚àÀs‚³‚ê‚é
 
 class Button : public Component { //Component‚ğŒp³‚µ‚Ä‚¢‚é‚ª’Ç‰Á‹@”\‚Æ‚¢‚¤‚æ‚è’P‘Ì¶‘¶‚·‚éƒ^ƒCƒv‚È‚Ì‚Å–½–¼‚ÉCmp‚ğ•t‚¯‚È‚©‚Á‚½
 	enum class State { free, push }; //free=•½íApush=area”ÍˆÍ“à‚Å¶ƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚½uŠÔ‚©‚çarea“àŠO–â‚í‚¸—£‚µ‚½uŠÔ‚Ü‚Å	
@@ -15,72 +17,32 @@ class Button : public Component { //Component‚ğŒp³‚µ‚Ä‚¢‚é‚ª’Ç‰Á‹@”\‚Æ‚¢‚¤‚æ‚è’
 	Cmp_Transform area; //ƒNƒŠƒbƒNŒŸ’m”ÍˆÍAPos‚ÉŒŸ’m”¼Œa‚ğ“ü‚ê‚éAScale‚ÍƒNƒŠƒbƒN‚µ‚½Ûk¬‚·‚é‹@”\‚ğÀs‚µ‚½ÛŠg‘å—¦‚ğŒ³‚É–ß‚·ˆ×pos‚©‚ç’l‚ğó‚¯æ‚é–‚Ég—p‚·‚é
 	bool isMonitorClick; //true‚ÅƒNƒŠƒbƒNŒŸ’mAfalse‚È‚çŒŸ’m‚µ‚È‚¢
 
-	std::deque<Component*> always; //í‚ÉUpdateADraw‚ğÀs‚·‚éƒRƒ“ƒ|[ƒlƒ“ƒg
-	std::deque<Component*> click; //ƒNƒŠƒbƒN‚ğŒŸ’m‚µ‚½uŠÔUpdateADraw‚ğ—LŒø‰»‚·‚éƒRƒ“ƒ|[ƒlƒ“ƒg
-	
+	ComponentArray always; //í‚ÉUpdateADraw‚ğÀs‚·‚éƒRƒ“ƒ|[ƒlƒ“ƒg
+	ComponentArray click; //ƒNƒŠƒbƒN‚ğŒŸ’m‚µ‚½uŠÔUpdateADraw‚ğ—LŒø‰»‚·‚éƒRƒ“ƒ|[ƒlƒ“ƒg
 public:
-	Button(int setX = 0, int setY = 0, int setAreaX = 0, int setAreaY = 0, bool monitorSet = true) :pos(Cmp_Transform()), area(Cmp_Transform()), isMonitorClick(monitorSet), state(State::free), always(std::deque<Component*>()), click(std::deque<Component*>()) {
-		pos.EditPos().SetXYZ(setX, setY, 0);
-		area.EditPos().SetXYZ(setAreaX, setAreaY, 0);
-	}
-	~Button();
+	Button(int setX = 0, int setY = 0, int setAreaX = 0, int setAreaY = 0, bool monitorSet = true);
 
 	void Update();
 	void Draw();
-
-
+	void Reset(); //always‚ÌÀsŒn‚ğtrue‚ÉAclick‚ğfalse‚Éİ’è‚µ’Ç‰Á‹@”\‚ÌReset‚ğŒÄ‚Ño‚·
+	void FullReset(); //Reset‚Ì‹@”\‚Æ’Ç‰Á‹@”\‚ÌResetŒÄ‚Ño‚µ‚Ì‘ã‚í‚èFullReset‚ğŒÄ‚Ño‚·‚â‚Â
 
 	void SetRunClickMonitor(bool set) { isMonitorClick = set; } //ƒNƒŠƒbƒN‚ğŒŸ’m‚·‚é‚©‚ğİ’èAtrue‚ÅŒŸ’m‚·‚éAfalse‚Å‚µ‚È‚¢
-	const bool GetRunClickMonitor()const { return isMonitorClick; } //ƒNƒŠƒbƒNŒŸ’m‚ÌÀs‰Â”Û‚Ìæ“¾
+	bool GetRunClickMonitor()const { return isMonitorClick; } //ƒNƒŠƒbƒNŒŸ’m‚ÌÀs‰Â”Û‚Ìæ“¾
 
-
-	void SetRunUpdateAlways(bool set); //always‚ÌisUpdate‚ğˆêŠ‡İ’è
-	void SetRunDrawAlways(bool set); //always‚ÌisDraw‚ğˆêŠ‡İ’è
-	void SetRunUpdateClick(bool set); //click‚ÌisUpdate‚ğˆêŠ‡İ’è
-	void SetRunDrawClick(bool set); //click‚ÌisDraw‚ğˆêŠ‡İ’è
-
-	const bool GetRunUpdateAlways()const; //always‚ÌisUpdate‚ğ’²¸‚µA1‚Â‚Å‚àtrue‚ª‚ ‚Á‚½‚çtrue‚ğ•Ô‚·
-	const bool GetRunDrawAlways()const; //always‚ÌisDraw‚ğ’²¸‚µA1‚Â‚Å‚àtrue‚ª‚ ‚Á‚½‚çtrue‚ğ•Ô‚·
-	const bool GetRunUpdateClick()const; //click‚ÌisUpdate‚ğ’²¸‚µA1‚Â‚Å‚àtrue‚ª‚ ‚Á‚½‚çtrue‚ğ•Ô‚·
-	const bool GetRunDrawClick()const; //click‚ÌisDraw‚ğ’²¸‚µA1‚Â‚Å‚àtrue‚ª‚ ‚Á‚½‚çtrue‚ğ•Ô‚·
+	bool GetRunUpdateAlways() const { return always.GetRunUpdate(); } //always::Update‚ªÀs‰Â”\‚Å‚ ‚ê‚Îtrue‚ğ•Ô‚·
+	bool GetRunUpdateClick() const { return click.GetRunUpdate(); } //click::Update‚ªÀs‰Â”\‚Å‚ ‚ê‚Îtrue‚ğ•Ô‚·
+	bool GetRunDrawAlways() const { return always.GetRunDraw(); } //always::Draw‚ªÀs‰Â”\‚Å‚ ‚ê‚Îtrue‚ğ•Ô‚·
+	bool GetRunDrawClick() const { return click.GetRunDraw(); } //click::Draw‚ªÀs‰Â”\‚Å‚ ‚ê‚Îtrue‚ğ•Ô‚·
 	
+	ComponentArray* EditAlways() { return &always; } //always‚ÌƒRƒ“ƒ|[ƒlƒ“ƒgW‚ğ•ÒW‰Â”\‚Èó‘Ô‚Å•Ô‚·
+	ComponentArray* EditClick() { return &click; } //click‚ÌƒRƒ“ƒ|[ƒlƒ“ƒgW‚ğ•ÒW‰Â”\‚Èó‘Ô‚Å•Ô‚·
+	const ComponentArray* ReadAlways() const { return &always; } //always‚ÌƒRƒ“ƒ|[ƒlƒ“ƒgW‚ğ“Ç‚İæ‚èê—p‚Å•Ô‚·
+	const ComponentArray* ReadClick() const { return &click; } //click‚ÌƒRƒ“ƒ|[ƒlƒ“ƒgW‚ğ“Ç‚İæ‚èê—p‚Å•Ô‚·
 
 
-
-	void SetAlways(Component* cmp) { always.push_back(cmp); } //cmp‚ğalways‚Ö’Ç‰Á
-	void EraseAlways(Component* cmp); //cmp©‘Ì‚ğíœ‚µAalways‚©‚ç‚àœŠOAalways‚É‘¶İ‚µ‚È‚¢ƒRƒ“ƒ|[ƒlƒ“ƒg‚ğw’è‚µ‚½ê‡íœ‚µ‚È‚¢
-	void ClearAlways(); //always‚ğ‹ó‚É‚·‚éA“ü‚Á‚Ä‚¢‚½ƒRƒ“ƒ|[ƒlƒ“ƒgÀ‘Ì‚Í‘S‚Äíœ‚³‚ê‚é
-
-	void SetClick(Component* cmp) { //cmp‚ğclick‚Ö’Ç‰Á
-		click.push_back(cmp); //”z—ñ‚É’Ç‰Á
-		cmp->SetRunUpdate(false); //w’èƒRƒ“ƒ|[ƒlƒ“ƒg‚ÌUpdateADraw‚ÍƒNƒŠƒbƒN‚ğŒŸ’m‚µ‚½Atrue‚É‚³‚ê‚é
-		cmp->SetRunDraw(false);
-	}
-	void EraseClick(Component* cmp); //cmp©‘Ì‚ğíœ‚µAclick‚©‚ç‚àœŠO
-	void ClearClick(); //click‚ğ‹ó‚É‚·‚éA“ü‚Á‚Ä‚¢‚½ƒRƒ“ƒ|[ƒlƒ“ƒgÀ‘Ì‚Í‘S‚Äíœ‚³‚ê‚é
-
-
-
-
-	const Cmp_Transform* ReadTransform() const { return &pos; } //À•WŒnî•ñ‚ğ“Ç‚İæ‚èê—pŒ`®‚Åæ“¾
 	Cmp_Transform* EditTransform() { return &pos; } //À•WŒnî•ñ‚ğ•ÒW‰Â”\‚Èó‘Ô‚Åæ“¾
-	const Vector3* ReadArea() const { return &(area.ReadPos()); } //ƒNƒŠƒbƒN”ÍˆÍ‚ğ“Ç‚İæ‚èê—pŒ`®‚Åæ“¾
 	Vector3* EditArea() { return &(area.EditPos()); } //ƒNƒŠƒbƒN”ÍˆÍ‚ğ•ÒW‰Â”\‚Èó‘Ô‚Åæ“¾
-
-
-
-	template<class T> T* EditAlwaysCmp() const { //alwaysƒRƒ“ƒ|[ƒlƒ“ƒgæ“¾
-		const type_info& master = typeid(T); //æ“¾‚·‚éƒRƒ“ƒ|[ƒlƒ“ƒg‚ÌŒ^‚ğ“ü‚ê‚Ä‚¨‚­
-		for (Component* get : always) {
-			if (typeid(*get) == master) { return dynamic_cast<T*>(get); }
-		}
-		return nullptr;
-	}
-	template<class T> T* EditClickCmp() const { //clickƒRƒ“ƒ|[ƒlƒ“ƒgæ“¾
-		const type_info& master = typeid(T); //æ“¾‚·‚éƒRƒ“ƒ|[ƒlƒ“ƒg‚ÌŒ^‚ğ“ü‚ê‚Ä‚¨‚­
-		for (Component* get : click) {
-			if (typeid(*get) == master) { return dynamic_cast<T*>(get); }
-		}
-		return nullptr;
-	}
+	const Cmp_Transform* ReadTransform() const { return &pos; } //À•WŒnî•ñ‚ğ“Ç‚İæ‚èê—pŒ`®‚Åæ“¾
+	const Vector3* ReadArea() const { return &(area.ReadPos()); } //ƒNƒŠƒbƒN”ÍˆÍ‚ğ“Ç‚İæ‚èê—pŒ`®‚Åæ“¾
 };
