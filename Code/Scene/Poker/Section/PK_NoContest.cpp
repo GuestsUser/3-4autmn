@@ -58,11 +58,7 @@ void Poker::NoContest::Update() {
 
 	if (nextButton.GetRunUpdateClick()) { //クリックされた場合
 		parent->run = parent->list[(int)Poker::Section::ini]; //最初の状態に戻る
-
-		nextButton.EditClick()->SetRunUpdate(false); //クリック状態を戻す
-		nextButton.EditClick()->SetRunDraw(false); //念の為Drawも戻す
-		nextButton.SetRunClickMonitor(false); //クリック検知の無効化
-		count = -1; //カウントリセット
+		Reset(); //各種項目をリセットする
 	}
 
 	++count;
@@ -71,4 +67,11 @@ void Poker::NoContest::Update() {
 void Poker::NoContest::Draw() {
 	DrawStringToHandle(titlePos.GetX(), titlePos.GetY(), "ノーコンテスト!", *PokerFontData::GetColor(PokerFontData::color::normal), *PokerFontData::GetHandle(PokerFontData::type::normal));
 	if (count >= clickStartTime && ((count - clickStartTime) / blink) % 2 == 0) { DrawStringToHandle(explainPos.GetX(), explainPos.GetY(), "画面をクリックで次ゲームへ", *PokerFontData::GetColor(PokerFontData::color::edgeColor), *PokerFontData::GetHandle(PokerFontData::type::edge), *PokerFontData::GetColor(PokerFontData::color::edgeNormal)); }
+}
+
+void Poker::NoContest::Reset() {
+	nextButton.EditClick()->SetRunUpdate(false); //クリック状態を戻す
+	nextButton.EditClick()->SetRunDraw(false); //念の為Drawも戻す
+	nextButton.SetRunClickMonitor(false); //クリック検知の無効化
+	count = -1; //カウントリセット
 }

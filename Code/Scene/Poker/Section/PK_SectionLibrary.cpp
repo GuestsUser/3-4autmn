@@ -13,12 +13,13 @@
 #include "Cmp_Image.h"
 #include "Button.h"
 #include "Gage.h"
+#include "Cmp_BetActionRecord.h"
+#include "Cmp_Button_ClickCheck.h"
+#include "Cmp_CPUBetLogic.h"
 #include "Cmp_Gage_Border.h"
 #include "Cmp_Gage_UpperBorder.h"
 #include "Cmp_Gage_MouseControl.h"
-#include "Cmp_Button_ClickCheck.h"
-#include "Cmp_BetActionRecord.h"
-#include "Cmp_CPUBetLogic.h"
+#include "Cmp_Hand.h"
 #include "Cmp_PlayerRaiseDraw.h"
 
 #include <algorithm>
@@ -30,7 +31,7 @@
 
 PK_Card* Power2Card(std::deque<PK_Card*>& hand, int target) { //handからtargetに渡されたカードの強さと一致するカードを抽出する
 	for (auto itr : hand) {
-		if (itr->GetCard() % (int)PK_CardDealer::CardPower::max == target) { return itr; } //targetと一致するPK_Card参照を返す
+		if (itr->GetCard() % (int)Cmp_Hand::CardPower::max == target) { return itr; } //targetと一致するPK_Card参照を返す
 	}
 }
 
@@ -151,7 +152,7 @@ void LoseSet(const std::deque<PK_Chara*>& chara, std::deque<Cmp_BetActionRecord*
 	for (int i = 0; i < chara.size(); ++i) { actionRecord[i]->SetIsLose(chara[i]->GetCoint() <= 0); } //所持金が0以下になったら敗北に設定する
 }
 
-void FullReset(std::deque<PK_Chara*>& chara, PK_Pot& pot, PK_Dealer& dealer, PK_CardDealer& cardDealer) { //各種fullResetを実行しPreから新しいゲームを始められるようにする
+void PartsFullReset(std::deque<PK_Chara*>& chara, PK_Pot& pot, PK_Dealer& dealer, PK_CardDealer& cardDealer) { //各種fullResetを実行しPreから新しいゲームを始められるようにする
 	pot.Reset();
 	dealer.FullReset();
 	cardDealer.Reset();
@@ -163,22 +164,6 @@ void PlayerButtonAnalyze(const std::deque<Button*>& button, Button** action, But
 		if ((itr->EditAlways()->EditCmp<Cmp_Image>())->GetAnimeLength() == 1) { *fold = itr; } //分割画像枚数が1ならfoldボタン
 		else { *action = itr; } //違うならアクションボタン
 	}
-}
-
-std::string Hand2String(const std::deque<int>& hand) {
-	switch ((PK_CardDealer::HandRank)(hand[0] / (int)PK_CardDealer::CardPower::max)) {
-	case PK_CardDealer::HandRank::No: return "ハイカード"; break;
-	case PK_CardDealer::HandRank::OnePair: return "ワンペア"; break;
-	case PK_CardDealer::HandRank::TwoPair: return "ツーペア"; break;
-	case PK_CardDealer::HandRank::ThreeCard: return "スリーカード"; break;
-	case PK_CardDealer::HandRank::Straight: return "ストレート!"; break;
-	case PK_CardDealer::HandRank::Flash: return "フラッシュ!"; break;
-	case PK_CardDealer::HandRank::FullHause: return "フルハウス!"; break;
-	case PK_CardDealer::HandRank::FourCard: return "フォーカード!!"; break;
-	case PK_CardDealer::HandRank::StraightFlash: return "ストレートフラッシュ!!"; break;
-	case PK_CardDealer::HandRank::RoyalStraightFlash: return "ロイヤルストレートフラッシュ!!!"; break;
-	}
-
 }
 
 void FoldMemberPayOut(std::deque<PK_Chara*>& chara, PK_Pot& pot) { //foldキャラへPayOut

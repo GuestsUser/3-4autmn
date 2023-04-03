@@ -15,3 +15,7 @@ void PokerFontData::SetUp(){
 	fontColor.push_back(WorldVal::Get<unsigned int>("pokerEdgeFontEdgeColor"));
 }
 
+void PokerFontData::Release() {
+	fontHandle.clear(); //”z—ñ‚Ì’†g‚ğ‹ó‚É‚·‚é
+	fontColor.clear();
+}

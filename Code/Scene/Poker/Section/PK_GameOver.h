@@ -20,4 +20,7 @@ public:
 	GameOver(Poker& set);
 	void Update();
 	void Draw();
+
+	void FullReset() { Reset(); } //Resetと同様
+	void Reset(); //画面クリック検知用ボタンと時間経過記録用カウントのリセット
 };

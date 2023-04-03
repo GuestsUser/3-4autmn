@@ -53,6 +53,7 @@
     <ClCompile Include="Code\Scene\daifugou\CP_Scene.cpp" />
     <ClCompile Include="Code\Scene\PageOne\PageOne.cpp" />
     <ClCompile Include="Code\Scene\PageOne\Scene_PageOne.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Component\Cmp_Hand.cpp" />
     <ClCompile Include="Code\Scene\Poker\PK_Btn.cpp" />
     <ClCompile Include="Code\Scene\Poker\Component\Cmp_ThinkingImage.cpp" />
     <ClCompile Include="Code\Scene\Poker\Chara\CPU\PK_CPU_Change.cpp" />
@@ -132,6 +133,7 @@
     <ClInclude Include="Code\Scene\PageOne\PageOne.h" />
     <ClInclude Include="Code\Scene\PageOne\Scene_PageOne.h" />
     <ClInclude Include="Code\Scene\Poker\BetLogicInitializeData.h" />
+    <ClInclude Include="Code\Scene\Poker\Component\Cmp_Hand.h" />
     <ClInclude Include="Code\Scene\Poker\PK_Btn.h" />
     <ClInclude Include="Code\Scene\Poker\Component\Cmp_ThinkingImage.h" />
     <ClInclude Include="Code\Scene\Poker\Chara\CPU\PK_CPU_Change.h" />

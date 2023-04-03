@@ -31,10 +31,9 @@ int RaiseCalculation(const std::deque<int>& split, int& runCount, int oldPay, in
 void SequenceNextReset(const std::deque<Cmp_BetActionRecord*>& chara); //次シーケンスへ移行する際実行するアクション記録リセット用関数
 void BBSBLevy(int BBpos, std::deque<PK_Chara*>& chara, std::deque<Cmp_BetActionRecord*>& actionRecord, Cmp_Gage_Border& gageBorder, Cmp_Gage_UpperBorder& gageUpper, PK_Pot& pot, PK_Dealer& dealer); //BB、SBポジションキャラからBB、SBを回収
 void LoseSet(const std::deque<PK_Chara*>& chara, std::deque<Cmp_BetActionRecord*>& actionRecord); //現在所持金に合わせて敗北設定を行う
-void FullReset(std::deque<PK_Chara*>& chara, PK_Pot& pot, PK_Dealer& dealer, PK_CardDealer& cardDealer); //各種fullResetを実行しPreから新しいゲームを始められるようにする
+void PartsFullReset(std::deque<PK_Chara*>& chara, PK_Pot& pot, PK_Dealer& dealer, PK_CardDealer& cardDealer); //各種fullResetを実行しPreから新しいゲームを始められるようにする
 
 void PlayerButtonAnalyze(const std::deque<Button*>& button, Button** action, Button** fold); //buttonにplayerのボタンをいれるとactionにアクション用ボタン、foldにfold用ボタンを入れて返してくれる
-std::string Hand2String(const std::deque<int>& hand); //完成役を文字列にして返す
 
 void FoldMemberPayOut(std::deque<PK_Chara*>& chara, PK_Pot& pot); //foldキャラへPayOut
 

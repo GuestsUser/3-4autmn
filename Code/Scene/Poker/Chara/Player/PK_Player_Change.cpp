@@ -7,15 +7,16 @@
 #include "PK_SectionLibrary.h"
 
 #include "Button.h"
+#include "Cmp_Hand.h"
 #include "Cmp_Image.h"
 
 PK_Player::Change::Change(PK_Player& parent):parent(&parent), moveY(-48), count(0) {
-	for (auto itr : *parent.EditCard()) {
+	for (auto itr : *parent.EditHand()->EditCard()) {
 		cardButton.push_back(itr->EditAppendCmp()->EditCmp<Button>()); //プレイヤーのカードから入力受付用ボタンを取得
 		cardPos.push_back(&itr->EditTransform()->EditPos()); //各カードのTransformから位置情報を抜き出しておく
 	}
 
-	originalY = (*parent.EditCard())[0]->ReadTransform()->ReadPos().GetY(); //カードの元yを記憶しておく
+	originalY = (*parent.EditHand()->EditCard())[0]->ReadTransform()->ReadPos().GetY(); //カードの元yを記憶しておく
 }
 
 void PK_Player::Change::Update() {
@@ -41,7 +42,7 @@ void PK_Player::Change::Update() {
 
 	if (parent->actionButton->GetRunUpdateClick()) { //アクションボタンが押された場合の処理
 		for (int i = 0; i < cardButton.size(); ++i) { //各カードの交換チェック
-			std::deque<PK_Card*>* card = parent->EditCard(); //カード配列を保持
+			std::deque<PK_Card*>* card = parent->EditHand()->EditCard(); //カード配列を保持
 			if (cardPos[i]->GetY() != originalY) { //カードが元位置にない場合交換するとして扱う
 				(*card)[i]->SetCard(parent->cardDealer->DeckDraw()); //交換指定のあるカードを交換
 

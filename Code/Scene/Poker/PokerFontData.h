@@ -9,6 +9,7 @@ public:
 	enum class color { normal, edgeNormal, edgeColor }; //上記のfontColor用、edgeNormalはエッジ付きフォントの通常部分カラー、edgeColorがエッジのカラー
 
 	static void SetUp(); //最初にこれを呼び出す事で利用可能となる、各種変数はstaticなので「PokerFontData::関数」の形式で色々取得可能
+	static void Release(); //ハンドルを格納していた配列からデータを取り除く
 
 	static const int* GetHandle(type get)  { return fontHandle[(int)get]; } //目的のハンドルを取る
 	static const unsigned int* GetColor(color get)  { return fontColor[(int)get]; } //目的のカラーを取る

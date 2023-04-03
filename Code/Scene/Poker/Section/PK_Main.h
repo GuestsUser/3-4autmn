@@ -19,7 +19,6 @@ class Poker::Main :public Scene { //メインベットフェイズ
 
 	Poker* parent; //このクラスの実体を持つPokerへの参照
 	int phase; //これが何回目のベットフェイズか持っておく変数
-	int count; //時間カウント
 
 public:
 	Main(Poker& set);

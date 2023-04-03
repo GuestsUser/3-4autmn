@@ -12,6 +12,7 @@
 #include "PK_SectionLibrary.h"
 
 #include "Cmp_BetActionRecord.h"
+#include "Cmp_Hand.h"
 #include "ComponentArray.h"
 
 
@@ -29,7 +30,7 @@ void Poker::Ini::Update() {
 
 
 		if (actionRecord[i]->GetIsLose()) { //今回キャラが敗北済みの場合
-			std::deque<PK_Card*>* card = parent->chara[i]->EditCard(); //カードを管理する配列を取得
+			std::deque<PK_Card*>* card = parent->chara[i]->EditHand()->EditCard(); //カードを管理する配列を取得
 			for (auto itr : *card) { itr->SetDrawMode(PK_Card::DrawMode::fold); } //カードをfold表示にする
 		}
 

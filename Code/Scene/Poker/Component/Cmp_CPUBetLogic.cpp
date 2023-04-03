@@ -8,6 +8,7 @@
 #include "PK_Card.h"
 #include "PK_Chara.h"
 #include "PK_Dealer.h"
+#include "Cmp_Hand.h"
 
 #include <deque>
 
@@ -54,9 +55,8 @@ void Cmp_CPUBetLogic::Reset() {
 	}
 }
 
-void Cmp_CPUBetLogic::RaiseVolDecision(const PK_Chara& chara, bool isCheckReach) {
-	std::deque<int> handRank; //手札を数値化した物を格納
-	chara.GetHandNum(handRank); //キャラから手札配列を取得
+void Cmp_CPUBetLogic::RaiseVolDecision(PK_Chara& chara, bool isCheckReach) {
+	std::deque<int> handRank = chara.ReadHand()->GetHandPower(); //手札を数値化した物を格納
 	
 	int rank = 0; //手の強さがborder内の何処にあるかを示す内部ランク
 	int vol = 0; //レイズ可能回数記録
@@ -69,7 +69,7 @@ void Cmp_CPUBetLogic::RaiseVolDecision(const PK_Chara& chara, bool isCheckReach)
 
 	raiseActive = handRank[0] >= GetRand(borderBase[rank * 2 + 1] - borderBase[rank * 2]) + borderBase[rank * 2] + raiseBorder[rank]; //内部ランク内のボーダーベースとレイズベースからランダム数値を取り出して2つを加算した値以上の手の強さなら自主レイズを行う
 
-	if (isCheckReach && PK_CardDealer::ReachCheck(chara) != 1) { //リーチチェック
+	if (isCheckReach && chara.EditHand()->ReachCheck() != nullptr) { //リーチチェック
 		vol = GetRand(payLimit[payLimit.size() - 1] - payLimit[payLimit.size() - 2]) + payLimit[payLimit.size() - 2]; //リーチが掛かっていればそちらにレイズ基準を合わせる
 		rank = border.size() + 1; //使用ランクをリーチ用の物に変更
 		raiseActive = round((double)GetRand(10) / 10.0); //リーチの場合自主レイズはランダム決定する

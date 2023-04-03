@@ -15,6 +15,7 @@
 #include "Cmp_Gage_MouseControl.h"
 #include "Cmp_Gage_Border.h"
 #include "Cmp_Gage_UpperBorder.h"
+#include "Cmp_Hand.h"
 #include "Cmp_Image.h"
 
 #include <deque>
@@ -79,7 +80,7 @@ PK_Player::PK_Player(PK_Pot& pot, PK_Dealer& dealer, PK_CardDealer& cardDealer) 
 	gage->EditAppendCmp()->SetCmp(gageUpper); //ゲージ上限設定機能の追加
 
 
-	std::deque<PK_Card*> card = *EditCard();
+	std::deque<PK_Card*> card = *EditHand()->EditCard();
 	for (int j = 0; j < card.size(); ++j) { //カードを取得
 		Button* button = new Button(cardPos[j].ReadPos().GetX(), cardPos[j].ReadPos().GetY(), 60, 75, false); //カードクリック判定用ボタンの作成
 		button->EditClick()->SetCmp(new Cmp_Button_ClickCheck()); //クリック検知用空コンポーネントの追加

@@ -49,7 +49,7 @@ void PK_Player::Main::Update() {
 	}
 	if (parent->foldButton->GetRunUpdateClick()) { //foldボタンが押された場合の処理
 		action = Cmp_BetActionRecord::Action::fold; //実行アクションをfoldにセット
-		for (auto itr : *parent->EditCard()) { itr->SetDrawMode(PK_Card::DrawMode::fold); } //手札をfold表示へ変更
+		for (auto itr : *parent->EditHand()->EditCard()) { itr->SetDrawMode(PK_Card::DrawMode::fold); } //手札をfold表示へ変更
 		parent->record->SetActionRecord(action, true); //foldを動作済みにする
 		parent->record->SetIsAction(true); //アクション済みに設定
 	}

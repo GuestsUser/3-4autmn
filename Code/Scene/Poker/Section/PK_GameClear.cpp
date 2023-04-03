@@ -23,13 +23,10 @@ void Poker::GameClear::Update() {
 	if (count == clickStartTime) { nextButton.SetRunClickMonitor(true); } //開始タイミングになったらクリック検知開始
 
 	if (nextButton.GetRunUpdateClick()) { //クリックされた場合
-		FullReset(parent->chara, *parent->pot, *parent->dealer, *parent->cardDealer); //新しいゲームの準備をする
+		PartsFullReset(parent->chara, *parent->pot, *parent->dealer, *parent->cardDealer); //新しいゲームの準備をする
+		parent->chara;
 		parent->run = parent->list[(int)Poker::Section::pre]; //最初の状態に戻る
-
-		nextButton.EditClick()->SetRunUpdate(false); //クリック状態を戻す
-		nextButton.EditClick()->SetRunDraw(false); //念の為Drawも戻す
-		nextButton.SetRunClickMonitor(false); //クリック検知の無効化
-		count = -1; //カウントリセット
+		Reset(); //各種項目をリセットする
 	}
 
 	++count;
@@ -38,4 +35,11 @@ void Poker::GameClear::Update() {
 void Poker::GameClear::Draw() {
 	DrawStringToHandle(titlePos.GetX(), titlePos.GetY(), "ゲームクリア!!", *PokerFontData::GetColor(PokerFontData::color::normal), *PokerFontData::GetHandle(PokerFontData::type::normal));
 	if (count >= clickStartTime && ((count - clickStartTime) / blink) % 2 == 0) { DrawStringToHandle(explainPos.GetX(), explainPos.GetY(), "画面をクリックで新しく始める", *PokerFontData::GetColor(PokerFontData::color::edgeColor), *PokerFontData::GetHandle(PokerFontData::type::edge), *PokerFontData::GetColor(PokerFontData::color::edgeNormal)); }
+}
+
+void Poker::GameClear::Reset() {
+	nextButton.EditClick()->SetRunUpdate(false); //クリック状態を戻す
+	nextButton.EditClick()->SetRunDraw(false); //念の為Drawも戻す
+	nextButton.SetRunClickMonitor(false); //クリック検知の無効化
+	count = -1; //カウントリセット
 }

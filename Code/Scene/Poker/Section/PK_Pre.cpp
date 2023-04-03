@@ -33,12 +33,14 @@ void Poker::Pre::Update() {
 		//デバッグ用
 		//for (auto card : *itr->EditCard()) { card->SetDrawMode(PK_Card::DrawMode::front); } //カードを可視化しておく 
 
-		for (auto card : *itr->EditCard()) { card->SetCard(parent->cardDealer->DeckDraw()); } //山札から引いてきたカードを手札に設定
+		for (auto card : *itr->EditHand()->EditCard()) { card->SetCard(parent->cardDealer->DeckDraw()); } //山札から引いてきたカードを手札に設定
+		itr->EditHand()->HandPowerUpdate(); //現在手札に合わせて役状態を更新する
+
 		if (typeid(*itr) == typeid(PK_CPU)) { //このキャラがcpuだった場合
 			(itr->EditAppendCmp()->EditCmp<Cmp_CPUBetLogic>())->RaiseVolDecision(*itr, true); //現在手札からレイズ数と分割、自主レイズするかどうかを決定する
 		}
 		else { //プレイヤーだった場合
-			for (auto card : *itr->EditCard()) { card->SetDrawMode(PK_Card::DrawMode::front); } //カードを可視化しておく 
+			for (auto card : *itr->EditHand()->EditCard()) { card->SetDrawMode(PK_Card::DrawMode::front); } //カードを可視化しておく 
 		}
 	}
 

@@ -14,6 +14,7 @@
 #include "PK_SectionLibrary.h"
 
 #include "Cmp_BetActionRecord.h"
+#include "Cmp_Hand.h"
 #include "ComponentArray.h"
 
 Poker::ShowDown::ShowDown(Poker& set) :parent(&set), count(0), actionRecord(std::deque<Cmp_BetActionRecord*>((int)Poker::Character::length)), hand(std::deque<std::deque<int>>((int)Poker::Character::length, std::deque<int>(5))), handPos(std::deque<Vector3>((int)Poker::Character::length)), handString(std::deque<std::string>((int)Poker::Character::length)) {
@@ -34,14 +35,7 @@ void Poker::ShowDown::Update() {
 	if (count == 60) {
 		for (int i = 0; i < actionRecord.size(); ++i) { //各キャラをチェックし持ち札を公開する処理
 			if (IsFold(*actionRecord[i])) { continue; } //ゲームから除外されていた場合以下処理は実行しない
-			for (auto itr : *parent->chara[i]->EditCard()) { itr->SetDrawMode(PK_Card::DrawMode::front); } //ここまでこれたキャラはカードを表側表示化
-		}
-	}
-
-	if (count == 120) {
-		for (int i = 0; i < parent->chara.size(); ++i) { //ハンド評価を行う
-			hand[i] = PK_CardDealer::HandCheck(*parent->chara[i]); //各キャラの手札評価を入れる
-			handString[i] = Hand2String(hand[i]); //各キャラの完成役を文字列化した物を格納
+			for (auto itr : *parent->chara[i]->EditHand()->EditCard()) { itr->SetDrawMode(PK_Card::DrawMode::front); } //ここまでこれたキャラはカードを表側表示化
 		}
 	}
 
@@ -55,7 +49,7 @@ void Poker::ShowDown::Update() {
 			if (actionRecord[i]->GetIsLose()) { continue; } //敗北済みの場合何もせず次キャラへ移行
 			if (actionRecord[i]->GetActionRecord(Cmp_BetActionRecord::Action::fold)) { foldChara.push_back(parent->chara[i]); continue; } //foldしてる場合foldCaraへ格納し次キャラへ移行
 			enableChara.push_back(parent->chara[i]); //現在キャラをenableCharaへ格納
-			enableHand.push_back(hand[i]); //現在キャラのハンド評価格納
+			enableHand.push_back(parent->chara[i]->EditHand()->GetHandPower()); //現在キャラのハンド評価格納
 		}
 
 
@@ -69,10 +63,10 @@ void Poker::ShowDown::Update() {
 				//ここまで来た場合役の強さは同じなので役をなさないカードの強さで強弱をチェックする
 				int sameCount; //現在最強キャラと今回キャラの同じ強さのカード枚数
 				for (sameCount = 1; sameCount < enableHand[max[0]].size(); ++sameCount) { //構成カード全てをチェック
-					if (enableHand[max[0]][sameCount] % (int)PK_CardDealer::CardPower::max != enableHand[i][sameCount] % (int)PK_CardDealer::CardPower::max) { break; } //強さの違うカードに当たったら中断
+					if (enableHand[max[0]][sameCount] % (int)Cmp_Hand::CardPower::max != enableHand[i][sameCount] % (int)Cmp_Hand::CardPower::max) { break; } //強さの違うカードに当たったら中断
 				}
 				if (sameCount >= enableHand[max[0]].size()) { max.push_back(i); continue; } //全てのカードが同じ強さなら今回キャラも支払い対象として配列に追加する
-				if (enableHand[max[0]][sameCount] % (int)PK_CardDealer::CardPower::max < enableHand[i][sameCount] % (int)PK_CardDealer::CardPower::max) { max = std::deque<int>(1, i); continue; } //今回キャラの構成カードの方が強ければ最強キャラを今回の物に交換
+				if (enableHand[max[0]][sameCount] % (int)Cmp_Hand::CardPower::max < enableHand[i][sameCount] % (int)Cmp_Hand::CardPower::max) { max = std::deque<int>(1, i); continue; } //今回キャラの構成カードの方が強ければ最強キャラを今回の物に交換
 			}
 
 			//デバッグ用
@@ -125,19 +119,14 @@ void Poker::ShowDown::Update() {
 
 	if (count == 240) {
 		parent->run = parent->list[(int)Poker::Section::ini]; //最初の状態に戻る
-		count = -1; //カウントリセット
+		count = 0; //カウントリセット
 
 		LoseSet(parent->chara, actionRecord); //敗北状況の設定
 		Poker::Section next = GameEndCheck(parent->chara, actionRecord); //敗北状況から次向かうべきシーンを取得
 
-		if (next != Poker::Section::ini) { //ini(続行すべき)以外が入った場合
-			parent->run = parent->list[(int)next]; //そのシーンに移行
-			count = -1; //カウントリセット
-			return; //終わり
-		}
-
+		if (next != Poker::Section::ini) { parent->run = parent->list[(int)next]; } //ini(続行すべき)以外が入った場合そのシーンに移行
+		return; //終わり
 	}
-
 	++count;
 }
 
@@ -147,7 +136,7 @@ void Poker::ShowDown::Draw() {
 	if (count >= 120) {
 		for (int i = 0; i < actionRecord.size(); ++i) { //勝負に挑んだキャラのハンドを表示する
 			if (IsFold(*actionRecord[i])) { continue; } //ゲームから除外されていた場合以下処理は実行しない
-			DrawStringToHandle(handPos[i].GetX(), handPos[i].GetY(), handString[i].c_str(), *PokerFontData::GetColor(PokerFontData::color::normal), *PokerFontData::GetHandle(PokerFontData::type::normal)); //ハンド表示
+			DrawStringToHandle(handPos[i].GetX(), handPos[i].GetY(), parent->chara[i]->ReadHand()->GetHandName().c_str(), *PokerFontData::GetColor(PokerFontData::color::normal), *PokerFontData::GetHandle(PokerFontData::type::normal)); //ハンド表示
 		}
 	}
 

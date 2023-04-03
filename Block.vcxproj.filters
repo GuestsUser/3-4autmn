@@ -74,6 +74,7 @@
     <ClCompile Include="Code\Scene\Poker\Chara\CPU\PK_CPU_DataPlace.cpp" />
     <ClCompile Include="Code\Scene\Title\Title_Select_ButtonCreator.cpp" />
     <ClCompile Include="Code\Component\Cmp_ButtonResetData.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Component\Cmp_Hand.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Component\Button.h" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Code\Scene\Poker\Chara\CPU\PK_CPU_DataPlace.h" />
     <ClInclude Include="Code\Scene\Title\Title_Select_ButtonCreator.h" />
     <ClInclude Include="Code\Component\Cmp_ButtonResetData.h" />
+    <ClInclude Include="Code\Scene\Poker\Component\Cmp_Hand.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Scene\Title\SelectScene.cd" />

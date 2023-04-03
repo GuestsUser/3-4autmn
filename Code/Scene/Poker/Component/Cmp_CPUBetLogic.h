@@ -27,7 +27,7 @@ public:
 	void FullReset() { Reset(); } //Resetと処理内容は同じ
 	void Update() {}
 
-	void RaiseVolDecision(const PK_Chara& chara, bool isCheckReach); //ハンドの評価結果を引数に与える事でそれに応じたレイズ可能回数を決定する関数、boolにtrueを入れるとリーチチェックも加味した結果となる
+	void RaiseVolDecision(PK_Chara& chara, bool isCheckReach); //ハンドの評価結果を引数に与える事でそれに応じたレイズ可能回数を決定する関数、boolにtrueを入れるとリーチチェックも加味した結果となる
 
 	const std::deque<int>* ReadRaiseSplit() const { return &raiseSplit; } //分割レイズ数を記録した配列を読み取り専用で返す
 	bool GetSelfRaise() { return raiseActive; } //自主レイズするか否かを返す

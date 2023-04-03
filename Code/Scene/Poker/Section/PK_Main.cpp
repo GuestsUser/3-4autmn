@@ -19,9 +19,9 @@
 #include "Cmp_Gage_UpperBorder.h"
 #include "Cmp_Gage_MouseControl.h"
 #include "Cmp_BetActionRecord.h"
+#include "Cmp_Hand.h"
 
-
-Poker::Main::Main(Poker& set) :parent(&set), phase(0), count(0), actionRecord(std::deque<Cmp_BetActionRecord*>((int)Poker::Character::length)), playerGage(nullptr), playerGageBorder(nullptr) {
+Poker::Main::Main(Poker& set) :parent(&set), phase(0), actionRecord(std::deque<Cmp_BetActionRecord*>((int)Poker::Character::length)), playerGage(nullptr), playerGageBorder(nullptr) {
 	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditAppendCmp()->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
 
 	playerGage = parent->chara[(int)Poker::Character::player]->EditAppendCmp()->EditCmp<Gage>(); //ゲージ取り出し
@@ -42,7 +42,7 @@ void Poker::Main::Update() {
 		actionRecord[access]->SetIsAction(true); //レイズしたキャラのアクションは終了済みに設定する
 	}
 	if (result == Cmp_BetActionRecord::Action::fold) { //フォールドした場合ラウンド中断チェックを行う
-		for (auto itr : *parent->chara[access]->EditCard()) { itr->SetDrawMode(PK_Card::DrawMode::fold); } //手札をfold表示へ変更
+		for (auto itr : *parent->chara[access]->EditHand()->EditCard()) { itr->SetDrawMode(PK_Card::DrawMode::fold); } //手札をfold表示へ変更
 
 		if (FoldCount(actionRecord, access) >= (int)Poker::Character::length - 1) { //1キャラ以外全てキャラが抜けた場合ノーコンテストへ
 			SequenceNextReset(actionRecord); //アクション実行状況を次シーン向けにリセット

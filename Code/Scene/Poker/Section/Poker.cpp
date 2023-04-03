@@ -91,6 +91,7 @@ Poker::Poker() :pot(new PK_Pot()), dealer(new PK_Dealer()), cardDealer(new PK_Ca
 }
 
 Poker::~Poker() {
+	PokerFontData::Release(); //フォントデータを格納していた配列をクリーンする
 	for (auto itr : list) { delete itr; } //Pokerで管理していたシーンの削除
 	for (int i = 0; i < (int)Character::length; ++i) { delete chara[i]; }
 	delete pot;
