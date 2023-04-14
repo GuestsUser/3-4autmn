@@ -10,24 +10,21 @@
 
 #include "Button.h"
 #include "Cmp_Button_ClickCheck.h"
+#include "Cmp_ButtonOverlapGroup.h"
 
 Poker::GameOver::GameOver(Poker& set) :parent(&set), count(0), clickStartTime(60), blink(30), nextButton(WINDOW_X / 2, WINDOW_Y / 2, WINDOW_X / 2, WINDOW_Y / 2, false) {
 	titlePos.SetXYZ(513, 189, 0); //ゲームオーバーである事を示すメッセージの位置設定
 	explainPos.SetXYZ(472, 312, 0); //ボタン説明配置位置
 
 	nextButton.EditClick()->SetCmp(new Cmp_Button_ClickCheck()); //クリックチェック用コンポーネント追加
+	parent->pauseButon->EditAlways()->EditCmp<Cmp_ButtonOverlapGroup>()->EditGroup()->push_back(&nextButton); //ポーズボタンに重なっている次シーン移行ボタンを重なり無効化コンポーネントへ格納する
 }
 
 void Poker::GameOver::Update() {
 	nextButton.Update(); //ボタンUpdate実行
 	if (count == clickStartTime) { nextButton.SetRunClickMonitor(true); } //開始タイミングになったらクリック検知開始
 
-	if (nextButton.GetRunUpdateClick()) { //クリックされた場合
-		PartsFullReset(parent->chara, *parent->pot, *parent->dealer, *parent->cardDealer); //新しいゲームの準備をする
-		parent->run = parent->list[(int)Poker::Section::pre]; //最初の状態に戻る
-		Reset(); //各種項目をリセットする
-	}
-
+	if (nextButton.GetRunUpdateClick()) { parent->SetNextSection(Poker::Section::newgamereset); } //クリックされた場合ゲームの完全リセットシーンへ移行
 	++count;
 }
 

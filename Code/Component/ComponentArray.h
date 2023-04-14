@@ -2,6 +2,7 @@
 
 #include "Component.h"
 #include <deque>
+#include <typeinfo>
 
 class ComponentArray: public Component { //コンポーネントを追加機能という形で複数持てる機能
 	std::deque<Component*> cmp;

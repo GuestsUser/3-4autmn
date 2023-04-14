@@ -1,5 +1,8 @@
 #pragma once
+#include <deque>
+
 class Quaternion;
+class Cmp_Transform;
 class Cmp_Transform;
 
 class Vector3 { //座標情報を3つ纏めて扱えるようにした物
@@ -94,7 +97,7 @@ public:
 	static Vector3 PointRotationQuaternion(const Vector3& xyz, const Quaternion& q); //右手系、特定中点からの距離をxyzに、qに回転を入れると、xyzを3次元回転してくれる、xyzの値は回転で変形させてない物を使用する事
 
 	static void VertexModification(Vector3 pos[4], const Vector3& size, const Cmp_Transform& ts, HorizonPivot hp = HorizonPivot::center, VerticalPivot vp = VerticalPivot::center); //拡大、回転を適用した画像サイズを出す処理、posに左上、右上、右下、左下の頂点座標を格納する
-
+	static void MatrixPlacePos(std::deque<Cmp_Transform*>& ts, int xSplit, int xSpace, int ySpace, const Vector3& start); //tsをxSplit分横配置、1つ配置毎にxSpace分空ける、オーバーしたらySpace分だけ下げて配置、という処理をts全てに行う、startはts[0]に入れる値
 };
 
 class LinerFunction { //y=ax+bの形で表される一次直線を表現できるクラス

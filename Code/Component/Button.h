@@ -10,7 +10,10 @@
 //clickはクリックを検知した瞬間からUpdate、Drawどちらも実行される
 
 class Button : public Component { //Componentを継承しているが追加機能というより単体生存するタイプなので命名にCmpを付けなかった
+public:
 	enum class State { free, push }; //free=平常時、push=area範囲内で左ボタンを押した瞬間からarea内外問わず離した瞬間まで	
+
+private:
 	State state; //クリック状態を記憶しておくための変数
 
 	Cmp_Transform pos; //ボタン座標、中心座標になる
@@ -30,11 +33,21 @@ public:
 	void SetRunClickMonitor(bool set) { isMonitorClick = set; } //クリックを検知するかを設定、trueで検知する、falseでしない
 	bool GetRunClickMonitor()const { return isMonitorClick; } //クリック検知の実行可否の取得
 
-	bool GetRunUpdateAlways() const { return always.GetRunUpdate(); } //always::Updateが実行可能であればtrueを返す
-	bool GetRunUpdateClick() const { return click.GetRunUpdate(); } //click::Updateが実行可能であればtrueを返す
-	bool GetRunDrawAlways() const { return always.GetRunDraw(); } //always::Drawが実行可能であればtrueを返す
-	bool GetRunDrawClick() const { return click.GetRunDraw(); } //click::Drawが実行可能であればtrueを返す
+	void SetRunUpdateAlways(bool set) { always.SetRunUpdate(set); } //always.SetRunUpdateのシンタックスシュガー
+	void SetRunUpdateClick(bool set) { click.SetRunUpdate(set); } 
+	void SetRunDrawAlways(bool set) { always.SetRunDraw(set); } 
+	void SetRunDrawClick(bool set) { click.SetRunDraw(set); }
+
+	void SetRunUpdateDrawAlways(bool update, bool draw) { always.SetRunUpdateDraw(update, draw); } //alwaysのSetRunUpdateDrawを呼び出す
+	void SetRunUpdateDrawClick(bool update, bool draw) { click.SetRunUpdateDraw(update, draw); } //clickのSetRunUpdateDrawを呼び出す
+
+	bool GetRunUpdateAlways() const { return always.GetRunUpdate(); } //always.GetRunUpdateのシンタックスシュガー
+	bool GetRunUpdateClick() const { return click.GetRunUpdate(); } 
+	bool GetRunDrawAlways() const { return always.GetRunDraw(); } 
+	bool GetRunDrawClick() const { return click.GetRunDraw(); } 
 	
+	State GetPushState() const { return state; } //ボタンが検知範囲内で押されてるかをState式で返す、範囲内で押されて離される事で押された扱いになるが、こちらは押された事の通知しかしない
+
 	ComponentArray* EditAlways() { return &always; } //alwaysのコンポーネント集を編集可能な状態で返す
 	ComponentArray* EditClick() { return &click; } //clickのコンポーネント集を編集可能な状態で返す
 	const ComponentArray* ReadAlways() const { return &always; } //alwaysのコンポーネント集を読み取り専用で返す

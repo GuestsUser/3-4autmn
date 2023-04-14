@@ -13,7 +13,7 @@
 
 #include <deque>
 
-void PK_CPU::PK_Main::Update() {
+void PK_CPU::Main::Update() {
 	++count;
 	if (count > waitTime) { //指定待機時間を超えた場合実行アクションを決定する
 		count = 0; //カウントリセット

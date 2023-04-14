@@ -10,7 +10,7 @@
 #include "Cmp_Hand.h"
 #include "Cmp_Image.h"
 
-PK_Player::Change::Change(PK_Player& parent):parent(&parent), moveY(-48), count(0) {
+PK_Player::Change::Change(PK_Player& parent) :parent(&parent), moveY(-48), count(0) {
 	for (auto itr : *parent.EditHand()->EditCard()) {
 		cardButton.push_back(itr->EditAppendCmp()->EditCmp<Button>()); //プレイヤーのカードから入力受付用ボタンを取得
 		cardPos.push_back(&itr->EditTransform()->EditPos()); //各カードのTransformから位置情報を抜き出しておく
@@ -22,8 +22,7 @@ PK_Player::Change::Change(PK_Player& parent):parent(&parent), moveY(-48), count(
 void PK_Player::Change::Update() {
 	++count;
 	if (count == 1) {
-		parent->actionButton->SetRunUpdate(true); //交換用ボタンの有効化
-		parent->actionButton->SetRunDraw(true);
+		parent->actionButton->SetRunUpdateDraw(true, true); //交換用ボタンの有効化
 		for (auto itr : cardButton) { itr->SetRunClickMonitor(true); } //クリック検知を開始する
 	}
 	parent->actionButtonImage->SetAnimeSub((int)Cmp_BetActionRecord::Action::change); //ボタン画像を交換に変更
@@ -50,14 +49,13 @@ void PK_Player::Change::Update() {
 				cardButton[i]->EditTransform()->EditPos().SetY(originalY);
 			}
 		}
+		parent->EditHand()->HandPowerUpdate(); //役の強さを新しい手札に合わせる
 
 		parent->record->SetActionRecord(Cmp_BetActionRecord::Action::change, true); //アクション済みに設定する
 		parent->record->SetIsAction(true);
 
-		parent->actionButton->SetRunUpdate(false); //ボタン無効化
-		parent->actionButton->SetRunDraw(false);
-		parent->actionButton->EditClick()->SetRunUpdate(false); //クリック状態のリセット
-		parent->actionButton->EditClick()->SetRunDraw(false);
+		parent->actionButton->SetRunUpdateDraw(false, false); //ボタン無効化
+		parent->actionButton->SetRunUpdateDrawClick(false, false); //クリック状態のリセット
 		for (auto itr : cardButton) { itr->SetRunClickMonitor(false); } //クリック検知を無効化
 
 		count = 0; //カウントリセット
@@ -67,4 +65,13 @@ void PK_Player::Change::Update() {
 
 	}
 	parent->record->SetFinalAction(Cmp_BetActionRecord::Action::noAction); //アクションを実行してないのでnoActionを設定
+}
+
+void PK_Player::Change::Reset() { //カード位置が操作されたままの可能性があるので戻しておく
+	for (int i = 0; i < cardButton.size(); ++i) { 
+		cardPos[i]->SetY(originalY); //位置を元に戻す
+		cardButton[i]->EditTransform()->EditPos().SetY(originalY); //検知用ボタン位置も戻す
+		cardButton[i]->SetRunClickMonitor(false); //クリック検知を無効化
+	}
+	count = 0; //カウントリセット
 }

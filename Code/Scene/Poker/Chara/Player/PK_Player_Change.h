@@ -19,4 +19,7 @@ public:
 	Change(PK_Player& parent);
 
 	void Update();
+
+	void FullReset() { Reset(); }
+	void Reset();
 };

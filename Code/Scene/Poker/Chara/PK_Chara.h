@@ -24,12 +24,12 @@ private:
 
 	ComponentArray cmp; //追加機能集
 public:
-	enum class Section { main, change }; //sectionModuleから目的のセクションを指定する為の列挙型
+	enum class Section { main, change, wait }; //sectionModuleから目的のセクションを指定する為の列挙型
 
 	PK_Chara();
 	virtual ~PK_Chara();
-	void FullReset();
-	void Reset();
+	virtual void FullReset();
+	virtual void Reset();
 
 	void Place(std::deque<Cmp_Transform>& cardPos, Cmp_Transform& backPos);
 	void Update();
@@ -49,4 +49,5 @@ public:
 
 	const ComponentArray* const ReadAppendCmp() { return &cmp; } //追加機能集へのアクセス、こちらは読み出し専用
 	ComponentArray* EditAppendCmp() { return &cmp; } //追加機能集へのアクセスを渡す
+
 };

@@ -33,6 +33,9 @@ public:
 	PK_Player(PK_Pot& pot, PK_Dealer& dealer, PK_CardDealer& cardDealer);
 	~PK_Player();
 
+	void FullReset();
+	void Reset();
+
 	void SectionUpdate();
 	void SetSection(Section set) { runSection = sectionModule[(int)set]; }
 

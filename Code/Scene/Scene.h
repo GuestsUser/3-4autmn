@@ -8,6 +8,8 @@ public:
 	
 	virtual void Update() = 0; //毎フレーム実行する処理関数、実装必須
 	virtual void Draw() {} //毎フレーム実行する描写関数
+	virtual void FullReset() {} //完全リセットしたい時の関数
+	virtual void Reset() {} //新しいゲーム等の理由でシーンリセットしたくなった時の関数
 
 	bool SetNext(Scene* set){ //シーンチェンジ用、引数に次シーンの実体を入れる
 		//if (next != this) { return false; } //既に次シーンの指定がなされている場合失敗

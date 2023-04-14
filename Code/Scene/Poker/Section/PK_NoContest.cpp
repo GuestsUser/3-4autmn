@@ -14,12 +14,14 @@
 #include "Cmp_BetActionRecord.h"
 #include "Cmp_Button_ClickCheck.h"
 #include "ComponentArray.h"
+#include "Cmp_ButtonOverlapGroup.h"
 
 Poker::NoContest::NoContest(Poker& set) :parent(&set), count(0), payOutTime(60), clickStartTime(120), blink(30), nextButton(WINDOW_X / 2, WINDOW_Y / 2, WINDOW_X / 2, WINDOW_Y / 2, false), actionRecord(std::deque<Cmp_BetActionRecord*>((int)Poker::Character::length)) {
 	titlePos.SetXYZ(513, 189, 0); //ノーコンテストである事を示すメッセージの位置設定
 	explainPos.SetXYZ(484, 312, 0); //ボタン説明配置位置
 
 	nextButton.EditClick()->SetCmp(new Cmp_Button_ClickCheck()); //クリックチェック用コンポーネント追加
+	parent->pauseButon->EditAlways()->EditCmp<Cmp_ButtonOverlapGroup>()->EditGroup()->push_back(&nextButton); //ポーズボタンに重なっている次シーン移行ボタンを重なり無効化コンポーネントへ格納する
 
 	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditAppendCmp()->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
 }
@@ -49,7 +51,6 @@ void Poker::NoContest::Update() {
 
 		if (next != Poker::Section::ini) { //ini(続行すべき)以外が入った場合
 			parent->run = parent->list[(int)next]; //そのシーンに移行
-			count = -1; //カウントリセット
 			return; //終わり
 		}
 
@@ -59,6 +60,7 @@ void Poker::NoContest::Update() {
 	if (nextButton.GetRunUpdateClick()) { //クリックされた場合
 		parent->run = parent->list[(int)Poker::Section::ini]; //最初の状態に戻る
 		Reset(); //各種項目をリセットする
+		return; //終わり
 	}
 
 	++count;
@@ -73,5 +75,5 @@ void Poker::NoContest::Reset() {
 	nextButton.EditClick()->SetRunUpdate(false); //クリック状態を戻す
 	nextButton.EditClick()->SetRunDraw(false); //念の為Drawも戻す
 	nextButton.SetRunClickMonitor(false); //クリック検知の無効化
-	count = -1; //カウントリセット
+	count = 0; //カウントリセット
 }

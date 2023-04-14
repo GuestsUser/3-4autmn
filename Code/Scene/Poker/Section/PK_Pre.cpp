@@ -42,6 +42,7 @@ void Poker::Pre::Update() {
 		else { //プレイヤーだった場合
 			for (auto card : *itr->EditHand()->EditCard()) { card->SetDrawMode(PK_Card::DrawMode::front); } //カードを可視化しておく 
 		}
+		itr->SetSection(PK_Chara::Section::main); //キャラの実行セクションをmainに合わせる
 	}
 
 	if (EnableCharaSearch(actionRecord, parent->dealer->ReadBtn()->GetBtnPos()) <= -1) { //この段階で全キャラアクションを終了していた場合

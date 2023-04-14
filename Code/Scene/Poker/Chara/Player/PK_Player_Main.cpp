@@ -18,10 +18,8 @@
 void PK_Player::Main::Update() {
 	++count;
 	if (count == 1) { //プレイヤーに操作が移った瞬間ならば各種ボタンを有効化する
-		parent->actionButton->SetRunUpdate(true); //ボタンのクリック検知開始と表示許可を出す 
-		parent->foldButton->SetRunUpdate(true);
-		parent->actionButton->SetRunDraw(true);
-		parent->foldButton->SetRunDraw(true);
+		parent->actionButton->SetRunUpdateDraw(true, true); //ボタンのクリック検知開始と表示許可を出す 
+		parent->foldButton->SetRunUpdateDraw(true, true);
 
 		parent->gageControl->SetRunUpdate(true); //ゲージの操作受け付けを開始する
 	}
@@ -60,14 +58,10 @@ void PK_Player::Main::Update() {
 
 
 	//ボタンのクリック検知終了と表示隠し、クリック情報の削除を行う
-	parent->actionButton->SetRunUpdate(false);
-	parent->actionButton->SetRunDraw(false);
-	parent->actionButton->EditClick()->SetRunUpdate(false);
-	parent->actionButton->EditClick()->SetRunDraw(false);
-	parent->foldButton->SetRunUpdate(false);
-	parent->foldButton->SetRunDraw(false);
-	parent->foldButton->EditClick()->SetRunUpdate(false);
-	parent->foldButton->EditClick()->SetRunDraw(false);
+	parent->actionButton->SetRunUpdateDraw(false, false);
+	parent->actionButton->SetRunUpdateDrawClick(false, false);
+	parent->foldButton->SetRunUpdateDraw(false, false);
+	parent->foldButton->SetRunUpdateDrawClick(false, false);
 
 	parent->gageControl->SetRunUpdate(false); //ゲージの操作受け付けを終了する
 	count = 0; //時間カウントリセット

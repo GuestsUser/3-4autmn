@@ -75,6 +75,14 @@
     <ClCompile Include="Code\Scene\Title\Title_Select_ButtonCreator.cpp" />
     <ClCompile Include="Code\Component\Cmp_ButtonResetData.cpp" />
     <ClCompile Include="Code\Scene\Poker\Component\Cmp_Hand.cpp" />
+    <ClCompile Include="Code\Component\Cmp_ButtonOverlapGroup.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Component\Cmp_PK_Pause.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Section\PK_NewGameReset.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Component\PK_Pause_DataSetting.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Component\PK_Pause_PauseEnd.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Component\PK_Pause_NewGame.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Component\PK_Pause_GameEnd.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Chara\PK_Chara_Wait.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Component\Button.h" />
@@ -157,6 +165,14 @@
     <ClInclude Include="Code\Scene\Title\Title_Select_ButtonCreator.h" />
     <ClInclude Include="Code\Component\Cmp_ButtonResetData.h" />
     <ClInclude Include="Code\Scene\Poker\Component\Cmp_Hand.h" />
+    <ClInclude Include="Code\Component\Cmp_ButtonOverlapGroup.h" />
+    <ClInclude Include="Code\Scene\Poker\Component\Cmp_PK_Pause.h" />
+    <ClInclude Include="Code\Scene\Poker\Section\PK_NewGameReset.h" />
+    <ClInclude Include="Code\Scene\Poker\Component\PK_Pause_DataSetting.h" />
+    <ClInclude Include="Code\Scene\Poker\Component\PK_Pause_PauseEnd.h" />
+    <ClInclude Include="Code\Scene\Poker\Component\PK_Pause_NewGame.h" />
+    <ClInclude Include="Code\Scene\Poker\Component\PK_Pause_GameEnd.h" />
+    <ClInclude Include="Code\Scene\Poker\Chara\PK_Chara_Wait.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Scene\Title\SelectScene.cd" />

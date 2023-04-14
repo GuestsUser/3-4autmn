@@ -78,3 +78,7 @@ void OriginMath::VertexModification(Vector3 pos[4], const Vector3& size, const C
 	}
 }
 
+void OriginMath::MatrixPlacePos(std::deque<Cmp_Transform*>& ts, int xSplit, int xSpace, int ySpace, const Vector3& start) {
+	int ySplit = ts.size() / xSplit; //配置行数
+	for (int i = 0; i < ts.size(); ++i) { ts[i]->EditPos() = start + Vector3(xSpace * (i % xSplit), ySpace * (int)(i / xSplit)); } //配置処理
+}

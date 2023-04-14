@@ -20,5 +20,8 @@ public:
 
 	void SetRunUpdate(bool set) { isUpdate = set; }
 	void SetRunDraw(bool set) { isDraw = set; }
-	
+	void SetRunUpdateDraw(bool update, bool draw) { //updateとdrawの実行設定を同時に行う、2つを同じタイミングに設定したい場合のシンタックスシュガー
+		isUpdate = update;
+		isDraw = draw;
+	}
 };

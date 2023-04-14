@@ -1,6 +1,7 @@
 #include "PK_Player.h"
 #include "PK_Player_Main.h"
 #include "PK_Player_Change.h"
+#include "PK_Chara_Wait.h"
 
 #include "PK_CardDealer.h"
 #include "PK_Chara.h"
@@ -56,10 +57,8 @@ PK_Player::PK_Player(PK_Pot& pot, PK_Dealer& dealer, PK_CardDealer& cardDealer) 
 	actionButton->EditClick()->SetCmp(new Cmp_Button_ClickCheck()); //クリックにクリック検知用空コンポーネントの追加
 	foldButton->EditClick()->SetCmp(new Cmp_Button_ClickCheck());
 
-	actionButton->SetRunUpdate(false); //ボタン系は必要時以外完全に隠す
-	foldButton->SetRunUpdate(false);
-	actionButton->SetRunDraw(false);
-	foldButton->SetRunDraw(false);
+	actionButton->SetRunUpdateDraw(false, false); //ボタン系は必要時以外完全に隠す
+	foldButton->SetRunUpdateDraw(false, false);
 
 
 	Cmp_Image* base = new Cmp_Image(*new int(LoadGraph("Resource/image/poker_gage_back.png")), 1); //ゲージ画像の作成
@@ -97,10 +96,11 @@ PK_Player::PK_Player(PK_Pot& pot, PK_Dealer& dealer, PK_CardDealer& cardDealer) 
 
 	Place(cardPos, backPos); //カードとコイン表示背景の配置
 
-	sectionModule.push_back(new PK_Player::Main(*this));
+	sectionModule.push_back(new PK_Player::Main(*this)); //section纏め
 	sectionModule.push_back(new PK_Player::Change(*this));
+	sectionModule.push_back(new PK_Chara_Wait());
 
-	runSection = sectionModule[(int)Section::main]; //mainからスタート
+	SetSection(Section::wait); //取り敢えず実行は止めておく
 }
 
 PK_Player::~PK_Player() {
@@ -110,4 +110,23 @@ PK_Player::~PK_Player() {
 void PK_Player::SectionUpdate() {
 	if (!runSection->GetRunUpdate()) { return; } //セクションが実行禁止なら実行しない
 	runSection->Update(); //指定セクションのUpdateを実行
+}
+
+void PK_Player::FullReset() {
+	SetSection(Section::wait); //取り敢えずsectionUpdateは止めておく
+
+	PK_Chara::FullReset(); //CharaのFullResetを実行
+	for (auto itr : sectionModule) { itr->FullReset(); } //各セクションのFullReset実行
+
+	actionButton->SetRunUpdateDraw(false, false); //ボタン系を隠しておく
+	foldButton->SetRunUpdateDraw(false, false);
+}
+void PK_Player::Reset() {
+	SetSection(Section::wait); //取り敢えずsectionUpdateは止めておく
+
+	PK_Chara::Reset(); //CharaのResetを実行
+	for (auto itr : sectionModule) { itr->Reset(); } //各セクションのReset実行
+
+	actionButton->SetRunUpdateDraw(false, false); //ボタン系を隠しておく
+	foldButton->SetRunUpdateDraw(false, false);
 }

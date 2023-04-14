@@ -11,7 +11,7 @@
 
 #include <deque>
 
-void PK_CPU::PK_Change::Update() {
+void PK_CPU::Change::Update() {
 	++count;
 	if (count > waitTime) {
 		count = 0; //カウントリセット
@@ -27,7 +27,9 @@ void PK_CPU::PK_Change::Update() {
 				change->SetCard(parent->cardDealer->DeckDraw()); //不要カードを交換
 				change->SetMarking(true); //交換したカードをマーキング
 				parent->record->SetFinalAction(Cmp_BetActionRecord::Action::change); //交換したのでchangeを最終アクションに指定
-				return;//終わり
+				parent->EditHand()->HandPowerUpdate(); //役の強さを新しい手札に合わせる
+
+				return; //終わり
 			}
 		}
 
@@ -56,7 +58,9 @@ void PK_CPU::PK_Change::Update() {
 			itr->SetMarking(true); //交換したカードをマーキング
 		}
 		parent->record->SetFinalAction(Cmp_BetActionRecord::Action::change); //交換したのでchangeを最終アクションに指定
-		return;//終わり
+		parent->EditHand()->HandPowerUpdate(); //役の強さを新しい手札に合わせる
+
+		return; //終わり
 	}
 	parent->record->SetFinalAction(Cmp_BetActionRecord::Action::noAction); //交換してないのでnoActionを指定
 

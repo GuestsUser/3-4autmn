@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "Poker.h"
 #include "PokerFontData.h"
+#include "Title/Title_Select.h"
 
 #include "PK_Ini.h"
 #include "PK_Pre.h"
@@ -12,6 +13,8 @@
 #include "PK_NoContest.h"
 #include "PK_GameOver.h"
 #include "PK_GameClear.h"
+#include "PK_NewGameReset.h"
+#include "Cmp_PK_Pause.h"
 
 #include "PK_Chara.h"
 #include "PK_CPU.h"
@@ -29,6 +32,7 @@
 #include "Button.h"
 #include "Gage.h"
 #include "Cmp_Button_ClickCheck.h"
+#include "Cmp_ButtonOverlapGroup.h"
 #include "Cmp_Gage_MouseControl.h"
 #include "Cmp_Gage_Border.h"
 #include "Cmp_Gage_UpperBorder.h"
@@ -37,7 +41,10 @@
 #include <deque>
 
 void Poker::Update() {
-	run->Update(); //Update実行
+	pauseButon->Update(); //ポーズ画面とボタンの処理実行
+	if (pauseButon->GetRunUpdateClick()) { return; } //クリックされた場合ポーズ画面実行中なのでゲームシーンに関する処理は実行しない
+
+	run->Update(); //指定セクションの処理実行
 	for (auto itr : chara) { if (itr->GetRunUpdate()) { itr->Update(); } } //キャラ内の追加機能を実行
 
 	run = run->GetNext(); //次シーンの取得
@@ -54,11 +61,18 @@ void Poker::Draw() {
 	dealer->Draw(); //ボタンポジションの描写
 	for (auto itr : chara) { itr->Draw(); } //各キャラの手札とか所持金とか描写
 
-	run->Draw();
+	run->Draw(); //実行セクション専用描写
+	pauseButon->Draw(); //ポーズ画面とボタンの描写
 }
 
 Poker::Poker() :pot(new PK_Pot()), dealer(new PK_Dealer()), cardDealer(new PK_CardDealer()), back(nullptr), list(std::deque<Scene*>()) {
 	PokerFontData::SetUp(); //フォントデータの使用準備
+
+	pauseButon = new Button(65, 53, 45, 37);
+	pauseButon->EditAlways()->SetCmp(new Cmp_Image(*new int(LoadGraph("Resource/image/poker_pause.png")), 1, pauseButon->EditTransform())); //ポーズボタン画像を作成
+	pauseButon->EditAlways()->SetCmp(new Cmp_ButtonOverlapGroup(*pauseButon)); //ポーズボタンに押された時重なっているボタンの入力を切る機能の追加
+	//上記重なっているボタン入力受付禁止コンポーネントのグループは該当ボタン作成箇所で各個グループへ格納する
+	pauseButon->EditClick()->SetCmp(new Cmp_PK_Pause(*pauseButon, *this)); //クリックされた時起動するポーズ画面実行機能追加
 
 	back = new Cmp_Image(*new int(LoadGraph("Resource/image/poker_back.png")), 1); //背景画像作成
 	back->EditTranform()->EditPos().SetXYZ(1280 / 2, 720 / 2, 0); //画面中央に配置
@@ -84,7 +98,7 @@ Poker::Poker() :pot(new PK_Pot()), dealer(new PK_Dealer()), cardDealer(new PK_Ca
 	list.push_back(new NoContest(*this));
 	list.push_back(new GameOver(*this));
 	list.push_back(new GameClear(*this));
-
+	list.push_back(new NewGameReset(*this));
 
 
 	run = list[(int)Section::pre]; //Preから開始
@@ -93,12 +107,19 @@ Poker::Poker() :pot(new PK_Pot()), dealer(new PK_Dealer()), cardDealer(new PK_Ca
 Poker::~Poker() {
 	PokerFontData::Release(); //フォントデータを格納していた配列をクリーンする
 	for (auto itr : list) { delete itr; } //Pokerで管理していたシーンの削除
-	for (int i = 0; i < (int)Character::length; ++i) { delete chara[i]; }
+	for (int i = 0; i < (int)Character::length; ++i) { 
+		delete chara[i]; 
+	}
 	delete pot;
 	delete dealer;
 	delete cardDealer;
 	delete back;
+	delete pauseButon;
 }
 
+void Poker::SetNextSection(Section section) {
+	if (section == Section::titleback) { SetNext(new Title_Select()); } //titlebackが指定されたらゲームセレクト画面へ戻す
+	else { run = list[(int)section]; } //それ以外なら該当セクションへ移行する
+}
 
 

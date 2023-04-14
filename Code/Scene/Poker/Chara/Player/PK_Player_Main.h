@@ -11,4 +11,7 @@ public:
 	Main(PK_Player& parent) :parent(&parent), count(0) {}
 
 	void Update();
+
+	void FullReset() { Reset(); }
+	void Reset() { count = 0; }
 };

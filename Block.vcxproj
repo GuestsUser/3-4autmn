@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Code\Component\Button.cpp" />
     <ClCompile Include="Code\Component\Cmp_ButtonGroup.cpp" />
+    <ClCompile Include="Code\Component\Cmp_ButtonOverlapGroup.cpp" />
     <ClCompile Include="Code\Component\Cmp_ButtonResetData.cpp" />
     <ClCompile Include="Code\Component\Cmp_Gage_Border.cpp" />
     <ClCompile Include="Code\Component\Cmp_Gage_MouseControl.cpp" />
@@ -53,13 +54,20 @@
     <ClCompile Include="Code\Scene\daifugou\CP_Scene.cpp" />
     <ClCompile Include="Code\Scene\PageOne\PageOne.cpp" />
     <ClCompile Include="Code\Scene\PageOne\Scene_PageOne.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Chara\PK_Chara_Wait.cpp" />
     <ClCompile Include="Code\Scene\Poker\Component\Cmp_Hand.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Component\Cmp_PK_Pause.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Component\PK_Pause_DataSetting.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Component\PK_Pause_GameEnd.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Component\PK_Pause_NewGame.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Component\PK_Pause_PauseEnd.cpp" />
     <ClCompile Include="Code\Scene\Poker\PK_Btn.cpp" />
     <ClCompile Include="Code\Scene\Poker\Component\Cmp_ThinkingImage.cpp" />
     <ClCompile Include="Code\Scene\Poker\Chara\CPU\PK_CPU_Change.cpp" />
     <ClCompile Include="Code\Scene\Poker\Chara\CPU\PK_CPU_Main.cpp" />
     <ClCompile Include="Code\Scene\Poker\Chara\CPU\PK_CPU_DataPlace.cpp" />
     <ClCompile Include="Code\Scene\Poker\Section\PK_GameOver.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Section\PK_NewGameReset.cpp" />
     <ClCompile Include="Code\Scene\Poker\Section\PK_NoContest.cpp" />
     <ClCompile Include="Code\Scene\Poker\Section\PK_Main.cpp" />
     <ClCompile Include="Code\Scene\Poker\PK_Card.cpp" />
@@ -97,6 +105,7 @@
   <ItemGroup>
     <ClInclude Include="Code\Component\Button.h" />
     <ClInclude Include="Code\Component\Cmp_ButtonGroup.h" />
+    <ClInclude Include="Code\Component\Cmp_ButtonOverlapGroup.h" />
     <ClInclude Include="Code\Component\Cmp_ButtonResetData.h" />
     <ClInclude Include="Code\Component\Cmp_Button_ClickCheck.h" />
     <ClInclude Include="Code\Component\Cmp_Gage_Border.h" />
@@ -133,13 +142,20 @@
     <ClInclude Include="Code\Scene\PageOne\PageOne.h" />
     <ClInclude Include="Code\Scene\PageOne\Scene_PageOne.h" />
     <ClInclude Include="Code\Scene\Poker\BetLogicInitializeData.h" />
+    <ClInclude Include="Code\Scene\Poker\Chara\PK_Chara_Wait.h" />
     <ClInclude Include="Code\Scene\Poker\Component\Cmp_Hand.h" />
+    <ClInclude Include="Code\Scene\Poker\Component\Cmp_PK_Pause.h" />
+    <ClInclude Include="Code\Scene\Poker\Component\PK_Pause_DataSetting.h" />
+    <ClInclude Include="Code\Scene\Poker\Component\PK_Pause_GameEnd.h" />
+    <ClInclude Include="Code\Scene\Poker\Component\PK_Pause_NewGame.h" />
+    <ClInclude Include="Code\Scene\Poker\Component\PK_Pause_PauseEnd.h" />
     <ClInclude Include="Code\Scene\Poker\PK_Btn.h" />
     <ClInclude Include="Code\Scene\Poker\Component\Cmp_ThinkingImage.h" />
     <ClInclude Include="Code\Scene\Poker\Chara\CPU\PK_CPU_Change.h" />
     <ClInclude Include="Code\Scene\Poker\Chara\CPU\PK_CPU_Main.h" />
     <ClInclude Include="Code\Scene\Poker\Chara\CPU\PK_CPU_DataPlace.h" />
     <ClInclude Include="Code\Scene\Poker\Section\PK_GameOver.h" />
+    <ClInclude Include="Code\Scene\Poker\Section\PK_NewGameReset.h" />
     <ClInclude Include="Code\Scene\Poker\Section\PK_NoContest.h" />
     <ClInclude Include="Code\Scene\Poker\Section\PK_Main.h" />
     <ClInclude Include="Code\Scene\Poker\PK_Card.h" />
