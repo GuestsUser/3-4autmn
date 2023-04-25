@@ -6,7 +6,7 @@ class Button;
 class Cmp_Image;
 class Poker;
 
-class Cmp_PK_Pause :public Component { //ƒ|[ƒYƒ{ƒ^ƒ“‚©‚ç‹N“®‚·‚éƒ|[ƒY‰æ–ÊA‰Ÿ‚³‚ê‚½‹N“®‚µ‚½‚¢‚Ì‚Åclick‚ÉŠi”[‚·‚é–
+class Cmp_PK_Pause :public Component { //ƒ|[ƒYƒ{ƒ^ƒ“‚©‚ç‹N“®‚·‚éƒ|[ƒY‰æ–ÊA‰Ÿ‚³‚ê‚½‹N“®‚µ‚½‚¢‚Ì‚Åclick‚ÉŠi”[‚·‚é–Apoker‚Éˆ—‚ğ–ß‚·ÛAeƒ{ƒ^ƒ“‚Ì‘¼‹@”\‚ğƒŠƒZƒbƒg‚µ‚½‚¢‚Ì‚Å‚±‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg‚ÍÅŒã‚É•t‚¯‚é–
 	Poker* poker; //eƒ{ƒ^ƒ“‚ªŠ‘®‚·‚épokerƒV[ƒ“
 	Button* parent; //‚±‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg‚ğ‚Âeƒ{ƒ^ƒ“
 
@@ -14,6 +14,7 @@ class Cmp_PK_Pause :public Component { //ƒ|[ƒYƒ{ƒ^ƒ“‚©‚ç‹N“®‚·‚éƒ|[ƒY‰æ–ÊA‰Ÿ‚
 	std::deque<Button*> button; //ƒ^ƒCƒgƒ‹“™‚Ö‘JˆÚ‚·‚éˆ×‚ÌUI\¬ƒ{ƒ^ƒ““ü‚ê
 
 	bool runClose; //true‚É‚È‚Á‚½‚çReset‚ğÀs‚µ‚Äƒ|[ƒY‰æ–Ê‚ğI—¹‚·‚é
+	int count; //ƒ|[ƒY‰æ–ÊŠJn‚©‚ç‚ÌŒo‰ßŠÔ‹L˜^
 public:
 	Cmp_PK_Pause(Button& set, Poker& poker);
 	~Cmp_PK_Pause() { delete back; }

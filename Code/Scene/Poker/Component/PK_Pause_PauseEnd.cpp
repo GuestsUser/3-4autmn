@@ -1,4 +1,7 @@
+#include "Poker.h"
+
 #include "Cmp_PK_Pause.h"
+#include "PK_BGM.h"
 #include "PK_Pause_PauseEnd.h"
 
 #include "Button.h"
@@ -6,6 +9,7 @@
 
 void Cmp_PK_Pause::PauseEnd::Update() {
 	parent->CloseOrder(); //ポーズ画面終了を指示する
+	parent->poker->ControlBGM()->Resume(); //bgm再開
 }
 
 void Cmp_PK_Pause::PauseEnd::Close(Cmp_PK_Pause& pause) {

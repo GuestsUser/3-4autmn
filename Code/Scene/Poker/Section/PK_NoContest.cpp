@@ -15,6 +15,9 @@
 #include "Cmp_Button_ClickCheck.h"
 #include "ComponentArray.h"
 #include "Cmp_ButtonOverlapGroup.h"
+#include "Cmp_PK_Chara_SE.h"
+#include "Cmp_Sound.h"
+
 
 Poker::NoContest::NoContest(Poker& set) :parent(&set), count(0), payOutTime(60), clickStartTime(120), blink(30), nextButton(WINDOW_X / 2, WINDOW_Y / 2, WINDOW_X / 2, WINDOW_Y / 2, false), actionRecord(std::deque<Cmp_BetActionRecord*>((int)Poker::Character::length)) {
 	titlePos.SetXYZ(513, 189, 0); //ノーコンテストである事を示すメッセージの位置設定
@@ -38,7 +41,12 @@ void Poker::NoContest::Update() {
 			if (actionRecord[i]->GetActionRecord(Cmp_BetActionRecord::Action::fold)) { foldChara.push_back(parent->chara[i]); continue; } //foldしてる場合foldCaraへ格納し次キャラへ移行
 			enableChara = parent->chara[i]; //現在キャラをenableCharaへ格納
 		}
-		enableChara->SetCoin(enableChara->GetCoint() + parent->pot->PayOut(*enableChara)); //金額総取り
+		int getCoin = parent->pot->PayOut(*enableChara); //受け取り金額取得
+
+		enableChara->SetCoin(enableChara->GetCoint() + getCoin); //金額受取
+		enableChara->ReadAppendCmp()->ReadCmp<Cmp_PK_Chara_SE>()->ReadSE(Cmp_PK_Chara_SE::UseCoinSound(getCoin, *parent->dealer))->Play(); //getCoinに応じたサウンドを鳴らす
+		PlayPlayerCoinGetSE(enableChara); //このキャラがプレイヤーだった場合プレイヤーのコイン入手音を鳴らす
+
 		if (parent->pot->TotalAmount() <= 0) { ++count; return; } //金額がなくなれば終わり
 		FoldMemberPayOut(foldChara, *parent->pot); //余っていればfoldキャラへ分配
 

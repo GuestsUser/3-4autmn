@@ -6,6 +6,8 @@
 #include "Button.h"
 #include "OriginMath.h"
 
+class Cmp_Sound;
+
 class Poker::GameClear :public Scene {
 	Poker* parent; //このクラスの実体を持つPokerへの参照
 	Button nextButton; //クリックする事で次シーンへ移行する
@@ -17,8 +19,10 @@ class Poker::GameClear :public Scene {
 	Vector3 titlePos; //ゲームクリアである事を示すメッセージの表示位置
 	Vector3 explainPos; //ボタン説明の配置位置
 
+	Cmp_Sound* sound; //ゲームオーバーである事を表すようなサウンド
 public:
 	GameClear(Poker& set);
+	~GameClear() { delete sound; }
 	void Update();
 	void Draw();
 

@@ -5,6 +5,7 @@
 class Btn;
 class Button;
 class Cmp_Image;
+class PK_BGM;
 class PK_Chara;
 class PK_CardDealer;
 class PK_Dealer;
@@ -13,6 +14,7 @@ class PK_Pot;
 
 class Poker :public Scene { //ポーカーのゲームシーン
 	Button* pauseButon; //ポーズ画面に移行する為のボタン
+	PK_BGM* bgm;
 	PK_Pot* pot;
 	PK_Dealer* dealer;
 	PK_CardDealer* cardDealer;
@@ -31,6 +33,7 @@ public:
 	void Draw();
 
 	void SetNextSection(Section section); //次実行に移すセクションの設定
+	PK_BGM* const ControlBGM() { return bgm; } //bgmを置き換え不可の形で返す
 
 private: //ポーカーを行う為のデータを操作する処理を定義したPoker管理シーン前方宣言
 	class Ini;

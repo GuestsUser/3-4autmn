@@ -6,6 +6,7 @@ class PK_CPU::DataPlace {
 public:
 	static void Run(PK_CPU& parent, int sub); //parent‚ğsub‚É‰‚¶‚½ˆÊ’u‚Ö”z’u‚·‚é
 
+private:
 	//À‘Ì¸»‹Ö~
 	DataPlace() = delete;
 	DataPlace(const DataPlace&) = delete;

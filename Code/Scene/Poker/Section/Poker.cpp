@@ -16,6 +16,7 @@
 #include "PK_NewGameReset.h"
 #include "Cmp_PK_Pause.h"
 
+#include "PK_BGM.h"
 #include "PK_Chara.h"
 #include "PK_CPU.h"
 #include "PK_Player.h"
@@ -26,17 +27,13 @@
 #include "PK_Pot.h"
 #include "OriginMath.h"
 
-#include "Cmp_BetActionRecord.h"
-#include "Cmp_CPUBetLogic.h"
-#include "Cmp_PlayerRaiseDraw.h"
 #include "Button.h"
-#include "Gage.h"
+#include "Cmp_3DSoundListener.h"
 #include "Cmp_Button_ClickCheck.h"
+#include "Cmp_Button_ClickSound.h"
 #include "Cmp_ButtonOverlapGroup.h"
-#include "Cmp_Gage_MouseControl.h"
-#include "Cmp_Gage_Border.h"
-#include "Cmp_Gage_UpperBorder.h"
 #include "Cmp_Image.h"
+#include "SoundSetting.h"
 
 #include <deque>
 
@@ -44,6 +41,7 @@ void Poker::Update() {
 	pauseButon->Update(); //ポーズ画面とボタンの処理実行
 	if (pauseButon->GetRunUpdateClick()) { return; } //クリックされた場合ポーズ画面実行中なのでゲームシーンに関する処理は実行しない
 
+	bgm->Update(); //bgm流し
 	run->Update(); //指定セクションの処理実行
 	for (auto itr : chara) { if (itr->GetRunUpdate()) { itr->Update(); } } //キャラ内の追加機能を実行
 
@@ -65,13 +63,14 @@ void Poker::Draw() {
 	pauseButon->Draw(); //ポーズ画面とボタンの描写
 }
 
-Poker::Poker() :pot(new PK_Pot()), dealer(new PK_Dealer()), cardDealer(new PK_CardDealer()), back(nullptr), list(std::deque<Scene*>()) {
+Poker::Poker() :pot(new PK_Pot()), dealer(new PK_Dealer()), cardDealer(new PK_CardDealer()), back(nullptr), bgm(nullptr), list(std::deque<Scene*>()) {
 	PokerFontData::SetUp(); //フォントデータの使用準備
 
 	pauseButon = new Button(65, 53, 45, 37);
 	pauseButon->EditAlways()->SetCmp(new Cmp_Image(*new int(LoadGraph("Resource/image/poker_pause.png")), 1, pauseButon->EditTransform())); //ポーズボタン画像を作成
 	pauseButon->EditAlways()->SetCmp(new Cmp_ButtonOverlapGroup(*pauseButon)); //ポーズボタンに押された時重なっているボタンの入力を切る機能の追加
 	//上記重なっているボタン入力受付禁止コンポーネントのグループは該当ボタン作成箇所で各個グループへ格納する
+	pauseButon->EditClick()->SetCmp(new Cmp_Button_ClickSound(*SoundSetting::CreateDefaultButtonClickSound(Cmp_3DSoundListener::EditTransform()))); //クリックされた時に鳴る音を追加
 	pauseButon->EditClick()->SetCmp(new Cmp_PK_Pause(*pauseButon, *this)); //クリックされた時起動するポーズ画面実行機能追加
 
 	back = new Cmp_Image(*new int(LoadGraph("Resource/image/poker_back.png")), 1); //背景画像作成
@@ -88,6 +87,7 @@ Poker::Poker() :pot(new PK_Pot()), dealer(new PK_Dealer()), cardDealer(new PK_Ca
 
 		chara.push_back(current);
 	}
+	bgm = new PK_BGM(*Cmp_3DSoundListener::ReadTransform()); //bgmをリスナー位置に作成
 	cardDealer->Reset(); //最初はIniを実行しないので山札だけは初期化しておく
 
 	list.push_back(new Ini(*this));
@@ -110,6 +110,7 @@ Poker::~Poker() {
 	for (int i = 0; i < (int)Character::length; ++i) { 
 		delete chara[i]; 
 	}
+	delete bgm;
 	delete pot;
 	delete dealer;
 	delete cardDealer;

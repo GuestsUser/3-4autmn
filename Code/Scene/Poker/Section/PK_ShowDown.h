@@ -9,6 +9,7 @@
 #include <string>
 
 class Cmp_BetActionRecord;
+class Cmp_Sound;
 
 class Poker::ShowDown :public Scene {
 	Poker* parent; //‚±‚ÌƒNƒ‰ƒX‚ÌÀ‘Ì‚ğ‚ÂPoker‚Ö‚ÌQÆ

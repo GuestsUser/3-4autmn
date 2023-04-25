@@ -5,6 +5,7 @@
 
 #include "Cmp_ThinkingImage.h"
 #include "Cmp_Transform.h"
+#include "Cmp_PK_Chara_SE.h"
 
 #include "OriginMath.h"
 
@@ -49,6 +50,7 @@ void PK_CPU::DataPlace::Run(PK_CPU& parent, int sub) {
 		cardPos[j].EditPos().SetX(firstCardPos.GetX() + cardPlaceSpace * j); //配置回数に合わせて位置ずらしを行う
 	}
 	parent.Place(cardPos, backPos); //カードとコイン表示背景の配置
+	parent.se = new Cmp_PK_Chara_SE(&cardPos[2]); //se保持用コンポーネント作成、音を鳴らす位置は手札の中央
 
 	Vector3 pos;
 	GetThinkingPos(sub, pos);

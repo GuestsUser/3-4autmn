@@ -5,6 +5,7 @@
 #include "Poker.h"
 #include "ConstVal.h"
 
+#include "PK_BGM.h"
 #include "PK_CPU.h"
 #include "PK_Card.h"
 #include "PK_CardDealer.h"
@@ -45,6 +46,7 @@ void Poker::Pre::Update() {
 		itr->SetSection(PK_Chara::Section::main); //キャラの実行セクションをmainに合わせる
 	}
 
+	parent->bgm->SetRunUpdate(true); //bgmシステム開始
 	if (EnableCharaSearch(actionRecord, parent->dealer->ReadBtn()->GetBtnPos()) <= -1) { //この段階で全キャラアクションを終了していた場合
 		SequenceNextReset(actionRecord); //アクション実行記憶の初期化
 		parent->run = parent->list[(int)Poker::Section::change]; //交換シーンに移行

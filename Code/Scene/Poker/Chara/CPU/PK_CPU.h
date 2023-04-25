@@ -5,6 +5,7 @@
 class Component;
 class Cmp_BetActionRecord;
 class Cmp_CPUBetLogic;
+class Cmp_PK_Chara_SE;
 class PK_Dealer;
 class PK_CardDealer;
 class PK_Pot;
@@ -18,6 +19,7 @@ class PK_CPU :public PK_Chara {
 
 	Cmp_BetActionRecord* record; //ゲーム内でのアクション記録
 	Cmp_CPUBetLogic* betData; //cpuのベット判断に使う情報纏めコンポーネント
+	Cmp_PK_Chara_SE* se; ////キャラクターのse保持コンポーネント
 
 	PK_Pot* pot;
 	PK_Dealer* dealer;

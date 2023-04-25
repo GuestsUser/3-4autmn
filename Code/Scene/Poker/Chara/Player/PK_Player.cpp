@@ -9,15 +9,23 @@
 #include "PK_Card.h"
 #include "PK_Dealer.h"
 
-#include "Cmp_PlayerRaiseDraw.h"
 #include "Button.h"
 #include "Gage.h"
-#include "Cmp_Button_ClickCheck.h"
+#include "Cmp_3DSoundListener.h"
+#include "Cmp_Button_ClickSound.h"
+#include "Cmp_Gage_ControlSound.h"
 #include "Cmp_Gage_MouseControl.h"
 #include "Cmp_Gage_Border.h"
 #include "Cmp_Gage_UpperBorder.h"
 #include "Cmp_Hand.h"
 #include "Cmp_Image.h"
+#include "Cmp_PK_Chara_SE.h"
+#include "Cmp_PK_Player_SE.h"
+#include "Cmp_PlayerRaiseDraw.h"
+#include "Cmp_Sound.h"
+
+#include "SoundSetting.h"
+#include "OriginMath.h"
 
 #include <deque>
 
@@ -43,6 +51,12 @@ PK_Player::PK_Player(PK_Pot& pot, PK_Dealer& dealer, PK_CardDealer& cardDealer) 
 		cardPos[j].EditPos().SetX(firstCardPos.GetX() + cardPlaceSpace * j); //配置回数に合わせて位置ずらしを行う
 	}
 
+	Cmp_3DSoundListener::SetPos(cardPos[2].ReadPos()); //位置は3番目の手札と同じ位置に
+	Cmp_3DSoundListener::SetRotate(Vector3(0, 0, 270 * OriginMath::Deg2Rad)); //ゲーム画面上で-y方向を向く様に設定
+
+	se = new Cmp_PK_Chara_SE(Cmp_3DSoundListener::ReadTransform()); //se保持用コンポーネント作成、音を鳴らす位置はリスナーと同じ位置
+	playerSE = new Cmp_PK_Player_SE(Cmp_3DSoundListener::ReadTransform()); //se保持用コンポーネント作成、音を鳴らす位置はリスナーと同じ位置
+
 	actionButton = new Button(actionPlace.GetX(), actionPlace.GetY(), actionSize.GetX() / 2, actionSize.GetY() / 2, true); //アクションボタンの作成
 	foldButton = new Button(foldPlace.GetX(), foldPlace.GetY(), foldSize.GetX() / 2, foldSize.GetY() / 2, true); //foldボタンの作成
 
@@ -54,12 +68,10 @@ PK_Player::PK_Player(PK_Pot& pot, PK_Dealer& dealer, PK_CardDealer& cardDealer) 
 
 	actionButton->EditAlways()->SetCmp(actionButtonImage); //ボタンに画像を追加
 	foldButton->EditAlways()->SetCmp(foldImage);
-	actionButton->EditClick()->SetCmp(new Cmp_Button_ClickCheck()); //クリックにクリック検知用空コンポーネントの追加
-	foldButton->EditClick()->SetCmp(new Cmp_Button_ClickCheck());
+	actionButton->EditClick()->SetCmp(new Cmp_Button_ClickSound(*SoundSetting::CreateDefaultButtonClickSound(Cmp_3DSoundListener::EditTransform()))); //クリックされた時に鳴る音を追加
 
 	actionButton->SetRunUpdateDraw(false, false); //ボタン系は必要時以外完全に隠す
 	foldButton->SetRunUpdateDraw(false, false);
-
 
 	Cmp_Image* base = new Cmp_Image(*new int(LoadGraph("Resource/image/poker_gage_back.png")), 1); //ゲージ画像の作成
 	Cmp_Image* full = new Cmp_Image(*new int(LoadGraph("Resource/image/poker_gage_full.png")), 1);
@@ -69,6 +81,8 @@ PK_Player::PK_Player(PK_Pot& pot, PK_Dealer& dealer, PK_CardDealer& cardDealer) 
 	gage = new Gage(*base, *full); //ゲージの作成
 	gageBorder = new Cmp_Gage_Border(*gage);
 	gageUpper = new Cmp_Gage_UpperBorder(*gage);
+	gageSound = new Cmp_Gage_ControlSound(gage, playerSE->ReadSE(Cmp_PK_Player_SE::Request::gage), false);
+	gageSound->SetSoundStop(true); //通常ゲージ操作音は切っておく
 	int sizeX = -1; int sizeY = -1;
 	GetGraphSize(*full->ReadImage(), &sizeX, &sizeY); //ゲージサイズ取得
 
@@ -77,22 +91,22 @@ PK_Player::PK_Player(PK_Pot& pot, PK_Dealer& dealer, PK_CardDealer& cardDealer) 
 	gage->EditAppendCmp()->SetCmp(gageControl); //ゲージをマウスからコントロールする機能の追加
 	gage->EditAppendCmp()->SetCmp(gageBorder); //ゲージ下限設定機能の追加
 	gage->EditAppendCmp()->SetCmp(gageUpper); //ゲージ上限設定機能の追加
-
+	gage->EditAppendCmp()->SetCmp(gageSound); //操作があった場合サウンドが鳴る機能の追加
 
 	std::deque<PK_Card*> card = *EditHand()->EditCard();
 	for (int j = 0; j < card.size(); ++j) { //カードを取得
 		Button* button = new Button(cardPos[j].ReadPos().GetX(), cardPos[j].ReadPos().GetY(), 60, 75, false); //カードクリック判定用ボタンの作成
-		button->EditClick()->SetCmp(new Cmp_Button_ClickCheck()); //クリック検知用空コンポーネントの追加
-
 		card[j]->EditAppendCmp()->SetCmp(button); //カードにボタンを追加
 	}
-	record = new Cmp_BetActionRecord();
+	record = new Cmp_BetActionRecord(); //ベット記録コンポーネント作成
 
 	EditAppendCmp()->SetCmp(gage); //ゲージをプレイヤーに追加
 	EditAppendCmp()->SetCmp(actionButton); //アクションボタンをプレイヤーに追加
 	EditAppendCmp()->SetCmp(foldButton); //foldボタンをプレイヤーに追加
 	EditAppendCmp()->SetCmp(new Cmp_PlayerRaiseDraw(*this, pot, dealer)); //プレイヤーの現在ゲージでの支払額表示用コンポーネントを追加
 	EditAppendCmp()->SetCmp(record); //アクションの状態を記録するActionRecordを導入
+	EditAppendCmp()->SetCmp(se); //seを保持するコンポーネントを導入
+	EditAppendCmp()->SetCmp(playerSE); //プレイヤー専用seを保持するコンポーネントを導入
 
 	Place(cardPos, backPos); //カードとコイン表示背景の配置
 

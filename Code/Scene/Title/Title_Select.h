@@ -1,5 +1,6 @@
 #pragma once
 #include "./../Scene.h"
+#include "Cmp_Sound.h"
 
 #include <deque>
 
@@ -11,8 +12,7 @@ class Title_Select :public Scene { //セレクト画面
 	std::deque<Button*> button; //説明画面へ飛ばす為のボタン
 
 	Scene* run; //現在実行するシーン、nullptrで自身、explainの何れかならそのシーン、explainに無いシーンが入っていた場合SetNextにrunをセットして指定ゲームへ移行
-private:
-	int BGM;
+	Cmp_Sound bgm; //bgmのサウンドを管理するコンポーネント
 public:
 	Title_Select();
 	~Title_Select();

@@ -83,6 +83,17 @@
     <ClCompile Include="Code\Scene\Poker\Component\PK_Pause_NewGame.cpp" />
     <ClCompile Include="Code\Scene\Poker\Component\PK_Pause_GameEnd.cpp" />
     <ClCompile Include="Code\Scene\Poker\Chara\PK_Chara_Wait.cpp" />
+    <ClCompile Include="Code\Component\Cmp_Sound.cpp" />
+    <ClCompile Include="Code\Component\Cmp_3DSoundListener.cpp" />
+    <ClCompile Include="Code\Scene\Title\Title_SoundSetting.cpp" />
+    <ClCompile Include="Code\Scene\Poker\PK_BGM.cpp" />
+    <ClCompile Include="Code\Component\3DSoundSystemCoordinateData.cpp" />
+    <ClCompile Include="Code\Scene\Poker\PK_SoundSetting.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Component\Cmp_PK_Chara_SE.cpp" />
+    <ClCompile Include="Code\Component\Cmp_Button_ClickSound.cpp" />
+    <ClCompile Include="Code\SoundSetting.cpp" />
+    <ClCompile Include="Code\Component\Cmp_Gage_ControlSound.cpp" />
+    <ClCompile Include="Code\Scene\Poker\Chara\Player\Cmp_PK_Player_SE.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Component\Button.h" />
@@ -173,6 +184,17 @@
     <ClInclude Include="Code\Scene\Poker\Component\PK_Pause_NewGame.h" />
     <ClInclude Include="Code\Scene\Poker\Component\PK_Pause_GameEnd.h" />
     <ClInclude Include="Code\Scene\Poker\Chara\PK_Chara_Wait.h" />
+    <ClInclude Include="Code\Component\Cmp_Sound.h" />
+    <ClInclude Include="Code\Component\Cmp_3DSoundListener.h" />
+    <ClInclude Include="Code\Scene\Title\Title_SoundSetting.h" />
+    <ClInclude Include="Code\Scene\Poker\PK_BGM.h" />
+    <ClInclude Include="Code\Component\3DSoundSystemCoordinateData.h" />
+    <ClInclude Include="Code\Scene\Poker\PK_SoundSetting.h" />
+    <ClInclude Include="Code\Scene\Poker\Component\Cmp_PK_Chara_SE.h" />
+    <ClInclude Include="Code\Component\Cmp_Button_ClickSound.h" />
+    <ClInclude Include="Code\SoundSetting.h" />
+    <ClInclude Include="Code\Component\Cmp_Gage_ControlSound.h" />
+    <ClInclude Include="Code\Scene\Poker\Chara\Player\Cmp_PK_Player_SE.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Scene\Title\SelectScene.cd" />

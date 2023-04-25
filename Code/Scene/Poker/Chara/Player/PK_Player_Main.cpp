@@ -9,9 +9,12 @@
 
 #include "Button.h"
 #include "Gage.h"
+#include "Cmp_Gage_ControlSound.h"
 #include "Cmp_Button_ClickCheck.h"
 #include "Cmp_Gage_MouseControl.h"
 #include "Cmp_Image.h"
+#include "Cmp_PK_Chara_SE.h"
+#include "Cmp_Sound.h"
 
 #include <deque>
 
@@ -20,8 +23,10 @@ void PK_Player::Main::Update() {
 	if (count == 1) { //プレイヤーに操作が移った瞬間ならば各種ボタンを有効化する
 		parent->actionButton->SetRunUpdateDraw(true, true); //ボタンのクリック検知開始と表示許可を出す 
 		parent->foldButton->SetRunUpdateDraw(true, true);
+		parent->actionButton->EditClick()->SetRunUpdateBundle(true); //クリック追加機能のUpdate実行を許可する
 
 		parent->gageControl->SetRunUpdate(true); //ゲージの操作受け付けを開始する
+		parent->gageSound->SetSoundStop(false); //ゲージ操作音を有効化する
 	}
 
 
@@ -44,12 +49,17 @@ void PK_Player::Main::Update() {
 
 		parent->record->SetActionRecord(action, true); //該当アクションを動作済みにする
 		parent->record->SetIsAction(true); //レイズしたプレイヤーのアクションは終了済みに設定する
+
+		if (action != Cmp_BetActionRecord::Action::check) { parent->se->ReadSE(Cmp_PK_Chara_SE::Request::call)->Play(); } //check以外ならベット音を鳴らす
+		if (action == Cmp_BetActionRecord::Action::raise || action == Cmp_BetActionRecord::Action::allIn) { parent->se->ReadSE(Cmp_PK_Chara_SE::Request::raise)->Play(); } //raise又はallInしていれば対応した音を鳴らす
 	}
 	if (parent->foldButton->GetRunUpdateClick()) { //foldボタンが押された場合の処理
 		action = Cmp_BetActionRecord::Action::fold; //実行アクションをfoldにセット
 		for (auto itr : *parent->EditHand()->EditCard()) { itr->SetDrawMode(PK_Card::DrawMode::fold); } //手札をfold表示へ変更
 		parent->record->SetActionRecord(action, true); //foldを動作済みにする
 		parent->record->SetIsAction(true); //アクション済みに設定
+
+		parent->se->ReadSE(Cmp_PK_Chara_SE::Request::fold)->Play(); //fold音を鳴らす
 	}
 	if (!parent->record->GetIsAction()) { //アクション未実行なら
 		parent->record->SetFinalAction(Cmp_BetActionRecord::Action::noAction); //noActionを設定
@@ -64,6 +74,7 @@ void PK_Player::Main::Update() {
 	parent->foldButton->SetRunUpdateDrawClick(false, false);
 
 	parent->gageControl->SetRunUpdate(false); //ゲージの操作受け付けを終了する
+	parent->gageSound->SetSoundStop(true); //ゲージ操作音を無効化する
 	count = 0; //時間カウントリセット
 
 	parent->record->SetFinalAction(action); //今回アクションを最終アクションにする

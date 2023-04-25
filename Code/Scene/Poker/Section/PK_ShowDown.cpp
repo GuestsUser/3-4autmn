@@ -8,6 +8,7 @@
 #include "PK_CPU.h"
 #include "PK_Pot.h"
 #include "PK_Card.h"
+#include "PK_Dealer.h"
 #include "PK_Player.h"
 #include "PK_CardDealer.h"
 #include "PokerFontData.h"
@@ -15,6 +16,9 @@
 
 #include "Cmp_BetActionRecord.h"
 #include "Cmp_Hand.h"
+#include "Cmp_PK_Chara_SE.h"
+#include "Cmp_PK_Player_SE.h"
+#include "Cmp_Sound.h"
 #include "ComponentArray.h"
 
 Poker::ShowDown::ShowDown(Poker& set) :parent(&set), count(0), actionRecord(std::deque<Cmp_BetActionRecord*>((int)Poker::Character::length)), hand(std::deque<std::deque<int>>((int)Poker::Character::length, std::deque<int>(5))), handPos(std::deque<Vector3>((int)Poker::Character::length)), handString(std::deque<std::string>((int)Poker::Character::length)) {
@@ -36,6 +40,7 @@ void Poker::ShowDown::Update() {
 		for (int i = 0; i < actionRecord.size(); ++i) { //各キャラをチェックし持ち札を公開する処理
 			if (IsFold(*actionRecord[i])) { continue; } //ゲームから除外されていた場合以下処理は実行しない
 			for (auto itr : *parent->chara[i]->EditHand()->EditCard()) { itr->SetDrawMode(PK_Card::DrawMode::front); } //ここまでこれたキャラはカードを表側表示化
+			parent->chara[i]->ReadAppendCmp()->ReadCmp<Cmp_PK_Chara_SE>()->ReadSE(Cmp_PK_Chara_SE::Request::cardOpen)->Play(); //カード公開音を鳴らす
 		}
 	}
 
@@ -75,7 +80,11 @@ void Poker::ShowDown::Update() {
 
 			std::deque<int> copy = max; //maxを編集する為のコピー
 			if (copy.size() == 1) { //要素が1つしかない場合
-				enableChara[copy[0]]->SetCoin(enableChara[copy[0]]->GetCoint() + parent->pot->PayOut(*enableChara[copy[0]])); //受取金額総取り
+				int getCoin = parent->pot->PayOut(*enableChara[copy[0]]); //受け取り金額取得
+				enableChara[copy[0]]->SetCoin(enableChara[copy[0]]->GetCoint() + getCoin); //金額受取
+				enableChara[copy[0]]->ReadAppendCmp()->ReadCmp<Cmp_PK_Chara_SE>()->ReadSE(Cmp_PK_Chara_SE::UseCoinSound(getCoin, *parent->dealer))->Play(); //getCoinに応じたサウンドを鳴らす
+				PlayPlayerCoinGetSE(enableChara[copy[0]]); //このキャラがプレイヤーだった場合プレイヤーのコイン入手音を鳴らす
+
 				copy.erase(copy.begin()); //要素消し
 			}
 			else { std::sort(copy.begin(), copy.end(), [=](int a, int b) { return parent->pot->Inquiry(*enableChara[copy[a]]) < parent->pot->Inquiry(*enableChara[copy[b]]); }); } //支払額の昇順ソート
@@ -87,9 +96,13 @@ void Poker::ShowDown::Update() {
 					if (pay == parent->pot->Inquiry(*enableChara[copy[i]])) { same.push_back(enableChara[copy[i]]); } //同一なら配列へ格納
 				}
 
+				Cmp_PK_Chara_SE::Request request = Cmp_PK_Chara_SE::UseCoinSound(pay, *parent->dealer);
 				pay = parent->pot->PayOut(*same[0]) / same.size(); //支払いを実行、同一支払額キャラの数だけ金額総を等分
 				for (int i = 0; i < same.size(); ++i) { //同一支払額の各キャラへ支払い
 					same[i]->SetCoin(same[i]->GetCoint() + pay); //同一支払額のキャラへ配分
+					enableChara[i]->ReadAppendCmp()->ReadCmp<Cmp_PK_Chara_SE>()->ReadSE(request)->Play(); //payとキャラに応じたサウンドを鳴らす
+					PlayPlayerCoinGetSE(enableChara[copy[0]]); //このキャラがプレイヤーだった場合プレイヤーのコイン入手音を鳴らす
+
 					for (int j = 0; j < copy.size(); ++j) { //支払ったキャラをcopyから除外する為のループ
 						if (enableChara[copy[j]] == same[i]) { copy.erase(copy.cbegin() + j); break; } //今回支払ったキャラをcopyから除外
 					}

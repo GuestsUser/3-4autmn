@@ -9,6 +9,9 @@
 #include "../Code/Component/Cmp_ButtonGroup.h"
 #include "../Code/Component/Button.h"
 #include "../Code/Scene/Scene.h"
+#include "Cmp_3DSoundListener.h"
+#include "Cmp_Button_ClickSound.h"
+#include "SoundSetting.h"
 
 #include <deque>
 #include <string>
@@ -39,9 +42,10 @@ Title_Select_Explain::Title_Select_Explain(std::deque<Cmp_Image*>& setImage, std
 
 		button[i]->EditAlways()->SetCmp(new Cmp_Image(*new int(LoadGraph(name)), 1, button[i]->EditTransform())); //ボタンに画像を追加
 		button[i]->EditClick()->SetCmp(new Cmp_ButtonGroup(*button[i], button)); //ボタンが押された際、押されたボタン以外を停止する機能の追加
+		button[i]->EditClick()->SetCmp(new Cmp_Button_ClickSound(*SoundSetting::CreateDefaultButtonClickSound(Cmp_3DSoundListener::EditTransform()))); //クリックされた時に鳴る音を追加
 	}
 	button[0]->EditClick()->SetCmp(new Cmp_SelectSelector(sceneCreator, &run)); //決定ボタンが押されたらsceneCreatorで作成したシーンへ移行する設定
-	button[1]->EditClick()->SetCmp(new Cmp_SelectSelector((Scene*)nullptr, &run)); //戻るボタンが押されたらゲームセレクトへ戻る設定
+	button[1]->EditClick()->SetCmp(new Cmp_SelectSelector([]() -> Scene* { return nullptr; }, &run)); //戻るボタンが押されたらゲームセレクトへ戻る設定
 
 }
 

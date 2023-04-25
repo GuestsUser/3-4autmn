@@ -5,14 +5,22 @@
 #include "Title_Select.h"
 #include "Title_Select_Explain.h"
 #include "Title_Select_ButtonCreator.h"
+#include "Title_SoundSetting.h"
+
+#include "Cmp_3DSoundListener.h"
+#include "Cmp_Sound.h"
 
 #include <deque>
 
-Title_Select::Title_Select() :explain(std::deque<Title_Select_Explain*>()), button(std::deque<Button*>()), run(nullptr) {
-	BGM = LoadSoundMem("Resource/bgm/Select.wav");
+Title_Select::Title_Select() :explain(std::deque<Title_Select_Explain*>()), button(std::deque<Button*>()), run(nullptr), bgm(Cmp_Sound(LoadSoundMem("Resource/bgm/Select.wav"))) {
 	SetFontSize(36); //描写文字サイズ指定
-
 	Title_Select_ButtonCreator::Creat(*this, explain, button, run); //次シーンへ飛ぶ為のボタンを作成しbuttonやexplainに格納する
+
+	Cmp_3DSoundListener::SetPos(Vector3()); //リスナー位置と回転を初期状態に戻す
+	Cmp_3DSoundListener::SetRotate(Vector3());
+
+	Title_SoundSetting::SetUpTitleSelectBGM(bgm); //bgmのステータスを設定
+	bgm.Play(); //bgmを流す
 }
 
 Title_Select::~Title_Select() {
@@ -23,10 +31,6 @@ Title_Select::~Title_Select() {
 }
 
 void Title_Select::Update() {
-	if (CheckSoundMem(BGM) == 0) {
-		ChangeVolumeSoundMem(110, BGM);
-		PlaySoundMem(BGM, DX_PLAYTYPE_LOOP);
-	}
 	if (run != nullptr) { //runに何か入っていた場合そちらを優先実行
 		run->Update(); //run実行
 
@@ -35,7 +39,7 @@ void Title_Select::Update() {
 		for (auto itr : explain) {
 			if (run == itr) { return; } //explainと同じ物があった場合抜け、次回もrunを実行する
 		}
-		StopSoundMem(BGM);
+		bgm.Stop(); //bgm止め
 		SetNext(run); //ここまで来たら設定されたシーンはゲーム実行シーンになるのでセレクト画面を終了しそちらに移行する
 		return;
 	}

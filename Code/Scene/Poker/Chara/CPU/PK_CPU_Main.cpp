@@ -8,6 +8,8 @@
 #include "Cmp_BetActionRecord.h"
 #include "Cmp_CPUBetLogic.h"
 #include "Cmp_Transform.h"
+#include "Cmp_PK_Chara_SE.h"
+#include "Cmp_Sound.h"
 
 #include "PK_SectionLibrary.h"
 
@@ -50,6 +52,12 @@ void PK_CPU::Main::Update() {
 		parent->record->SetActionRecord(action, true); //該当アクションを動作済みにする
 		parent->record->SetFinalAction(action); //該当アクションを最終アクションにする
 		parent->record->SetIsAction(true); //アクション済みに設定
+
+		Cmp_PK_Chara_SE::Request request = Cmp_PK_Chara_SE::Request::call; //鳴らすseの指示を格納
+		if (action == Cmp_BetActionRecord::Action::raise || action == Cmp_BetActionRecord::Action::allIn) { request = Cmp_PK_Chara_SE::Request::raise; } //raise又はallInしていればraise音を指定
+		if (action == Cmp_BetActionRecord::Action::fold) { request = Cmp_PK_Chara_SE::Request::fold; } //fold音を指定
+		if (action != Cmp_BetActionRecord::Action::check) { parent->se->ReadSE(request)->Play(); } //check以外なら指定された音を鳴らす
+		
 
 		if (action == Cmp_BetActionRecord::Action::call || action == Cmp_BetActionRecord::Action::raise) { parent->pot->SetMainPot(pay, *parent); } //call、raiseの場合メインポットへ
 		if (action == Cmp_BetActionRecord::Action::allIn) { parent->pot->SetSidePot(pay, *parent); } //allInの場合サイドポットへ

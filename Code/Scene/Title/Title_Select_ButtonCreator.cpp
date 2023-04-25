@@ -5,7 +5,10 @@
 #include "../Code/Component/Button.h"
 #include "../Code/Component/Cmp_Image.h"
 #include "../Code/Component/Cmp_ButtonGroup.h"
+#include "Cmp_3DSoundListener.h"
 #include "Cmp_SelectSelector.h"
+#include "Cmp_Button_ClickSound.h"
+#include "SoundSetting.h"
 
 //プレイするゲームシーンをインクルード
 #include"../Code/Scene/Karuta/Scene_Karuta.h"
@@ -120,6 +123,8 @@ void Title_Select_ButtonCreator::Creat(Scene& parent, std::deque<Title_Select_Ex
 		button[i]->EditAlways()->SetCmp(new Cmp_Image(*img, 1, button[i]->EditTransform())); //ボタンに画像を追加
 		button[i]->EditClick()->SetCmp(new Cmp_ButtonGroup(*button[i], button)); //ボタンが押された際、押されたボタン以外を停止する機能の追加
 		button[i]->EditClick()->SetCmp(new Cmp_SelectSelector(explain[i], &run)); //ボタンが押された際、runへ次シーンを入れる機能の追加
+		button[i]->EditClick()->SetCmp(new Cmp_Button_ClickSound(*SoundSetting::CreateDefaultButtonClickSound(Cmp_3DSoundListener::EditTransform()))); //クリックされた時に鳴る音を追加
+
 	}
 }
 

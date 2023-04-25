@@ -38,3 +38,5 @@ void PlayerButtonAnalyze(const std::deque<Button*>& button, Button** action, But
 void FoldMemberPayOut(std::deque<PK_Chara*>& chara, PK_Pot& pot); //foldキャラへPayOut
 
 Poker::Section GameEndCheck(const std::deque<PK_Chara*>& chara, const std::deque<Cmp_BetActionRecord*>& actionRecord); //現在の敗北状況から向かうべきシーンを返す
+
+void PlayPlayerCoinGetSE(PK_Chara* chara); //charaを受け取るとそいつがPlayer_SEを持っていた場合player用コイン入手音を鳴らす

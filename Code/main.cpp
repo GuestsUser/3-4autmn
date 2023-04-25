@@ -12,12 +12,21 @@
 #include "Worldval.h"
 #include "GlovalLoading.h"
 
+#include "3DSoundSystemCoordinateData.h"
+#include "Cmp_3DSoundListener.h"
+
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); //デバッグ表示を可能にする
 	ChangeWindowMode(true);
+	SetEnableXAudioFlag(true); //3dサウンドを使用する設定
 
 	if (DxLib_Init() == -1) { return -1; }		//初期化と異常が認められた場合の終了
+	SetCreate3DSoundFlag(true); //読み込むサウンドを3dサウンドとして扱う
+	Set3DSoundOneMetre(1.0f); //3d空間上での距離単位設定、1=1m
+
+	SoundSystemCoordinateData::SetUp(); //3dサウンド設定用座標系データの準備
+	Cmp_3DSoundListener::SetUp(); //3dサウンドリスナーの使用準備
 
 	int fps = 1000000 / FPS; //割る値を変えると1秒間に行う処理回数を変更できる
 	LONGLONG now = GetNowHiPerformanceCount();

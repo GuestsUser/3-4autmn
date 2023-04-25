@@ -3,10 +3,14 @@
 #include <deque>
 
 class Button;
+class Cmp_3DSoundListener;
+class Cmp_Gage_ControlSound;
 class Cmp_Gage_Border;
 class Cmp_Gage_UpperBorder;
 class Cmp_Gage_MouseControl;
 class Cmp_Image;
+class Cmp_PK_Chara_SE;
+class Cmp_PK_Player_SE;
 class Gage;
 class PK_CardDealer;
 class PK_Dealer;
@@ -25,6 +29,11 @@ class PK_Player :public PK_Chara {
 	Cmp_Gage_Border* gageBorder; //プレイヤーのゲージ下限設定機能のコンポーネント
 	Cmp_Gage_UpperBorder* gageUpper; //プレイヤーのゲージ上限設定機能のコンポーネント
 	Cmp_Gage_MouseControl* gageControl; //ゲージ操作を受け付けるコンポーネント
+	Cmp_Gage_ControlSound* gageSound; //ゲージ操作があった場合サウンドを鳴らすコンポーネント
+
+	Cmp_PK_Chara_SE* se; //キャラクターのse保持コンポーネント
+	Cmp_PK_Player_SE* playerSE; //プレイヤー専用のse保持コンポーネント
+
 
 	PK_Pot* pot;
 	PK_Dealer* dealer;

@@ -11,6 +11,7 @@
 
 #include "Cmp_BetActionRecord.h"
 #include "Cmp_CPUBetLogic.h"
+#include "Cmp_PK_Chara_SE.h"
 
 #include <deque>
 
@@ -19,10 +20,14 @@ int PK_CPU::waitTime = 30;
 PK_CPU::PK_CPU(int sub, PK_Pot& pot, PK_Dealer& dealer, PK_CardDealer& cardDealer) :pot(&pot), dealer(&dealer), cardDealer(&cardDealer), sectionModule(0) {
 	betData = new Cmp_CPUBetLogic(dealer);
 	record = new Cmp_BetActionRecord();
+
+	DataPlace::Run(*this, sub); //配置の実行、考え中表示用コンポーネント、seコンポーネント作成と配置はこちらで行っている
+
 	EditAppendCmp()->SetCmp(betData); //cpuのベットに必要なデータを纏めたBetLogicを導入
 	EditAppendCmp()->SetCmp(record); //アクションの状態を記録するActionRecordを導入
+	EditAppendCmp()->SetCmp(se); //アクションの状態を記録するActionRecordを導入
 
-	DataPlace::Run(*this, sub); //配置の実行、考え中表示用コンポーネントはこちらで作成している
+
 
 	sectionModule.push_back(new PK_CPU::Main(*this)); //section纏め
 	sectionModule.push_back(new PK_CPU::Change(*this));

@@ -21,6 +21,8 @@
 #include "Cmp_Gage_MouseControl.h"
 #include "Cmp_Hand.h"
 #include "Cmp_PlayerRaiseDraw.h"
+#include "Cmp_PK_Player_SE.h"
+#include "Cmp_Sound.h"
 
 #include <algorithm>
 #include <deque>
@@ -189,4 +191,9 @@ Poker::Section GameEndCheck(const std::deque<PK_Chara*>& chara, const std::deque
 	if (actionRecord[(int)Poker::Character::player]->GetIsLose()) { val = Poker::Section::gameover; } //プレイヤーが敗北していた場合ゲームオーバーを設定、クリアとオーバーではオーバーが優先
 
 	return val;
+}
+
+void PlayPlayerCoinGetSE(PK_Chara* chara) {
+	Cmp_PK_Player_SE* seSystem = chara->ReadAppendCmp()->ReadCmp<Cmp_PK_Player_SE>(); //追加機能からPlayer_SEを検索して取得
+	if (seSystem != nullptr) { seSystem->ReadSE(Cmp_PK_Player_SE::Request::coinPlayer)->Play(); } //Player_SEが存在した場合コイン入手音を鳴らす
 }

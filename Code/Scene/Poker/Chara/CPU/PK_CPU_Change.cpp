@@ -6,6 +6,8 @@
 #include "PK_CardDealer.h"
 #include "Cmp_BetActionRecord.h"
 #include "Cmp_Hand.h"
+#include "Cmp_PK_Chara_SE.h"
+#include "Cmp_Sound.h"
 
 #include "PK_SectionLibrary.h"
 
@@ -57,6 +59,8 @@ void PK_CPU::Change::Update() {
 			itr->SetCard(parent->cardDealer->DeckDraw()); //交換指定のあるカードを交換
 			itr->SetMarking(true); //交換したカードをマーキング
 		}
+		if (changeList.size() > 0) { parent->se->ReadSE(Cmp_PK_Chara_SE::Request::cardChange)->Play(); } //カード交換があった場合対応seを鳴らす
+
 		parent->record->SetFinalAction(Cmp_BetActionRecord::Action::change); //交換したのでchangeを最終アクションに指定
 		parent->EditHand()->HandPowerUpdate(); //役の強さを新しい手札に合わせる
 
