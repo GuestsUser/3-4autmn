@@ -62,7 +62,6 @@
     <ClCompile Include="Code\Scene\Poker\Chara\PK_Chara_Wait.cpp" />
     <ClCompile Include="Code\Scene\Poker\Chara\Player\Cmp_PK_Player_SE.cpp" />
     <ClCompile Include="Code\Scene\Poker\Component\Cmp_PK_Chara_SE.cpp" />
-    <ClCompile Include="Code\Scene\Poker\PK_SoundSetting.cpp" />
     <ClCompile Include="Code\Scene\Poker\Component\Cmp_Hand.cpp" />
     <ClCompile Include="Code\Scene\Poker\Component\Cmp_PK_Pause.cpp" />
     <ClCompile Include="Code\Scene\Poker\Component\PK_Pause_DataSetting.cpp" />
@@ -160,7 +159,6 @@
     <ClInclude Include="Code\Scene\Poker\BetLogicInitializeData.h" />
     <ClInclude Include="Code\Scene\Poker\Chara\Player\Cmp_PK_Player_SE.h" />
     <ClInclude Include="Code\Scene\Poker\Component\Cmp_PK_Chara_SE.h" />
-    <ClInclude Include="Code\Scene\Poker\PK_SoundSetting.h" />
     <ClInclude Include="Code\Scene\Poker\Chara\PK_Chara_Wait.h" />
     <ClInclude Include="Code\Scene\Poker\Component\Cmp_Hand.h" />
     <ClInclude Include="Code\Scene\Poker\Component\Cmp_PK_Pause.h" />

@@ -88,7 +88,6 @@
     <ClCompile Include="Code\Scene\Title\Title_SoundSetting.cpp" />
     <ClCompile Include="Code\Scene\Poker\PK_BGM.cpp" />
     <ClCompile Include="Code\Component\3DSoundSystemCoordinateData.cpp" />
-    <ClCompile Include="Code\Scene\Poker\PK_SoundSetting.cpp" />
     <ClCompile Include="Code\Scene\Poker\Component\Cmp_PK_Chara_SE.cpp" />
     <ClCompile Include="Code\Component\Cmp_Button_ClickSound.cpp" />
     <ClCompile Include="Code\SoundSetting.cpp" />
@@ -189,7 +188,6 @@
     <ClInclude Include="Code\Scene\Title\Title_SoundSetting.h" />
     <ClInclude Include="Code\Scene\Poker\PK_BGM.h" />
     <ClInclude Include="Code\Component\3DSoundSystemCoordinateData.h" />
-    <ClInclude Include="Code\Scene\Poker\PK_SoundSetting.h" />
     <ClInclude Include="Code\Scene\Poker\Component\Cmp_PK_Chara_SE.h" />
     <ClInclude Include="Code\Component\Cmp_Button_ClickSound.h" />
     <ClInclude Include="Code\SoundSetting.h" />
