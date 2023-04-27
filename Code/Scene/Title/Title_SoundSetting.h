@@ -6,7 +6,7 @@ class Title_SoundSetting {
 public:
 	static void SetUpTitleSelectBGM(Cmp_Sound& sound); //soundに入れられたサウンドにタイトルのbgm向けステータスを設定する
 	static void SetUpTitleClick(Cmp_Sound& sound); //soundに入れられたサウンドにタイトル画面のクリック向けステータスを設定する
-
+	static void SetUpExplainScroll(Cmp_Sound& sound); //サウンドにスクロール時seとしてのステータスを設定
 
 private:
 	//実体精製禁止

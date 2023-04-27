@@ -18,6 +18,9 @@ private:
 
 public:
 	Cmp_PK_Chara_SE(const Cmp_Transform* const soundPos = nullptr);
+	~Cmp_PK_Chara_SE() {
+		for (auto itr : sound) { delete itr; } //newしたsoundコンポーネントの削除
+	}
 
 	void Update() {}
 

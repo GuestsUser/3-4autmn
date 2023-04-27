@@ -16,6 +16,9 @@ private:
 
 public:
 	Cmp_PK_Player_SE(const Cmp_Transform* const soundPos = nullptr);
+	~Cmp_PK_Player_SE() {
+		for (auto itr : sound) { delete itr; } //newしたsoundコンポーネントの削除
+	}
 
 	void Update() {}
 

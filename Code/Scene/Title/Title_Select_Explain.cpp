@@ -11,6 +11,8 @@
 #include "../Code/Scene/Scene.h"
 #include "Cmp_3DSoundListener.h"
 #include "Cmp_Button_ClickSound.h"
+#include "Cmp_Sound.h"
+#include "Title_SoundSetting.h"
 #include "SoundSetting.h"
 
 #include <deque>
@@ -22,6 +24,8 @@ Title_Select_Explain::Title_Select_Explain(std::deque<Cmp_Image*>& setImage, std
 	run = this; //次回実行にはニュートラルとして自身を入れておく
 
 	for (auto itr : *image) { itr->EditTranform()->EditPos().SetXYZ(640, 360, 0); } //ここで説明画像の表示位置を設定する
+	scroll = new Cmp_Sound(LoadSoundMem("Resource/se/scroll.wav")); //スクロール音作成
+	Title_SoundSetting::SetUpExplainScroll(*scroll); //スクロール音ステータス設定
 
 	if (image->size() > 1) { //説明画像が複数枚ある場合
 		for (int i = 0; i < 2; ++i) {
@@ -55,6 +59,7 @@ Title_Select_Explain::~Title_Select_Explain() {
 	for (auto itr : button) { delete itr; }
 
 	delete image; //imageは他所で作られた参照をこちらで管理する形式なので消しておく
+	delete scroll; //スクロール音の削除
 }
 
 void Title_Select_Explain::Update() {
@@ -64,10 +69,12 @@ void Title_Select_Explain::Update() {
 
 	//表示ページ更新処理
 	int max = image->size(); //ページ最大数
+	int oldPage = page; //ページ操作を検知する為の現在ページ記録変数
 	if (max > 1) { //ページが複数ある場合
 		int rotate = GetMouseWheelRotVol(); //マウスホイール回転量
 		if (rotate <= -1) { page = (page + 1) % max; } //前方にまわしたらページ+1
 		if (rotate >= 1) { page = page - 1 < 0 ? (page + max - 1) % max : (page - 1) % max; } //奥にまわした場合ページ-1
+		if (oldPage != page) { scroll->Play(); } //ページ操作があった場合サウンドを鳴らす
 	}
 	
 	if (run != this) { 

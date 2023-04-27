@@ -17,6 +17,9 @@ class PK_BGM :public Component {
 	int resumeMemo; //Stopを実行した時掛かっていた曲の添え字を保持、何も掛かってなかった場合-1が入る
 public:
 	PK_BGM(Cmp_Transform ts = Cmp_Transform());
+	~PK_BGM() {
+		for (auto itr : bgm) { delete itr; } //newしたsoundコンポーネントの削除
+	}
 
 	void Update(); //bgm内にある曲を連続で流すUpdate
 
