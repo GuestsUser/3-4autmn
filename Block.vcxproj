@@ -108,6 +108,7 @@
     <ClCompile Include="Code\Scene\Sugoroku\SR_Saikoro.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\SR_Title.cpp" />
     <ClCompile Include="Code\Scene\Sugoroku\SR_Game.cpp" />
+    <ClCompile Include="Code\Scene\Title\Title_Select_Explain_PageScrollExplain.cpp" />
     <ClCompile Include="Code\Scene\Title\Title_SoundSetting.cpp" />
     <ClCompile Include="Code\SoundSetting.cpp" />
     <ClCompile Include="Code\Worldval.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="Code\Scene\Sugoroku\SR_Game.h" />
     <ClInclude Include="Code\Scene\Sugoroku\SR_Saikoro.h" />
     <ClInclude Include="Code\Scene\Sugoroku\SR_Title.h" />
+    <ClInclude Include="Code\Scene\Title\Title_Select_Explain_PageScrollExplain.h" />
     <ClInclude Include="Code\Scene\Title\Title_SoundSetting.h" />
     <ClInclude Include="Code\SoundSetting.h" />
     <ClInclude Include="Code\Worldval.h" />

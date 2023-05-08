@@ -12,6 +12,7 @@
 #include "Cmp_3DSoundListener.h"
 #include "Cmp_Button_ClickSound.h"
 #include "Cmp_Sound.h"
+#include "Title_Select_Explain_PageScrollExplain.h"
 #include "Title_SoundSetting.h"
 #include "SoundSetting.h"
 
@@ -20,13 +21,14 @@
 #include <sstream>
 #include <functional>
 
-Title_Select_Explain::Title_Select_Explain(std::deque<Cmp_Image*>& setImage, std::function<Scene* ()> sceneCreator) :image(&setImage), page(0) {
+Title_Select_Explain::Title_Select_Explain(std::deque<Cmp_Image*>& setImage, std::function<Scene* ()> sceneCreator) :image(&setImage), page(0), scrollExplain(new Title_Select_Explain_PageScrollExplain()){
 	run = this; //次回実行にはニュートラルとして自身を入れておく
 
 	for (auto itr : *image) { itr->EditTranform()->EditPos().SetXYZ(640, 360, 0); } //ここで説明画像の表示位置を設定する
 	scroll = new Cmp_Sound(LoadSoundMem("Resource/se/scroll.wav")); //スクロール音作成
 	Title_SoundSetting::SetUpExplainScroll(*scroll); //スクロール音ステータス設定
 
+	if (image->size() <= 1) { scrollExplain->SetRunUpdateDraw(false, false); } //スクロール不可なページ数の場合explainは実行禁止にする
 	for (int i = 0; i < 2; ++i) { //ボタン設定
 		button.push_back(new Button(1165 - 200 * i, 680, 150 / 2, 60 / 2)); //空ボタンを追加
 		
@@ -51,11 +53,13 @@ Title_Select_Explain::~Title_Select_Explain() {
 
 	delete image; //imageは他所で作られた参照をこちらで管理する形式なので消しておく
 	delete scroll; //スクロール音の削除
+	delete scrollExplain; //スクロール可能説明文の削除
 }
 
 void Title_Select_Explain::Update() {
 	for (auto itr : *image) { itr->Update(); } //各種更新処理
 	for (auto itr : button) { itr->Update(); }
+	scrollExplain->Update();
 
 	//表示ページ更新処理
 	int max = image->size(); //ページ最大数
@@ -78,7 +82,7 @@ void Title_Select_Explain::Draw() {
 
 	std::string pageNum = std::to_string(page + 1) + "/" + std::to_string(image->size()); //現在のページ数表示
 	DrawString(1100, 32, pageNum.c_str(), GetColor(255, 255, 255)); //カラーは仮の物
-	if (image->size() > 1) { DrawString(120, 670, "スクロールでページめくり!", GetColor(255, 25, 65)); } //ページが複数あった場合ページめくり可能である事を表示する
+	scrollExplain->Draw(); //ページが複数あった場合ページめくり可能である事を表示する
 
 	(*image)[page]->Draw();
 	for (auto itr : button) { itr->Draw(); }

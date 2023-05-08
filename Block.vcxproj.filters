@@ -93,6 +93,7 @@
     <ClCompile Include="Code\SoundSetting.cpp" />
     <ClCompile Include="Code\Component\Cmp_Gage_ControlSound.cpp" />
     <ClCompile Include="Code\Scene\Poker\Chara\Player\Cmp_PK_Player_SE.cpp" />
+    <ClCompile Include="Code\Scene\Title\Title_Select_Explain_PageScrollExplain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Component\Button.h" />
@@ -193,6 +194,7 @@
     <ClInclude Include="Code\SoundSetting.h" />
     <ClInclude Include="Code\Component\Cmp_Gage_ControlSound.h" />
     <ClInclude Include="Code\Scene\Poker\Chara\Player\Cmp_PK_Player_SE.h" />
+    <ClInclude Include="Code\Scene\Title\Title_Select_Explain_PageScrollExplain.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Scene\Title\TitleSelect.cd" />
