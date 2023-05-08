@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="pauseButtonが押されたら&#xD;&#xA;UpdateはPauseの物のみ実行する事で&#xD;&#xA;ゲームの流れを一時停止する&#xD;&#xA;Drawは通常通り行う">
+    <Position X="2.146" Y="0.708" Height="0.75" Width="2.242" />
+  </Comment>
+  <Comment CommentText="pauseButtonのクリックに付いてる&#xD;&#xA;クリックされたらポーズ画面用UIを表示し&#xD;&#xA;そのUI上でクリックされたボタンに応じて&#xD;&#xA;実行する内部クラスを変更する">
+    <Position X="6.76" Y="0.5" Height="0.781" Width="2.169" />
+  </Comment>
+  <Comment CommentText="PauseEndクラス&#xD;&#xA;ポーズ画面を終了する処理が記されたクラス">
+    <Position X="6.75" Y="1.5" Height="0.417" Width="2.45" />
+  </Comment>
+  <Comment CommentText="NewGameクラス&#xD;&#xA;ポーズ画面を終了し&#xD;&#xA;新しいゲームを開始する為の処理が記されたクラス">
+    <Position X="6.75" Y="2.188" Height="0.625" Width="2.731" />
+  </Comment>
+  <Comment CommentText="GameEndクラス&#xD;&#xA;ポーズ画面を終了し&#xD;&#xA;ゲームセレクト画面に戻る為の処理が記されたクラス">
+    <Position X="6.75" Y="3.094" Height="0.646" Width="2.742" />
+  </Comment>
+  <Comment CommentText="DataSettingクラス&#xD;&#xA;ポーズ画面UIを適切な位置に配置する為のクラス">
+    <Position X="6.792" Y="3.979" Height="0.5" Width="2.637" />
+  </Comment>
+  <Class Name="Cmp_PK_Pause">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="Cmp_PK_Pause::DataSetting" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Component\Cmp_PK_Pause.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Cmp_PK_Pause::PauseEnd" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Component\Cmp_PK_Pause.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Cmp_PK_Pause::NewGame" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Component\Cmp_PK_Pause.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Cmp_PK_Pause::GameEnd" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Component\Cmp_PK_Pause.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQAAAlAAAQAAgBABAAAAAAAACEAAAAAAAAAEAAAAAA=</HashCode>
+      <FileName>Code\Scene\Poker\Component\Cmp_PK_Pause.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Poker">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Class Name="Poker::Ini" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::GameOver" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::ShowDown" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Enum Name="Poker::Section" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Class Name="Poker::NoContest" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::GameClear" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::Pre" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::Main" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::Change" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::NewGameReset" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Enum Name="Poker::Character" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AQQAAgEAAAAIAgIAAAAAAIAACABQCAEBAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Poker\Section\Poker.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

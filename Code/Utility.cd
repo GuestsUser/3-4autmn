@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="キー入力の検知システム割と古の産物&#xD;&#xA;">
+    <Position X="11.271" Y="0.5" Height="0.291" Width="2.096" />
+  </Comment>
+  <Comment CommentText="このヘッダーをインクルードすると&#xD;&#xA;KeySystem実体である&#xD;&#xA;グローバル変数のkeyが利用可能になる">
+    <Position X="11.156" Y="0.906" Height="0.625" Width="2.127" />
+  </Comment>
+  <Comment CommentText="key利用前にmain等で&#xD;&#xA;keyへ実体の代入を行う必要あり">
+    <Position X="11.292" Y="1.656" Height="0.458" Width="1.877" />
+  </Comment>
+  <Comment CommentText="1フレーム毎にKeyInputを実行すると&#xD;&#xA;そのフレーム中での入力に応じてキーのステータスを更新">
+    <Position X="10.896" Y="2.938" Height="0.469" Width="2.825" />
+  </Comment>
+  <Comment CommentText="各種関数の引数にヘッダー内で定義されてる&#xD;&#xA;ボタン指定用グローバル変数を指示すると&#xD;&#xA;利用した関数に応じたそのボタンのステータスを返す">
+    <Position X="10.906" Y="2.281" Height="0.583" Width="2.669" />
+  </Comment>
+  <Comment CommentText="constexprの付いてない&#xD;&#xA;ボタン指定用グローバル変数は&#xD;&#xA;中身の書き換えが可能で&#xD;&#xA;それを利用する事によりキーコンフィグ的な事も可能">
+    <Position X="10.833" Y="4.146" Height="0.75" Width="2.742" />
+  </Comment>
+  <Comment CommentText="これら関数へのアクセスは&#xD;&#xA;key変数を介する必要あり">
+    <Position X="11.25" Y="3.5" Height="0.438" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Sceneを超えた値の保持を行う為のクラス">
+    <Position X="14.365" Y="0.927" Height="0.312" Width="2.294" />
+  </Comment>
+  <Comment CommentText="利用前にmain等で一度&#xD;&#xA;SetUpを実行する必要あり">
+    <Position X="14.406" Y="1.427" Height="0.427" Width="1.523" />
+  </Comment>
+  <Comment CommentText="値を取り出す時はGetのテンプレートに&#xD;&#xA;受け取る値の型、引数に名前を指示">
+    <Position X="14.375" Y="3.354" Height="0.438" Width="2.117" />
+  </Comment>
+  <Comment CommentText="本クラスは全てstaticで実装されているので&#xD;&#xA;アクセスに実体を介する必要はない&#xD;&#xA;ヘッダーをインクルードすれば直ぐ利用可能">
+    <Position X="14.344" Y="2" Height="0.594" Width="2.481" />
+  </Comment>
+  <Comment CommentText="Setに名前と値を入れる事で&#xD;&#xA;Sceneを跨いでも保持される値の作成が可能">
+    <Position X="14.354" Y="2.771" Height="0.469" Width="2.46" />
+  </Comment>
+  <Comment CommentText="値をWorldValから消したい場合&#xD;&#xA;Delに値の名前を入れると消してくれる">
+    <Position X="14.396" Y="3.917" Height="0.427" Width="2.096" />
+  </Comment>
+  <Comment CommentText="アプリを終了する際にDestructを呼び出す事で&#xD;&#xA;WorldVal内の全ての値を削除する">
+    <Position X="14.396" Y="4.531" Height="0.438" Width="2.513" />
+  </Comment>
+  <Comment CommentText="数学系の便利機能が色々入ったクラス">
+    <Position X="0.844" Y="1.25" Height="0.313" Width="2.138" />
+  </Comment>
+  <Comment CommentText="各種機能の使い方はヘッダーを参照">
+    <Position X="0.948" Y="1.76" Height="0.302" Width="2.054" />
+  </Comment>
+  <Comment CommentText="3次元情報を表す為のクラス">
+    <Position X="3.365" Y="1.719" Height="0.344" Width="1.7" />
+  </Comment>
+  <Comment CommentText="クォータニオンを表す為のクラス&#xD;&#xA;基本的にOriginMathの内部用&#xD;&#xA;OriginMathと併用すれば&#xD;&#xA;余り意識しなくても3次元回転が&#xD;&#xA;可能になる">
+    <Position X="5.542" Y="1.219" Height="0.917" Width="1.856" />
+  </Comment>
+  <Comment CommentText="一次直線を表す為のクラス&#xD;&#xA;こちらもOriginMathの内部用">
+    <Position X="7.865" Y="1.656" Height="0.458" Width="1.7" />
+  </Comment>
+  <Class Name="KeySystem">
+    <Position X="11.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AkACAAAAAAEAAAAAAAAAAAAAIgAAABAAACAAAAAIEAA=</HashCode>
+      <FileName>Code\GetKey.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WorldVal">
+    <Position X="14.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAABAjAAAAAAAACAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Worldval.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Vector3">
+    <Position X="3.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAABYAAAAAAQAAAAAAACAAYAFgAQAAAAA=</HashCode>
+      <FileName>Code\OriginMath.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Quaternion">
+    <Position X="5.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABCAAAEAAAAAAAAAAAAQAAgAAAAQAAA=</HashCode>
+      <FileName>Code\OriginMath.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OriginMath">
+    <Position X="1.25" Y="2.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="OriginMath::HorizonPivot" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\OriginMath.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="OriginMath::VerticalPivot" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\OriginMath.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAABQAAAAAAAAAAAAAAAAAAgAiAAAACAAAAAAAAAAAI=</HashCode>
+      <FileName>Code\OriginMath.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinerFunction">
+    <Position X="8" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYQAASAAAAAA=</HashCode>
+      <FileName>Code\OriginMath.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

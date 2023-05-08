@@ -20,21 +20,13 @@
 #include <sstream>
 #include <functional>
 
-Title_Select_Explain::Title_Select_Explain(std::deque<Cmp_Image*>& setImage, std::function<Scene* ()> sceneCreator) :image(&setImage), cursor(std::deque<Cmp_Image*>()), page(0) {
+Title_Select_Explain::Title_Select_Explain(std::deque<Cmp_Image*>& setImage, std::function<Scene* ()> sceneCreator) :image(&setImage), page(0) {
 	run = this; //次回実行にはニュートラルとして自身を入れておく
 
 	for (auto itr : *image) { itr->EditTranform()->EditPos().SetXYZ(640, 360, 0); } //ここで説明画像の表示位置を設定する
 	scroll = new Cmp_Sound(LoadSoundMem("Resource/se/scroll.wav")); //スクロール音作成
 	Title_SoundSetting::SetUpExplainScroll(*scroll); //スクロール音ステータス設定
 
-	if (image->size() > 1) { //説明画像が複数枚ある場合
-		for (int i = 0; i < 2; ++i) {
-			cursor.push_back(new Cmp_Image(*new int(LoadGraph("Resource/image/Explain_Cursor.png")), 1)); //ここに矢印画像の読み込みを入れる
-			cursor[i]->EditTranform()->EditRotate().SetZ((270 - 180 * i) * OriginMath::Deg2Rad); //画像向きの設定、i==0は上向き、i==1は下向き
-			cursor[i]->EditTranform()->EditPos().SetXYZ(1280 / 2, 640 * (i % 2) + 80 / 2, 0); //ここに位置設定を入れる
-		}
-	}
-	
 	for (int i = 0; i < 2; ++i) { //ボタン設定
 		button.push_back(new Button(1165 - 200 * i, 680, 150 / 2, 60 / 2)); //空ボタンを追加
 		
@@ -55,7 +47,6 @@ Title_Select_Explain::Title_Select_Explain(std::deque<Cmp_Image*>& setImage, std
 
 Title_Select_Explain::~Title_Select_Explain() {
 	for (auto itr : *image) { delete itr; } //各要素はnewで精製されているので消しておく
-	for (auto itr : cursor) { delete itr; }
 	for (auto itr : button) { delete itr; }
 
 	delete image; //imageは他所で作られた参照をこちらで管理する形式なので消しておく
@@ -64,7 +55,6 @@ Title_Select_Explain::~Title_Select_Explain() {
 
 void Title_Select_Explain::Update() {
 	for (auto itr : *image) { itr->Update(); } //各種更新処理
-	for (auto itr : cursor) { itr->Update(); }
 	for (auto itr : button) { itr->Update(); }
 
 	//表示ページ更新処理
@@ -88,9 +78,9 @@ void Title_Select_Explain::Draw() {
 
 	std::string pageNum = std::to_string(page + 1) + "/" + std::to_string(image->size()); //現在のページ数表示
 	DrawString(1100, 32, pageNum.c_str(), GetColor(255, 255, 255)); //カラーは仮の物
+	if (image->size() > 1) { DrawString(120, 670, "スクロールでページめくり!", GetColor(255, 25, 65)); } //ページが複数あった場合ページめくり可能である事を表示する
+
 	(*image)[page]->Draw();
-	//for (auto itr : *image) { itr->Draw(); } //各種更新処理
-	for (auto itr : cursor) { itr->Draw(); }
 	for (auto itr : button) { itr->Draw(); }
 
 }

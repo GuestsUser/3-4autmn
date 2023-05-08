@@ -19,7 +19,7 @@ Poker::GameClear::GameClear(Poker& set) :parent(&set), count(0), clickStartTime(
 	explainPos.SetXYZ(472, 312, 0); //ボタン説明配置位置
 
 	nextButton.EditClick()->SetCmp(new Cmp_Button_ClickCheck()); //クリックチェック用コンポーネント追加
-	parent->pauseButon->EditAlways()->EditCmp<Cmp_ButtonOverlapGroup>()->EditGroup()->push_back(&nextButton); //ポーズボタンに重なっている次シーン移行ボタンを重なり無効化コンポーネントへ格納する
+	parent->pauseButton->EditAlways()->EditCmp<Cmp_ButtonOverlapGroup>()->EditGroup()->push_back(&nextButton); //ポーズボタンに重なっている次シーン移行ボタンを重なり無効化コンポーネントへ格納する
 
 	sound = new Cmp_Sound(LoadSoundMem("Resource/se/Poker_SE/gameClear.wav"), -1, -1, true, Cmp_3DSoundListener::EditTransform());
 }

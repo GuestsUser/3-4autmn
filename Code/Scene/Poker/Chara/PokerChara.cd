@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="このラウンド上での&#xD;&#xA;アクション実行状況を&#xD;&#xA;記録するコンポーネント">
+    <Position X="9.312" Y="0.969" Height="0.625" Width="1.294" />
+  </Comment>
+  <Comment CommentText="手札を管理するコンポーネント">
+    <Position X="11.385" Y="1.26" Height="0.344" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Player、CPUに共通する&#xD;&#xA;サウンドを保持するコンポーネント">
+    <Position X="13.562" Y="1.25" Height="0.406" Width="1.835" />
+  </Comment>
+  <Comment CommentText="Character列挙型の個数を&#xD;&#xA;書き換える事でキャラ数を変更できる他&#xD;&#xA;chara配列にCharacter列挙型を使う事で&#xD;&#xA;目的のキャラを取り出す事もできる">
+    <Position X="2.198" Y="1.219" Height="0.75" Width="2.315" />
+  </Comment>
+  <Comment CommentText="chara配列にCPUとプレイヤーを格納する">
+    <Position X="2.198" Y="0.667" Height="0.292" Width="2.231" />
+  </Comment>
+  <Comment CommentText="CPUやPlayerの基底クラス">
+    <Position X="6.417" Y="0.531" Height="0.333" Width="1.7" />
+  </Comment>
+  <Comment CommentText="右にあるコンポーネントや&#xD;&#xA;保持コイン数など&#xD;&#xA;両方に共通する機能を持っている">
+    <Position X="6.417" Y="0.958" Height="0.583" Width="2.2" />
+  </Comment>
+  <Comment CommentText="PokerSection.cdの項も参照されたし">
+    <Position X="6.448" Y="1.75" Height="0.323" Width="2.158" />
+  </Comment>
+  <Class Name="PK_Chara">
+    <Position X="4.75" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="PK_Chara::BBView" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Chara\PK_Chara.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="PK_Chara::Section" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Chara\PK_Chara.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>QQQQAAAAAAAgBgQlAAAAAIAAAAYCAAAEBEAACABAAQI=</HashCode>
+      <FileName>Code\Scene\Poker\Chara\PK_Chara.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_BetActionRecord">
+    <Position X="9.25" Y="1.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Cmp_BetActionRecord::Action" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Component\Cmp_BetActionRecord.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>ABQgAAAQAAAQBQARQAAAABEAAQACEAAABABBAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Poker\Component\Cmp_BetActionRecord.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_Hand">
+    <Position X="11.5" Y="1.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Cmp_Hand::HandRank" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Component\Cmp_Hand.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Cmp_Hand::CardPower" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Component\Cmp_Hand.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAQAAYBggACAkIAAAAAAASAAAAAIAgAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Poker\Component\Cmp_Hand.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_PK_Chara_SE">
+    <Position X="13.75" Y="1.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Cmp_PK_Chara_SE::Request" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Component\Cmp_PK_Chara_SE.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAgAAEQAAQAAAAAAAAAAAEAAABEAAAAAAAAAQ=</HashCode>
+      <FileName>Code\Scene\Poker\Component\Cmp_PK_Chara_SE.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Poker">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="Poker::Ini" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::GameOver" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::ShowDown" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Enum Name="Poker::Section" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Class Name="Poker::NoContest" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::GameClear" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::Pre" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::Main" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::Change" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::NewGameReset" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Enum Name="Poker::Character">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AQQAAgEAAAAIAgIAAAAAAIAACABQCAEBAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Poker\Section\Poker.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

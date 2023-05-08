@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="カードを表すコンポーネント">
+    <Position X="5.604" Y="1.573" Height="0.312" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Cardを複数枚保持する手札コンポーネント">
+    <Position X="7.531" Y="1.49" Height="0.406" Width="2.356" />
+  </Comment>
+  <Comment CommentText="山札を表すクラス">
+    <Position X="10.125" Y="1.604" Height="0.292" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Handコンポーネントが手札を管理する">
+    <Position X="2.24" Y="0.542" Height="0.344" Width="2.127" />
+  </Comment>
+  <Class Name="PK_Card">
+    <Position X="5.75" Y="2" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="PK_Card::DrawMode" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\PK_Card.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>BAQAAAgAQAAEBgQACBAAAAAEUIACIAAEAEAAAABAAQA=</HashCode>
+      <FileName>Code\Scene\Poker\PK_Card.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PK_CardDealer">
+    <Position X="10.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAABAAAAAAAQAgAAAAAAEAAAAAAEAAAAAA=</HashCode>
+      <FileName>Code\Scene\Poker\PK_CardDealer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_Hand">
+    <Position X="8" Y="2" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Cmp_Hand::HandRank" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Component\Cmp_Hand.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Cmp_Hand::CardPower" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Component\Cmp_Hand.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAQAAYBggACAkIAAAAAAASAAAAAIAgAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Poker\Component\Cmp_Hand.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PK_Chara">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="PK_Chara::BBView" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Chara\PK_Chara.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="PK_Chara::Section" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Chara\PK_Chara.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>QQQQAAAAAAAgBgQlAAAAAIAAAAYCAAAEBEAACABAAQI=</HashCode>
+      <FileName>Code\Scene\Poker\Chara\PK_Chara.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

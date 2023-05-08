@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="マウスでのクリックを検知するボタンを作成できるクラス&#xD;&#xA;常に実行する機能をalwaysへ&#xD;&#xA;クリックされると実行する機能をclickへ&#xD;&#xA;色々追加機能が作成されている">
+    <Position X="2.427" Y="0.573" Height="0.917" Width="2.283" />
+  </Comment>
+  <Comment CommentText="clickに追加すると&#xD;&#xA;これを持つ親ボタンが押された際group内のボタンのクリック検知と動作を無効にする追加機能">
+    <Position X="4.125" Y="2.51" Height="0.896" Width="2.21" />
+  </Comment>
+  <Comment CommentText="alwaysに追加すると&#xD;&#xA;親ボタンがクリックされる時、group内の親ボタンと重なっているボタンのクリック検知を行わないようにする追加機能&#xD;&#xA;">
+    <Position X="6.656" Y="1.281" Height="0.896" Width="2.252" />
+  </Comment>
+  <Comment CommentText="ButtonGroupだと親ボタンと重なりのあるボタンは動作を止められるが、クリック検知の為の処理が中断された状態で止められてしまうので、クリック検知範囲内で動作を再開させると押された判定になってしまう&#xD;&#xA;このコンポーネントは重なっているボタンはクリック検知自体行わないようにしてその問題を解決する為の物">
+    <Position X="6.448" Y="2.25" Height="1.188" Width="2.762" />
+  </Comment>
+  <Comment CommentText="どちらに追加してもいい&#xD;&#xA;ButtonのResetが呼ばれた時&#xD;&#xA;このコンポーネントに設定されたデータを元にUpdateやDrawの実行可否を設定する">
+    <Position X="9.312" Y="2.51" Height="0.875" Width="2.335" />
+  </Comment>
+  <Comment CommentText="clickに追加すると&#xD;&#xA;クリックされた時、コンストラクタで受け取ったサウンドを鳴らす">
+    <Position X="11.865" Y="2.677" Height="0.656" Width="1.825" />
+  </Comment>
+  <Class Name="Button">
+    <Position X="0.75" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Button::State" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Component\Button.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>REQAABAAAAAEBoAABAUEAIQAAACCACCEgARqAAAEIAE=</HashCode>
+      <FileName>Code\Component\Button.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_Button_ClickSound">
+    <Position X="12" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIQAAAAAAAAABAAAAAAABAAAAAAGAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Component\Cmp_Button_ClickSound.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_ButtonGroup">
+    <Position X="4.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAUAAAAAAAAABEBAAAAAAAAAAAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Component\Cmp_ButtonGroup.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_ButtonOverlapGroup">
+    <Position X="7" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QIQAEAAAAAAAAEBAAAAEAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>Code\Component\Cmp_ButtonOverlapGroup.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ButtonResetData">
+    <Position X="9.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAQACQIAAAAABABAAAAAAAAAAAACAAIAACAQAAAAAAA=</HashCode>
+      <FileName>Code\Component\Cmp_ButtonResetData.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

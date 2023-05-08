@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="bgmを管理するクラス&#xD;&#xA;管理するbgmをメドレーで流す">
+    <Position X="3.896" Y="1.698" Height="0.417" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Player、CPUに共通のサウンドを纏めたコンポーネント&#xD;&#xA;Request型で比較的分かりやすく&#xD;&#xA;流したいSEを指示できる">
+    <Position X="6" Y="1.531" Height="0.615" Width="2.825" />
+  </Comment>
+  <Comment CommentText="Player専用のサウンドを纏めたコンポーネント">
+    <Position X="9.052" Y="1.812" Height="0.333" Width="2.45" />
+  </Comment>
+  <Comment CommentText="サウンドの音量調整は其々のクラスのコンストラクタで行っている">
+    <Position X="5.792" Y="0.5" Height="0.333" Width="3.429" />
+  </Comment>
+  <Class Name="Cmp_PK_Player_SE">
+    <Position X="9.5" Y="2.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Cmp_PK_Player_SE::Request" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Chara\Player\Cmp_PK_Player_SE.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAEQAAAAAAAAAAAQAAEBAABAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Poker\Chara\Player\Cmp_PK_Player_SE.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_PK_Chara_SE">
+    <Position X="6.75" Y="2.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Cmp_PK_Chara_SE::Request" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Component\Cmp_PK_Chara_SE.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAgAAEQAAQAAAAAAAAAAAEAAABEAAAAAAAAAQ=</HashCode>
+      <FileName>Code\Scene\Poker\Component\Cmp_PK_Chara_SE.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PK_BGM">
+    <Position X="4" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAUAAAAAAAAABAIABAAAEAAAAAACAAAAMkAAAAgAACA=</HashCode>
+      <FileName>Code\Scene\Poker\PK_BGM.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

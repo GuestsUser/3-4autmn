@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="ゲームセレクト画面を実行するクラス&#xD;&#xA;他ゲームは終了時タイトルではなく&#xD;&#xA;こちらに戻ってくる">
+    <Position X="2.167" Y="0.5" Height="0.75" Width="1.992" />
+  </Comment>
+  <Comment CommentText="各ゲームの説明を表示するシーンコンポーネント&#xD;&#xA;セレクト画面の各ゲームアイコンがクリックされたら&#xD;&#xA;対応するExplainシーンの処理を実行する">
+    <Position X="6.26" Y="1.75" Height="0.583" Width="2.554" />
+  </Comment>
+  <Comment CommentText="セレクト画面に表示される&#xD;&#xA;ゲームアイコンの&#xD;&#xA;クリックを検知する為のボタン">
+    <Position X="9.188" Y="1.74" Height="0.625" Width="1.669" />
+  </Comment>
+  <Comment CommentText="Buttonの追加機能&#xD;&#xA;ボタンがクリックされた時&#xD;&#xA;TitleSelectのrunに&#xD;&#xA;Explainシーンを代入し&#xD;&#xA;実行をExplainへ&#xD;&#xA;移せる様にする追加機能">
+    <Position X="11.406" Y="1.49" Height="1.052" Width="1.637" />
+  </Comment>
+  <Comment CommentText="流すbgmを保有するコンポーネント">
+    <Position X="13.562" Y="2.125" Height="0.292" Width="1.887" />
+  </Comment>
+  <Comment CommentText="クリックすると対応したゲームの&#xD;&#xA;Explainシーンに飛ぶButtonと&#xD;&#xA;Explainシーンの実体を&#xD;&#xA;作成するFactoryクラス">
+    <Position X="4.208" Y="1.667" Height="0.708" Width="1.7" />
+  </Comment>
+  <Comment CommentText="ゲームアイコンとクリックされると&#xD;&#xA;アイコンに対応した&#xD;&#xA;Explainシーンに飛ばす&#xD;&#xA;追加機能を持った&#xD;&#xA;ボタンを格納するbutton">
+    <Position X="2.208" Y="1.375" Height="0.927" Width="1.69" />
+  </Comment>
+  <Comment CommentText="Explainシーンの&#xD;&#xA;実体を格納したexplain">
+    <Position X="2.25" Y="2.5" Height="0.417" Width="1.377" />
+  </Comment>
+  <Comment CommentText="現在実行すべき&#xD;&#xA;Explainシーンを格納したrun">
+    <Position X="2.198" Y="3.094" Height="0.438" Width="1.7" />
+  </Comment>
+  <Comment CommentText="大まかにこれらの要素で&#xD;&#xA;セレクト画面は成り立っている">
+    <Position X="2.177" Y="3.708" Height="0.458" Width="1.7" />
+  </Comment>
+  <Comment CommentText="ゲームに実行を移す場合&#xD;&#xA;このシーンの実体は&#xD;&#xA;削除されるので&#xD;&#xA;戻ってきたい場合&#xD;&#xA;ゲームシーン内で&#xD;&#xA;このシーンをnewし&#xD;&#xA;SetNextに入れてやれば&#xD;&#xA;戻る事ができる">
+    <Position X="2.219" Y="4.396" Height="1.344" Width="1.513" />
+  </Comment>
+  <Comment CommentText="SetUpTitleSelectBGMは&#xD;&#xA;soundコンポーネントに&#xD;&#xA;TitleSelectのbgmとしての&#xD;&#xA;音量調整を行ってくれる">
+    <Position X="15.885" Y="1.76" Height="0.729" Width="1.492" />
+  </Comment>
+  <Class Name="Title_Select">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARAggBAAAAAAgIAAAAAAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Title\Title_Select.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Title_Select_Explain">
+    <Position X="6.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAgBAAAAABgEAEEAAAAAAMAACACAAAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Title\Title_Select_Explain.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Button">
+    <Position X="9.25" Y="2.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Button::State" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Component\Button.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>REQAABAAAAAEBoAABAUEAIQAAACCACCEgARqAAAEIAE=</HashCode>
+      <FileName>Code\Component\Button.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_Sound">
+    <Position X="13.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIQAgAAIAAgAAAAAAAAAAAAAgAIAAAAQowgCAAAUAAA=</HashCode>
+      <FileName>Code\Component\Cmp_Sound.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_SelectSelector">
+    <Position X="11.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAhAAIgAABAAABAAAAAAAAAGCAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Title\Cmp_SelectSelector.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Title_SoundSetting">
+    <Position X="16" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAABAQAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Title\Title_SoundSetting.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Title_Select_ButtonCreator">
+    <Position X="4.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Title\Title_Select_ButtonCreator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

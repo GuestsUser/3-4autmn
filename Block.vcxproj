@@ -213,7 +213,22 @@
     <ClInclude Include="Code\Worldval.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Code\Scene\Title\SelectScene.cd" />
+    <None Include="Code\Component\Component.cd" />
+    <None Include="Code\Component\Button.cd" />
+    <None Include="Code\Component\Gage.cd" />
+    <None Include="Code\Component\Sound.cd" />
+    <None Include="Code\Scene\Poker\Chara\CPU\PokerCPU.cd" />
+    <None Include="Code\Scene\Poker\Chara\Player\PokerPlayer.cd" />
+    <None Include="Code\Scene\Poker\Chara\PokerChara.cd" />
+    <None Include="Code\Scene\Poker\PokerEtc.cd" />
+    <None Include="Code\Scene\Poker\PokerCard.cd" />
+    <None Include="Code\Scene\Poker\PokerPause.cd" />
+    <None Include="Code\Scene\Poker\PokerSound.cd" />
+    <None Include="Code\Scene\Poker\Section\PokerSection.cd" />
+    <None Include="Code\Scene\Scene.cd" />
+    <None Include="Code\Scene\Title\TitleSelect.cd" />
+    <None Include="Code\Scene\Title\TitleSelectExplain.cd" />
+    <None Include="Code\Utility.cd" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

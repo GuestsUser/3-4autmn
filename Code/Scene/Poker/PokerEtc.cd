@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="現在BBや現在ラウンド数等色々管理しているクラス">
+    <Position X="3.885" Y="1.625" Height="0.427" Width="1.7" />
+  </Comment>
+  <Comment CommentText="ボタン、Dealerが管理している">
+    <Position X="6.135" Y="1.792" Height="0.291" Width="1.7" />
+  </Comment>
+  <Comment CommentText="現在ラウンドで掛けられたコインを保持するクラス">
+    <Position X="8.073" Y="1.73" Height="0.291" Width="2.554" />
+  </Comment>
+  <Comment CommentText="Pokerで使用するフォントデータを格納しているクラス">
+    <Position X="10.76" Y="1.719" Height="0.417" Width="1.7" />
+  </Comment>
+  <Class Name="PK_Pot">
+    <Position X="8.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIBAAAGGAAAQBgAAAAAAAIAAAABAAEAAAAAABAAAAAA=</HashCode>
+      <FileName>Code\Scene\Poker\PK_Pot.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PK_Dealer">
+    <Position X="4" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAIABkEACAACAQAAAAACCAAAEgAAAAGAQgA=</HashCode>
+      <FileName>Code\Scene\Poker\PK_Dealer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PK_Btn">
+    <Position X="6.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAIFgAgAAAAAAAAAAACAAAAEAAAAAACIAA=</HashCode>
+      <FileName>Code\Scene\Poker\PK_Btn.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PokerFontData">
+    <Position X="10.75" Y="2.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="PokerFontData::type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\PokerFontData.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="PokerFontData::color" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\PokerFontData.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AIAAAAAgAACAAAgAAAAAAAAAAAAAAACAAAAABBAAAAA=</HashCode>
+      <FileName>Code\Scene\Poker\PokerFontData.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

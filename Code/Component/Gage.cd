@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="数値操作によって増減するゲージを作成できるコンポーネント&#xD;&#xA;">
+    <Position X="2.115" Y="0.687" Height="0.75" Width="1.95" />
+  </Comment>
+  <Comment CommentText="ゲージをマウス操作で&#xD;&#xA;増減できる様にする追加機能&#xD;&#xA;自信作">
+    <Position X="5.115" Y="1.948" Height="0.75" Width="1.783" />
+  </Comment>
+  <Comment CommentText="ゲージの最低値を設定できる追加機能&#xD;&#xA;ゲージの内部数値がこれを下回ると&#xD;&#xA;強制的にこの数値に合わせる">
+    <Position X="7.156" Y="1.906" Height="0.75" Width="2.158" />
+  </Comment>
+  <Comment CommentText="GageBorderが下限設定であればこちらは上限設定&#xD;&#xA;">
+    <Position X="9.719" Y="1.885" Height="0.75" Width="1.617" />
+  </Comment>
+  <Comment CommentText="ゲージ操作があった場合&#xD;&#xA;指定されたサウンドを鳴らす追加機能">
+    <Position X="11.781" Y="1.813" Height="0.75" Width="2.137" />
+  </Comment>
+  <Class Name="Gage">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARgAAAAAAABBgSQAgAAACIAAAgCAAAEAAAAAABAAAA=</HashCode>
+      <FileName>Code\Component\Gage.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_Gage_Border">
+    <Position X="7.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAABUBABAAAAABAAAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Component\Cmp_Gage_Border.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_Gage_ControlSound">
+    <Position X="12" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAQAAAAAAAQABABAAAAIAQQAAgAGAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Component\Cmp_Gage_ControlSound.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_Gage_MouseControl">
+    <Position X="5.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAABABAACAAAAAAAAAkAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Code\Component\Cmp_Gage_MouseControl.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_Gage_UpperBorder">
+    <Position X="9.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAQAAAABEBABAAAAABAAAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Component\Cmp_Gage_UpperBorder.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

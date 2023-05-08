@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="レイズ額を操作する為に&#xD;&#xA;利用するゲージコンポーネント&#xD;&#xA;追加機能として他にも&#xD;&#xA;borderやmouseControl等を持つ">
+    <Position X="4.771" Y="0.573" Height="0.844" Width="1.96" />
+  </Comment>
+  <Comment CommentText="実行アクションを決定する為のボタンと&#xD;&#xA;foldを実行する為のボタン">
+    <Position X="6.979" Y="0.917" Height="0.438" Width="2.127" />
+  </Comment>
+  <Comment CommentText="プレイヤー専用のサウンド纏め">
+    <Position X="9.323" Y="1.083" Height="0.323" Width="1.7" />
+  </Comment>
+  <Comment CommentText="現在Gageのvolから&#xD;&#xA;どれ位レイズするかを&#xD;&#xA;数値化して表示する為のコンポーネント">
+    <Position X="11.5" Y="0.781" Height="0.604" Width="2.085" />
+  </Comment>
+  <Comment CommentText="プレイヤーに必要な機能を纏めたクラス">
+    <Position X="2.115" Y="0.667" Height="0.323" Width="2.085" />
+  </Comment>
+  <Class Name="PK_Player">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Class Name="PK_Player::Main" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Chara\Player\PK_Player.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="PK_Player::Change" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Chara\Player\PK_Player.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAEgAAEAAAABBAYBASAAICACiBCAACIBAAACEAAAAA=</HashCode>
+      <FileName>Code\Scene\Poker\Chara\Player\PK_Player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_PK_Player_SE">
+    <Position X="9.5" Y="1.5" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Cmp_PK_Player_SE::Request" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Chara\Player\Cmp_PK_Player_SE.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAEQAAAAAAAAAAAQAAEBAABAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Poker\Chara\Player\Cmp_PK_Player_SE.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_PlayerRaiseDraw">
+    <Position X="11.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AASAAAAAAAAAAwBAAAAAAIAAAABAAAAIAAAAAAAAQAA=</HashCode>
+      <FileName>Code\Scene\Poker\Component\Cmp_PlayerRaiseDraw.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gage">
+    <Position X="5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARgAAAAAAABBgSQAgAAACIAAAgCAAAEAAAAAABAAAA=</HashCode>
+      <FileName>Code\Component\Gage.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Button">
+    <Position X="7.25" Y="1.5" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Button::State" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Component\Button.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>REQAABAAAAAEBoAABAUEAIQAAACCACCEgARqAAAEIAE=</HashCode>
+      <FileName>Code\Component\Button.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

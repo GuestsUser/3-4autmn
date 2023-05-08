@@ -13,7 +13,7 @@ class PK_Player;
 class PK_Pot;
 
 class Poker :public Scene { //ポーカーのゲームシーン
-	Button* pauseButon; //ポーズ画面に移行する為のボタン
+	Button* pauseButton; //ポーズ画面に移行する為のボタン
 	PK_BGM* bgm;
 	PK_Pot* pot;
 	PK_Dealer* dealer;

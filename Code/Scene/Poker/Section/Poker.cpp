@@ -38,8 +38,8 @@
 #include <deque>
 
 void Poker::Update() {
-	pauseButon->Update(); //ポーズ画面とボタンの処理実行
-	if (pauseButon->GetRunUpdateClick()) { return; } //クリックされた場合ポーズ画面実行中なのでゲームシーンに関する処理は実行しない
+	pauseButton->Update(); //ポーズ画面とボタンの処理実行
+	if (pauseButton->GetRunUpdateClick()) { return; } //クリックされた場合ポーズ画面実行中なのでゲームシーンに関する処理は実行しない
 
 	bgm->Update(); //bgm流し
 	run->Update(); //指定セクションの処理実行
@@ -60,18 +60,18 @@ void Poker::Draw() {
 	for (auto itr : chara) { itr->Draw(); } //各キャラの手札とか所持金とか描写
 
 	run->Draw(); //実行セクション専用描写
-	pauseButon->Draw(); //ポーズ画面とボタンの描写
+	pauseButton->Draw(); //ポーズ画面とボタンの描写
 }
 
 Poker::Poker() :pot(new PK_Pot()), dealer(new PK_Dealer()), cardDealer(new PK_CardDealer()), back(nullptr), bgm(nullptr), list(std::deque<Scene*>()) {
 	PokerFontData::SetUp(); //フォントデータの使用準備
 
-	pauseButon = new Button(65, 53, 45, 37);
-	pauseButon->EditAlways()->SetCmp(new Cmp_Image(*new int(LoadGraph("Resource/image/poker_pause.png")), 1, pauseButon->EditTransform())); //ポーズボタン画像を作成
-	pauseButon->EditAlways()->SetCmp(new Cmp_ButtonOverlapGroup(*pauseButon)); //ポーズボタンに押された時重なっているボタンの入力を切る機能の追加
+	pauseButton = new Button(65, 53, 45, 37);
+	pauseButton->EditAlways()->SetCmp(new Cmp_Image(*new int(LoadGraph("Resource/image/poker_pause.png")), 1, pauseButton->EditTransform())); //ポーズボタン画像を作成
+	pauseButton->EditAlways()->SetCmp(new Cmp_ButtonOverlapGroup(*pauseButton)); //ポーズボタンに押された時重なっているボタンの入力を切る機能の追加
 	//上記重なっているボタン入力受付禁止コンポーネントのグループは該当ボタン作成箇所で各個グループへ格納する
-	pauseButon->EditClick()->SetCmp(new Cmp_Button_ClickSound(*SoundSetting::CreateDefaultButtonClickSound(Cmp_3DSoundListener::EditTransform()))); //クリックされた時に鳴る音を追加
-	pauseButon->EditClick()->SetCmp(new Cmp_PK_Pause(*pauseButon, *this)); //クリックされた時起動するポーズ画面実行機能追加
+	pauseButton->EditClick()->SetCmp(new Cmp_Button_ClickSound(*SoundSetting::CreateDefaultButtonClickSound(Cmp_3DSoundListener::EditTransform()))); //クリックされた時に鳴る音を追加
+	pauseButton->EditClick()->SetCmp(new Cmp_PK_Pause(*pauseButton, *this)); //クリックされた時起動するポーズ画面実行機能追加
 
 	back = new Cmp_Image(*new int(LoadGraph("Resource/image/poker_back.png")), 1); //背景画像作成
 	back->EditTranform()->EditPos().SetXYZ(1280 / 2, 720 / 2, 0); //画面中央に配置
@@ -115,7 +115,7 @@ Poker::~Poker() {
 	delete dealer;
 	delete cardDealer;
 	delete back;
-	delete pauseButon;
+	delete pauseButton;
 }
 
 void Poker::SetNextSection(Section section) {

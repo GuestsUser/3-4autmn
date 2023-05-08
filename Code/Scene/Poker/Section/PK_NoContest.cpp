@@ -24,7 +24,7 @@ Poker::NoContest::NoContest(Poker& set) :parent(&set), count(0), payOutTime(60),
 	explainPos.SetXYZ(484, 312, 0); //ボタン説明配置位置
 
 	nextButton.EditClick()->SetCmp(new Cmp_Button_ClickCheck()); //クリックチェック用コンポーネント追加
-	parent->pauseButon->EditAlways()->EditCmp<Cmp_ButtonOverlapGroup>()->EditGroup()->push_back(&nextButton); //ポーズボタンに重なっている次シーン移行ボタンを重なり無効化コンポーネントへ格納する
+	parent->pauseButton->EditAlways()->EditCmp<Cmp_ButtonOverlapGroup>()->EditGroup()->push_back(&nextButton); //ポーズボタンに重なっている次シーン移行ボタンを重なり無効化コンポーネントへ格納する
 
 	for (int i = 0; i < parent->chara.size(); ++i) { actionRecord[i] = parent->chara[i]->EditAppendCmp()->EditCmp<Cmp_BetActionRecord>(); } //ベット記録のコンポーネントを取り出し
 }

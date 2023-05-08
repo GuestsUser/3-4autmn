@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="ゲームに必要なデータへの操作を内部クラスが担っている&#xD;&#xA;">
+    <Position X="2.208" Y="0.615" Height="0.312" Width="3.002" />
+  </Comment>
+  <Comment CommentText="SetNextSectionで実行する内部クラスを変更する事により&#xD;&#xA;場面に応じた処理を実行できる">
+    <Position X="2.219" Y="1.073" Height="0.458" Width="3.117" />
+  </Comment>
+  <Comment CommentText="Iniクラス&#xD;&#xA;新しいラウンドを開始する為の準備を行うクラス&#xD;&#xA;新しいゲームの準備の場合こちらは実行しない">
+    <Position X="2.229" Y="2.135" Height="0.615" Width="2.512" />
+  </Comment>
+  <Comment CommentText="Preクラス&#xD;&#xA;新しいラウンド、ゲーム、どちらにも共通する準備を行うクラス">
+    <Position X="2.24" Y="2.885" Height="0.438" Width="3.127" />
+  </Comment>
+  <Comment CommentText="Mainクラス&#xD;&#xA;掛けを行う為の処理が記されたクラス">
+    <Position X="2.24" Y="3.49" Height="0.448" Width="2.054" />
+  </Comment>
+  <Comment CommentText="Changeクラス&#xD;&#xA;カード交換を行う為の処理が記されたクラス">
+    <Position X="2.26" Y="4.135" Height="0.479" Width="2.315" />
+  </Comment>
+  <Comment CommentText="ShowDownクラス&#xD;&#xA;手札を公開し、勝負を行う処理が記されたクラス">
+    <Position X="2.229" Y="4.812" Height="0.5" Width="2.617" />
+  </Comment>
+  <Comment CommentText="NoContesetクラス&#xD;&#xA;ラウンド中、1人以外全てが降りて&#xD;&#xA;勝負を行えなくなった場合の処理が記されたクラス">
+    <Position X="2.26" Y="5.5" Height="0.646" Width="2.7" />
+  </Comment>
+  <Comment CommentText="GameOverクラス&#xD;&#xA;プレイヤーの所持金が無くなった場合の処理が記されたクラス">
+    <Position X="2.271" Y="6.333" Height="0.49" Width="3.127" />
+  </Comment>
+  <Comment CommentText="GameClearクラス&#xD;&#xA;プレイヤー以外の&#xD;&#xA;全キャラの所持金が無くなった場合の処理が記されたクラス">
+    <Position X="2.24" Y="7" Height="0.583" Width="3.148" />
+  </Comment>
+  <Comment CommentText="NewGameResetクラス&#xD;&#xA;新しいゲームを始める為の準備を行うたクラス">
+    <Position X="2.281" Y="7.771" Height="0.479" Width="2.429" />
+  </Comment>
+  <Comment CommentText="TitleBackについて&#xD;&#xA;SetNextSectionにこれを設定するとゲームセレクト画面に戻せる">
+    <Position X="2.271" Y="8.427" Height="0.51" Width="3.356" />
+  </Comment>
+  <Comment CommentText="PlayerとCPUも同様の構造を持つ">
+    <Position X="11.917" Y="0.792" Height="0.365" Width="1.919" />
+  </Comment>
+  <Comment CommentText="DataPlaceクラス&#xD;&#xA;保有するオブジェクトを適切な位置に配置するクラス">
+    <Position X="11.917" Y="2.365" Height="0.531" Width="2.783" />
+  </Comment>
+  <Comment CommentText="Waitクラス&#xD;&#xA;Pokerのsectionと実行の足並みを揃える為に用意された何もしないクラス">
+    <Position X="11.927" Y="3.083" Height="0.438" Width="3.877" />
+  </Comment>
+  <Comment CommentText="こちらだと内部クラスの処理はSectioUpdateを実行する事で処理される">
+    <Position X="11.917" Y="1.344" Height="0.291" Width="3.7" />
+  </Comment>
+  <Comment CommentText="SectioUpdateは&#xD;&#xA;PlayerやCPU内部クラス処理が必要なPoker内部クラスが呼び出しを行う">
+    <Position X="11.938" Y="1.75" Height="0.458" Width="3.867" />
+  </Comment>
+  <Class Name="Poker">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="Poker::Ini" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::GameOver" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::ShowDown" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Enum Name="Poker::Section" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Class Name="Poker::NoContest" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::GameClear" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::Pre" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::Main" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::Change" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Poker::NewGameReset" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Enum Name="Poker::Character" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Section\Poker.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AQQAAgEAAAAIAgIAAAAAAIAACABQCAEBAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Poker\Section\Poker.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PK_Player">
+    <Position X="8.5" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="PK_Player::Main" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Chara\Player\PK_Player.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="PK_Player::Change" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Chara\Player\PK_Player.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAEgAAEAAAABBAYBASAAICACiBCAACIBAAACEAAAAA=</HashCode>
+      <FileName>Code\Scene\Poker\Chara\Player\PK_Player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PK_CPU">
+    <Position X="10.25" Y="1.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="PK_CPU::Main" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Chara\CPU\PK_CPU.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="PK_CPU::Change" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Chara\CPU\PK_CPU.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="PK_CPU::DataPlace" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Chara\CPU\PK_CPU.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAEAAAEAAAABAACBAQQAIAACABCAAAABAAACAIAEAA=</HashCode>
+      <FileName>Code\Scene\Poker\Chara\CPU\PK_CPU.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PK_Chara">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="PK_Chara::BBView" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Chara\PK_Chara.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="PK_Chara::Section">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Scene\Poker\Chara\PK_Chara.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>QQQQAAAAAAAgBgQlAAAAAIAAAAYCAAAEBEAACABAAQI=</HashCode>
+      <FileName>Code\Scene\Poker\Chara\PK_Chara.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

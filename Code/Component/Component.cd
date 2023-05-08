@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="Componentを継承したクラスを複数保持できるコンポーネント&#xD;&#xA;このクラスのUpdateやDrawを呼び出すと追加された全てコンポーネントのUpdate、Drawを一括で呼び出せる&#xD;&#xA;">
+    <Position X="9.25" Y="5.125" Height="0.969" Width="2.065" />
+  </Comment>
+  <Comment CommentText="コンポジットの関係を構築するのに便利なクラス&#xD;&#xA;Updateは毎フレームのデータ更新処理&#xD;&#xA;Drawは毎フレームの画面描写処理を想定しており&#xD;&#xA;それらを継承先でオーバーライドする事で、継承先独自の挙動を共通のインタフェースで呼び出せる">
+    <Position X="9.25" Y="0.75" Height="0.927" Width="2.898" />
+  </Comment>
+  <Comment CommentText="コンポーネント継承クラスの&#xD;&#xA;一例">
+    <Position X="3.219" Y="0.635" Height="0.75" Width="1.7" />
+  </Comment>
+  <Class Name="Component">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAQgCEAAAAAABgAAAAAAAgAAAAACAAIEAABEAAAAAAA=</HashCode>
+      <FileName>Code\Component\Component.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ComponentArray">
+    <Position X="7.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBABAAQEAARgQAAAAAAACAAAACIAABAAAAAAhAAIA=</HashCode>
+      <FileName>Code\Component\ComponentArray.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Button" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Button::State" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Component\Button.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>REQAABAAAAAEBoAABAUEAIQAAACCACCEgARqAAAEIAE=</HashCode>
+      <FileName>Code\Component\Button.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gage" Collapsed="true">
+    <Position X="2" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARgAAAAAAABBgSQAgAAACIAAAgCAAAEAAAAAABAAAA=</HashCode>
+      <FileName>Code\Component\Gage.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_Sound" Collapsed="true">
+    <Position X="3.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIQAgAAIAAgAAAAAAAAAAAAAgAIAAAAQowgCAAAUAAA=</HashCode>
+      <FileName>Code\Component\Cmp_Sound.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_Image" Collapsed="true">
+    <Position X="5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QQQAAAAAAAgAAgQBAEQAAAEBIAIIAAABJgAAABAEAAA=</HashCode>
+      <FileName>Code\Component\Cmp_Image.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

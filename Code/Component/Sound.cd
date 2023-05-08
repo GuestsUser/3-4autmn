@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="3dサウンドの聞き手位置や向きを設定する為のクラス&#xD;&#xA;座標タイプを指定する事で&#xD;&#xA;2d平面上で3dサウンドを利用する事もできる">
+    <Position X="7" Y="1" Height="0.75" Width="2.856" />
+  </Comment>
+  <Comment CommentText="サウンドを管理するコンポーネント">
+    <Position X="11.937" Y="0.99" Height="0.438" Width="1.835" />
+  </Comment>
+  <Comment CommentText="3deSoundLisnerの座標タイプを指定する為のクラス">
+    <Position X="2.604" Y="0.969" Height="0.75" Width="1.804" />
+  </Comment>
+  <Class Name="SoundSystemCoordinateData">
+    <Position X="1" Y="0.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="SoundSystemCoordinateData::Type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Component\3DSoundSystemCoordinateData.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAABAQAAgAAAAAAAAAAAAAAAAAQAAAAgAAAAA=</HashCode>
+      <FileName>Code\Component\3DSoundSystemCoordinateData.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_Sound">
+    <Position X="10.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIQAgAAIAAgAAAAAAAAAAAAAgAIAAAAQowgCAAAUAAA=</HashCode>
+      <FileName>Code\Component\Cmp_Sound.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_3DSoundListener">
+    <Position X="5.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BIQAAAAAAAAkAAgAIAAAIAAAAAAAAAAAAgAAAAAAEAA=</HashCode>
+      <FileName>Code\Component\Cmp_3DSoundListener.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

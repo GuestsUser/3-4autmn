@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="ゲーム説明の表示と&#xD;&#xA;ゲームに進む為のボタンを備えたシーン">
+    <Position X="2.219" Y="0.573" Height="0.438" Width="2.012" />
+  </Comment>
+  <Comment CommentText="このFactoryで&#xD;&#xA;各種ゲームの実体と&#xD;&#xA;Explainシーンの作成を行う">
+    <Position X="5.188" Y="1.323" Height="0.594" Width="1.554" />
+  </Comment>
+  <Comment CommentText="実行をゲームに移す為のボタンと&#xD;&#xA;セレクト画面に戻る為のボタン">
+    <Position X="7.281" Y="1.583" Height="0.448" Width="1.856" />
+  </Comment>
+  <Comment CommentText="セレクト画面からこちらへ&#xD;&#xA;処理を移したのと同じ方法で&#xD;&#xA;ゲームに処理を移す為の機能として利用&#xD;&#xA;セレクト画面から&#xD;&#xA;こちらに移った場合と違い&#xD;&#xA;ゲームに移った場合セレクト画面実体は&#xD;&#xA;削除される">
+    <Position X="9.365" Y="0.771" Height="1.229" Width="2.179" />
+  </Comment>
+  <Comment CommentText="説明のページめくりした時に&#xD;&#xA;鳴らすサウンド">
+    <Position X="11.875" Y="1.698" Height="0.406" Width="1.7" />
+  </Comment>
+  <Comment CommentText="SetUpExplainScrollは&#xD;&#xA;soundコンポーネントに&#xD;&#xA;ページめくりした時の音量調整を&#xD;&#xA;施してくれる">
+    <Position X="14.062" Y="1.344" Height="0.75" Width="1.783" />
+  </Comment>
+  <Class Name="Title_Select_Explain">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAgBAAAAABgEAEEAAAAAAMAACACAAAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Title\Title_Select_Explain.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Button">
+    <Position X="7.5" Y="2.25" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Button::State" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Code\Component\Button.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>REQAABAAAAAEBoAABAUEAIQAAACCACCEgARqAAAEIAE=</HashCode>
+      <FileName>Code\Component\Button.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Title_Select_ButtonCreator">
+    <Position X="5.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Title\Title_Select_ButtonCreator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_SelectSelector">
+    <Position X="9.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAhAAIgAABAAABAAAAAAAAAGCAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Title\Cmp_SelectSelector.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Title_SoundSetting">
+    <Position X="14.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAABAQAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Title\Title_SoundSetting.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cmp_Sound">
+    <Position X="12" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIQAgAAIAAgAAAAAAAAAAAAAgAIAAAAQowgCAAAUAAA=</HashCode>
+      <FileName>Code\Component\Cmp_Sound.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

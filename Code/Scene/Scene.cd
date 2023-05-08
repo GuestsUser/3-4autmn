@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="実行シーンの管理クラス">
+    <Position X="2.115" Y="0.531" Height="0.291" Width="1.356" />
+  </Comment>
+  <Comment CommentText="ゲームループでUpdateを呼び出すと&#xD;&#xA;runのUpdateが実行され&#xD;&#xA;Drawを呼び出すと&#xD;&#xA;runのDrawが実行される">
+    <Position X="2.115" Y="1.323" Height="0.75" Width="2.085" />
+  </Comment>
+  <Comment CommentText="runに実行したいシーンを入れる">
+    <Position X="2.156" Y="0.896" Height="0.302" Width="1.825" />
+  </Comment>
+  <Comment CommentText="Updateの呼び出しで&#xD;&#xA;実行シーンの移行や&#xD;&#xA;アプリの終了指示チェックを行うので&#xD;&#xA;Drawより先にUpdateを呼び出す事">
+    <Position X="2.167" Y="2.229" Height="0.771" Width="1.96" />
+  </Comment>
+  <Comment CommentText="これを継承する事で&#xD;&#xA;SceneManagerのrunに格納でき&#xD;&#xA;オーバーライドしたUpdateやDrawを&#xD;&#xA;実行する事で独自の場面作成ができる&#xD;&#xA;Sceneクラス">
+    <Position X="11.156" Y="0.51" Height="0.906" Width="2.231" />
+  </Comment>
+  <Comment CommentText="SceneManagerに入れて利用する&#xD;&#xA;Scene継承クラスの一例">
+    <Position X="6.76" Y="0.521" Height="0.469" Width="1.929" />
+  </Comment>
+  <Comment CommentText="PokerやTitleSelectは内部に&#xD;&#xA;独自のSceneManagerの様な機能を持っており&#xD;&#xA;それによって更なる処理の細分化を可能にした">
+    <Position X="6.427" Y="1.25" Height="0.75" Width="2.627" />
+  </Comment>
+  <Comment CommentText="Updateは場面の実行に必要な処理&#xD;&#xA;Drawは描写の処理を記入する">
+    <Position X="11.167" Y="1.583" Height="0.469" Width="2.065" />
+  </Comment>
+  <Comment CommentText="実行シーンを変えたくなったら&#xD;&#xA;SetNextにnewした新しいSceneを入れる事で&#xD;&#xA;そちらに処理を移せる">
+    <Position X="11.156" Y="3.698" Height="0.615" Width="2.512" />
+  </Comment>
+  <Comment CommentText="コンテニュー等で状況を最初に戻したくなった場合&#xD;&#xA;その為の処理をResetに記載すると&#xD;&#xA;Reset呼び出しで元に戻せるから楽でいい">
+    <Position X="11.177" Y="2.177" Height="0.646" Width="2.565" />
+  </Comment>
+  <Comment CommentText="リスタート等で状況を完全に元に戻したくなった場合には&#xD;&#xA;FullResetをオーバーライドするといい">
+    <Position X="11.167" Y="2.99" Height="0.438" Width="2.898" />
+  </Comment>
+  <Comment CommentText="アプリを終了したくなった場合SetNextに&#xD;&#xA;nullptrを入れると終わらせる事ができる">
+    <Position X="11.135" Y="4.448" Height="0.438" Width="2.148" />
+  </Comment>
+  <Comment CommentText="SetNextでシーンを変える際、元のシーンは破棄されるが&#xD;&#xA;元シーンのデストラクタは&#xD;&#xA;元シーンのUpdateが全て終わった後に実行される">
+    <Position X="11.156" Y="5.042" Height="0.594" Width="3.023" />
+  </Comment>
+  <Comment CommentText="シーンチェンジによる元シーンの破棄終了後は&#xD;&#xA;新しいシーンのDraw実行がなされる&#xD;&#xA;但し、新しいシーンのUpdateは次SceneManagerのUpdateが呼ばれた時になる&#xD;&#xA;">
+    <Position X="11.188" Y="5.865" Height="0.75" Width="2.606" />
+  </Comment>
+  <Comment CommentText="纏めると&#xD;&#xA;元シーンのUpdate→元シーン内で新しいシーンの作成→&#xD;&#xA;新しいシーンのコンストラクタ→元シーンのUpdate終了→&#xD;&#xA;元シーンのデストラクタ→新しいシーンのDraw&#xD;&#xA;という流れになる">
+    <Position X="11.229" Y="6.792" Height="0.906" Width="2.971" />
+  </Comment>
+  <Class Name="Scene">
+    <Position X="9.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAABgAAgAAAAAAAQAAiAAIAAAAAAAIAAAA=</HashCode>
+      <FileName>Code\Scene\Scene.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneManager">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAgAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Code\SceneManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Title" Collapsed="true">
+    <Position X="4.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAkIACAAAAAAAEAABAAAAAAACAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Title\Title.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Poker" Collapsed="true">
+    <Position X="7.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQQAAgEAAAAIAgIAAAAAAIAACABQCAEBAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Poker\Section\Poker.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Title_Select" Collapsed="true">
+    <Position X="6" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARAggBAAAAAAgIAAAAAAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Title\Title_Select.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>
