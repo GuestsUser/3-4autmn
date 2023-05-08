@@ -13,15 +13,18 @@
     <Position X="9.365" Y="0.771" Height="1.229" Width="2.179" />
   </Comment>
   <Comment CommentText="説明のページめくりした時に&#xD;&#xA;鳴らすサウンド">
-    <Position X="11.875" Y="1.698" Height="0.406" Width="1.7" />
+    <Position X="14.125" Y="1.698" Height="0.406" Width="1.7" />
   </Comment>
   <Comment CommentText="SetUpExplainScrollは&#xD;&#xA;soundコンポーネントに&#xD;&#xA;ページめくりした時の音量調整を&#xD;&#xA;施してくれる">
-    <Position X="14.062" Y="1.344" Height="0.75" Width="1.783" />
+    <Position X="16.312" Y="1.344" Height="0.75" Width="1.783" />
+  </Comment>
+  <Comment CommentText="ページめくりが&#xD;&#xA;ホイール操作である事を&#xD;&#xA;明記する追加機能&#xD;&#xA;2色を行ったり来たりする機能搭載">
+    <Position X="11.792" Y="1.24" Height="0.75" Width="1.898" />
   </Comment>
   <Class Name="Title_Select_Explain">
     <Position X="0.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAgBAAAAABgEAEEAAAAAAMAACACAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAQAAgBAAAAIBgAAEEAAAAAAMAACACAAAAAAAAAAAAA=</HashCode>
       <FileName>Code\Scene\Title\Title_Select_Explain.h</FileName>
     </TypeIdentifier>
   </Class>
@@ -54,17 +57,24 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Title_SoundSetting">
-    <Position X="14.25" Y="2.25" Width="1.5" />
+    <Position X="16.5" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAABAQAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Code\Scene\Title\Title_SoundSetting.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Cmp_Sound">
-    <Position X="12" Y="2.25" Width="1.5" />
+    <Position X="14.25" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AIQAgAAIAAgAAAAAAAAAAAAAgAIAAAAQowgCAAAUAAA=</HashCode>
       <FileName>Code\Component\Cmp_Sound.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Title_Select_Explain_PageScrollExplain">
+    <Position X="12" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAQAAAAAAAAARgAABAAAAoAAAAECACAAAAAAAAAAAAA=</HashCode>
+      <FileName>Code\Scene\Title\Title_Select_Explain_PageScrollExplain.h</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Yu Gothic UI" Size="9" />
